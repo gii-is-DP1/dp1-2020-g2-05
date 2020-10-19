@@ -47,6 +47,13 @@
     			<role>Team Member</role>
     		</roles>
     	</developer>
+    	<developer>
+    		<id>antcammar4</id>
+    		<name>Antonio Campuzano Martinez</name>
+    		<roles>
+    			<role>Team member</role>
+    		</roles>
+    	</developer>
     </developers>
     
     <dependencies>
