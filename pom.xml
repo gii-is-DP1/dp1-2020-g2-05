@@ -40,6 +40,13 @@
     			<role>Team Member</role>
     		</roles>
     	</developer>
+    	<developer>
+    		<id>martorsan13</id>
+    		<name>Mariano Manuel Torrado Sánchez</name>
+    		<roles>
+    			<role>Team Member</role>
+    		</roles>
+    	</developer>
     </developers>
     
     <dependencies>
