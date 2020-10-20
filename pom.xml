@@ -54,6 +54,13 @@
     			<role>Team member</role>
     		</roles>
     	</developer>
+    	<developer>
+    		<id>serrojim</id>
+    		<name>Sergio Rojas Jimenez</name>
+    		<roles>
+    			<role>Team Member</role>
+    		</roles>
+    	</developer>
     </developers>
     
     <dependencies>
