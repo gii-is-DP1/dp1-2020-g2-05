@@ -1,6 +1,4 @@
 target/*
-src/main/resources/application.properties
-application.properties
 .settings/*
 .classpath
 .project
@@ -68,3 +66,4 @@ _site/
 .metadata/.plugins/org.eclipse.ui.intro/introstate
 .metadata/.plugins/org.eclipse.ui.workbench/dialog_settings.xml
 .metadata/.plugins/org.eclipse.ui.workbench/workingsets.xml
+/bin/
