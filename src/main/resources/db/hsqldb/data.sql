@@ -17,6 +17,10 @@ INSERT INTO authorities(id,username,authority) VALUES (5,'serrojjim','owner');
 INSERT INTO users(username,password,enabled) VALUES ('aleruijur','aleale',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (6,'aleruijur','owner');
 
+-- Usuario de migniearj com owner
+INSERT INTO users(username,password,enabled) VALUES ('migniearj','miguesnow',TRUE);
+INSERT INTO authorities(id,username,authority) VALUES (7,'migninearj','owner');
+
 INSERT INTO vets VALUES (1, 'James', 'Carter');
 INSERT INTO vets VALUES (2, 'Helen', 'Leary');
 INSERT INTO vets VALUES (3, 'Linda', 'Douglas');
@@ -54,6 +58,8 @@ INSERT INTO owners VALUES (10, 'Carlos', 'Estaban', '2335 Independence La.', 'Wa
 INSERT INTO owners VALUES (11, 'Sergio', 'Rojas', 'Calle monzón 24', 'Sevilla', '633732554', 'serrojjim');
 INSERT INTO owners VALUES(12,'Antonio','Campuzano','41430 Blas Infante','Sevilla','627665452','owner1');
 INSERT INTO owners VALUES (13, 'Alejandro', 'Ruiz', '41703 Parque Giralda', 'Sevilla', '637676578', 'aleruijur');
+INSERT INTO owners VALUES(12,'Miguel Ángel','Nieva','41013  Calle Castillo de Constantina','Sevilla','644214406','migniearj');
+
 
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (1, 'Leo', '2010-09-07', 1, 1);
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (2, 'Basil', '2012-08-06', 6, 2);
@@ -74,6 +80,8 @@ INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (15, 'Negis', '2012
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (14, 'Dama', '2015-11-25', 2, 11);
 --Mascota de aleruijur
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (16, 'Nube', '2011-09-13', 5, 13);
+--Mascota de migniearj
+INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (18, 'Snow', '2018-06-06', 8, 15);
 
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (1, 7, '2013-01-01', 'rabies shot');
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (2, 8, '2013-01-02', 'rabies shot');
