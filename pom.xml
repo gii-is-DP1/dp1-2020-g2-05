@@ -33,6 +33,13 @@
     </properties>
 
 	<developers>
+		<developer>
+    		<id>migniearj</id>
+    		<name>Miguel Ángel Nieva Arjona</name>
+    		<roles>
+    			<role>Team Member</role>
+    		</roles>
+    	</developer>
     	<developer>
     		<id>aleruijur</id>
     		<name>Alejandro Ruiz Jurado</name>
