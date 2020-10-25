@@ -50,7 +50,7 @@ public class WelcomeController {
 		  persons.add(person6);
 		  
 		  model.put("persons", persons);
-		  model.put("title", "Titulo del Proyecto");
+		  model.put("title", "MyCycling");
 		  model.put("group", "G2-05");
 		  
 	    return "welcome";
