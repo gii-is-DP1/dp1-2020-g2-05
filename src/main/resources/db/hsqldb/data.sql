@@ -90,7 +90,7 @@ INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (15, 'Negis', '2012
 --Mascota de aleruijur
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (16, 'Nube', '2011-09-13', 5, 13);
 --Mascota de migniearj
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (17, 'Snow', '2018-06-06', 8, 14);
+INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (17, 'Snow', '2018-06-06', 6, 14);
 --Mascota de alvcorcas
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (18, 'Chipi', '2015-02-04', 1, 15);
 --Mascota de martorsan13
