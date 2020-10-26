@@ -7,6 +7,7 @@ INSERT INTO authorities(id,username,authority) VALUES (2,'owner1','owner');
 -- One vet user, named vet1 with password v3t
 INSERT INTO users(username,password,enabled) VALUES ('vet1','v3t',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (3,'vet1','veterinarian');
+
 -- Usuario de antcammar4 como owner
 INSERT INTO users(username,password,enabled) VALUES ('antcammar4','123456',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (4,'antcammar4','owner');
@@ -25,6 +26,7 @@ INSERT INTO authorities(id,username,authority) VALUES (8,'alvcorcas','owner');
 -- Usuario de martorsan13 como owner
 INSERT INTO users(username,password,enabled) VALUES ('martorsan13','mariano',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (9,'martorsan13','owner');
+
 
 INSERT INTO vets VALUES (1, 'James', 'Carter');
 INSERT INTO vets VALUES (2, 'Helen', 'Leary');
