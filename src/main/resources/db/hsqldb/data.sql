@@ -19,7 +19,7 @@ INSERT INTO users(username,password,enabled) VALUES ('aleruijur','aleale',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (6,'aleruijur','owner');
 -- Usuario de migniearj como owner
 INSERT INTO users(username,password,enabled) VALUES ('migniearj','miguesnow',TRUE);
-INSERT INTO authorities(id,username,authority) VALUES (7,'migninearj','owner');
+INSERT INTO authorities(id,username,authority) VALUES (7,'migniearj','owner');
 -- Usuario de alvcorcas como owner
 INSERT INTO users(username,password,enabled) VALUES ('alvcorcas','1eB@6!XYUYe6c33&',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (8,'alvcorcas','owner');
