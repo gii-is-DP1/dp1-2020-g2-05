@@ -11,9 +11,9 @@ public class InfoCarrera {
 	String equipo;
 
 	Double kmh;
-	Boolean vueltaMasRapidaPole;
+	Integer vueltaMasRapidaPole;
 	public InfoCarrera(String nombreEvento, Integer posicion, Integer puntos, Integer numeros, String piloto,
-			String pais, String equipo, Double kmh, Boolean vueltaMasRapidaPole) {
+			String pais, String equipo, Double kmh, Integer vueltaMasRapidaPole) {
 		super();
 		this.nombreEvento = nombreEvento;
 		this.posicion = posicion;
@@ -74,10 +74,10 @@ public class InfoCarrera {
 	public void setKmh(Double kmh) {
 		this.kmh = kmh;
 	}
-	public Boolean getVueltaMasRapidaPole() {
+	public Integer getVueltaMasRapidaPole() {
 		return vueltaMasRapidaPole;
 	}
-	public void setVueltaMasRapidaPole(Boolean vueltaMasRapidaPole) {
+	public void setVueltaMasRapidaPole(Integer vueltaMasRapidaPole) {
 		this.vueltaMasRapidaPole = vueltaMasRapidaPole;
 	}
 	@Override
