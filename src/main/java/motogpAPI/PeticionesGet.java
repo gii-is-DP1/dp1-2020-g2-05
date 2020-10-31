@@ -24,15 +24,17 @@ public class PeticionesGet {
 	private RaceCode raceCode= null;
 	private int raceNumber = -1;
 	
-	public static void main (String args[]) throws JSONException, IOException {
-		List<InfoCarrera> listaResultados = getResultsByRaceNumberCampu(Category.MotoGP, 2019, 1, Session.RACE);
-		
-		for (int i=0; i<listaResultados.size(); i++)
-		System.out.println(listaResultados.get(i));
-	}
+//	public static void main (String args[]) throws JSONException, IOException {
+//		List<InfoCarrera> listaResultados = getResultsByRaceNumberCampu(Category.MotoGP, 2019, 1, Session.RACE);
+//		
+//		for (int i=0; i<listaResultados.size(); i++)
+//		System.out.println(listaResultados.get(i));
+//	}
 
 
-	public static Record obtieneRecords(String anyo, String pais, String categoria) throws IOException {
+	// Poner con JPA que anyo debe tener un @range de 2012 a 2020
+	// Para pais hace falta hacer un enum con los codigos de paises que acepta esa url
+	public static Record obtieneRecords(String anyo, String pais, Category categoria) throws IOException {
 		String urlBuilder = "https://www.motogp.com/es/ajax/results/parse/" + anyo + "/" + pais + "/" + categoria + "/";
 		return new Record(urlBuilder);
 	}
