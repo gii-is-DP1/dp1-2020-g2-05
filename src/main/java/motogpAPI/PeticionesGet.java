@@ -32,8 +32,8 @@ public class PeticionesGet {
 	}
 
 
-	public static Record obtieneRecords(String anyo, String pais) throws IOException {
-		String urlBuilder = "https://www.motogp.com/es/ajax/results/parse/" + anyo + "/" + pais + "/" + "MotoGP" + "/";
+	public static Record obtieneRecords(String anyo, String pais, String categoria) throws IOException {
+		String urlBuilder = "https://www.motogp.com/es/ajax/results/parse/" + anyo + "/" + pais + "/" + categoria + "/";
 		return new Record(urlBuilder);
 	}
 	
