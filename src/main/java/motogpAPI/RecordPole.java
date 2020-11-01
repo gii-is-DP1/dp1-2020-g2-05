@@ -5,17 +5,27 @@ public class RecordPole {
 	public String nombrePiloto;
 	public Integer tiempo;
 	public Double kmh;
-	
+
 	public RecordPole(String entrada) {
 		super();
 		String atributos = entrada.split(":")[1].trim();
 		String[] split = atributos.split(" ");
-		this.nombrePiloto = split[0] + " " + split[1];
-		String[] tiempoSplit = split[2].split("'");
-		this.tiempo = (int) ((Integer.parseInt(tiempoSplit[0]) * 60 + Double.parseDouble(tiempoSplit[1]) + 1e-14) * 1000);
-		this.kmh = Double.parseDouble(split[3]);
+		Integer x = split.length;
+		if (x < 4) {
+			this.nombrePiloto = null;
+			this.tiempo = null;
+			this.kmh = null;
+		} else {
+			this.nombrePiloto = split[0];
+			for (int i=1; i < x-2; i++) {
+				this.nombrePiloto += " " + split[i];
+			}
+			String[] tiempoSplit = split[x-2].split("'");
+			this.tiempo = (int) ((Integer.parseInt(tiempoSplit[0]) * 60 + Double.parseDouble(tiempoSplit[1]) + 1e-14) * 1000);
+			this.kmh = Double.parseDouble(split[x-1]);
+		}
 	}
-	
+
 	public RecordPole(String nombrePiloto, Integer tiempo, Double kmh) {
 		super();
 		this.nombrePiloto = nombrePiloto;
@@ -88,5 +98,5 @@ public class RecordPole {
 	public String toString() {
 		return "RecordPole [nombrePiloto=" + nombrePiloto + ", tiempo=" + tiempo + ", kmh=" + kmh + "]";
 	}
-	
+
 }

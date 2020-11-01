@@ -6,17 +6,28 @@ public class RecordMejorVuelta {
 	public String nombrePiloto;
 	public Integer tiempo;
 	public Double kmh;
-	
+
 	public RecordMejorVuelta(String entrada) {
 		super();
 		String atributos = entrada.split(":")[1].trim();
 		String[] split = atributos.split(" ");
-		this.nombrePiloto = split[1] + " " + split[2];
-		String[] tiempoSplit = split[3].split("'");
-		this.tiempo = (int) ((Integer.parseInt(tiempoSplit[0]) * 60 + Double.parseDouble(tiempoSplit[1]) + 1e-14) * 1000);
-		this.kmh = Double.parseDouble(split[4]);
-		
-		this.anyo = Integer.parseInt(split[0]);
+		Integer x = split.length;
+		if (x < 4) {
+			this.nombrePiloto = null;
+			this.tiempo = null;
+			this.kmh = null;
+			this.anyo= null;
+		} else { 
+			this.nombrePiloto = split[1];
+			for (int i=2; i < x-2; i++) {
+				this.nombrePiloto += " " + split[i];
+			}
+			String[] tiempoSplit = split[x-2].split("'");
+			this.tiempo = (int) ((Integer.parseInt(tiempoSplit[0]) * 60 + Double.parseDouble(tiempoSplit[1]) + 1e-14) * 1000);
+			this.kmh = Double.parseDouble(split[x-1]);
+
+			this.anyo = Integer.parseInt(split[0]);
+		}
 	}
 
 	public RecordMejorVuelta(Integer anyo, String nombrePiloto, Integer tiempo, Double kmh) {
@@ -107,5 +118,5 @@ public class RecordMejorVuelta {
 		return "RecordMejorVuelta [anyo=" + anyo + ", nombrePiloto=" + nombrePiloto + ", tiempo=" + tiempo + ", kmh="
 				+ kmh + "]";
 	}
-	
+
 }

@@ -1,22 +1,34 @@
 package motogpAPI;
 
 public class RecordVueltaRapida {
-	
+
 	public Integer vuelta;
 	public String nombrePiloto;
 	public Integer tiempo;
 	public Double kmh;
-	
+
 	public RecordVueltaRapida(String entrada) {
 		super();
+
 		String atributos = entrada.split(":")[2].trim();
 		String[] split = atributos.split(" ");
-		this.nombrePiloto = split[1] + " " + split[2];
-		String[] tiempoSplit = split[3].split("'");
-		this.tiempo = (int) ((Integer.parseInt(tiempoSplit[0]) * 60 + Double.parseDouble(tiempoSplit[1]) + 1e-14) * 1000);
-		this.kmh = Double.parseDouble(split[4]);
-		
-		this.vuelta = Integer.parseInt(split[0]);
+		Integer x = split.length;
+		if (x < 4) {
+			this.nombrePiloto = null;
+			this.tiempo = null;
+			this.kmh = null;
+			this.vuelta = null;
+		} else {
+			this.nombrePiloto = split[1];
+			for (int i=2; i < x-2; i++) {
+				this.nombrePiloto += " " + split[i];
+			}
+			String[] tiempoSplit = split[x-2].split("'");
+			this.tiempo = (int) ((Integer.parseInt(tiempoSplit[0]) * 60 + Double.parseDouble(tiempoSplit[1]) + 1e-14) * 1000);
+			this.kmh = Double.parseDouble(split[x-1]);
+
+			this.vuelta = Integer.parseInt(split[0]);
+		}
 	}
 
 	public RecordVueltaRapida(Integer vuelta, String nombrePiloto, Integer tiempo, Double kmh) {
@@ -107,5 +119,5 @@ public class RecordVueltaRapida {
 		return "RecordVueltaRapida [vuelta=" + vuelta + ", nombrePiloto=" + nombrePiloto + ", tiempo=" + tiempo
 				+ ", kmh=" + kmh + "]";
 	}
-	
+
 }
