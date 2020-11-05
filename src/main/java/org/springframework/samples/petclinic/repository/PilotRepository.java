@@ -58,6 +58,9 @@ public interface PilotRepository extends Repository<Pilot, Integer> {
 	
 	@Query("SELECT DISTINCT pilot FROM Pilot pilot left join fetch pilot.results WHERE pilot.lastName LIKE :lastName%")
 	public Collection<Pilot> findByLastName(@Param("lastName") String lastName);
+	
+	@Query("SELECT pilot FROM Pilot pilot")
+	public Collection<Pilot> findAll();
 
 	/**
 	 * Save a <code>Pilot</code> to the data store, either inserting or updating it.

@@ -74,5 +74,10 @@ public class PilotService {
 		//creating owner
 		pilotRepository.save(pilot);		
 	}		
+	
+	@Transactional(readOnly = true)	
+	public Collection<Pilot> findPilots() throws DataAccessException {
+		return pilotRepository.findAll();
+	}	
 
 }
