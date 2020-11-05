@@ -16,6 +16,7 @@
 package org.springframework.samples.petclinic.service;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -46,38 +47,48 @@ import org.springframework.util.StringUtils;
 @Service
 public class PilotService {
 
-	private PilotRepository pilotRepository;	
+	@Autowired
+	private PilotRepository pilotRepository;
 	
-	@Autowired
-	private UserService userService;
-	
-	@Autowired
-	private AuthoritiesService authoritiesService;
-
-	@Autowired
-	public PilotService(PilotRepository pilotRepository) {
-		this.pilotRepository = pilotRepository;
-	}	
-
-	@Transactional(readOnly = true)
-	public Pilot findPilotById(int id) throws DataAccessException {
-		return pilotRepository.findById(id);
-	}
-
-	@Transactional(readOnly = true)
-	public Collection<Pilot> findPilotByLastName(String lastName) throws DataAccessException {
-		return pilotRepository.findByLastName(lastName);
-	}
-
 	@Transactional
-	public void savePilot(Pilot pilot) throws DataAccessException {
-		//creating owner
-		pilotRepository.save(pilot);		
-	}		
+	public int pilotCount() {
+		return (int) pilotRepository.count();
+	}
 	
-	@Transactional(readOnly = true)	
-	public Collection<Pilot> findPilots() throws DataAccessException {
+	@Transactional
+	public Iterable<Pilot> findAll(){
 		return pilotRepository.findAll();
-	}	
+	}
+//	
+//	@Autowired
+//	private UserService userService;
+//	
+//	@Autowired
+//	private AuthoritiesService authoritiesService;
+//
+//	@Autowired
+//	public PilotService(PilotRepository pilotRepository) {
+//		this.pilotRepository = pilotRepository;
+//	}	
+//
+	@Transactional
+	public Optional<Pilot> findPilotById(int pilotId) {
+		return pilotRepository.findById(pilotId);
+	}
+//	@Transactional(readOnly = true)
+//	public Collection<Pilot> findPilotByLastName(String lastName) throws DataAccessException {
+//		return pilotRepository.findByLastName(lastName);
+//	}
+//
+//	@Transactional
+//	public void savePilot(Pilot pilot) throws DataAccessException {
+//		//creating owner
+//		pilotRepository.save(pilot);		
+//	}		
+//	
+//	@Transactional(readOnly = true)	
+//	public Collection<Pilot> findPilots() throws DataAccessException {
+//		return pilotRepository.findAll();
+//	}	
 
 }

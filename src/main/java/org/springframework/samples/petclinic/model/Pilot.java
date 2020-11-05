@@ -16,18 +16,13 @@ import motogpAPI.Category;
 @Table(name = "pilot")
 public class Pilot extends BaseEntity {
 	
-	
-
-
 	@Column(name = "name")
 	@NotEmpty
 	private String name;
 	
-	
 	@Column(name = "lastname")
 	@NotEmpty
 	private String lastName;
-	
 
 	@Column(name = "nationality")
 	@NotEmpty
@@ -44,9 +39,6 @@ public class Pilot extends BaseEntity {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pilot")
 	private Set<Result> results;
 
-	
-
-	
 	public String getName() {
 		return name;
 	}
@@ -55,7 +47,6 @@ public class Pilot extends BaseEntity {
 		this.name = name;
 	}
 	
-
 	public String getLastName() {
 		return lastName;
 	}
@@ -63,7 +54,6 @@ public class Pilot extends BaseEntity {
 	public void setLastName(String lastname) {
 		this.lastName = lastname;
 	}
-	
 	
 	public String getNationality() {
 		return nationality;
