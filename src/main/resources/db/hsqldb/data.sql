@@ -121,5 +121,3 @@ INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (1,'Sergi
 INSERT INTO results(id,position,pole,lap,pilot_id) VALUES (2,3,true,true,1)
 
 
-
-

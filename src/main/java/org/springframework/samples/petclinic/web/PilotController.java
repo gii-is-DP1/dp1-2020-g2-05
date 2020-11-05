@@ -86,6 +86,7 @@ public class PilotController {
 	public String processFindForm(Pilot pilot, BindingResult result, Map<String, Object> model) {
 
 		 //allow parameterless GET request for /pilots to return all records
+
 		if (pilot.getLastName() == null) {
 			pilot.setLastName(""); // empty string signifies broadest possible search
 		}
@@ -108,6 +109,7 @@ public class PilotController {
 			return "pilots/pilotsList";
 		}
 	}
+
 
 	@GetMapping(value = "/pilots/{pilotId}/edit")
 	public String initUpdatePilotForm(@PathVariable("pilotId") int pilotId, Model model) {
