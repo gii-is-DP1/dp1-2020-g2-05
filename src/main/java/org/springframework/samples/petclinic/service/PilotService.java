@@ -47,8 +47,10 @@ import org.springframework.util.StringUtils;
 @Service
 public class PilotService {
 
-	private PilotRepository pilotRepository;	
+	@Autowired
+	private PilotRepository pilotRepository;
 	
+<<<<<<< HEAD
 	@Autowired
 	private UserService userService;
 	
@@ -70,20 +72,55 @@ public class PilotService {
 		return pilotRepository.findByLastName(lastName);
 	}
 
+=======
+>>>>>>> branch 'master' of https://github.com/gii-is-DP1/dp1-2020-g2-05.git
 	@Transactional
-	public void savePilot(Pilot pilot) throws DataAccessException {
-		//creating owner
-		pilotRepository.save(pilot);		
-	}		
+	public int pilotCount() {
+		return (int) pilotRepository.count();
+	}
 	
-	@Transactional(readOnly = true)	
-	public Collection<Pilot> findPilots() throws DataAccessException {
+	@Transactional
+	public Iterable<Pilot> findAll(){
 		return pilotRepository.findAll();
 	}
+<<<<<<< HEAD
 
 	public void delete(Pilot pilotId) {
 		pilotRepository.delete(pilotId);
 		
 	}	
+=======
+//	
+//	@Autowired
+//	private UserService userService;
+//	
+//	@Autowired
+//	private AuthoritiesService authoritiesService;
+//
+//	@Autowired
+//	public PilotService(PilotRepository pilotRepository) {
+//		this.pilotRepository = pilotRepository;
+//	}	
+//
+	@Transactional
+	public Optional<Pilot> findPilotById(int pilotId) {
+		return pilotRepository.findById(pilotId);
+	}
+//	@Transactional(readOnly = true)
+//	public Collection<Pilot> findPilotByLastName(String lastName) throws DataAccessException {
+//		return pilotRepository.findByLastName(lastName);
+//	}
+//
+//	@Transactional
+//	public void savePilot(Pilot pilot) throws DataAccessException {
+//		//creating owner
+//		pilotRepository.save(pilot);		
+//	}		
+//	
+//	@Transactional(readOnly = true)	
+//	public Collection<Pilot> findPilots() throws DataAccessException {
+//		return pilotRepository.findAll();
+//	}	
+>>>>>>> branch 'master' of https://github.com/gii-is-DP1/dp1-2020-g2-05.git
 
 }
