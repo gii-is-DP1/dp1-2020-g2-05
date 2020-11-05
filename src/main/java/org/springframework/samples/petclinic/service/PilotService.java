@@ -16,6 +16,7 @@
 package org.springframework.samples.petclinic.service;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -60,7 +61,7 @@ public class PilotService {
 	}	
 
 	@Transactional(readOnly = true)
-	public Pilot findPilotById(int id) throws DataAccessException {
+	public Optional<Pilot> findPilotById(int id)  {
 		return pilotRepository.findById(id);
 	}
 
@@ -78,6 +79,11 @@ public class PilotService {
 	@Transactional(readOnly = true)	
 	public Collection<Pilot> findPilots() throws DataAccessException {
 		return pilotRepository.findAll();
+	}
+
+	public void delete(Pilot pilotId) {
+		pilotRepository.delete(pilotId);
+		
 	}	
 
 }

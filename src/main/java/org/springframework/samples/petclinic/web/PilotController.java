@@ -16,9 +16,13 @@
 package org.springframework.samples.petclinic.web;
 
 import java.util.Collection;
+
 import java.util.Map;
+import java.util.Optional;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Pilot;
@@ -33,6 +37,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+
 
 /**
  * @author Juergen Hoeller
@@ -152,5 +158,34 @@ public class PilotController {
 		model.addAttribute("pilot", pilotService.findPilots());
 		return "pilots/pilotsList";
 	}
-
+	
+	@GetMapping(path="/pilots/new")
+	public String crearPiloto(ModelMap model) {
+		model.addAttribute("pilot", new Pilot());
+		return "pilots/pilotsEdit";
+	}
+	
+	@PostMapping(path="pilots/save")
+	public String guardarPiloto(@Valid Pilot pilot, BindingResult result, ModelMap model) {
+		if(result.hasErrors()) {
+			model.addAttribute("pilot", pilot);
+			return "pilots/pilotsEdit";
+		}else {
+			pilotService.savePilot(pilot);
+			model.addAttribute("message", "Rider successfully saved!");
+		}
+		return "pilots/pilotsList";
+	}
+	
+	@GetMapping(path="pilots/delete/{pilotId}")
+	public String borrarPiloto(@PathParam("pilotId") int pilotId, ModelMap model) {
+		Optional<Pilot> pilot = pilotService.findPilotById(pilotId);
+		if(pilot.isPresent()) {
+			pilotService.delete(pilot.get());
+			model.addAttribute("message", "Rider successfully deleted!");
+		}else {
+			model.addAttribute("message", "Rider not found!");
+		}
+		return "pilots/pilotsList";
+	}
 }

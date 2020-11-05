@@ -1,6 +1,7 @@
 package org.springframework.samples.petclinic.web;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -51,7 +52,7 @@ public class ResultController {
 //		}
 
 		@ModelAttribute("pilot")
-		public Pilot findPilot(@PathVariable("pilotId") int pilotId) {
+		public Optional<Pilot> findPilot(@PathVariable("pilotId") int pilotId) {
 			return this.pilotService.findPilotById(pilotId);
 		}
 	        
