@@ -26,6 +26,7 @@ import org.springframework.samples.petclinic.model.BaseEntity;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
+import org.springframework.samples.petclinic.model.Pilot;
 
 /**
  * Spring Data JPA specialization of the {@link PilotRepository} interface
@@ -49,10 +50,14 @@ public interface PilotRepository extends Repository<Pilot, Integer> {
 	 * @throws org.springframework.dao.DataRetrievalFailureException if not found
 	 */
 	@Query("SELECT pilot FROM Pilot pilot left join fetch pilot.results WHERE pilot.id =:id")
-	Pilot findById(int id) throws DataAccessException;
+	public Pilot findById(@Param("id")int id);
+	
+//	@Query("SELECT pilot FROM Pilot pilot WHERE pilot.id =:id")
+//	public Pilot findById(@Param("id")int id);
 
-//	@Query("SELECT DISTINCT pilot FROM Pilot pilot left join fetch pilot.results WHERE owner.lastName LIKE :lastName%")
-//	public Collection<Pilot> findByLastName(@Param("lastName") String lastName);
+	
+	@Query("SELECT DISTINCT pilot FROM Pilot pilot left join fetch pilot.results WHERE pilot.lastName LIKE :lastName%")
+	public Collection<Pilot> findByLastName(@Param("lastName") String lastName);
 
 	/**
 	 * Save a <code>Pilot</code> to the data store, either inserting or updating it.

@@ -85,29 +85,31 @@ public class PilotController {
 	@GetMapping(value = "/pilots")
 	public String processFindForm(Pilot pilot, BindingResult result, Map<String, Object> model) {
 
-		// allow parameterless GET request for /pilots to return all records
+		 //allow parameterless GET request for /pilots to return all records
+
 		if (pilot.getLastName() == null) {
 			pilot.setLastName(""); // empty string signifies broadest possible search
 		}
 
 		// find pilots by last name
-//		Collection<Pilot> results = this.pilotService.findPilotByLastName(pilot.getLastName());
-//		if (results.isEmpty()) {
-//			// no pilots found
-//			result.rejectValue("lastName", "notFound", "not found");
-//			return "pilots/findPilots";
-//		}
-//		else if (results.size() == 1) {
-//			// 1 pilot found
-//			pilot = results.iterator().next();
-//			return "redirect:/pilots/" + pilot.getId();
-//		}
-//		else {
-//			// multiple pilots found
-//			model.put("selections", results);
-//			return "pilots/pilotsList";
-//		}
-//	}
+		Collection<Pilot> results = this.pilotService.findPilotByLastName(pilot.getLastName());
+		if (results.isEmpty()) {
+			// no pilots found
+			result.rejectValue("lastName", "notFound", "not found");
+			return "pilots/findPilots";
+		}
+		else if (results.size() == 1) {
+			// 1 pilot found
+			pilot = results.iterator().next();
+			return "redirect:/pilots/" + pilot.getId();
+		}
+		else {
+			// multiple pilots found
+			model.put("selections", results);
+			return "pilots/pilotsList";
+		}
+	}
+
 
 	@GetMapping(value = "/pilots/{pilotId}/edit")
 	public String initUpdatePilotForm(@PathVariable("pilotId") int pilotId, Model model) {

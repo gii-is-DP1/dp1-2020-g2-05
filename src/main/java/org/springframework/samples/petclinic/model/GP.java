@@ -5,6 +5,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
@@ -21,20 +22,20 @@ public class GP extends BaseEntity {
 	@NotEmpty
 	private String site;
 	
-	@Column(name = "date")
+	@Column(name = "date0")
 	@NotEmpty
-	private String date; // formato de la fecha dd-mm-yyyy
+	private String date0; // formato de la fecha dd-mm-yyyy
 	
 	@Column(name = "circuit")
 	@NotEmpty
 	private String circuit;
 	
-	@Column(name = "raceCode")
+	@Column(name = "racecode")
 	@NotEmpty
-	private RaceCode raceCode;
+	private String raceCode;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="gp")
-	Set<Result> results;
+//	@OneToMany(cascade = CascadeType.ALL, mappedBy="gp")
+//	Set<Result> results;
 
 	public String getSite() {
 		return site;
@@ -44,12 +45,12 @@ public class GP extends BaseEntity {
 		this.site = site;
 	}
 
-	public String getDate() {
-		return date;
+	public String getDate0() {
+		return date0;
 	}
 
-	public void setDate(String date) {
-		this.date = date;
+	public void setDate0(String date0) {
+		this.date0 = date0;
 	}
 
 	public String getCircuit() {
@@ -60,22 +61,22 @@ public class GP extends BaseEntity {
 		this.circuit = circuit;
 	}
 
-	public RaceCode getRaceCode() {
+	public String getRaceCode() {
 		return raceCode;
 	}
 
-	public void setRaceCode(RaceCode raceCode) {
+	public void setRaceCode(String raceCode) {
 		this.raceCode = raceCode;
 	}
 
-	public Set<Result> getResults() {
-		return results;
-	}
-
-	public void setResults(Set<Result> results) {
-		this.results = results;
-	}
-	
+//	public Set<Result> getResults() {
+//		return results;
+//	}
+//
+//	public void setResults(Set<Result> results) {
+//		this.results = results;
+//	}
+//	
 	
 
 
