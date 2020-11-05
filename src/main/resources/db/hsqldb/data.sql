@@ -101,3 +101,12 @@ INSERT INTO visits(id,pet_id,visit_date,description) VALUES (2, 8, '2013-01-02',
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (3, 8, '2013-01-03', 'neutered');
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04', 'spayed');
 
+
+INSERT INTO pilot(id,name,nationality,dorsal,category) VALUES (1,'Sergio','Española',93,'MOTOGP');
+INSERT INTO pilot(id,name,nationality,dorsal,category) VALUES (2,'Antonio','Española',43,'MOTOGP');
+INSERT INTO pilot(id,name,nationality,dorsal,category) VALUES (3,'Miguel','Española',234,'MOTOGP');
+INSERT INTO pilot(id,name,nationality,dorsal,category) VALUES (4,'Mariano','Española',45,'MOTOGP');
+INSERT INTO pilot(id,name,nationality,dorsal,category) VALUES (5,'Alvaro','Española',73,'MOTOGP');
+INSERT INTO pilot(id,name,nationality,dorsal,category) VALUES (6,'Alejandro','Española',83,'MOTOGP');
+
+
