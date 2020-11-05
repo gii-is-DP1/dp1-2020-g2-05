@@ -38,11 +38,18 @@
                     <c:out value="${pilot.category}"/>
                 </td>
                 <td>
+                
+                 <spring:url value="/pilots/edit/{pilotId}" var="pilotUrl">
+                        <spring:param name="pilotId" value="${pilot.id}"/>
+                    </spring:url>
+                	<a href="${fn:escapeXml(pilotUrl)}">Edit</a>
                 	 
                 	 <spring:url value="/pilots/delete/{pilotId}" var="pilotUrl">
                         <spring:param name="pilotId" value="${pilot.id}"/>
                     </spring:url>
                 	<a href="${fn:escapeXml(pilotUrl)}">Delete</a>
+                	
+                	
                 	
                 	
                 </td>
