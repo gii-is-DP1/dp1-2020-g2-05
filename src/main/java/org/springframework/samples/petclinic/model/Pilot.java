@@ -14,8 +14,21 @@ import motogpAPI.Category;
 
 @Entity
 @Table(name = "pilot")
-public class Pilot extends NamedEntity {
+public class Pilot extends BaseEntity {
 	
+	
+
+
+	@Column(name = "name")
+	@NotEmpty
+	private String name;
+	
+	
+	@Column(name = "lastname")
+	@NotEmpty
+	private String lastName;
+	
+
 	@Column(name = "nationality")
 	@NotEmpty
 	private String nationality;
@@ -26,11 +39,32 @@ public class Pilot extends NamedEntity {
 	
 	@Column(name = "category")
 	@NotEmpty
-	private Category category;
+	private String category;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pilot")
 	private Set<Result> results;
 
+	
+
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastname) {
+		this.lastName = lastname;
+	}
+	
+	
 	public String getNationality() {
 		return nationality;
 	}
@@ -47,11 +81,11 @@ public class Pilot extends NamedEntity {
 		this.dorsal = dorsal;
 	}
 
-	public Category getCategory() {
+	public String getCategory() {
 		return category;
 	}
 
-	public void setCategory(Category category) {
+	public void setCategory(String category) {
 		this.category = category;
 	}
 

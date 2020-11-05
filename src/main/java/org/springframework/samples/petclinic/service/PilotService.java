@@ -23,6 +23,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
+import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Vet;
 import org.springframework.samples.petclinic.model.Visit;
 import org.springframework.samples.petclinic.repository.OwnerRepository;
@@ -62,15 +63,16 @@ public class PilotService {
 		return pilotRepository.findById(id);
 	}
 
-//	@Transactional(readOnly = true)
-//	public Collection<Pilot> findPilotByLastName(String lastName) throws DataAccessException {
-//		return pilotRepository.findByLastName(lastName);
-//	}
+	@Transactional(readOnly = true)
+	public Collection<Pilot> findPilotByLastName(String lastName) throws DataAccessException {
+		return pilotRepository.findByLastName(lastName);
+	}
 
 	@Transactional
 	public void savePilot(Pilot pilot) throws DataAccessException {
 		//creating owner
 		pilotRepository.save(pilot);		
+
 
 	}		
 

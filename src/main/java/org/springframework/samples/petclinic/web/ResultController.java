@@ -13,6 +13,7 @@ import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Result;
 import org.springframework.samples.petclinic.service.OwnerService;
 import org.springframework.samples.petclinic.service.PetService;
+import org.springframework.samples.petclinic.service.PilotService;
 import org.springframework.samples.petclinic.service.ResultService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
 import org.springframework.stereotype.Controller;
@@ -44,12 +45,12 @@ public class ResultController {
 	        this.pilotService = pilotService;
 		}
 
-		@ModelAttribute("types")
-		public Collection<Result> resultList(String name) {
-			return this.resultService.findResults(name);
-		}
+//		@ModelAttribute("types")
+//		public Collection<Result> resultList(String name) {
+//			return this.resultService.findResults(name);
+//		}
 
-		@ModelAttribute("owner")
+		@ModelAttribute("pilot")
 		public Pilot findPilot(@PathVariable("pilotId") int pilotId) {
 			return this.pilotService.findPilotById(pilotId);
 		}
@@ -69,10 +70,10 @@ public class ResultController {
 			dataBinder.setDisallowedFields("id");
 		}
 
-		@InitBinder("result")
-		public void initResultBinder(WebDataBinder dataBinder) {
-			dataBinder.setValidator(new PetValidator());
-		}
+//		@InitBinder("result")
+//		public void initResultBinder(WebDataBinder dataBinder) {
+//			dataBinder.setValidator(new ResultValidator());
+//		}
 
 		@GetMapping(value = "/result/new")
 		public String initCreationForm(Pilot pilot, ModelMap model) {
@@ -92,7 +93,7 @@ public class ResultController {
 	                    try{
 	                    	pilot.addResult(result0);;
 	                    	this.resultService.saveResult(result0);
-	                    }catch(DuplicatedPetNameException ex){
+	                    }catch(Exception ex){
 	                        result.rejectValue("name", "duplicate", "already exists");
 	                        return VIEWS_RESULT_CREATE_OR_UPDATE_FORM;
 	                    }
@@ -128,7 +129,7 @@ public class ResultController {
 				BeanUtils.copyProperties(result0, resultToUpdate, "id","pilot","results");                                                                                  
 	                    try {                    
 	                        this.resultService.saveResult(resultToUpdate);
-	                    } catch (DuplicatedPetNameException ex) {
+	                    } catch (Exception ex) {
 	                        result.rejectValue("name", "duplicate", "already exists");
 	                        return VIEWS_RESULT_CREATE_OR_UPDATE_FORM;
 	                    }

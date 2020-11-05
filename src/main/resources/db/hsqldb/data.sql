@@ -83,6 +83,8 @@ INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (11, 'Freddy', '201
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (12, 'Lucky', '2010-06-24', 2, 10);
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (13, 'Sly', '2012-06-08', 1, 10);
 
+
+
 --Mascota de serrojjim
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (14, 'Dama', '2015-11-25', 2, 11);
 --Mascota de antcammar4
@@ -102,11 +104,22 @@ INSERT INTO visits(id,pet_id,visit_date,description) VALUES (3, 8, '2013-01-03',
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04', 'spayed');
 
 
-INSERT INTO pilot(id,name,nationality,dorsal,category) VALUES (1,'Sergio','Española',93,'MOTOGP');
-INSERT INTO pilot(id,name,nationality,dorsal,category) VALUES (2,'Antonio','Española',43,'MOTOGP');
-INSERT INTO pilot(id,name,nationality,dorsal,category) VALUES (3,'Miguel','Española',234,'MOTOGP');
-INSERT INTO pilot(id,name,nationality,dorsal,category) VALUES (4,'Mariano','Española',45,'MOTOGP');
-INSERT INTO pilot(id,name,nationality,dorsal,category) VALUES (5,'Alvaro','Española',73,'MOTOGP');
-INSERT INTO pilot(id,name,nationality,dorsal,category) VALUES (6,'Alejandro','Española',83,'MOTOGP');
+--INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (2,'Antonio','Rojas','Española','43','MOTOGP');
+--INSERT INTO pilot(id,name,nationality,dorsal,category) VALUES (3,'Miguel','Rojas','Española',234,'MOTOGP');
+--INSERT INTO pilot(id,name,nationality,dorsal,category) VALUES (4,'Mariano','Rojas','Española',45,'MOTOGP');
+--INSERT INTO pilot(id,name,nationality,dorsal,category) VALUES (5,'Alvaro','Rojas','Española',73,'MOTOGP');
+--INSERT INTO pilot(id,name,nationality,dorsal,category) VALUES (6,'Alejandro','Rojas','Española',83,'MOTOGP');
+
+
+--INSERT INTO gp(id,site,date0,circuit,racecode) VALUES (1,'Mallorca','15-12-2012','Montercarlo','QAT')
+
+
+INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (1,'Sergio','Rojas','Espanola','93','MOTOGP');
+
+
+
+INSERT INTO results(id,position,pole,lap,pilot_id) VALUES (2,3,true,true,1)
+
+
 
 

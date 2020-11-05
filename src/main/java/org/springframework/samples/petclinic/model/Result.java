@@ -9,7 +9,7 @@ import javax.validation.constraints.NotEmpty;
 
 
 @Entity
-@Table(name = "result")
+@Table(name = "results")
 public class Result extends BaseEntity {
 	
 	@Column(name = "position")
@@ -19,21 +19,20 @@ public class Result extends BaseEntity {
 
 	@Column(name = "pole")
 	@NotEmpty
-	private Integer pole; //0-> false , 1-> true
+	private Boolean pole; //0-> false , 1-> true
 	
-	@Column(name = "fastestLapOnRace")
+	@Column(name = "lap")
 	@NotEmpty
-	private Integer fastestLapOnRace; //0-> false , 1-> true
-	
-	
+	private Boolean lap; //0-> false , 1-> true
 	
 	@ManyToOne
 	@JoinColumn(name = "pilot_id")
 	private Pilot pilot;
 	
-	@ManyToOne
-	@JoinColumn(name = "gp_id")
-	private GP gp;
+	
+//	@ManyToOne
+//	@JoinColumn(name = "gp_id")
+//	private GP gp;
 
 	public Integer getPosition() {
 		return position;
@@ -43,20 +42,20 @@ public class Result extends BaseEntity {
 		this.position = position;
 	}
 
-	public Integer getPole() {
+	public Boolean getPole() {
 		return pole;
 	}
 
-	public void setPole(Integer pole) {
+	public void setPole(Boolean pole) {
 		this.pole = pole;
 	}
 
-	public Integer getFastestLapOnRace() {
-		return fastestLapOnRace;
+	public Boolean getLap() {
+		return lap;
 	}
 
-	public void setFastestLapOnRace(Integer fastestLapOnRace) {
-		this.fastestLapOnRace = fastestLapOnRace;
+	public void setLap(Boolean fastestLapOnRace) {
+		this.lap = fastestLapOnRace;
 	}
 
 	public Pilot getPilot() {
@@ -67,13 +66,13 @@ public class Result extends BaseEntity {
 		this.pilot = pilot;
 	}
 
-	public GP getGp() {
-		return gp;
-	}
-
-	public void setGp(GP gp) {
-		this.gp = gp;
-	}
+//	public GP getGp() {
+//		return gp;
+//	}
+//
+//	public void setGp(GP gp) {
+//		this.gp = gp;
+//	}
 
 	
 }

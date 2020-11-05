@@ -8,8 +8,10 @@ import org.springframework.samples.petclinic.model.Result;
 import org.springframework.samples.petclinic.model.Visit;
 import org.springframework.samples.petclinic.repository.ResultRepository;
 import org.springframework.samples.petclinic.repository.VisitRepository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Service
 public class ResultService {
 	
 	
@@ -25,11 +27,11 @@ public class ResultService {
 		this.visitRepository = visitRepository;
 	}
 
-	@Transactional(readOnly = true)
-	public Collection<Result> findResults(String name) throws DataAccessException {
-		return resultRepository.findResults(name);
-	}
-	
+//	@Transactional(readOnly = true)
+//	public Collection<Result> findResults(String name) throws DataAccessException {
+//		return resultRepository.findResults(name);
+//	}
+//	
 	@Transactional
 	public void saveResult(Result result) throws DataAccessException {
 		visitRepository.save(result);
