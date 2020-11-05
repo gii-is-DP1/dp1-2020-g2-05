@@ -18,6 +18,8 @@ package org.springframework.samples.petclinic.service;
 import java.util.Collection;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
@@ -50,7 +52,7 @@ public class PilotService {
 	@Autowired
 	private PilotRepository pilotRepository;
 	
-<<<<<<< HEAD
+
 	@Autowired
 	private UserService userService;
 	
@@ -62,18 +64,15 @@ public class PilotService {
 		this.pilotRepository = pilotRepository;
 	}	
 
-	@Transactional(readOnly = true)
-	public Optional<Pilot> findPilotById(int id)  {
-		return pilotRepository.findById(id);
-	}
+
 
 	@Transactional(readOnly = true)
 	public Collection<Pilot> findPilotByLastName(String lastName) throws DataAccessException {
 		return pilotRepository.findByLastName(lastName);
 	}
 
-=======
->>>>>>> branch 'master' of https://github.com/gii-is-DP1/dp1-2020-g2-05.git
+
+
 	@Transactional
 	public int pilotCount() {
 		return (int) pilotRepository.count();
@@ -83,13 +82,13 @@ public class PilotService {
 	public Iterable<Pilot> findAll(){
 		return pilotRepository.findAll();
 	}
-<<<<<<< HEAD
+
 
 	public void delete(Pilot pilotId) {
 		pilotRepository.delete(pilotId);
 		
 	}	
-=======
+
 //	
 //	@Autowired
 //	private UserService userService;
@@ -111,16 +110,20 @@ public class PilotService {
 //		return pilotRepository.findByLastName(lastName);
 //	}
 //
-//	@Transactional
-//	public void savePilot(Pilot pilot) throws DataAccessException {
-//		//creating owner
-//		pilotRepository.save(pilot);		
-//	}		
+	@Transactional
+	public void savePilot(Pilot pilot) throws DataAccessException {
+		
+		pilotRepository.save(pilot);		
+	}		
 //	
 //	@Transactional(readOnly = true)	
 //	public Collection<Pilot> findPilots() throws DataAccessException {
 //		return pilotRepository.findAll();
 //	}	
->>>>>>> branch 'master' of https://github.com/gii-is-DP1/dp1-2020-g2-05.git
 
-}
+
+
+	}
+
+
+

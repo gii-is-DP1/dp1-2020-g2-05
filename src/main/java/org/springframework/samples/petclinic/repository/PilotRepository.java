@@ -38,7 +38,7 @@ import org.springframework.samples.petclinic.model.Pilot;
  */
 public interface PilotRepository extends CrudRepository<Pilot, Integer> {
 
-<<<<<<< HEAD
+
 	/**
 	 * Retrieve all <code>PetType</code>s from the data store.
 	 * @return a <code>Collection</code> of <code>PetType</code>s
@@ -56,7 +56,7 @@ public interface PilotRepository extends CrudRepository<Pilot, Integer> {
 	public Optional<Pilot> findById(@Param("id")int id);
 	
 //	@Query("SELECT pilot FROM Pilot pilot WHERE pilot.id =:id")
-=======
+
 //	/**
 //	 * Retrieve all <code>PetType</code>s from the data store.
 //	 * @return a <code>Collection</code> of <code>PetType</code>s
@@ -71,9 +71,9 @@ public interface PilotRepository extends CrudRepository<Pilot, Integer> {
 //	 * @throws org.springframework.dao.DataRetrievalFailureException if not found
 //	 */
 //	@Query("SELECT pilot FROM Pilot pilot left join fetch pilot.results WHERE pilot.id =:id")
->>>>>>> branch 'master' of https://github.com/gii-is-DP1/dp1-2020-g2-05.git
+
 //	public Pilot findById(@Param("id")int id);
-<<<<<<< HEAD
+
 
 	
 	@Query("SELECT DISTINCT pilot FROM Pilot pilot left join fetch pilot.results WHERE pilot.lastName LIKE :lastName%")
@@ -87,8 +87,7 @@ public interface PilotRepository extends CrudRepository<Pilot, Integer> {
 	 * @param pet the <code>Pilot</code> to save
 	 * @see BaseEntity#isNew
 	 */
-	
-=======
+
 //	
 ////	@Query("SELECT pilot FROM Pilot pilot WHERE pilot.id =:id")
 ////	public Pilot findById(@Param("id")int id);
@@ -106,6 +105,6 @@ public interface PilotRepository extends CrudRepository<Pilot, Integer> {
 //	 * @see BaseEntity#isNew
 //	 */
 //	void save(Pilot pilot) throws DataAccessException;
->>>>>>> branch 'master' of https://github.com/gii-is-DP1/dp1-2020-g2-05.git
+
 
 }
