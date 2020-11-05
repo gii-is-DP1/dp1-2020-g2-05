@@ -17,17 +17,24 @@ public class Record {
 		super();
 
 		String html = Jsoup.connect(entrada).get().text();
-		String records = html.split("Récords: ")[1];
-		String[] prueba = records.split("Km/h");
-		List<String> listaRecords = new ArrayList<String>();
-		for (int i=0; i < prueba.length; i++) {
-			listaRecords.add(prueba[i].trim());
-		}
+		if (!html.contains("Récords: ") ) {
+			this.vueltaDePole = null;
+			this.vueltaRapida = null;
+			this.recordDelCircuito = null;
+			this.mejorVuelta = null;
+		} else {
+			String records = html.split("Récords: ")[1];
+			String[] prueba = records.split("Km/h");
+			List<String> listaRecords = new ArrayList<String>();
+			for (int i=0; i < prueba.length; i++) {
+				listaRecords.add(prueba[i].trim());
+			}
 
-		this.vueltaDePole = new RecordPole(prueba[0]);
-		this.vueltaRapida = new RecordVueltaRapida(prueba[1]);
-		this.recordDelCircuito = new RecordCircuito(prueba[2]);
-		this.mejorVuelta = new RecordMejorVuelta(prueba[3]);
+			this.vueltaDePole = new RecordPole(prueba[0]);
+			this.vueltaRapida = new RecordVueltaRapida(prueba[1]);
+			this.recordDelCircuito = new RecordCircuito(prueba[2]);
+			this.mejorVuelta = new RecordMejorVuelta(prueba[3]);
+		}
 	}
 
 	public Record(RecordPole vueltaDePole, RecordVueltaRapida vueltaRapida, RecordCircuito recordDelCircuito,
@@ -127,8 +134,12 @@ public class Record {
 
 	@Override
 	public String toString() {
-		return "Record [vueltaDePole=" + vueltaDePole + ", vueltaRapida=" + vueltaRapida + ", recordDelCircuito="
-				+ recordDelCircuito + ", mejorVuelta=" + mejorVuelta + "]";
+		if (vueltaDePole == null || vueltaRapida == null || recordDelCircuito == null || mejorVuelta == null) {
+			return "No disponemos de datos para la fecha, el pais y la categoria introducidos";
+		} else {
+			return "Record [vueltaDePole=" + vueltaDePole + ", vueltaRapida=" + vueltaRapida + ", recordDelCircuito="
+					+ recordDelCircuito + ", mejorVuelta=" + mejorVuelta + "]";
+		}
 	}
 
 }
