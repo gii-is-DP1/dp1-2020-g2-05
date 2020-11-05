@@ -25,6 +25,7 @@ import javax.websocket.server.PathParam;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.PilotService;
@@ -192,4 +193,34 @@ public class PilotController {
 		}
 		return view;
 	}
+	
+	@GetMapping(path="pilots/edit/{pilotId}")
+	public String editarPiloto(@PathVariable("pilotId") int pilotId, ModelMap model) {
+		Optional<Pilot> pilot = this.pilotService.findPilotById(pilotId);
+		String view = "pilots/pilotsList";
+		model.addAttribute(pilot);
+		if(pilot.isPresent()) {
+			view = "pilots/pilotsEdit";
+			
+		}else {
+			model.addAttribute("message", "Rider not found!");
+			view=listadoPilotos(model);
+		}
+		return view;
+	}
+	
+	@PostMapping(value = "pilots/edit/{pilotId}")
+	public String processUpdatePilot(@Valid Pilot pilot, BindingResult result,
+			@PathVariable("pilotId") int pilotId) {
+		if (result.hasErrors()) {
+			return "pilots/pilotsEdit";
+		}
+		else {
+			pilot.setId(pilotId);
+			this.pilotService.savePilot(pilot);
+			return "redirect:/pilots/{pilotId}";
+		}
+	
+	}
 }
+
