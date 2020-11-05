@@ -167,25 +167,29 @@ public class PilotController {
 	
 	@PostMapping(path="pilots/save")
 	public String guardarPiloto(@Valid Pilot pilot, BindingResult result, ModelMap model) {
+		String view = "pilots/pilotsList";
 		if(result.hasErrors()) {
 			model.addAttribute("pilot", pilot);
 			return "pilots/pilotsEdit";
 		}else {
 			pilotService.savePilot(pilot);
 			model.addAttribute("message", "Rider successfully saved!");
+			view=listadoPilotos(model);
 		}
-		return "pilots/pilotsList";
+		return view;
 	}
 	
 	@GetMapping(path="pilots/delete/{pilotId}")
-	public String borrarPiloto(@PathParam("pilotId") int pilotId, ModelMap model) {
+	public String borrarPiloto(@PathVariable("pilotId") int pilotId, ModelMap model) {
 		Optional<Pilot> pilot = pilotService.findPilotById(pilotId);
+		String view = "pilots/pilotsList";
 		if(pilot.isPresent()) {
 			pilotService.delete(pilot.get());
 			model.addAttribute("message", "Rider successfully deleted!");
 		}else {
 			model.addAttribute("message", "Rider not found!");
+			view=listadoPilotos(model);
 		}
-		return "pilots/pilotsList";
+		return view;
 	}
 }
