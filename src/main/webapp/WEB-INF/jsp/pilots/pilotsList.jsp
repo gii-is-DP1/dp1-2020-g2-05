@@ -19,7 +19,7 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${selections}" var="pilot">
+        <c:forEach items="${resultados}" var="pilot">
             <tr>
                 <td>
                     <c:out value="${pilot.name} "/>

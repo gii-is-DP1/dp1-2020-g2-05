@@ -149,7 +149,7 @@ public class PilotController {
 	
 	@GetMapping("/pilots")
 	public String listadoPilotos(ModelMap modelMap) {
-		modelMap.addAttribute("selections", pilotService.findAll());
+		modelMap.addAttribute("resultados", pilotService.findAll());
 		return "pilots/pilotsList";
 	}
 
