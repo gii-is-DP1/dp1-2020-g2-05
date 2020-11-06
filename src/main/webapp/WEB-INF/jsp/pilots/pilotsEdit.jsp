@@ -14,6 +14,7 @@
     </h2>
     <form:form modelAttribute="pilot" class="form-horizontal" id="add-pilot-form" action="/pilots/save">
         <div class="form-group has-feedback">
+        	<input type="hidden" name="id" value="${pilot.id}"/>
             <petclinic:inputField label="Name" name="name"/>
             <petclinic:inputField label="Last Name" name="lastName"/>
             <petclinic:inputField label="Dorsal" name="dorsal"/>

@@ -175,7 +175,6 @@ public class PilotController {
 		}else {
 			pilotService.savePilot(pilot);
 			model.addAttribute("message", "Rider successfully saved!");
-			view=listadoPilotos(model);
 		}
 		return view;
 	}
@@ -183,22 +182,20 @@ public class PilotController {
 	@GetMapping(path="pilots/delete/{pilotId}")
 	public String borrarPiloto(@PathVariable("pilotId") int pilotId, ModelMap model) {
 		Optional<Pilot> pilot = pilotService.findPilotById(pilotId);
-		String view = "pilots/pilotsList";
 		if(pilot.isPresent()) {
 			pilotService.delete(pilot.get());
 			model.addAttribute("message", "Rider successfully deleted!");
 		}else {
 			model.addAttribute("message", "Rider not found!");
-			view=listadoPilotos(model);
 		}
-		return view;
+		return listadoPilotos(model);
 	}
 	
 	@GetMapping(path="pilots/edit/{pilotId}")
 	public String editarPiloto(@PathVariable("pilotId") int pilotId, ModelMap model) {
 		Optional<Pilot> pilot = this.pilotService.findPilotById(pilotId);
 		String view = "pilots/pilotsList";
-		model.addAttribute(pilot);
+		model.addAttribute(pilot.get());
 		if(pilot.isPresent()) {
 			view = "pilots/pilotsEdit";
 			
@@ -217,8 +214,7 @@ public class PilotController {
 		}
 		else {
 			pilot.setId(pilotId);
-			this.pilotService.savePilot(pilot);
-			return "redirect:/pilots/{pilotId}";
+			return "/pilots/pilotsList";
 		}
 	
 	}

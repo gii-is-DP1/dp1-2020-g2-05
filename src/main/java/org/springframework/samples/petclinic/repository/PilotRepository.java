@@ -52,8 +52,8 @@ public interface PilotRepository extends CrudRepository<Pilot, Integer> {
 	 * @return the <code>Pet</code> if found
 	 * @throws org.springframework.dao.DataRetrievalFailureException if not found
 	 */
-	@Query("SELECT pilot FROM Pilot pilot left join fetch pilot.results WHERE pilot.id =:id")
-	public Optional<Pilot> findById(@Param("id")int id);
+//	@Query("SELECT pilot FROM Pilot pilot left join fetch pilot.results WHERE pilot.id =:id")
+//	public Optional<Pilot> findById(@Param("id")int id);
 	
 //	@Query("SELECT pilot FROM Pilot pilot WHERE pilot.id =:id")
 
@@ -76,11 +76,11 @@ public interface PilotRepository extends CrudRepository<Pilot, Integer> {
 
 
 	
-	@Query("SELECT DISTINCT pilot FROM Pilot pilot left join fetch pilot.results WHERE pilot.lastName LIKE :lastName%")
-	public Collection<Pilot> findByLastName(@Param("lastName") String lastName);
-	
-	@Query("SELECT pilot FROM Pilot pilot")
-	public Collection<Pilot> findAll();
+//	@Query("SELECT DISTINCT pilot FROM Pilot pilot left join fetch pilot.results WHERE pilot.lastName LIKE :lastName%")
+//	public Collection<Pilot> findByLastName(@Param("lastName") String lastName);
+//	
+//	@Query("SELECT pilot FROM Pilot pilot")
+//	public Collection<Pilot> findAll();
 
 	/**
 	 * Save a <code>Pilot</code> to the data store, either inserting or updating it.
