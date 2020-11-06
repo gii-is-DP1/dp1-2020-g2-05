@@ -206,17 +206,6 @@ public class PilotController {
 		return view;
 	}
 	
-	@PostMapping(value = "pilots/edit/{pilotId}")
-	public String processUpdatePilot(@Valid Pilot pilot, BindingResult result,
-			@PathVariable("pilotId") int pilotId) {
-		if (result.hasErrors()) {
-			return "pilots/pilotsEdit";
-		}
-		else {
-			pilot.setId(pilotId);
-			return "/pilots/pilotsList";
-		}
 	
-	}
 }
 

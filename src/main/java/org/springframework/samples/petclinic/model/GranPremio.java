@@ -15,8 +15,8 @@ import motogpAPI.RaceCode;
 
 
 @Entity
-@Table(name = "gp")
-public class GP extends BaseEntity {
+@Table(name = "granpremio")
+public class GranPremio extends BaseEntity {
 
 	@Column(name = "site")
 	@NotEmpty
@@ -34,8 +34,8 @@ public class GP extends BaseEntity {
 	@NotEmpty
 	private String raceCode;
 	
-//	@OneToMany(cascade = CascadeType.ALL, mappedBy="gp")
-//	Set<Result> results;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="gp")
+	Set<Result> results;
 
 	public String getSite() {
 		return site;
@@ -69,14 +69,14 @@ public class GP extends BaseEntity {
 		this.raceCode = raceCode;
 	}
 
-//	public Set<Result> getResults() {
-//		return results;
-//	}
-//
-//	public void setResults(Set<Result> results) {
-//		this.results = results;
-//	}
-//	
+	public Set<Result> getResults() {
+		return results;
+	}
+
+	public void setResults(Set<Result> results) {
+		this.results = results;
+	}
+	
 	
 
 
