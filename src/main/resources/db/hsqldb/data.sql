@@ -111,12 +111,13 @@ INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (5,'Alvar
 INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (6,'Alejandro','Rojas','Española',83,'MOTOGP');
 
 
---INSERT INTO gp(id,site,date0,circuit,racecode) VALUES (1,'Mallorca','15-12-2012','Montercarlo','QAT')
+INSERT INTO granpremio(id,site,date0,circuit,racecode) VALUES (1,'Mallorca','15','Montercarlo','QAT');
 
 
 
 
 
-INSERT INTO results(id,position,pole,lap,pilot_id) VALUES (2,3,true,true,1)
+
+INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (2,3,true,true,1,1);
 
 

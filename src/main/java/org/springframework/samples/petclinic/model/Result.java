@@ -30,9 +30,9 @@ public class Result extends BaseEntity {
 	private Pilot pilot;
 	
 	
-//	@ManyToOne
-//	@JoinColumn(name = "gp_id")
-//	private GP gp;
+	@ManyToOne
+	@JoinColumn(name = "granpremio_id")
+	private GranPremio gp;
 
 	public Integer getPosition() {
 		return position;
@@ -66,13 +66,13 @@ public class Result extends BaseEntity {
 		this.pilot = pilot;
 	}
 
-//	public GP getGp() {
-//		return gp;
-//	}
-//
-//	public void setGp(GP gp) {
-//		this.gp = gp;
-//	}
+	public GranPremio getGp() {
+		return gp;
+	}
+
+	public void setGp(GranPremio gp) {
+		this.gp = gp;
+	}
 
 	
 }
