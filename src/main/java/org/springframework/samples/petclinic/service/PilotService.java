@@ -18,6 +18,8 @@ package org.springframework.samples.petclinic.service;
 import java.util.Collection;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
@@ -50,6 +52,27 @@ public class PilotService {
 	@Autowired
 	private PilotRepository pilotRepository;
 	
+
+	@Autowired
+	private UserService userService;
+	
+	@Autowired
+	private AuthoritiesService authoritiesService;
+
+	@Autowired
+	public PilotService(PilotRepository pilotRepository) {
+		this.pilotRepository = pilotRepository;
+	}	
+
+
+
+	@Transactional(readOnly = true)
+	public Collection<Pilot> findPilotByLastName(String lastName) throws DataAccessException {
+		return pilotRepository.findByLastName(lastName);
+	}
+
+
+
 	@Transactional
 	public int pilotCount() {
 		return (int) pilotRepository.count();
@@ -59,6 +82,13 @@ public class PilotService {
 	public Iterable<Pilot> findAll(){
 		return pilotRepository.findAll();
 	}
+
+
+	public void delete(Pilot pilotId) {
+		pilotRepository.delete(pilotId);
+		
+	}	
+
 //	
 //	@Autowired
 //	private UserService userService;
@@ -80,15 +110,20 @@ public class PilotService {
 //		return pilotRepository.findByLastName(lastName);
 //	}
 //
-//	@Transactional
-//	public void savePilot(Pilot pilot) throws DataAccessException {
-//		//creating owner
-//		pilotRepository.save(pilot);		
-//	}		
+	@Transactional
+	public void savePilot(Pilot pilot) throws DataAccessException {
+		
+		pilotRepository.save(pilot);		
+	}		
 //	
 //	@Transactional(readOnly = true)	
 //	public Collection<Pilot> findPilots() throws DataAccessException {
 //		return pilotRepository.findAll();
 //	}	
 
-}
+
+
+	}
+
+
+

@@ -17,6 +17,7 @@ package org.springframework.samples.petclinic.repository;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
@@ -37,6 +38,25 @@ import org.springframework.samples.petclinic.model.Pilot;
  */
 public interface PilotRepository extends CrudRepository<Pilot, Integer> {
 
+
+	/**
+	 * Retrieve all <code>PetType</code>s from the data store.
+	 * @return a <code>Collection</code> of <code>PetType</code>s
+	 */
+//	@Query("SELECT ptype FROM PetType ptype ORDER BY ptype.name")
+//	List<PetType> findPetTypes() throws DataAccessException;
+	
+	/**
+	 * Retrieve a <code>Pilot</code> from the data store by id.
+	 * @param id the id to search for
+	 * @return the <code>Pet</code> if found
+	 * @throws org.springframework.dao.DataRetrievalFailureException if not found
+	 */
+	@Query("SELECT pilot FROM Pilot pilot left join fetch pilot.results WHERE pilot.id =:id")
+	public Optional<Pilot> findById(@Param("id")int id);
+	
+//	@Query("SELECT pilot FROM Pilot pilot WHERE pilot.id =:id")
+
 //	/**
 //	 * Retrieve all <code>PetType</code>s from the data store.
 //	 * @return a <code>Collection</code> of <code>PetType</code>s
@@ -51,7 +71,23 @@ public interface PilotRepository extends CrudRepository<Pilot, Integer> {
 //	 * @throws org.springframework.dao.DataRetrievalFailureException if not found
 //	 */
 //	@Query("SELECT pilot FROM Pilot pilot left join fetch pilot.results WHERE pilot.id =:id")
+
 //	public Pilot findById(@Param("id")int id);
+
+
+	
+	@Query("SELECT DISTINCT pilot FROM Pilot pilot left join fetch pilot.results WHERE pilot.lastName LIKE :lastName%")
+	public Collection<Pilot> findByLastName(@Param("lastName") String lastName);
+	
+	@Query("SELECT pilot FROM Pilot pilot")
+	public Collection<Pilot> findAll();
+
+	/**
+	 * Save a <code>Pilot</code> to the data store, either inserting or updating it.
+	 * @param pet the <code>Pilot</code> to save
+	 * @see BaseEntity#isNew
+	 */
+
 //	
 ////	@Query("SELECT pilot FROM Pilot pilot WHERE pilot.id =:id")
 ////	public Pilot findById(@Param("id")int id);
@@ -69,5 +105,6 @@ public interface PilotRepository extends CrudRepository<Pilot, Integer> {
 //	 * @see BaseEntity#isNew
 //	 */
 //	void save(Pilot pilot) throws DataAccessException;
+
 
 }
