@@ -66,10 +66,10 @@ public class PilotService {
 
 
 
-	@Transactional(readOnly = true)
-	public Collection<Pilot> findPilotByLastName(String lastName) throws DataAccessException {
-		return pilotRepository.findByLastName(lastName);
-	}
+//	@Transactional(readOnly = true)
+//	public Collection<Pilot> findPilotByLastName(String lastName) throws DataAccessException {
+//		return pilotRepository.findByLastName(lastName);
+//	}
 
 
 
