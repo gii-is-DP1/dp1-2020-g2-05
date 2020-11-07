@@ -168,7 +168,6 @@ public class PilotController {
 	
 	@PostMapping(path="pilots/save")
 	public String guardarPiloto(@Valid Pilot pilot, BindingResult result, ModelMap model) {
-		String view = "pilots/pilotsList";
 		if(result.hasErrors()) {
 			model.addAttribute("pilot", pilot);
 			return "pilots/pilotsEdit";
