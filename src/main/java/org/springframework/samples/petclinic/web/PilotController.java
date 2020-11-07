@@ -176,7 +176,7 @@ public class PilotController {
 			pilotService.savePilot(pilot);
 			model.addAttribute("message", "Rider successfully saved!");
 		}
-		return view;
+		return "redirect:/pilots";
 	}
 	
 	@GetMapping(path="pilots/delete/{pilotId}")
