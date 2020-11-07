@@ -104,18 +104,14 @@ INSERT INTO visits(id,pet_id,visit_date,description) VALUES (3, 8, '2013-01-03',
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04', 'spayed');
 
 INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (1,'Sergio','Rojas','Espanola',93,'MOTOGP');
-INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (2,'Antonio','Rojas','Española',43,'MOTOGP');
-INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (3,'Miguel','Rojas','Española',234,'MOTOGP');
-INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (4,'Mariano','Rojas','Española',45,'MOTOGP');
-INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (5,'Alvaro','Rojas','Española',73,'MOTOGP');
-INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (6,'Alejandro','Rojas','Española',83,'MOTOGP');
+INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (2,'Antonio','Rojas','Espanola',43,'MOTOGP');
+INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (3,'Miguel','Rojas','Espanola',234,'MOTOGP');
+INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (4,'Mariano','Rojas','Espanola',45,'MOTOGP');
+INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (5,'Alvaro','Rojas','Espanola',73,'MOTOGP');
+INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (6,'Alejandro','Rojas','Espanola',83,'MOTOGP');
 
 
 INSERT INTO granpremio(id,site,date0,circuit,racecode) VALUES (1,'Mallorca','15','Montercarlo','QAT');
-
-
-
-
 
 
 INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (2,3,true,true,1,1);

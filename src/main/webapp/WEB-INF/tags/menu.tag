@@ -45,10 +45,14 @@
 					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
 					<span>Error</span>
 				</petclinic:menuItem>
+				
+				<petclinic:menuItem active="${name eq 'pilots'}" url="/pilots"
+					title="leads to /pilots">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					<span>Pilots</span>
+				</petclinic:menuItem>
 
 			</ul>
-
-
 
 
 			<ul class="nav navbar-nav navbar-right">
