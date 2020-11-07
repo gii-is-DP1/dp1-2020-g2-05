@@ -36,7 +36,7 @@ public interface ResultRepository extends Repository<Result, Integer> {
 	 * Retrieve all <code>PetType</code>s from the data store.
 	 * @return a <code>Collection</code> of <code>PetType</code>s
 	 */
-//	@Query("SELECT results FROM Result results WHERE results.pilot_id LIKE SELECT pilot_id FROM Pilot pilot WHERE pilot.name LIKE =S:name")
+//	@Query("SELECT * FROM RESULTS WHERE RESULTS.pilot_id = SELECT id FROM Pilot  WHERE pilot.name=%name")
 //	List<Result> findResults(@Param("name")String name) throws DataAccessException;
 	//Obtiene resultados del piloto pasado como parametro
 	
