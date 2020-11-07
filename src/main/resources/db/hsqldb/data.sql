@@ -112,8 +112,19 @@ INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (6,'Aleja
 
 
 INSERT INTO granpremio(id,site,date0,circuit,racecode) VALUES (1,'Mallorca','15','Montercarlo','QAT');
+INSERT INTO granpremio(id,site,date0,circuit,racecode) VALUES (2,'Menorca','15','Andalusia','SPA');
+INSERT INTO granpremio(id,site,date0,circuit,racecode) VALUES (3,'Menorca','15','Andalusia','SPA');
+INSERT INTO granpremio(id,site,date0,circuit,racecode) VALUES (4,'Menorca','15','Andalusia','SPA');
+INSERT INTO granpremio(id,site,date0,circuit,racecode) VALUES (5,'Menorca','15','Andalusia','SPA');
+INSERT INTO granpremio(id,site,date0,circuit,racecode) VALUES (6,'Menorca','15','Andalusia','SPA');
 
 
-INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (2,3,true,true,1,1);
+INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (1,1,true,false,1,1);
+INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (2,2,false,false,2,1);
+INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (3,3,false,true,3,1);
+INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (4,4,false,false,4,1);
+INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (5,5,false,false,5,1);
+INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (6,6,false,false,6,1);
+
 
 
