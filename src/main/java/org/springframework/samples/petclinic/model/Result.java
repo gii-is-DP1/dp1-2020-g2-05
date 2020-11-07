@@ -74,5 +74,11 @@ public class Result extends BaseEntity {
 		this.gp = gp;
 	}
 
+//	@Override
+//	public String toString() {
+//		return "Result [position=" + position + ", pole=" + pole + ", lap=" + lap + ", pilot=" + pilot + ", gp=" + gp
+//				+ "]";
+//	}
+
 	
 }

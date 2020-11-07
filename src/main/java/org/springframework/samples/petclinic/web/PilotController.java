@@ -164,19 +164,27 @@ public class PilotController {
 	public String muestraPilotoPorId(@PathVariable("pilotId") int pilotId, ModelMap model) {
 		Optional<Pilot> pilot = pilotService.findPilotById(pilotId);
 		if(pilot.isPresent()) {
-			model.addAttribute("resultado", pilot.get());
+			model.addAttribute("pilot", pilot.get());
 		}else {
 			model.addAttribute("encontrado", false);
 		}
-		return "pilots/pilotsEdit";
+		System.out.println("El id del piloto es: " + this.pilotService.findPilotById(pilotId).get());
+		return "pilots/pilotDetails";
 	}
+	
+//	@GetMapping(path="/pilots/{pilotId}")
+//	public ModelAndView muestraPilotoPorId(@PathVariable("pilotId") int pilotId) {
+//		ModelAndView mav = new ModelAndView("pilot/pilotDetails");
+//		mav.addObject(this.pilotService.findPilotById(pilotId));
+//		return mav;
+//	}
 	
 	@GetMapping(path="/pilots/new")
 	public String crearPiloto(ModelMap model) {
 		model.addAttribute("pilot", new Pilot());
 		return "pilots/pilotsEdit";
 	}
-	
+	 
 	@PostMapping(path="pilots/save")
 	public String guardarPiloto(@Valid Pilot pilot, BindingResult result, ModelMap model) {
 		String view = "pilots/pilotsList";

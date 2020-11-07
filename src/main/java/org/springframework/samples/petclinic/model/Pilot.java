@@ -97,6 +97,13 @@ public class Pilot extends BaseEntity {
 		}
 		return this.results;
 	}
+
+	@Override
+	public String toString() {
+		return "Pilot [name=" + name + ", lastName=" + lastName + ", nationality=" + nationality + ", dorsal=" + dorsal
+				+ ", category=" + category + ", results=" + results + "]";
+	}
+	
 	
 }
 

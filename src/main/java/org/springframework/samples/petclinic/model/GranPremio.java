@@ -76,8 +76,10 @@ public class GranPremio extends BaseEntity {
 	public void setResults(Set<Result> results) {
 		this.results = results;
 	}
-	
-	
 
-
+	@Override
+	public String toString() {
+		return "GranPremio [site=" + site + ", date0=" + date0 + ", circuit=" + circuit + ", raceCode=" + raceCode
+				+ ", results=" + results + "]";
+	}
 }
