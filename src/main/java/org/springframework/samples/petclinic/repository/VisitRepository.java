@@ -20,6 +20,7 @@ import java.util.List;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.repository.Repository;
 import org.springframework.samples.petclinic.model.BaseEntity;
+import org.springframework.samples.petclinic.model.Result;
 import org.springframework.samples.petclinic.model.Visit;
 
 /**
@@ -41,6 +42,7 @@ public interface VisitRepository extends Repository<Visit, Integer> {
 	 * @see BaseEntity#isNew
 	 */
 	void save(Visit visit) throws DataAccessException;
+	void save(Result result) throws DataAccessException;
 
 	List<Visit> findByPetId(Integer petId);
 

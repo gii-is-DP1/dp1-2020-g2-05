@@ -19,7 +19,7 @@ INSERT INTO users(username,password,enabled) VALUES ('aleruijur','aleale',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (6,'aleruijur','owner');
 -- Usuario de migniearj como owner
 INSERT INTO users(username,password,enabled) VALUES ('migniearj','miguesnow',TRUE);
-INSERT INTO authorities(id,username,authority) VALUES (7,'migninearj','owner');
+INSERT INTO authorities(id,username,authority) VALUES (7,'migniearj','owner');
 -- Usuario de alvcorcas como owner
 INSERT INTO users(username,password,enabled) VALUES ('alvcorcas','1eB@6!XYUYe6c33&',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (8,'alvcorcas','owner');
@@ -83,6 +83,8 @@ INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (11, 'Freddy', '201
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (12, 'Lucky', '2010-06-24', 2, 10);
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (13, 'Sly', '2012-06-08', 1, 10);
 
+
+
 --Mascota de serrojjim
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (14, 'Dama', '2015-11-25', 2, 11);
 --Mascota de antcammar4
@@ -90,7 +92,7 @@ INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (15, 'Negis', '2012
 --Mascota de aleruijur
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (16, 'Nube', '2011-09-13', 5, 13);
 --Mascota de migniearj
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (17, 'Snow', '2018-06-06', 8, 14);
+INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (17, 'Snow', '2018-06-06', 5, 14);
 --Mascota de alvcorcas
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (18, 'Chipi', '2015-02-04', 1, 15);
 --Mascota de martorsan13
@@ -100,4 +102,22 @@ INSERT INTO visits(id,pet_id,visit_date,description) VALUES (1, 7, '2013-01-01',
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (2, 8, '2013-01-02', 'rabies shot');
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (3, 8, '2013-01-03', 'neutered');
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04', 'spayed');
+
+INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (1,'Sergio','Rojas','Espanola',93,'MOTOGP');
+INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (2,'Antonio','Rojas','Española',43,'MOTOGP');
+INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (3,'Miguel','Rojas','Española',234,'MOTOGP');
+INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (4,'Mariano','Rojas','Española',45,'MOTOGP');
+INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (5,'Alvaro','Rojas','Española',73,'MOTOGP');
+INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (6,'Alejandro','Rojas','Española',83,'MOTOGP');
+
+
+INSERT INTO granpremio(id,site,date0,circuit,racecode) VALUES (1,'Mallorca','15','Montercarlo','QAT');
+
+
+
+
+
+
+INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (2,3,true,true,1,1);
+
 
