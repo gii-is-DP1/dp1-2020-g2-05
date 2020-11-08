@@ -33,30 +33,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/result/{resultId}")
 public class ResultController {
-	
 
-		private static final String VIEWS_RESULT_CREATE_OR_UPDATE_FORM = "result/createOrUpdateResultForm";
 
-		private final ResultService resultService;
-	    private final PilotService pilotService;
+	private static final String VIEWS_RESULT_CREATE_OR_UPDATE_FORM = "result/createOrUpdateResultForm";
 
-		@Autowired
-		public ResultController(ResultService resultService, PilotService pilotService) {
-			this.resultService = resultService;
-	        this.pilotService = pilotService;
-		}
+	private final ResultService resultService;
+	private final PilotService pilotService;
 
-//		@ModelAttribute("types")
-//		public Collection<Result> resultList(String name) {
-//			return this.resultService.findResults(name);
-//		}
+	@Autowired
+	public ResultController(ResultService resultService, PilotService pilotService) {
+		this.resultService = resultService;
+		this.pilotService = pilotService;
+	}
 
-		@ModelAttribute("pilot")
-		public Optional<Pilot> findPilot(@PathVariable("pilotId") int pilotId) {
-			return this.pilotService.findPilotById(pilotId);
-		}
-	        
-	        /*@ModelAttribute("pet")
+	//		@ModelAttribute("types")
+	//		public Collection<Result> resultList(String name) {
+	//			return this.resultService.findResults(name);
+	//		}
+
+	@ModelAttribute("pilot")
+	public Optional<Pilot> findPilot(@PathVariable("pilotId") int pilotId) {
+		return this.pilotService.findPilotById(pilotId);
+	}
+
+	/*@ModelAttribute("pet")
 		public Pet findPet(@PathVariable("petId") Integer petId) {
 	            Pet result=null;
 			if(petId!=null)
@@ -65,77 +65,77 @@ public class ResultController {
 	                    result=new Pet();
 	            return result;
 		}*/
-	                
-		@InitBinder("pilot")
-		public void initPilotBinder(WebDataBinder dataBinder) {
-			dataBinder.setDisallowedFields("id");
-		}
 
-//		@InitBinder("result")
-//		public void initResultBinder(WebDataBinder dataBinder) {
-//			dataBinder.setValidator(new ResultValidator());
-//		}
+	@InitBinder("pilot")
+	public void initPilotBinder(WebDataBinder dataBinder) {
+		dataBinder.setDisallowedFields("id");
+	}
 
-		@GetMapping(value = "/result/new")
-		public String initCreationForm(Pilot pilot, ModelMap model) {
-			Result result = new Result();
-			pilot.addResult(result);
-			model.put("result", result);
+	//		@InitBinder("result")
+	//		public void initResultBinder(WebDataBinder dataBinder) {
+	//			dataBinder.setValidator(new ResultValidator());
+	//		}
+
+	@GetMapping(value = "/result/new")
+	public String initCreationForm(Pilot pilot, ModelMap model) {
+		Result result = new Result();
+		pilot.addResult(result);
+		model.put("result", result);
+		return VIEWS_RESULT_CREATE_OR_UPDATE_FORM;
+	}
+
+	@PostMapping(value = "/result/new")
+	public String processCreationForm(Pilot pilot, @Valid Result result0, BindingResult result, ModelMap model) {		
+		if (result.hasErrors()) {
+			model.put("result0", result0);
 			return VIEWS_RESULT_CREATE_OR_UPDATE_FORM;
 		}
-
-		@PostMapping(value = "/result/new")
-		public String processCreationForm(Pilot pilot, @Valid Result result0, BindingResult result, ModelMap model) {		
-			if (result.hasErrors()) {
-				model.put("result0", result0);
+		else {
+			try{
+				pilot.addResult(result0);;
+				this.resultService.saveResult(result0);
+			}catch(Exception ex){
+				result.rejectValue("name", "duplicate", "already exists");
 				return VIEWS_RESULT_CREATE_OR_UPDATE_FORM;
 			}
-			else {
-	                    try{
-	                    	pilot.addResult(result0);;
-	                    	this.resultService.saveResult(result0);
-	                    }catch(Exception ex){
-	                        result.rejectValue("name", "duplicate", "already exists");
-	                        return VIEWS_RESULT_CREATE_OR_UPDATE_FORM;
-	                    }
-	                    return "redirect:/result/{resultId}";
-			}
+			return "redirect:/result/{resultId}";
 		}
+	}
 
-		@GetMapping(value = "/pets/{petId}/edit")
-		public String initUpdateForm(@PathVariable("resultId") int id, ModelMap model) {
-			Result result = this.resultService.findResultById(id);
-			model.put("result", result);
+	@GetMapping(value = "/pets/{petId}/edit")
+	public String initUpdateForm(@PathVariable("resultId") int id, ModelMap model) {
+		Result result = this.resultService.findResultById(id).get();
+		model.put("result", result);
+		return VIEWS_RESULT_CREATE_OR_UPDATE_FORM;
+	}
+
+	/**
+	 *
+	 * @param pet
+	 * @param result
+	 * @param petId
+	 * @param model
+	 * @param owner
+	 * @param model
+	 * @return
+	 */
+	@PostMapping(value = "/result/{resultId}/edit")
+	public String processUpdateForm(@Valid Result result0, BindingResult result, Pilot pilot,@PathVariable("resultId") int resultId, ModelMap model) {
+		if (result.hasErrors()) {
+			model.put("result0", result0);
 			return VIEWS_RESULT_CREATE_OR_UPDATE_FORM;
 		}
-
-	    /**
-	     *
-	     * @param pet
-	     * @param result
-	     * @param petId
-	     * @param model
-	     * @param owner
-	     * @param model
-	     * @return
-	     */
-	        @PostMapping(value = "/result/{resultId}/edit")
-		public String processUpdateForm(@Valid Result result0, BindingResult result, Pilot pilot,@PathVariable("resultId") int resultId, ModelMap model) {
-			if (result.hasErrors()) {
-				model.put("result0", result0);
+		else {
+			Result resultToUpdate=this.resultService.findResultById(resultId).get();
+			BeanUtils.copyProperties(result0, resultToUpdate, "id","pilot","results");                                                                                  
+			try {                    
+				this.resultService.saveResult(resultToUpdate);
+			} catch (Exception ex) {
+				result.rejectValue("name", "duplicate", "already exists");
 				return VIEWS_RESULT_CREATE_OR_UPDATE_FORM;
 			}
-			else {
-	                        Result resultToUpdate=this.resultService.findResultById(resultId);
-				BeanUtils.copyProperties(result0, resultToUpdate, "id","pilot","results");                                                                                  
-	                    try {                    
-	                        this.resultService.saveResult(resultToUpdate);
-	                    } catch (Exception ex) {
-	                        result.rejectValue("name", "duplicate", "already exists");
-	                        return VIEWS_RESULT_CREATE_OR_UPDATE_FORM;
-	                    }
-				return "redirect:/pilot/{pilotId}";
-			}
+			return "redirect:/pilot/{pilotId}";
 		}
+	}
 
 }
