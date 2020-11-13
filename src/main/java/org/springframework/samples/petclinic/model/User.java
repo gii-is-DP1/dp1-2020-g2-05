@@ -17,10 +17,23 @@ public class User{
 	@Id
 	String username;
 	
+	String email;
+	
 	String password;
 	
 	boolean enabled;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private Set<Authorities> authorities;
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "usernamesend")
+	private Set<Message> messages_send;
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "usernamereceive")
+	private Set<Message> messages_received;
+	
+	@Override
+	public String toString() {
+		return  username ;
+	}
 }
