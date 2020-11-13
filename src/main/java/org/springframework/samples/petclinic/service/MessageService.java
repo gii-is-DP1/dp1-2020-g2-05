@@ -23,13 +23,15 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Message;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
 import org.springframework.samples.petclinic.model.Pilot;
-
+import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.model.Vet;
 import org.springframework.samples.petclinic.model.Visit;
+import org.springframework.samples.petclinic.repository.MessageRepository;
 import org.springframework.samples.petclinic.repository.OwnerRepository;
 import org.springframework.samples.petclinic.repository.PetRepository;
 import org.springframework.samples.petclinic.repository.PilotRepository;
@@ -47,79 +49,50 @@ import org.springframework.util.StringUtils;
  * @author Michael Isvy
  */
 @Service
-public class PilotService {
+public class MessageService {
 
 	@Autowired
-	private PilotRepository pilotRepository;
+	private MessageRepository messageRepository;
 	
 
 	@Autowired
-	private UserService userService;
+	private MessageService messageService;
 	
 	@Autowired
 	private AuthoritiesService authoritiesService;
 
 	@Autowired
-	public PilotService(PilotRepository pilotRepository) {
-		this.pilotRepository = pilotRepository;
+	public MessageService(MessageRepository messageRepository) {
+		this.messageRepository = messageRepository;
 	}	
 
 
-
-//	@Transactional(readOnly = true)
-//	public Collection<Pilot> findPilotByLastName(String lastName) throws DataAccessException {
-//		return pilotRepository.findByLastName(lastName);
-//	}
-
-
-
 	@Transactional
-	public int pilotCount() {
-		return (int) pilotRepository.count();
+	public int messageCount() {
+		return (int) messageRepository.count();
 	}
 	
 	@Transactional
-	public Iterable<Pilot> findAll(){
-		return pilotRepository.findAll();
+	public Iterable<Message> findAll(){
+		return messageRepository.findAll();
 	}
 
 
-	public void delete(Pilot pilotId) {
-		pilotRepository.delete(pilotId);
+	public void delete(Message messageId) {
+		messageRepository.delete(messageId);
 		
 	}	
 
-//	
-//	@Autowired
-//	private UserService userService;
-//	
-//	@Autowired
-//	private AuthoritiesService authoritiesService;
-//
-//	@Autowired
-//	public PilotService(PilotRepository pilotRepository) {
-//		this.pilotRepository = pilotRepository;
-//	}	
-//
-	@Transactional
-	public Optional<Pilot> findPilotById(int pilotId) {
-		return pilotRepository.findById(pilotId);
+    @Transactional
+	public Optional<Message> findMessageById(int messageId) {
+		return messageRepository.findById(messageId);
 	}
-//	@Transactional(readOnly = true)
-//	public Collection<Pilot> findPilotByLastName(String lastName) throws DataAccessException {
-//		return pilotRepository.findByLastName(lastName);
-//	}
-//
+
 	@Transactional
-	public void savePilot(Pilot pilot) throws DataAccessException {
+	public void saveMessage(Message message) throws DataAccessException {
 		
-		pilotRepository.save(pilot);		
+		messageRepository.save(message);		
 	}		
-//	
-//	@Transactional(readOnly = true)	
-//	public Collection<Pilot> findPilots() throws DataAccessException {
-//		return pilotRepository.findAll();
-//	}	
 
 
 

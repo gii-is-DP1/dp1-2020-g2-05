@@ -27,7 +27,7 @@ INSERT INTO authorities(id,username,authority) VALUES (8,'alvcorcas','owner');
 INSERT INTO users(username,password,enabled) VALUES ('martorsan13','mariano',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (9,'martorsan13','owner');
 
-
+INSERT INTO messages (id,asunto,cuerpo,usernamesend,usernamereceive) VALUES (1,'Prueba1','Prueba1','serrojjim','martorsan13');
 INSERT INTO vets VALUES (1, 'James', 'Carter');
 INSERT INTO vets VALUES (2, 'Helen', 'Leary');
 INSERT INTO vets VALUES (3, 'Linda', 'Douglas');
@@ -128,6 +128,12 @@ INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (5,5,fal
 INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (6,6,false,false,6,1);
 
 
+
+INSERT INTO offer(id,price,status,pilot_id) VALUES (1,200,1,1);
+
 INSERT INTO league(id,name,league_date,motogp_active,moto2_active,moto3_active,races_completed) VALUES (1,'Liga1','ola',true,false,false,3);
+INSERT INTO league(id,name,league_date,motogp_active,moto2_active,moto3_active,races_completed) VALUES (2,'Liga1','ola',false,true,false,3);
+INSERT INTO league(id,name,league_date,motogp_active,moto2_active,moto3_active,races_completed) VALUES (3,'Liga1','ola',false,false,true,3);
+
 
 INSERT INTO team(name, points, money, league_id) VALUES ('MigueTeam', 120, 40000, 1);
