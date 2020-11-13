@@ -65,8 +65,8 @@ public class League extends NamedEntity {
 	@Column(name = "races_completed")        
 	private Integer racesCompleted;
 	
-//	@OneToMany(cascade = CascadeType.ALL, mappedBy="league")
-//	Set<Team> team;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="league")
+	Set<Team> team;
 
 	public String getLeagueDate() {
 		return leagueDate;
@@ -108,13 +108,13 @@ public class League extends NamedEntity {
 		this.racesCompleted = racesCompleted;
 	}
 
-//	public Set<Team> getTeam() {
-//		return team;
-//	}
-//
-//	public void setTeam(Set<Team> team) {
-//		this.team = team;
-//	}
+	public Set<Team> getTeam() {
+		return team;
+	}
+
+	public void setTeam(Set<Team> team) {
+		this.team = team;
+	}
 
 	@Override
 	public String toString() {
