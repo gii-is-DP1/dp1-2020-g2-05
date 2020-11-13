@@ -128,5 +128,9 @@ INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (5,5,fal
 INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (6,6,false,false,6,1);
 
 
+
+INSERT INTO offer(id,price,status,pilot_id) VALUES (1,200,1,1);
+
 INSERT INTO league(id,name,league_date,motogp_active,moto2_active,moto3_active,races_completed) VALUES (1,'Liga1','ola',true,false,false,3);
+
 
