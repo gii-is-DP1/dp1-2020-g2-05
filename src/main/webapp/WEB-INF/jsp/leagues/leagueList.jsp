@@ -15,7 +15,7 @@
 				<th>Date</th>
 				<th>Category</th>
 				<th>Races Completed</th>
-	
+				<th>Teams</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -33,7 +33,11 @@
 					<td>Moto 3 </td>					
 					</c:if>  
 					<td><c:out value="${league.racesCompleted}" /></td>
-
+					<td>
+					<spring:url value="/leagues/{leagueId}/teams" var="leagueUrl">
+							<spring:param name="leagueId" value="${league.id}" />
+						</spring:url> <a href="${fn:escapeXml(leagueUrl)}">Teams</a>
+					</td>
 				</tr>
 			</c:forEach>
 		</tbody>

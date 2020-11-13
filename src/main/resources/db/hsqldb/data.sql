@@ -136,3 +136,4 @@ INSERT INTO league(id,name,league_date,motogp_active,moto2_active,moto3_active,r
 INSERT INTO league(id,name,league_date,motogp_active,moto2_active,moto3_active,races_completed) VALUES (3,'Liga1','ola',false,false,true,3);
 
 
+INSERT INTO team(name, points, money, league_id) VALUES ('MigueTeam', 120, 40000, 1);
