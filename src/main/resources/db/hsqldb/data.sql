@@ -128,4 +128,5 @@ INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (5,5,fal
 INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (6,6,false,false,6,1);
 
 
+INSERT INTO offer(id,price,status,pilot_id) VALUES (1,200,1,1);
 
