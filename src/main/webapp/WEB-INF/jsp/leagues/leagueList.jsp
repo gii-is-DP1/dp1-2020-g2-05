@@ -13,7 +13,7 @@
 			<tr>
 				<th>Name</th>
 				<th>Date</th>
-<!-- 				<c:if test="condition"></c:if> -->
+				<th>Category</th>
 				<th>Races Completed</th>
 	
 			</tr>
@@ -23,6 +23,15 @@
 				<tr>
 					<td><c:out value="${league.name} " /></td>
 					<td><c:out value="${league.leagueDate}" /></td>
+					<c:if test="${league.motogpActive==true}">  
+					<td>Moto GP </td>					
+					</c:if>
+					<c:if test="${league.moto2Active==true}">  
+					<td>Moto 2 </td>					
+					</c:if>
+					<c:if test="${league.moto3Active==true}">  
+					<td>Moto 3 </td>					
+					</c:if>  
 					<td><c:out value="${league.racesCompleted}" /></td>
 
 				</tr>
