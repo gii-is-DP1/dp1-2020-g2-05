@@ -1,5 +1,5 @@
 package org.springframework.samples.petclinic.model;
 
-public enum Categoria {
+public enum Category {
 	MOTOGP, MOTO2, MOTO3
 }
