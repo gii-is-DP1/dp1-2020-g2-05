@@ -28,10 +28,9 @@ public class Tests {
 //			System.out.println(resultado3.get(i));
 //		}
 
-		for (int i=0; i < Pais.values().length; i++) {
-			Record prueba = PeticionesGet.obtieneRecords("2012", Pais.values()[i], Category.Moto2);
-			System.out.println(Pais.values()[i] + " " + prueba);
-		}
+			Record prueba = PeticionesGet.obtieneRecords("2012", Pais.SPA, Category.Moto2);
+			System.out.println(prueba);
+
 //		System.out.println(prueba.getMejorVuelta());
 //		System.out.println(prueba.getRecordDelCircuito());
 //		System.out.println(prueba.getVueltaDePole());
