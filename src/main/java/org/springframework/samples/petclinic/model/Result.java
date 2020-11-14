@@ -74,5 +74,10 @@ public class Result extends BaseEntity {
 		this.gp = gp;
 	}
 
+	@Override
+	public String toString() {
+		return "[Position=" + position + ", Pole=" + pole +  ", Location=" + gp.getSite() + "]";
+	}
+
 	
 }

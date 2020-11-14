@@ -27,7 +27,7 @@ INSERT INTO authorities(id,username,authority) VALUES (8,'alvcorcas','owner');
 INSERT INTO users(username,password,enabled) VALUES ('martorsan13','mariano',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (9,'martorsan13','owner');
 
-
+INSERT INTO messages (id,asunto,cuerpo,usernamesend,usernamereceive) VALUES (1,'Prueba1','Prueba1','serrojjim','martorsan13');
 INSERT INTO vets VALUES (1, 'James', 'Carter');
 INSERT INTO vets VALUES (2, 'Helen', 'Leary');
 INSERT INTO vets VALUES (3, 'Linda', 'Douglas');
@@ -112,8 +112,28 @@ INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (6,'Aleja
 
 
 INSERT INTO granpremio(id,site,date0,circuit,racecode) VALUES (1,'Mallorca','15','Montercarlo','QAT');
+INSERT INTO granpremio(id,site,date0,circuit,racecode) VALUES (2,'Menorca','15','Andalusia','SPA');
+INSERT INTO granpremio(id,site,date0,circuit,racecode) VALUES (3,'Menorca','15','Andalusia','SPA');
+INSERT INTO granpremio(id,site,date0,circuit,racecode) VALUES (4,'Menorca','15','Andalusia','SPA');
+INSERT INTO granpremio(id,site,date0,circuit,racecode) VALUES (5,'Menorca','15','Andalusia','SPA');
+INSERT INTO granpremio(id,site,date0,circuit,racecode) VALUES (6,'Menorca','15','Andalusia','SPA');
 
 
-INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (2,3,true,true,1,1);
+INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (1,1,true,false,1,1);
+INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (7,1,true,false,1,2);
+INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (2,2,false,false,2,1);
+INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (3,3,false,true,3,1);
+INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (4,4,false,false,4,1);
+INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (5,5,false,false,5,1);
+INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (6,6,false,false,6,1);
 
 
+
+INSERT INTO offer(id,price,status,pilot_id) VALUES (1,200,1,1);
+
+INSERT INTO league(id,name,league_date,motogp_active,moto2_active,moto3_active,races_completed) VALUES (1,'Liga1','ola',true,false,false,3);
+INSERT INTO league(id,name,league_date,motogp_active,moto2_active,moto3_active,races_completed) VALUES (2,'Liga1','ola',false,true,false,3);
+INSERT INTO league(id,name,league_date,motogp_active,moto2_active,moto3_active,races_completed) VALUES (3,'Liga1','ola',false,false,true,3);
+
+
+INSERT INTO team(name, points, money, league_id) VALUES ('MigueTeam', 120, 40000, 1);

@@ -51,6 +51,16 @@
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Pilots</span>
 				</petclinic:menuItem>
+				<petclinic:menuItem active="${name eq 'messages'}" url="/messages"
+					title="leads to /messages">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					<span>Messages</span>
+				</petclinic:menuItem>
+				<petclinic:menuItem active="${name eq 'leagues'}" url="/leagues"
+					title="leads to /leagues">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					<span>Leagues</span>
+				</petclinic:menuItem>
 
 			</ul>
 

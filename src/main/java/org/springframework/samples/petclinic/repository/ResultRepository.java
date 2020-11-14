@@ -19,6 +19,7 @@ import java.util.List;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.BaseEntity;
@@ -30,29 +31,29 @@ import org.springframework.samples.petclinic.model.Result;
  * @author Michael Isvy
  * @since 15.1.2013
  */
-public interface ResultRepository extends Repository<Result, Integer> {
+public interface ResultRepository extends CrudRepository<Result, Integer> {
 
-	/**
-	 * Retrieve all <code>PetType</code>s from the data store.
-	 * @return a <code>Collection</code> of <code>PetType</code>s
-	 */
-//	@Query("SELECT results FROM Result results WHERE results.pilot_id LIKE SELECT pilot_id FROM Pilot pilot WHERE pilot.name LIKE =S:name")
-//	List<Result> findResults(@Param("name")String name) throws DataAccessException;
-	//Obtiene resultados del piloto pasado como parametro
-	
-	/**
-	 * Retrieve a <code>Pet</code> from the data store by id.
-	 * @param id the id to search for
-	 * @return the <code>Pet</code> if found
-	 * @throws org.springframework.dao.DataRetrievalFailureException if not found
-	 */
-	Result findById(int id) throws DataAccessException;
-
-	/**
-	 * Save a <code>Pet</code> to the data store, either inserting or updating it.
-	 * @param pet the <code>Pet</code> to save
-	 * @see BaseEntity#isNew
-	 */
-	void save(Result pet) throws DataAccessException;
+//	/**
+//	 * Retrieve all <code>PetType</code>s from the data store.
+//	 * @return a <code>Collection</code> of <code>PetType</code>s
+//	 */
+////	@Query("SELECT * FROM RESULTS WHERE RESULTS.pilot_id = SELECT id FROM Pilot  WHERE pilot.name=%name")
+////	List<Result> findResults(@Param("name")String name) throws DataAccessException;
+//	//Obtiene resultados del piloto pasado como parametro
+//	
+//	/**
+//	 * Retrieve a <code>Pet</code> from the data store by id.
+//	 * @param id the id to search for
+//	 * @return the <code>Pet</code> if found
+//	 * @throws org.springframework.dao.DataRetrievalFailureException if not found
+//	 */
+//	Result findById(int id) throws DataAccessException;
+//
+//	/**
+//	 * Save a <code>Pet</code> to the data store, either inserting or updating it.
+//	 * @param pet the <code>Pet</code> to save
+//	 * @see BaseEntity#isNew
+//	 */
+//	void save(Result pet) throws DataAccessException;
 
 }
