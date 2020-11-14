@@ -5,14 +5,13 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
 import motogpAPI.RaceCode;
-
-
 
 @Entity
 @Table(name = "granpremio")
@@ -35,7 +34,10 @@ public class GranPremio extends BaseEntity {
 	private String raceCode;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="gp")
-	Set<Result> results;
+	private Set<Result> results;
+	
+//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "gp")
+//	private Set<Lineup> lineups;
 
 	public String getSite() {
 		return site;
@@ -76,6 +78,14 @@ public class GranPremio extends BaseEntity {
 	public void setResults(Set<Result> results) {
 		this.results = results;
 	}
+	
+//	public Set<Lineup> getLineups() {
+//		return lineups;
+//	}
+//
+//	public void setLineups(Set<Lineup> lineups) {
+//		this.lineups = lineups;
+//	}
 
 	@Override
 	public String toString() {
