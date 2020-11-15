@@ -1,5 +1,7 @@
 package org.springframework.samples.petclinic.model;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -25,6 +27,16 @@ public class Lineup extends BaseEntity {
 	@JoinColumn(name = "recruit2_id")
 	@NotEmpty
 	private Recruit recruit2;
+	
+	@ManyToOne
+	@JoinColumn(name = "team_id")
+	@NotEmpty
+	private Team team;
+	
+	@ManyToOne
+	@JoinColumn(name = "league_id")
+	@NotEmpty
+	private League league;
 	
 	@ManyToOne
 	@JoinColumn(name = "gp_id")

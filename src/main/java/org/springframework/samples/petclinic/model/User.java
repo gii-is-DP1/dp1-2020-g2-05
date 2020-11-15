@@ -23,6 +23,8 @@ public class User{
 	
 	boolean enabled;
 	
+	Rol rol;
+	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private Set<Authorities> authorities;
 	

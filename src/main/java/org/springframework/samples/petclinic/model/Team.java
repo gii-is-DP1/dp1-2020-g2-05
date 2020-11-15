@@ -24,9 +24,18 @@ public class Team extends NamedEntity {
 	private String money;
 	
 	@ManyToOne()
-	@JoinColumn(name = "League_id")
+	@JoinColumn(name = "league_id")
 	private League league;
-
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "team")
+	private Set<Lineup> lineups;
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "team")
+	private Set<Offer> offer;
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "team")
+	private Set<Recruit> recruit;
+	
 	public String getPoints() {
 		return points;
 	}
