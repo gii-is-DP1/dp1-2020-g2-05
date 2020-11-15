@@ -36,8 +36,8 @@ public class GranPremio extends BaseEntity {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="gp")
 	private Set<Result> results;
 	
-//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "gp")
-//	private Set<Lineup> lineups;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "gp")
+	private Set<Lineup> lineups;
 
 	public String getSite() {
 		return site;
@@ -79,13 +79,13 @@ public class GranPremio extends BaseEntity {
 		this.results = results;
 	}
 	
-//	public Set<Lineup> getLineups() {
-//		return lineups;
-//	}
-//
-//	public void setLineups(Set<Lineup> lineups) {
-//		this.lineups = lineups;
-//	}
+	public Set<Lineup> getLineups() {
+		return lineups;
+	}
+
+	public void setLineups(Set<Lineup> lineups) {
+		this.lineups = lineups;
+	}
 
 	@Override
 	public String toString() {

@@ -20,22 +20,26 @@ public class Offer extends BaseEntity{
 	@Column(name = "status")
 	private Status status;
 	
-//	@ManyToOne
-//	@JoinColumn(name = "team_id")
-//	private Team team;
-//	
+	@ManyToOne
+	@JoinColumn(name = "team_id")
+	private Team team;
+	
 	@ManyToOne
 	@JoinColumn(name = "pilot_id")
 	private Pilot pilot;
+	
+	@ManyToOne()
+	@JoinColumn(name = "recruit_id")
+	private Recruit recruit;
 
-//	public Team getTeam() {
-//		return team;
-//	}
-//
-//	public void setTeam(Team team) {
-//		this.team = team;
-//	}
-//
+	public Team getTeam() {
+		return team;
+	}
+
+	public void setTeam(Team team) {
+		this.team = team;
+	}
+
 	public Pilot getPilot() {
 		return pilot;
 	}

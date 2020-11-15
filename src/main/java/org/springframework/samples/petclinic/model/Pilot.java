@@ -42,6 +42,9 @@ public class Pilot extends BaseEntity {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pilot")
 	private Set<Offer> offers;
 
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pilot")
+	private Set<Recruit> recruit;
+	
 	public String getName() {
 		return name;
 	}

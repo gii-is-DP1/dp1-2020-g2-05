@@ -67,6 +67,9 @@ public class League extends NamedEntity {
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="league")
 	Set<Team> team;
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "league")
+	private Set<Lineup> lineups;
 
 	public String getLeagueDate() {
 		return leagueDate;
