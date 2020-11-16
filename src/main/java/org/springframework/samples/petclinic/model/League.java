@@ -118,12 +118,18 @@ public class League extends NamedEntity {
 	public void setTeam(Set<Team> team) {
 		this.team = team;
 	}
+	
 
 	@Override
 	public String toString() {
 		return "League [leagueDate=" + leagueDate + ", motogpActive=" + motogpActive + ", moto2Active=" + moto2Active
 				+ ", moto3Active=" + moto3Active + ", racesCompleted=" + racesCompleted + "]";
 	}
+
+//	public void addTeam(Team team) {
+//		getTeams().add(team);
+//		team.setLeague(this);
+//	}
 	
 	
 }
