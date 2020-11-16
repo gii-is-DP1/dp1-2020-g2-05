@@ -13,8 +13,14 @@ import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "team")
-public class Team extends NamedEntity {
+public class Team extends BaseEntity {
 	
+	@Column(name = "name")
+	@NotEmpty
+	private String name;
+	
+
+
 	@Column(name = "points")
 	@NotEmpty
 	private String points;
@@ -43,6 +49,14 @@ public class Team extends NamedEntity {
 	public void setPoints(String points) {
 		this.points = points;
 	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public String getMoney() {
 		return money;
@@ -62,7 +76,7 @@ public class Team extends NamedEntity {
 	
 	@Override
 	public String toString() {
-		return "Team [points=" + points + ", money=" + money + "]";
+		return "Team [name =" + name + ", points=" + points + ", money=" + money + "]";
 	}
 	
 

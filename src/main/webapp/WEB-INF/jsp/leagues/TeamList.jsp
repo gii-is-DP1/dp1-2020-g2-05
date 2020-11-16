@@ -26,7 +26,9 @@
 					<td><c:out value="${team.name} " /></td>
 					<td><c:out value="${team.points}" /></td>
 					<td><c:out value="${team.money}" /></td>
-
+					<td>
+					
+					</td>
 				</tr>
 			</c:forEach>
 		</tbody>
