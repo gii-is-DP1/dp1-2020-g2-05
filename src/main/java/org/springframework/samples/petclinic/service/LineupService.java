@@ -31,5 +31,8 @@ public class LineupService {
 	public Optional<Lineup> findLineup(Integer lineupId) {
 		return lineupRepository.findById(lineupId);
 	}
-
+	
+	public void delete(Lineup lineup) {
+		lineupRepository.delete(lineup);
+	}
 }

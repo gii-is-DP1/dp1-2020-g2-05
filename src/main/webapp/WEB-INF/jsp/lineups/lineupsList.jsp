@@ -20,7 +20,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${lineups}" var="lineup">
+			<c:forEach items="${resultados}" var="lineup">
 				<tr>
 					<td>${lineup.category}</td>
 					<td>${lineup.gp}</td>
@@ -28,11 +28,16 @@
 					<td>${lineup.recruit1}</td>
 					<td>${lineup.recruit2}</td>
 					<td>${lineup.team}</td>
-<!-- 					<td> -->
-<%-- 					<spring:url value="/lineups/{lineupId}/teams" var="lineupUrl"> --%>
-<%-- 						<spring:param name="lineupId" value="${lineup.id}" /> --%>
-<%-- 					</spring:url> <a href="${fn:escapeXml(lineupUrl)}">Teams</a> --%>
-<!-- 					</td> -->
+					
+					<td>
+						<spring:url value="/lineups/edit/{lineupId}" var="lineupUrl">
+							<spring:param name="lineupId" value="${lineup.id}" />
+						</spring:url> <a href="${fn:escapeXml(lineupUrl)}">Edit</a>
+						<spring:url value="/lineups/delete/{lineupId}" var="lineupUrl">
+							<spring:param name="lineupId" value="${lineup.id}" />
+						</spring:url> <a href="${fn:escapeXml(lineupUrl)}">Delete</a>
+					</td>
+					
 				</tr>
 			</c:forEach>
 		</tbody>
