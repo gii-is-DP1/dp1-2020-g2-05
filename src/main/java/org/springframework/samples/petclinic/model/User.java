@@ -27,6 +27,10 @@ public class User{
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private Set<Authorities> authorities;
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	private Set<Team> team;
+	
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "usernamesend")
 	private Set<Message> messages_send;
