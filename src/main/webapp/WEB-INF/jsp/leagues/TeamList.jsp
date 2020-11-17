@@ -28,9 +28,10 @@
 					<td><c:out value="${team.points}" /></td>
 					<td><c:out value="${team.money}" /></td>
 					<td>
-<%-- 						<spring:url value="/pilots/edit/{pilotId}" var="pilotUrl"> --%>
-<%-- 							<spring:param name="pilotId" value="${pilot.id}" /> --%>
-<%-- 						</spring:url> <a href="${fn:escapeXml(pilotUrl)}">Edit</a> --%>
+						<spring:url value="/leagues/{leagueId}/teams/{teamId}/edit" var="TeamUrl">
+								<spring:param name="teamId" value="${team.id}" />
+							<spring:param name="leagueId" value="${league.id}" />
+						</spring:url> <a href="${fn:escapeXml(TeamUrl)}">Edit</a>
 						<spring:url value="/leagues/{leagueId}/teams/{teamId}/delete" var="TeamUrl">
 							<spring:param name="teamId" value="${team.id}" />
 							<spring:param name="leagueId" value="${league.id}" />

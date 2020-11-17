@@ -84,6 +84,23 @@ public class TeamController {
 		return "redirect:/leagues/{leagueId}/teams";
 	}
 	
+	@GetMapping(path="/leagues/{leagueId}/teams/{teamId}/edit")
+	public String editarPiloto(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, ModelMap model) {
+		Optional<Team> team = leagueService.findTeamById(teamId);
+		String view = "leagues/TeamList";
+		model.addAttribute(team.get());
+		if(team.isPresent()) {
+			System.out.println("hola");
+			view = "leagues/TeamsEdit";
+			
+		}else {
+			model.addAttribute("message", "team not found!");
+			view=showTeams(leagueId, model);
+		}
+		return view;
+	}
+	
+	
 
 	
 	@GetMapping(value = "/leagues/{leagueId}/teams")
