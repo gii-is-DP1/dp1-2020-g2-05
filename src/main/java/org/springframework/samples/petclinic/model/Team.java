@@ -33,6 +33,11 @@ public class Team extends BaseEntity {
 	@JoinColumn(name = "league_id")
 	private League league;
 	
+	@ManyToOne()
+	@JoinColumn(name = "username")
+	private User user;
+	
+
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "team")
 	private Set<Lineup> lineups;
 	
@@ -57,6 +62,15 @@ public class Team extends BaseEntity {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 
 	public String getMoney() {
 		return money;
@@ -76,7 +90,7 @@ public class Team extends BaseEntity {
 	
 	@Override
 	public String toString() {
-		return "Team [name =" + name + ", points=" + points + ", money=" + money + "]";
+		return "Team [name =" + name + ", points=" + points + ", money=" + money + " username =" + user + "]";
 	}
 	
 

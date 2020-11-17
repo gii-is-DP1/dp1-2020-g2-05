@@ -17,6 +17,7 @@
 				<th>Points</th>
 <!-- 				<c:if test="condition"></c:if> -->
 				<th>money</th>
+				<th>user</th>
 				<th>Actions</th>
 	
 			</tr>
@@ -27,6 +28,7 @@
 					<td><c:out value="${team.name} " /></td>
 					<td><c:out value="${team.points}" /></td>
 					<td><c:out value="${team.money}" /></td>
+					<td><c:out value="${team.user.username}" /></td>
 					<td>
 						<spring:url value="/leagues/{leagueId}/teams/{teamId}/edit" var="TeamUrl">
 								<spring:param name="teamId" value="${team.id}" />
