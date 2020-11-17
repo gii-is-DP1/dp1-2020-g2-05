@@ -49,7 +49,7 @@ import javax.persistence.TemporalType;
 public class Pet extends NamedEntity {
 
 	@Column(name = "birth_date")        
-	@DateTimeFormat(pattern = "yyyy/MM/dd")
+//	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate birthDate;
 
 	@ManyToOne
@@ -108,5 +108,6 @@ public class Pet extends NamedEntity {
 		getVisitsInternal().add(visit);
 		visit.setPet(this);
 	}
+	
 
 }

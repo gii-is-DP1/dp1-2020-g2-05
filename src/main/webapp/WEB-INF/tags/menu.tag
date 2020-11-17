@@ -43,6 +43,11 @@
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Lineups</span>
 				</petclinic:menuItem>
+				<petclinic:menuItem active="${name eq 'myLeagues'}" url="/myLeagues"
+					title="leads to /myLeagues">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					<span>myLeagues</span>
+				</petclinic:menuItem>
 
 			</ul>
 

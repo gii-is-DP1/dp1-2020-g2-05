@@ -130,15 +130,19 @@ INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (6,6,fal
 
 INSERT INTO offer(id,price,status,pilot_id) VALUES (1,200,1,1);
 
-INSERT INTO league(id,name,league_date,motogp_active,moto2_active,moto3_active,races_completed) VALUES (1,'Liga1','ola',true,false,false,3);
-INSERT INTO league(id,name,league_date,motogp_active,moto2_active,moto3_active,races_completed) VALUES (2,'Liga1','ola',false,true,false,3);
-INSERT INTO league(id,name,league_date,motogp_active,moto2_active,moto3_active,races_completed) VALUES (3,'Liga1','ola',false,false,true,3);
 
-INSERT INTO team(id,name,points,money,league_id) VALUES (1,'MigueTeam',120,40000,1);
-INSERT INTO team(id,name,points,money,league_id) VALUES (2,'campu',284,5242,1);
-INSERT INTO team(id,name,points,money,league_id) VALUES (3,'MigueTeam',22,111,1);
+INSERT INTO league(id,name,league_code,league_date,motogp_active,moto2_active,moto3_active,races_completed) VALUES (1,'Liga1','QWEASDFRGT','2019/02/01',true,false,false,3);
+INSERT INTO league(id,name,league_code,league_date,motogp_active,moto2_active,moto3_active,races_completed) VALUES (2,'Liga1','OLIKJUHMNJ','2019/06/12',false,true,false,3);
+INSERT INTO league(id,name,league_code,league_date,motogp_active,moto2_active,moto3_active,races_completed) VALUES (3,'Liga1','UHJNBGFVTR','2019/09/21',false,false,true,3);
+
+
+INSERT INTO team(id,name,points,money,league_id, username) VALUES (1,'MigueTeam',120,40000,2,'antcammar4');
+INSERT INTO team(id,name,points,money,league_id, username) VALUES (2,'campu',284,5242,1, 'antcammar4');
+INSERT INTO team(id,name,points,money,league_id, username) VALUES (3,'MigueTeam',22,111,1, 'migniearj');
+
 
 INSERT INTO recruit(id,pilot_id,team_id) VALUES (1,1,1);
 INSERT INTO recruit(id,pilot_id,team_id) VALUES (2,2,1);
+
 
 INSERT INTO lineup(id,category,gp_id,league_id,recruit1_id,recruit2_id,team_id) VALUES (1,'MOTOGP',1,1,1,2,1); 

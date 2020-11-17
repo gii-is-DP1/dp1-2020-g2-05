@@ -48,10 +48,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/offers").permitAll()
 //				.antMatchers("/results/**").permitAll()
 				.antMatchers("/welcome").permitAll()
+				.antMatchers("/myLeagues/**").permitAll()
 				.antMatchers("/leagues/teams").permitAll()
 				.anyRequest().denyAll()
 				.and()
 				 	.formLogin()
+				 	
 				 	/*.loginPage("/login")*/
 				 	.failureUrl("/login-error")
 				.and()
