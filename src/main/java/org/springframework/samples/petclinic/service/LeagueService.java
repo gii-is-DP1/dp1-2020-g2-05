@@ -53,6 +53,11 @@ public class LeagueService {
 	public Optional<League> findLeague(Integer leagueId) {
 		return leagueRepository.findById(leagueId);
 	}
+	
+	public Optional<Team> findTeamById(Integer teamId) {
+		
+		return teamRepository.findById(teamId);
+	}
 
 
 
@@ -60,6 +65,10 @@ public class LeagueService {
 		System.out.println(team);
 		teamRepository.save(team);
 		}
+
+	public void delete(Team team) {
+		teamRepository.delete(team);
+	}
 	
 
 //	public Optional<Team> findTeam(Integer teamId) {

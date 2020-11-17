@@ -17,6 +17,7 @@
 				<th>Points</th>
 <!-- 				<c:if test="condition"></c:if> -->
 				<th>money</th>
+				<th>Actions</th>
 	
 			</tr>
 		</thead>
@@ -27,6 +28,16 @@
 					<td><c:out value="${team.points}" /></td>
 					<td><c:out value="${team.money}" /></td>
 					<td>
+<%-- 						<spring:url value="/pilots/edit/{pilotId}" var="pilotUrl"> --%>
+<%-- 							<spring:param name="pilotId" value="${pilot.id}" /> --%>
+<%-- 						</spring:url> <a href="${fn:escapeXml(pilotUrl)}">Edit</a> --%>
+						<spring:url value="/leagues/{leagueId}/teams/{teamId}/delete" var="TeamUrl">
+							<spring:param name="teamId" value="${team.id}" />
+							<spring:param name="leagueId" value="${league.id}" />
+						</spring:url> <a href="${fn:escapeXml(TeamUrl)}">Delete</a>
+						<spring:url value="/leagues/{leagueId}/teams/new" var="TeamUrl">
+							<spring:param name="leagueId" value="${league.id}" />
+						</spring:url> <a href="${fn:escapeXml(TeamUrl)}">NEW</a>
 					
 					</td>
 				</tr>
