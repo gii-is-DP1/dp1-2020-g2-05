@@ -6,7 +6,7 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
 
 <petclinic:layout pageName="leagues">
-	<h2>Leagues</h2>
+	<h2>Your Leagues</h2>
 
 	<table id="leaguesTable" class="table table-striped">
 		<thead>
@@ -20,7 +20,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${ligas}" var="league">
+			<c:forEach items="${misLigas}" var="league">
 				<tr>
 					<td><c:out value="${league.name} " /></td>
 					<td><c:out value="${league.leagueCode} " /></td>

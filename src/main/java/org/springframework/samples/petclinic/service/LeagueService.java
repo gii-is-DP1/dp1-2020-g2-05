@@ -15,6 +15,7 @@ import org.springframework.samples.petclinic.repository.LeagueRepository;
 import org.springframework.samples.petclinic.repository.TeamRepository;
 import org.springframework.samples.petclinic.repository.UserRepository;
 import org.springframework.samples.petclinic.repository.VisitRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class LeagueService {
 	private LeagueRepository leagueRepository;
 	private TeamRepository teamRepository;
+	private UserService userService;
 
 	@Autowired
 	public LeagueService(LeagueRepository leagueRepository, TeamRepository teamRepository) {
@@ -69,7 +71,8 @@ public class LeagueService {
 	public void delete(Team team) {
 		teamRepository.delete(team);
 	}
-	
+
+
 
 //	public Optional<Team> findTeam(Integer teamId) {
 //		return leagueRepository.findById(teamId);

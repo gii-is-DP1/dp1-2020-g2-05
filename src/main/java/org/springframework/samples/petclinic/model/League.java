@@ -37,21 +37,19 @@ import java.util.List;
 import java.util.Set;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Size;
 
-/**
- * Simple business object representing a pet.
- *
- * @author Ken Krebs
- * @author Juergen Hoeller
- * @author Sam Brannen
- */
 @Entity
 @Table(name = "league")
 public class League extends NamedEntity {
 
 	@Column(name = "league_date")        
-//	@DateTimeFormat(pattern = "yyyy/MM/dd")
+	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private String leagueDate;
+
+	@Column(name = "league_code")        
+    @Size(min = 10, max = 10)
+	private String leagueCode;
 	
 	@Column(name = "motogp_active")        
 	private boolean motogpActive;
@@ -119,17 +117,23 @@ public class League extends NamedEntity {
 		this.team = team;
 	}
 	
-
+	public String getLeagueCode() {
+		return leagueCode;
+	}
+	
+	public String setLeagueCode(String leagueCode1) {
+		return this.leagueCode=leagueCode1;
+	}
 	@Override
 	public String toString() {
-		return "League [leagueDate=" + leagueDate + ", motogpActive=" + motogpActive + ", moto2Active=" + moto2Active
+		return "League [leagueDate=" + leagueDate +", leagueaCode="+ leagueCode +", motogpActive=" + motogpActive + ", moto2Active=" + moto2Active
 				+ ", moto3Active=" + moto3Active + ", racesCompleted=" + racesCompleted + "]";
 	}
 
-//	public void addTeam(Team team) {
-//		getTeams().add(team);
-//		team.setLeague(this);
-//	}
+	public void addTeam(Team team) {
+		getTeam().add(team);
+		team.setLeague(this);
+	}
 	
 	
 }
