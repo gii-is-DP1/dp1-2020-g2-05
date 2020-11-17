@@ -135,6 +135,8 @@ INSERT INTO league(id,name,league_date,motogp_active,moto2_active,moto3_active,r
 INSERT INTO league(id,name,league_date,motogp_active,moto2_active,moto3_active,races_completed) VALUES (3,'Liga1','ola',false,false,true,3);
 
 INSERT INTO team(id,name,points,money,league_id) VALUES (1,'MigueTeam',120,40000,1);
+INSERT INTO team(id,name,points,money,league_id) VALUES (2,'campu',284,5242,1);
+INSERT INTO team(id,name,points,money,league_id) VALUES (3,'MigueTeam',22,111,1);
 
 INSERT INTO recruit(id,pilot_id,team_id) VALUES (1,1,1);
 INSERT INTO recruit(id,pilot_id,team_id) VALUES (2,2,1);
