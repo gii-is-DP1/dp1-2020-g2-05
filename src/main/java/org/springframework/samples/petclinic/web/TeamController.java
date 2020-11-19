@@ -81,12 +81,12 @@ public class TeamController {
 	
 	@PostMapping(value = "/leagues/{leagueId}/teams/new")
 	public String saveNewTeam(@PathVariable("leagueId") int leagueId,Team team, BindingResult result) {
+		User usuario = getUserSession();
 		if (result.hasErrors()) {
 			return "/leagues/TeamsEdit";
 		}
 		else {
-			System.out.println(team);
-			System.out.println(leagueId);
+			team.setUser(usuario);
 			this.leagueService.saveTeam(team);
 			
 			return "redirect:/leagues/{leagueId}/teams";
@@ -130,20 +130,18 @@ public class TeamController {
 	    leagues.forEach(result::add);
 	    List<Team> myTeamsList = new ArrayList<Team>();
 	    String username = getUserSession().getUsername();
-	    List<League> leaguesIDs = new ArrayList<League>();
+	    ;
 	    for(int i=0;i<result.size();i++) {
 		    List<Team> teams = new ArrayList<>(result.get(i).getTeam());
 		    for(int j=0;j<teams.size();j++) {
 		    	if(teams.get(j).getUser().getUsername().equals(username)){
 		    		myTeamsList.add(teams.get(j));
-		    		Integer a = teams.get(j).getLeague().getId();
-		    		leaguesIDs.add(this.leagueService.findLeague(a).get());
+		    		
 		    	}
 		    }
 	    }
 	    
-	    modelMap.addAttribute("league", leaguesIDs);
-	    System.out.println(leaguesIDs);
+	    
 	    modelMap.addAttribute("teams", myTeamsList);
 		return "leagues/myTeams";
 	}

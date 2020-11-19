@@ -15,8 +15,7 @@
      <form:form modelAttribute="teams" class="form-horizontal" id="add-pilot-form" actions="/leagues/{leagueId}/teams/new/save"  > 
         <div class="form-group has-feedback">
         	<input type="hidden" name="id" value="${teams.id}"/>
-        <input type="hidden"  name="league" value="${leagueId}"/>
-        	
+        <input type="hidden"  name="league" value="${leagueId}"/>	
 
             <petclinic:inputField label="Name" name="name"/>
             <petclinic:inputField label="points" name="points"/>
