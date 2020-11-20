@@ -28,11 +28,7 @@
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Pilots</span>
 				</petclinic:menuItem>
-				<petclinic:menuItem active="${name eq 'messages'}" url="/messages"
-					title="leads to /messages">
-					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-					<span>Messages</span>
-				</petclinic:menuItem>
+			
 				
 				<petclinic:menuItem active="${name eq 'lineups'}" url="/lineups"
 					title="leads to /lineups">
@@ -105,7 +101,22 @@
 									</div>
 								</div>
 							</li>
+							
 -->
+		
+                            <li> 
+								<div class="navbar-login navbar-login-session">
+									<div class="row">
+										<div class="col-lg-12">
+											<p>
+												<a href="/messages/" class="btn btn-primary btn-block">My messages</a>
+<!-- 												<a href="#" class="btn btn-danger btn-block">Change -->
+<!-- 													Password</a> -->
+											</p>
+										</div>
+									</div>
+								</div>
+							</li>
 						</ul></li>
 				</sec:authorize>
 			</ul>
