@@ -231,7 +231,7 @@ public class LeagueController {
 		
 		Optional<League> liga = leagueService.findLeagueByLeagueCode(league.getLeagueCode().trim());
 
-		if(liga.isEmpty()) {
+		if(!liga.isPresent()) {
 			noLeagueFound=true;
 			return "redirect:/leagues/join";
 		}
