@@ -9,7 +9,8 @@
     
 <petclinic:layout pageName="Teams">
 	<h2>Teams</h2>
-
+	
+	
 	<table id="teamsTable" class="table table-striped">
 		<thead>
 			<tr>
@@ -24,27 +25,41 @@
 		</thead>
 		<tbody>
 			<c:forEach items="${teams}" var="team">
+				<c:if test="${team.user.username == user.username}">
 				<tr>
 					<td><c:out value="${team.name} " /></td>
 					<td><c:out value="${team.points}" /></td>
 					<td><c:out value="${team.money}" /></td>
 					<td><c:out value="${team.user.username}" /></td>
 					<td>
-						<spring:url value="/leagues/{leagueId}/teams/{teamId}/edit" var="TeamUrl">
-								<spring:param name="teamId" value="${team.id}" />
-							<spring:param name="leagueId" value="${league.id}" />
-						</spring:url> <a href="${fn:escapeXml(TeamUrl)}">Edit</a>
+<%-- 						<spring:url value="/leagues/{leagueId}/teams/{teamId}/edit" var="TeamUrl"> --%>
+<%-- 								<spring:param name="teamId" value="${team.id}" /> --%>
+<%-- 							<spring:param name="leagueId" value="${league.id}" /> --%>
+<%-- 						</spring:url> <a href="${fn:escapeXml(TeamUrl)}">Edit</a> --%>
 						<spring:url value="/leagues/{leagueId}/teams/{teamId}/delete" var="TeamUrl">
 							<spring:param name="teamId" value="${team.id}" />
 							<spring:param name="leagueId" value="${league.id}" />
 						</spring:url> <a href="${fn:escapeXml(TeamUrl)}">Delete</a>
-						<spring:url value="/leagues/{leagueId}/teams/new" var="TeamUrl">
-							<spring:param name="leagueId" value="${league.id}" />
-						</spring:url> <a href="${fn:escapeXml(TeamUrl)}">NEW</a>
+						
 					
 					</td>
 				</tr>
+				</c:if>
+				
+				<c:if test="${team.user.username != user.username}">
+				<tr>
+					<td><c:out value="${team.name} " /></td>
+					<td><c:out value="${team.points}" /></td>
+					<td><c:out value="${team.money}" /></td>
+					<td><c:out value="${team.user.username}" /></td>
+					<td><c:out value="" /></td>
+				</tr>
+				</c:if>
 			</c:forEach>
 		</tbody>
 	</table>
+	
+	<spring:url value="/leagues/{leagueId}/teams/new" var="TeamUrl">
+							<spring:param name="leagueId" value="${league.id}" />
+						</spring:url> <a href="${fn:escapeXml(TeamUrl)}">New</a>
 </petclinic:layout>

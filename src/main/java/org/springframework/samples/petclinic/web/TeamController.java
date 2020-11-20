@@ -1,9 +1,13 @@
 package org.springframework.samples.petclinic.web;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
@@ -80,17 +84,42 @@ public class TeamController {
 	
 	
 	@PostMapping(value = "/leagues/{leagueId}/teams/new")
-	public String saveNewTeam(@PathVariable("leagueId") int leagueId,Team team, BindingResult result) {
+	public String saveNewTeam(@PathVariable("leagueId") int leagueId,Team team, BindingResult result, ModelMap model) {
 		User usuario = getUserSession();
-		if (result.hasErrors()) {
-			return "/leagues/TeamsEdit";
+		List<Team> tem = new ArrayList<Team>();
+		Optional<League> league = this.leagueService.findLeague(leagueId);
+		List<Team> list = league.get().getTeam().stream().collect(Collectors.toList());
+		System.out.println(list);
+		String username = getUserSession().getUsername();
+		for(int i = 0; i<list.size(); i++) {
+			if(list.get(i).getUser().getUsername().equals(username)){
+	    		tem.add(list.get(i));
+	    		
+	    	}
 		}
-		else {
+		System.out.println(tem.size());
+
+		
+		System.out.println(tem);
+		if (result.hasErrors()) {
+			model.put("message", "Team have some errors!");
+			return "/leagues/TeamsEdit";
+	}
+		else if(tem.size()>= 1){
+			model.put("message", "Sorry, you cannot have more teams in this league!");
+			
+			return "redirect:/leagues/{leagueId}/teams";
+			
+		}
+			else {
 			team.setUser(usuario);
 			this.leagueService.saveTeam(team);
+			model.put("message", "Team successfully saved!");
 			
 			return "redirect:/leagues/{leagueId}/teams";
 		}
+		
+		
 	}
 	
 	
@@ -149,8 +178,10 @@ public class TeamController {
 	
 	@GetMapping(value = "/leagues/{leagueId}/teams")
 	public String showTeams(@PathVariable int leagueId, Map<String, Object> model) {
+		User usuario = getUserSession();
 		model.put("teams", this.leagueService.findLeague(leagueId).get().getTeam());
 		model.put("league", this.leagueService.findLeague(leagueId).get());
+		model.put("user", usuario);
 		return "/leagues/TeamList";
 	}
 }
