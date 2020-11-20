@@ -132,7 +132,7 @@ INSERT INTO offer(id,price,status,pilot_id) VALUES (1,200,1,1);
 
 
 INSERT INTO league(id,name,league_code,league_date,motogp_active,moto2_active,moto3_active,races_completed) VALUES (1,'Liga1','QWEASDFRGT','2019/02/01',true,false,false,3);
-INSERT INTO league(id,name,league_code,league_date,motogp_active,moto2_active,moto3_active,races_completed) VALUES (2,'Liga1','OLIKJUHMNJ','2019/06/12',false,true,false,3);
+INSERT INTO league(id,name,league_code,league_date,motogp_active,moto2_active,moto3_active,races_completed) VALUES (2,'Liga2','OLIKJUHMNJ','2019/06/12',false,true,false,3);
 INSERT INTO league(id,name,league_code,league_date,motogp_active,moto2_active,moto3_active,races_completed) VALUES (3,'Liga1','UHJNBGFVTR','2019/09/21',false,false,true,3);
 
 

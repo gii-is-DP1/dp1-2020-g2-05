@@ -41,37 +41,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import lombok.extern.java.Log;
 
 @Controller
-//@RequestMapping("/leagues/{leagueId}")
 public class LeagueController {
 
 	private Boolean yaTienesEquipo=false;
 	private Boolean noLeagueFound=false;
-	//private static final String VIEWS_RESULT_CREATE_OR_UPDATE_FORM = "result/createOrUpdateResultForm";
 	@Autowired
 
 	LeagueService leagueService;
-	//private final TeamService pilotService;
 	@Autowired
 
 	UserService userService;
 	
 		
-//	public LeagueController(LeagueService leagueService, UserService userService) {
-//		this.leagueService = leagueService;
-//		this.userService = userService;
-//	}
 
-//
-//	@ModelAttribute("league")
-//	public Optional<League> findLeague(@PathVariable("leagueId") int leagueId) {
-//		return this.leagueService.findLeague(leagueId);
-//	}
-
-
-//	@InitBinder("league")
-//	public void initPilotBinder(WebDataBinder dataBinder) {
-//		dataBinder.setDisallowedFields("id");
-//	}
 	
 	public String randomString(int longitud) {
 		 String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -92,22 +74,7 @@ public class LeagueController {
 	}
 	
 	
-	public User getUserSession() {
-		User usuario = new User();  
-		try {
-			  Object auth = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			  Integer index1 = auth.toString().indexOf("Username:");
-			  Integer index2 = auth.toString().indexOf("; Password:"); // CON ESTO TENEMOS EL STRIN Username: user
-			  String nombreUsuario = auth.toString().substring(index1, index2).split(": ")[1]; //con esto hemos spliteado lo de arriba y nos hemos quedado con user.
-
-			  Optional<User> user = this.userService.findUser(nombreUsuario);
-			  
-			  usuario =  user.get();
-		  }catch (Exception e) {	
-			// TODO: handle exception
-		  }
-		return usuario;
-	}
+	
 
 	
 	@GetMapping("/leagues")
@@ -127,14 +94,18 @@ public class LeagueController {
 	    		league.setMotogpActive(false); // si las carreras estan entre 10 y 15 pues estamos en moto2
 	    		league.setMoto3Active(false);
 
+
 	    	}else if(league.getRacesCompleted()>=15 ) {
 	    		league.setMoto2Active(false);
 	    		league.setMotogpActive(true); // mas de 15 carreras es motogp
 	    		league.setMoto3Active(false);
+
 	    	}
 	    	
 	    	if(league.getRacesCompleted()>20) league.setRacesCompleted(20);
 	    	
+			if(league.getTeam().isEmpty()) leagueService.deleteLeague(league);
+
  	    }
 		
 		modelMap.addAttribute("ligas", leagueService.findAll());
@@ -142,15 +113,10 @@ public class LeagueController {
 		return "leagues/leagueList";
 	}
 	
-//	@GetMapping("/createLeague")
-//	public String crearLiga(ModelMap modelMap) {
-//		modelMap.addAttribute("ligas", leagueService.findAll());
-//		return "leagues/leagueList";
-//	}
 	
 	@GetMapping("/leagues/myLeagues")
 	public String myLeagues(ModelMap modelMap) {
-		User user = getUserSession();
+		User user = leagueService.getUserSession();
 		
 		Collection<Integer> collect = leagueService.findTeamsByUsername(user.getUsername());
 		
@@ -161,13 +127,15 @@ public class LeagueController {
 
 	    
 		for(Integer i:idLeague) {
-			myLeaguesList.add(leagueService.findLeague(i).get());
+			League league_i = leagueService.findLeague(i).get();
+			myLeaguesList.add(league_i);
 		}
+		
 		
 		
 	    
 	    if(yaTienesEquipo) modelMap.addAttribute("yaTienesEquipo",true);yaTienesEquipo=false;
-	    
+
 	    modelMap.addAttribute("misLigas", myLeaguesList);
 	return "leagues/myLeagues";
 	}
@@ -179,7 +147,7 @@ public class LeagueController {
 		
 		League league = leagueService.findLeague(leagueId).get();
 		league.setRacesCompleted(league.getRacesCompleted()+1);
-		
+//		leagueService.incrementarCarrerasLiga(leagueId);
 		model.addAttribute("ligas", leagueService.findAll());
 		return "redirect:/leagues";
 	}
@@ -204,9 +172,8 @@ public class LeagueController {
 	    newLeague.setName("Liga"+newLeague.getId().toString());
 	    newLeague.setRacesCompleted(0);
 
-	    
 	    leagueService.saveLeague(newLeague);
-	    model.addAttribute("messageNewLiga", true);
+
 		 return "redirect:/leagues/"+newLeague.getId()+"/teams/new";	
 		 }
 	
@@ -221,7 +188,7 @@ public class LeagueController {
 	
 	@PostMapping(value="/leagues/join")
 	public String unirseLigaCode(League league,ModelMap model) {	
-		User user = getUserSession();
+		User user = leagueService.getUserSession();
 		Collection<Integer> collect = leagueService.findTeamsByUsername(user.getUsername());
 		
 		List<Integer> idLeague = new ArrayList<Integer>();
@@ -250,22 +217,6 @@ public class LeagueController {
 		 }
 	
 	
-	
-	
-	
-//	
-//	@PostMapping(value = "/leagues/new/league")
-//	public String saveNewLeague(@PathVariable("leagueId") int leagueId,Team team, BindingResult result) {
-//		User usuario = getUserSession();
-//		if (result.hasErrors()) {
-//			return "/leagues/TeamsEdit";
-//		}
-//		else {
-//			team.setUser(usuario);
-//			this.leagueService.saveTeam(team);
-//			
-//			return "redirect:/leagues/{leagueId}/teams";
-//		}
-//	}
+
 	
 }
