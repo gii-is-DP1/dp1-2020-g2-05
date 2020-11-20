@@ -16,6 +16,7 @@ UserRepository.java * Copyright 2002-2013 the original author or authors.
 package org.springframework.samples.petclinic.service;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -51,43 +52,37 @@ public class PilotService {
 
 	@Autowired
 	private PilotRepository pilotRepository;
-	
 
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private AuthoritiesService authoritiesService;
 
 	@Autowired
 	public PilotService(PilotRepository pilotRepository) {
 		this.pilotRepository = pilotRepository;
-	}	
-
-
+	}
 
 //	@Transactional(readOnly = true)
 //	public Collection<Pilot> findPilotByLastName(String lastName) throws DataAccessException {
 //		return pilotRepository.findByLastName(lastName);
 //	}
 
-
-
 	@Transactional
 	public int pilotCount() {
 		return (int) pilotRepository.count();
 	}
-	
+
 	@Transactional
-	public Iterable<Pilot> findAll(){
+	public Iterable<Pilot> findAll() {
 		return pilotRepository.findAll();
 	}
 
-
 	public void delete(Pilot pilotId) {
 		pilotRepository.delete(pilotId);
-		
-	}	
+
+	}
 
 //	
 //	@Autowired
@@ -105,6 +100,7 @@ public class PilotService {
 	public Optional<Pilot> findPilotById(int pilotId) {
 		return pilotRepository.findById(pilotId);
 	}
+
 //	@Transactional(readOnly = true)
 //	public Collection<Pilot> findPilotByLastName(String lastName) throws DataAccessException {
 //		return pilotRepository.findByLastName(lastName);
@@ -112,18 +108,18 @@ public class PilotService {
 //
 	@Transactional
 	public void savePilot(Pilot pilot) throws DataAccessException {
-		
-		pilotRepository.save(pilot);		
-	}		
+
+		pilotRepository.save(pilot);
+	}
 //	
 //	@Transactional(readOnly = true)	
 //	public Collection<Pilot> findPilots() throws DataAccessException {
 //		return pilotRepository.findAll();
 //	}	
 
-
-
+	
+	
+	public List<Pilot> getRecruits(int teamID) throws DataAccessException {
+		return this.pilotRepository.findAllRecruits(teamID);
 	}
-
-
-
+}

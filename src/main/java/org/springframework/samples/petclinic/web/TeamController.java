@@ -1,36 +1,26 @@
 package org.springframework.samples.petclinic.web;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.User;
-import org.springframework.samples.petclinic.model.Visit;
 import org.springframework.samples.petclinic.service.LeagueService;
-import org.springframework.samples.petclinic.service.PetService;
+import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class TeamController {
@@ -46,6 +36,9 @@ public class TeamController {
 	
 	@Autowired
 	LeagueService leagueService;
+	
+	@Autowired
+	RecruitService recruitService;
 	
 	
 	
@@ -125,6 +118,20 @@ public class TeamController {
 		
 	}
 	
+	@GetMapping(path="/leagues/{leagueId}/teams/{teamId}/details")
+	public String mostrarDetallesEscuderia (@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamID,  ModelMap model) {
+		Optional<Team> team = leagueService.findTeamById(teamID);
+		if(team.isPresent()) {
+			model.addAttribute("message", "Team found!");
+			model.addAttribute("team", team.get());
+			List<Pilot> l = recruitService.getRecruits(teamID);
+			System.out.println(l);
+			model.addAttribute("misFichajes", l);
+		}else {
+			model.addAttribute("message", "Team not found!");
+		}
+		return "/leagues/teamDetails";
+	}
 	
 	@GetMapping(path="/leagues/{leagueId}/teams/{teamId}/delete")
 	public String borrarEscuderia (@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,  ModelMap model) {
