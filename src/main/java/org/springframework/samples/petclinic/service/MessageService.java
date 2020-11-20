@@ -76,6 +76,13 @@ public class MessageService {
 	public Iterable<Message> findAll(){
 		return messageRepository.findAll();
 	}
+	
+	@Transactional
+	public Iterable<Message> findAllUsernameReceive(String usernamereceive){
+		return messageRepository.findByUsernameReceive(usernamereceive);
+	}
+	
+	
 
 
 	public void delete(Message messageId) {
