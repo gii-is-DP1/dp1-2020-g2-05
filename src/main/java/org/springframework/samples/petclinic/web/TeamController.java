@@ -73,7 +73,6 @@ public class TeamController {
 	@GetMapping(path="/leagues/{leagueId}/teams/new")
 	public String crearEquipo(@PathVariable("leagueId") int leagueId, ModelMap model) {
 		model.addAttribute("teams", new Team());
-		
 	  return "/leagues/TeamsEdit";
 	}
 	
