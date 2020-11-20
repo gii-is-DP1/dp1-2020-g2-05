@@ -28,17 +28,12 @@
 					<td><c:out value="${team.money}" /></td>
 					<td><c:out value="${team.user.username}" /></td>
 					<td>
-						<spring:url value="/leagues/{leagueId}/teams/{teamId}/edit" var="TeamUrl">
-								<spring:param name="teamId" value="${team.id}" />
-							<spring:param name="leagueId" value="${league.id}" />
-						</spring:url> <a href="${fn:escapeXml(TeamUrl)}">Edit</a>
+						
 						<spring:url value="/leagues/{leagueId}/teams/{teamId}/delete" var="TeamUrl">
 							<spring:param name="teamId" value="${team.id}" />
 							<spring:param name="leagueId" value="${league.id}" />
 						</spring:url> <a href="${fn:escapeXml(TeamUrl)}">Delete</a>
-						<spring:url value="/leagues/{leagueId}/teams/new" var="TeamUrl">
-							<spring:param name="leagueId" value="${league.id}" />
-						</spring:url> <a href="${fn:escapeXml(TeamUrl)}">NEW</a>
+						
 					
 					</td>
 				</tr>
