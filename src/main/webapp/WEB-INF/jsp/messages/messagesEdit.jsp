@@ -6,24 +6,22 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
-<petclinic:layout pageName="messages">
+<petclinic:layout pageName="messagese">
 	
 	
     <h2>
-        <c:if test="${message['new']}">New </c:if> Mensaje
+        <c:if test="${messagee['new']}">New </c:if> Mensaje
     </h2>
-    <form:form modelAttribute="message" class="form-horizontal" id="add-message-form" action="/messages/save">
+    <form:form modelAttribute="messagee" class="form-horizontal" id="add-message-form">
         <div class="form-group has-feedback">
-        	<input type="hidden" name="id" value="${message.id}"/>
             <petclinic:inputField label="Asunto" name="asunto"/>
             <petclinic:inputField label="Cuerpo" name="cuerpo"/>
-            <petclinic:inputField label="Remitente" name="usersend"/>
-            <petclinic:inputField label="Destinatario" name="userreceive"/>
+            <petclinic:inputField label="Destinatario" name="usernamereceive"/>
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <c:choose>
-                    <c:when test="${message['new']}">
+                    <c:when test="${messagee['new']}">
                         <button class="btn btn-default" type="submit">Add message</button>
                     </c:when>
                     <c:otherwise>

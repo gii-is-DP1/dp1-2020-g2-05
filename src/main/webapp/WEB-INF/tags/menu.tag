@@ -33,18 +33,14 @@
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Messages</span>
 				</petclinic:menuItem>
-				<petclinic:menuItem active="${name eq 'leagues'}" url="/leagues"
-					title="leads to /leagues">
-					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-					<span>Leagues</span>
-				</petclinic:menuItem>
+				
 				<petclinic:menuItem active="${name eq 'lineups'}" url="/lineups"
 					title="leads to /lineups">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Lineups</span>
 				</petclinic:menuItem>
-				<petclinic:menuItem active="${name eq 'myLeagues'}" url="/myLeagues"
-					title="leads to /myLeagues">
+				<petclinic:menuItem active="${name eq 'myLeagues'}" url="/leagues/myLeagues"
+					title="leads to /leagues/myLeagues">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>myLeagues</span>
 				</petclinic:menuItem>
@@ -52,6 +48,11 @@
 					title="leads to /myTeams">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>myTeams</span>
+				</petclinic:menuItem>
+				<petclinic:menuItem active="${name eq 'leagues'}" url="/leagues"
+					title="leads to /leagues">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					<span>Leagues</span>
 				</petclinic:menuItem>
 
 			</ul>
