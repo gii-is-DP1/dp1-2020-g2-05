@@ -10,6 +10,7 @@
 <petclinic:layout pageName="Teams">
 	<h2>Teams</h2>
 	
+	<c:if test="${message=true}">team dont saved </c:if>
 	
 	<table id="teamsTable" class="table table-striped">
 		<thead>
