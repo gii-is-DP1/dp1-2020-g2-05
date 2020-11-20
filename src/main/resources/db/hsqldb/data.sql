@@ -139,6 +139,7 @@ INSERT INTO league(id,name,league_code,league_date,motogp_active,moto2_active,mo
 INSERT INTO team(id,name,points,money,league_id, username) VALUES (1,'MigueTeam',120,40000,2,'antcammar4');
 INSERT INTO team(id,name,points,money,league_id, username) VALUES (2,'campu',284,5242,1, 'antcammar4');
 INSERT INTO team(id,name,points,money,league_id, username) VALUES (3,'MigueTeam',22,111,1, 'migniearj');
+INSERT INTO team(id,name,points,money,league_id, username) VALUES (4,'sergio',516,651651,1,'serrojjim');
 
 
 INSERT INTO recruit(id,pilot_id,team_id) VALUES (1,1,1);
