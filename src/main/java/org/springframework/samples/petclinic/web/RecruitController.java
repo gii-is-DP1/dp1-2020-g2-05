@@ -24,11 +24,11 @@ public class RecruitController {
 //		return mav;
 //	}
 	
-	@GetMapping("/recruits/")
-	public ModelAndView getRecruits() {
-		ModelAndView mav = new ModelAndView("/recruit/details");
-		mav.addObject("resultados", this.recruitService.getRecruits());
-		return mav;
-	}
+//	@GetMapping("/recruits/")
+//	public ModelAndView getRecruits() {
+//		ModelAndView mav = new ModelAndView("/recruit/details");
+//		mav.addObject("resultados", this.recruitService.getRecruits());
+//		return mav;
+//	}
 	
 }

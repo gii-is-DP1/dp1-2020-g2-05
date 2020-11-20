@@ -100,10 +100,7 @@ public interface PilotRepository extends CrudRepository<Pilot, Integer> {
 //	 */
 //	void save(Pilot pilot) throws DataAccessException;
 
-//	@Query("SELECT p FROM Pilot AS p, Recruit AS r, Team AS t WHERE p.id = r.pilot AND t.id = ?1")
-//	List<Pilot> listTeamRecruits(Integer teamID);
-	
-	@Query(value="SELECT p.* FROM PILOT AS p, RECRUIT AS r WHERE p.id = r.pilot_id", nativeQuery = true)
-	List<Pilot> findAllRecruits();
+	@Query(value="SELECT p.* FROM RECRUIT AS r NATURAL JOIN PILOT AS p WHERE r.team_id = ?1", nativeQuery = true)
+	List<Pilot> findAllRecruits(@Param("teamID")int teamID);
 
 }

@@ -30,8 +30,8 @@ public class RecruitService {
 //		return this.recruitRepository.listTeamRecruits(teamID);
 //	}
 	
-	public List<Pilot> getRecruits() throws DataAccessException {
-		return this.pilotService.getRecruits();
+	public List<Pilot> getRecruits(int teamID) throws DataAccessException {
+		return this.pilotService.getRecruits(teamID);
 	}
 
 }
