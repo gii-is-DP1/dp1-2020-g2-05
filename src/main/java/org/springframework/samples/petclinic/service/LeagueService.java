@@ -55,6 +55,9 @@ public class LeagueService {
 	public Optional<User> findUserByUsername(String username) throws DataAccessException {
 		return leagueRepository.findUserByUsername(username);
 	}
+	public Integer findLeaguesByUsername(String username) throws DataAccessException {
+		return leagueRepository.findLeaguesByUsername(username);
+	}
 	
 //	public void activeMoto3(Integer leagueId) throws DataAccessException {
 //		leagueRepository.activeMoto3(leagueId);

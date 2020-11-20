@@ -39,6 +39,9 @@ public interface LeagueRepository extends CrudRepository<League, Integer>{
 	@Query("SELECT user FROM User user WHERE user.username LIKE :username") //METER EN USER REPOSITORY
 	public Optional<User> findUserByUsername(@Param("username") String username);
 	
+	@Query("SELECT COUNT(t)  FROM Team t WHERE t.user.username like :username") 
+	public Integer findLeaguesByUsername(@Param("username") String username);
+	
 //	@Query(value ="UPDATE LEAGUE SET racesCompleted=(SELECT racesCompleted FROM LEAGUE WHERE LEAGUE.id=leagueId)+1 WHERE LEAGUE.id=leagueId", nativeQuery=true)	
 //	public Optional<League> incrementarCarrerasLiga(@Param("leagueId") Integer leagueId);
 

@@ -45,6 +45,8 @@ public class LeagueController {
 
 	private Boolean yaTienesEquipo=false;
 	private Boolean noLeagueFound=false;
+	private Integer leagueYaEquipoId=-1;
+	private Boolean yaTieneMaxLigas=false;
 	@Autowired
 
 	LeagueService leagueService;
@@ -134,10 +136,17 @@ public class LeagueController {
 		
 		
 	    
-	    if(yaTienesEquipo) modelMap.addAttribute("yaTienesEquipo",true);yaTienesEquipo=false;
+	    if(yaTienesEquipo) {
+	    	modelMap.addAttribute("yaTienesEquipo",true);yaTienesEquipo=false;
+			modelMap.addAttribute("leagueYaEquipoId", leagueYaEquipoId);leagueYaEquipoId=-1;
 
+	    }
+	    
+	    if(yaTieneMaxLigas) modelMap.addAttribute("yaTieneMaxLigas",true);yaTieneMaxLigas=false;
+
+	    
 	    modelMap.addAttribute("misLigas", myLeaguesList);
-	return "leagues/myLeagues";
+	    return "leagues/myLeagues";
 	}
 	
 	
@@ -154,6 +163,14 @@ public class LeagueController {
 	
 	@GetMapping(path="/leagues/new")
 	public String crearLiga(ModelMap model) {	
+		
+		Integer num_leagues = leagueService.findLeaguesByUsername(leagueService.getUserSession().getUsername());
+		
+		if(num_leagues==5) {
+			yaTieneMaxLigas=true;
+			return "redirect:/leagues/myLeagues";
+		}
+		
 		Iterable<League> leagues = leagueService.findAll() ;
 		List<League> result = new ArrayList<League>();
 	    leagues.forEach(result::add);
@@ -198,19 +215,24 @@ public class LeagueController {
 		
 		Optional<League> liga = leagueService.findLeagueByLeagueCode(league.getLeagueCode().trim());
 
+		
 		if(!liga.isPresent()) {
 			noLeagueFound=true;
 			return "redirect:/leagues/join";
 		}
 		
 		if(idLeague.contains(liga.get().getId())) {
-
+			
 			yaTienesEquipo=true;
+			leagueYaEquipoId=liga.get().getId();
 			return "redirect:/leagues/myLeagues";
 
 		}
 		
-		
+		if(idLeague.size()==5) {
+			yaTieneMaxLigas=true;
+			return "redirect:/leagues/myLeagues";
+		}
 
 		model.addAttribute("yaTienesEquipo", false);
 		return "redirect:/leagues/"+liga.get().getId()+"/teams/new";
