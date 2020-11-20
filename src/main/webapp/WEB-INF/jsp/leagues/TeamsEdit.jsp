@@ -8,6 +8,9 @@
 
 <petclinic:layout pageName="Team">
 	
+	 <h2>
+        <c:if test="${messageNewLiga=true}">Before creating a league, you have to create a team which belongs to this league! </c:if> 
+    </h2>
 	
     <h2>
         <c:if test="${teams['new']}">New </c:if> Team
@@ -15,9 +18,7 @@
      <form:form modelAttribute="teams" class="form-horizontal" id="add-pilot-form" actions="/leagues/{leagueId}/teams/new/save"  > 
         <div class="form-group has-feedback">
         	<input type="hidden" name="id" value="${teams.id}"/>
-        	 	<input type="hidden"  name="league" value="${leagueId}"/>
-        	
-
+        <input type="hidden"  name="league" value="${leagueId}"/>	
             <petclinic:inputField label="Name" name="name"/>
             <petclinic:inputField label="points" name="points"/>
             <petclinic:inputField label="money" name="money"/>

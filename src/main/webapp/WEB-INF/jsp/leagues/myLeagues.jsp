@@ -44,4 +44,6 @@
 			</c:forEach>
 		</tbody>
 	</table>
+	<spring:url value="/leagues/new" var="messageUrl">
+	</spring:url> <a href="${fn:escapeXml(messageUrl)}">Nueva liga</a>
 </petclinic:layout>

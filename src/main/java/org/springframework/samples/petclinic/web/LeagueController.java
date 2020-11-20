@@ -1,10 +1,15 @@
 package org.springframework.samples.petclinic.web;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import javax.validation.Valid;
 
@@ -66,6 +71,25 @@ public class LeagueController {
 //		dataBinder.setDisallowedFields("id");
 //	}
 	
+	public String randomString(int longitud) {
+		 String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+		 String sb="";
+		 Random random = new Random();
+		
+
+	    for(int i = 0; i < longitud; i++) {
+
+	      int index = random.nextInt(alphabet.length());
+
+	      char randomChar = alphabet.charAt(index);
+
+	      sb+=(randomChar);
+	    }
+	    return sb;
+	}
+	
+	
 	public User getUserSession() {
 		User usuario = new User();  
 		try {
@@ -108,7 +132,8 @@ public class LeagueController {
 	    	}
 	    	
 	    	if(league.getRacesCompleted()>20) league.setRacesCompleted(20);
-	    }
+	    	
+ 	    }
 		
 		modelMap.addAttribute("ligas", leagueService.findAll());
 	
@@ -153,4 +178,49 @@ public class LeagueController {
 		model.addAttribute("ligas", leagueService.findAll());
 		return "redirect:/leagues";
 	}
+	
+	@GetMapping(path="/leagues/new")
+	public String crearEquipo(ModelMap model) {	
+		Iterable<League> leagues = leagueService.findAll() ;
+		List<League> result = new ArrayList<League>();
+	    leagues.forEach(result::add);
+	    
+	    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");  
+	    Date date = new Date();  
+	    
+	    
+	    League newLeague = new League();
+	    newLeague.setId(result.get(result.size()-1).getId()+1);
+	    newLeague.setLeagueCode(randomString(10));
+	    newLeague.setLeagueDate(formatter.format(date));
+	    newLeague.setMoto2Active(false);
+	    newLeague.setMoto3Active(true);
+	    newLeague.setMotogpActive(false);
+	    newLeague.setName("Liga"+newLeague.getId().toString());
+	    newLeague.setRacesCompleted(0);
+
+	    
+	    leagueService.saveLeague(newLeague);
+	    model.addAttribute("messageNewLiga", true);
+		 return "redirect:/leagues/"+newLeague.getId()+"/teams/new";	
+		 }
+	
+	
+	
+	
+//	
+//	@PostMapping(value = "/leagues/new/league")
+//	public String saveNewLeague(@PathVariable("leagueId") int leagueId,Team team, BindingResult result) {
+//		User usuario = getUserSession();
+//		if (result.hasErrors()) {
+//			return "/leagues/TeamsEdit";
+//		}
+//		else {
+//			team.setUser(usuario);
+//			this.leagueService.saveTeam(team);
+//			
+//			return "redirect:/leagues/{leagueId}/teams";
+//		}
+//	}
+	
 }

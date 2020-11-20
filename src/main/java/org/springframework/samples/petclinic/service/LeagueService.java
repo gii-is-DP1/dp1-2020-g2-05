@@ -41,6 +41,10 @@ public class LeagueService {
 		leagueRepository.save(league);
 	}
 	
+	public void deleteLeague(League league) throws DataAccessException {
+		leagueRepository.delete(league);
+	}
+	
 	@Transactional
 	public Iterable<League> findAll(){
 		return leagueRepository.findAll();

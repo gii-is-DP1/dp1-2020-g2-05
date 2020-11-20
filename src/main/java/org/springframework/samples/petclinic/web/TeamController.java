@@ -1,5 +1,7 @@
 package org.springframework.samples.petclinic.web;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -9,10 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Team;
+import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.model.Visit;
 import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.PetService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -47,7 +51,26 @@ public class TeamController {
 //	}
 //
 
-//	
+//
+	
+	public User getUserSession() {
+		User usuario = new User();  
+		try {
+			  Object auth = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			  Integer index1 = auth.toString().indexOf("Username:");
+			  Integer index2 = auth.toString().indexOf("; Password:"); // CON ESTO TENEMOS EL STRIN Username: user
+			  String nombreUsuario = auth.toString().substring(index1, index2).split(": ")[1]; //con esto hemos spliteado lo de arriba y nos hemos quedado con user.
+
+			  Optional<User> user = this.userService.findUser(nombreUsuario);
+			  
+			  usuario =  user.get();
+		  }catch (Exception e) {	
+			// TODO: handle exception
+		  }
+		return usuario;
+	}
+	
+	
 	@GetMapping(path="/leagues/{leagueId}/teams/new")
 	public String crearEquipo(@PathVariable("leagueId") int leagueId, ModelMap model) {
 		model.addAttribute("teams", new Team());
@@ -58,12 +81,12 @@ public class TeamController {
 	
 	@PostMapping(value = "/leagues/{leagueId}/teams/new")
 	public String saveNewTeam(@PathVariable("leagueId") int leagueId,Team team, BindingResult result) {
+		User usuario = getUserSession();
 		if (result.hasErrors()) {
 			return "/leagues/TeamsEdit";
 		}
 		else {
-			System.out.println(team);
-			System.out.println(leagueId);
+			team.setUser(usuario);
 			this.leagueService.saveTeam(team);
 			
 			return "redirect:/leagues/{leagueId}/teams";
@@ -100,7 +123,28 @@ public class TeamController {
 		return view;
 	}
 	
-	
+	@GetMapping("/myTeams")
+	public String myTeams(ModelMap modelMap) {
+		Iterable<League> leagues = leagueService.findAll() ;
+		List<League> result = new ArrayList<League>();
+	    leagues.forEach(result::add);
+	    List<Team> myTeamsList = new ArrayList<Team>();
+	    String username = getUserSession().getUsername();
+	    ;
+	    for(int i=0;i<result.size();i++) {
+		    List<Team> teams = new ArrayList<>(result.get(i).getTeam());
+		    for(int j=0;j<teams.size();j++) {
+		    	if(teams.get(j).getUser().getUsername().equals(username)){
+		    		myTeamsList.add(teams.get(j));
+		    		
+		    	}
+		    }
+	    }
+	    
+	    
+	    modelMap.addAttribute("teams", myTeamsList);
+		return "leagues/myTeams";
+	}
 
 	
 	@GetMapping(value = "/leagues/{leagueId}/teams")
