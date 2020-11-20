@@ -16,14 +16,13 @@
 			<th>Cuerpo</th>
 			<th>Remitente</th>
 			<th>Destinatario</th>
-			<th>Actions</th>
 		</tr>
 		<tr>
-			<td><c:out value="${message.id} " /></td>
-			<td><c:out value="${message.asunto}" /></td>
-			<td><c:out value="${message.cuerpo}" /></td>
-			<td><c:out value="${message.usersend}" /></td>
-			<td><c:out value="${message.userreceive}" /></td>
+			<td><c:out value="${messagee.id} " /></td>
+			<td><c:out value="${messagee.asunto}" /></td>
+			<td><c:out value="${messagee.cuerpo}" /></td>
+			<td><c:out value="${messagee.usernamesend}" /></td>
+			<td><c:out value="${messagee.usernamereceive}" /></td>
 			
 		</tr>
 	</table>

@@ -2,7 +2,7 @@ package org.springframework.samples.petclinic.model;
 
 import java.util.Set;
 
-
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -15,10 +15,14 @@ import lombok.Data;
 @Table(name = "messages")
 public class Message extends BaseEntity{
 	
-	
+	@Column(name = "asunto")        
 	String asunto;
 	
+	@Column(name = "cuerpo")        
 	String cuerpo;
+	
+    @Column(columnDefinition = "integer default 0")
+	Integer visto;
 	
 	@ManyToOne
 	@JoinColumn(name = "usernamesend")
@@ -27,6 +31,8 @@ public class Message extends BaseEntity{
 	@ManyToOne
 	@JoinColumn(name = "usernamereceive")
 	User usernamereceive;
+
+	
 	
 	
 }
