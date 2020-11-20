@@ -49,7 +49,6 @@ public class LineupController {
 	@GetMapping("/lineups")
 	public String listadoAlineaciones(ModelMap modelMap) {
 		modelMap.addAttribute("resultados", lineupService.findAll());
-		System.out.println("Mostrando todas las alineaciones: " + lineupService.findAll());
 		return "lineups/lineupsList";
 	}
 	
@@ -61,7 +60,6 @@ public class LineupController {
 		}else {
 			model.addAttribute("encontrado", false);
 		}
-		System.out.println("El id de la alineacion es: " + this.lineupService.findLineup(lineupId).get());
 		return "lineups/lineupDetails";
 	}
 	
