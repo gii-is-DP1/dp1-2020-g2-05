@@ -7,7 +7,8 @@
 
 <petclinic:layout pageName="leagues">
 	<h2>Your Leagues</h2>
-	
+	<h2>        <c:if test="${yaTienesEquipo}">You already have a team in this League :( !</c:if> 
+	</h2>
 	<table id="leaguesTable" class="table table-striped">
 		<thead>
 			<tr>
@@ -21,7 +22,9 @@
 		</thead>
 		<tbody>
 			<c:forEach items="${misLigas}" var="league">
+					
 				<tr>
+					
 					<td><c:out value="${league.name} " /></td>
 					<td><c:out value="${league.leagueCode} " /></td>
 					<td><c:out value="${league.leagueDate}" /></td>
@@ -40,10 +43,14 @@
 							<spring:param name="leagueId" value="${league.id}" />
 						</spring:url> <a href="${fn:escapeXml(leagueUrl)}">Teams</a>
 					</td>
+					
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
 	<spring:url value="/leagues/new" var="messageUrl">
-	</spring:url> <a href="${fn:escapeXml(messageUrl)}">Nueva liga</a>
+	</spring:url> <a href="${fn:escapeXml(messageUrl)}">New league</a>
+	<spring:url value="/leagues/join" var="messageUrl">
+	</br>
+	</spring:url> <a href="${fn:escapeXml(messageUrl)}">Join league</a>
 </petclinic:layout>

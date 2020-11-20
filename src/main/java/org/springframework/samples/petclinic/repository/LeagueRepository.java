@@ -15,4 +15,10 @@ public interface LeagueRepository extends CrudRepository<League, Integer>{
 //Iremos añadiendo poco a poco mas metodos
 //	@Query("UPDATE League league SET league.racesCompleted=(SELECT leag.racesCompleted FROM League leag WHERE leag.id=leagueId)+1 WHERE league.id=leagueId")
 //	public League incrementarCarrerasLiga(@Param("leagueId") Integer leagueId);
+	
+	@Query("SELECT league FROM League league WHERE league.leagueCode LIKE :leagueCode")
+	public Optional<League> findLeagueByLeagueCode(@Param("leagueCode") String leagueCode);
+	
+	@Query("SELECT team.league.id FROM Team team WHERE team.user.username LIKE :username")
+	public Collection<Integer> findTeamsByUsername(@Param("username") String username);
 }

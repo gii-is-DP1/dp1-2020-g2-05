@@ -88,15 +88,15 @@ public class TeamController {
 	@PostMapping(value = "/leagues/{leagueId}/teams/new")
 	public String saveNewTeam(@PathVariable("leagueId") int leagueId,Team team, BindingResult result, ModelMap model) {
 		User usuario = getUserSession();
-		List<Team> tem = new ArrayList<Team>();
-		Optional<League> league = this.leagueService.findLeague(leagueId);
-		List<Team> list = league.get().getTeam().stream().collect(Collectors.toList());
-		System.out.println(list);
-		String username = getUserSession().getUsername();
-		for(int i = 0; i<list.size(); i++) {
-			if(list.get(i).getUser().getUsername().equals(username)){
-	    		tem.add(list.get(i));
-	    		
+			List<Team> tem = new ArrayList<Team>();
+			Optional<League> league = this.leagueService.findLeague(leagueId);
+			List<Team> list = league.get().getTeam().stream().collect(Collectors.toList());
+			System.out.println(list);
+			String username = getUserSession().getUsername();
+			for(int i = 0; i<list.size(); i++) {
+				if(list.get(i).getUser().getUsername().equals(username)){
+		    		tem.add(list.get(i));
+		    		
 	    	}
 		}
 		System.out.println(tem.size());
