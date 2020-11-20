@@ -42,6 +42,15 @@
 							<spring:param name="leagueId" value="${league.id}" />
 						</spring:url> <a href="${fn:escapeXml(TeamUrl)}">Delete</a>
 						
+<!-- 			Visualizar fichajes de un equipo -->
+
+						<spring:url value="/leagues/{leagueId}/teams/{teamId}/details" var="TeamUrl">
+							<spring:param name="teamId" value="${team.id}" />
+							<spring:param name="leagueId" value="${league.id}" />
+						</spring:url> <a href="${fn:escapeXml(TeamUrl)}">Details</a>
+						
+<!-- 			Visualizar fichajes de un equipo -->
+						
 					
 					</td>
 				</tr>

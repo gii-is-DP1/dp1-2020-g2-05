@@ -125,6 +125,17 @@ public class TeamController {
 		
 	}
 	
+	@GetMapping(path="/leagues/{leagueId}/teams/{teamId}/details")
+	public String mostrarDetallesEscuderia (@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,  ModelMap model) {
+		Optional<Team> team = leagueService.findTeamById(teamId);
+		if(team.isPresent()) {
+			model.addAttribute("message", "Team found!");
+			model.addAttribute("team", team.get());
+		}else {
+			model.addAttribute("message", "Team not found!");
+		}
+		return "/leagues/teamDetails";
+	}
 	
 	@GetMapping(path="/leagues/{leagueId}/teams/{teamId}/delete")
 	public String borrarEscuderia (@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,  ModelMap model) {
