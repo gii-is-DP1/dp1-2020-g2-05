@@ -152,13 +152,12 @@ public class MessageController {
 	public String guardarMensaje(@Valid Message message, BindingResult result, ModelMap model) {
 		String view = "messages/messagesList";
 		if(result.hasErrors()) {
-			model.addAttribute("message", message);
+			model.addAttribute("messagee", message);
 			return "messages/messagesEdit";
 		}else {
 			System.out.println(message.getId());
 			messageService.saveMessage(message);
 			model.addAttribute("message", "Message successfully saved!");
-			model.addAttribute("resultados", messageService.findAllUsernameReceive(getUserSession().getUsername()));
 		}
 		return view;
 	}
