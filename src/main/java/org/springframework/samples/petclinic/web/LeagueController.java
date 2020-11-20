@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.web;
+	package org.springframework.samples.petclinic.web;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -44,7 +44,8 @@ import lombok.extern.java.Log;
 //@RequestMapping("/leagues/{leagueId}")
 public class LeagueController {
 
-
+	private Boolean yaTienesEquipo=false;
+	private Boolean noLeagueFound=false;
 	//private static final String VIEWS_RESULT_CREATE_OR_UPDATE_FORM = "result/createOrUpdateResultForm";
 	@Autowired
 
@@ -54,6 +55,7 @@ public class LeagueController {
 
 	UserService userService;
 	
+		
 //	public LeagueController(LeagueService leagueService, UserService userService) {
 //		this.leagueService = leagueService;
 //		this.userService = userService;
@@ -140,28 +142,31 @@ public class LeagueController {
 		return "leagues/leagueList";
 	}
 	
-	@GetMapping("/createLeague")
-	public String crearLiga(ModelMap modelMap) {
-		modelMap.addAttribute("ligas", leagueService.findAll());
-		return "leagues/leagueList";
-	}
+//	@GetMapping("/createLeague")
+//	public String crearLiga(ModelMap modelMap) {
+//		modelMap.addAttribute("ligas", leagueService.findAll());
+//		return "leagues/leagueList";
+//	}
 	
 	@GetMapping("/leagues/myLeagues")
 	public String myLeagues(ModelMap modelMap) {
-		Iterable<League> leagues = leagueService.findAll() ;
-		List<League> result = new ArrayList<League>();
-	    leagues.forEach(result::add);
+		User user = getUserSession();
+		
+		Collection<Integer> collect = leagueService.findTeamsByUsername(user.getUsername());
+		
+		List<Integer> idLeague = new ArrayList<Integer>();
+		
+		collect.forEach(idLeague::add);
 	    List<League> myLeaguesList = new ArrayList<League>();
-	    String username = getUserSession().getUsername();
 
-	    for(int i=0;i<result.size();i++) {
-		    List<Team> teams = new ArrayList<>(result.get(i).getTeam());
-		    for(int j=0;j<teams.size();j++) {
-		    	if(teams.get(j).getUser().getUsername().equals(username)){
-		    		myLeaguesList.add(result.get(i));
-		    	}
-		    }
-	    }
+	    
+		for(Integer i:idLeague) {
+			myLeaguesList.add(leagueService.findLeague(i).get());
+		}
+		
+		
+	    
+	    if(yaTienesEquipo) modelMap.addAttribute("yaTienesEquipo",true);yaTienesEquipo=false;
 	    
 	    modelMap.addAttribute("misLigas", myLeaguesList);
 	return "leagues/myLeagues";
@@ -180,7 +185,7 @@ public class LeagueController {
 	}
 	
 	@GetMapping(path="/leagues/new")
-	public String crearEquipo(ModelMap model) {	
+	public String crearLiga(ModelMap model) {	
 		Iterable<League> leagues = leagueService.findAll() ;
 		List<League> result = new ArrayList<League>();
 	    leagues.forEach(result::add);
@@ -204,6 +209,46 @@ public class LeagueController {
 	    model.addAttribute("messageNewLiga", true);
 		 return "redirect:/leagues/"+newLeague.getId()+"/teams/new";	
 		 }
+	
+	@GetMapping(path="/leagues/join")
+	public String unirseLiga(ModelMap model) {	
+		model.addAttribute("league", new League());
+
+		if(noLeagueFound) model.addAttribute("noLeagueFound", "Any league has been found with the code provided :(");
+		noLeagueFound=false;
+		return "/leagues/createLeague";
+		 }
+	
+	@PostMapping(value="/leagues/join")
+	public String unirseLigaCode(League league,ModelMap model) {	
+		User user = getUserSession();
+		Collection<Integer> collect = leagueService.findTeamsByUsername(user.getUsername());
+		
+		List<Integer> idLeague = new ArrayList<Integer>();
+		
+		collect.forEach(idLeague::add);
+		
+		
+		Optional<League> liga = leagueService.findLeagueByLeagueCode(league.getLeagueCode().trim());
+
+		if(liga.isEmpty()) {
+			noLeagueFound=true;
+			return "redirect:/leagues/join";
+		}
+		
+		if(idLeague.contains(liga.get().getId())) {
+
+			yaTienesEquipo=true;
+			return "redirect:/leagues/myLeagues";
+
+		}
+		
+		
+
+		model.addAttribute("yaTienesEquipo", false);
+		return "redirect:/leagues/"+liga.get().getId()+"/teams/new";
+		 }
+	
 	
 	
 	

@@ -45,6 +45,15 @@ public class LeagueService {
 		leagueRepository.delete(league);
 	}
 	
+	public Optional<League> findLeagueByLeagueCode(String leagueCode) throws DataAccessException {
+		return leagueRepository.findLeagueByLeagueCode(leagueCode);
+	}
+	
+	public Collection<Integer> findTeamsByUsername(String username) throws DataAccessException {
+		return leagueRepository.findTeamsByUsername(username);
+	}
+	
+	
 	@Transactional
 	public Iterable<League> findAll(){
 		return leagueRepository.findAll();
