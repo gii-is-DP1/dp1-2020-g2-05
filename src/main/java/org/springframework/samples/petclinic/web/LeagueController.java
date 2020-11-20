@@ -1,10 +1,15 @@
 package org.springframework.samples.petclinic.web;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import javax.validation.Valid;
 
@@ -31,6 +36,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import lombok.extern.java.Log;
 
@@ -65,6 +71,25 @@ public class LeagueController {
 //		dataBinder.setDisallowedFields("id");
 //	}
 	
+	public String randomString(int longitud) {
+		 String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+		 String sb="";
+		 Random random = new Random();
+		
+
+	    for(int i = 0; i < longitud; i++) {
+
+	      int index = random.nextInt(alphabet.length());
+
+	      char randomChar = alphabet.charAt(index);
+
+	      sb+=(randomChar);
+	    }
+	    return sb;
+	}
+	
+	
 	public User getUserSession() {
 		User usuario = new User();  
 		try {
@@ -85,7 +110,32 @@ public class LeagueController {
 	
 	@GetMapping("/leagues")
 	public String leagues(ModelMap modelMap) {
-	modelMap.addAttribute("ligas", leagueService.findAll());
+		Iterable<League> leagues = leagueService.findAll() ;
+		List<League> result = new ArrayList<League>();
+	    leagues.forEach(result::add);
+		
+	    for(League league:result) {
+	    	if(league.getRacesCompleted()<10) {
+	    		league.setMoto3Active(true);
+	    		league.setMoto2Active(false);//menos de 10 carreras es moto3
+	    		league.setMotogpActive(false);
+
+	    	}else if(league.getRacesCompleted()>=10 && league.getRacesCompleted()<15 ) {
+	    		league.setMoto2Active(true);
+	    		league.setMotogpActive(false); // si las carreras estan entre 10 y 15 pues estamos en moto2
+	    		league.setMoto3Active(false);
+
+	    	}else if(league.getRacesCompleted()>=15 ) {
+	    		league.setMoto2Active(false);
+	    		league.setMotogpActive(true); // mas de 15 carreras es motogp
+	    		league.setMoto3Active(false);
+	    	}
+	    	
+	    	if(league.getRacesCompleted()>20) league.setRacesCompleted(20);
+	    	
+ 	    }
+		
+		modelMap.addAttribute("ligas", leagueService.findAll());
 	
 		return "leagues/leagueList";
 	}
@@ -96,7 +146,7 @@ public class LeagueController {
 		return "leagues/leagueList";
 	}
 	
-	@GetMapping("/myLeagues")
+	@GetMapping("/leagues/myLeagues")
 	public String myLeagues(ModelMap modelMap) {
 		Iterable<League> leagues = leagueService.findAll() ;
 		List<League> result = new ArrayList<League>();
@@ -116,4 +166,61 @@ public class LeagueController {
 	    modelMap.addAttribute("misLigas", myLeaguesList);
 	return "leagues/myLeagues";
 	}
+	
+	
+	
+	@GetMapping(path="/leagues/{leagueId}/increase")
+	public String crearEquipo(@PathVariable("leagueId") int leagueId, ModelMap model) {	
+		
+		League league = leagueService.findLeague(leagueId).get();
+		league.setRacesCompleted(league.getRacesCompleted()+1);
+		
+		model.addAttribute("ligas", leagueService.findAll());
+		return "redirect:/leagues";
+	}
+	
+	@GetMapping(path="/leagues/new")
+	public String crearEquipo(ModelMap model) {	
+		Iterable<League> leagues = leagueService.findAll() ;
+		List<League> result = new ArrayList<League>();
+	    leagues.forEach(result::add);
+	    
+	    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");  
+	    Date date = new Date();  
+	    
+	    
+	    League newLeague = new League();
+	    newLeague.setId(result.get(result.size()-1).getId()+1);
+	    newLeague.setLeagueCode(randomString(10));
+	    newLeague.setLeagueDate(formatter.format(date));
+	    newLeague.setMoto2Active(false);
+	    newLeague.setMoto3Active(true);
+	    newLeague.setMotogpActive(false);
+	    newLeague.setName("Liga"+newLeague.getId().toString());
+	    newLeague.setRacesCompleted(0);
+
+	    
+	    leagueService.saveLeague(newLeague);
+	    model.addAttribute("messageNewLiga", true);
+		 return "redirect:/leagues/"+newLeague.getId()+"/teams/new";	
+		 }
+	
+	
+	
+	
+//	
+//	@PostMapping(value = "/leagues/new/league")
+//	public String saveNewLeague(@PathVariable("leagueId") int leagueId,Team team, BindingResult result) {
+//		User usuario = getUserSession();
+//		if (result.hasErrors()) {
+//			return "/leagues/TeamsEdit";
+//		}
+//		else {
+//			team.setUser(usuario);
+//			this.leagueService.saveTeam(team);
+//			
+//			return "redirect:/leagues/{leagueId}/teams";
+//		}
+//	}
+	
 }

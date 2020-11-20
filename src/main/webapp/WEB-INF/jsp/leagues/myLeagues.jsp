@@ -7,7 +7,7 @@
 
 <petclinic:layout pageName="leagues">
 	<h2>Your Leagues</h2>
-
+	
 	<table id="leaguesTable" class="table table-striped">
 		<thead>
 			<tr>
@@ -44,4 +44,6 @@
 			</c:forEach>
 		</tbody>
 	</table>
+	<spring:url value="/leagues/new" var="messageUrl">
+	</spring:url> <a href="${fn:escapeXml(messageUrl)}">Nueva liga</a>
 </petclinic:layout>

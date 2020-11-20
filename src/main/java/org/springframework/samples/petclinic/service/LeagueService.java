@@ -41,6 +41,10 @@ public class LeagueService {
 		leagueRepository.save(league);
 	}
 	
+	public void deleteLeague(League league) throws DataAccessException {
+		leagueRepository.delete(league);
+	}
+	
 	@Transactional
 	public Iterable<League> findAll(){
 		return leagueRepository.findAll();
@@ -61,7 +65,9 @@ public class LeagueService {
 		return teamRepository.findById(teamId);
 	}
 
-
+//	public League increaseLeagueRaces(Integer leagueId){
+//		return leagueRepository.incrementarCarrerasLiga(leagueId);
+//	}
 
 	public void saveTeam(Team team)  throws DataAccessException{
 		System.out.println(team);
