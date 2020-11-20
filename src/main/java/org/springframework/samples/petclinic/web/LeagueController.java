@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import lombok.extern.java.Log;
 
@@ -85,7 +86,31 @@ public class LeagueController {
 	
 	@GetMapping("/leagues")
 	public String leagues(ModelMap modelMap) {
-	modelMap.addAttribute("ligas", leagueService.findAll());
+		Iterable<League> leagues = leagueService.findAll() ;
+		List<League> result = new ArrayList<League>();
+	    leagues.forEach(result::add);
+		
+	    for(League league:result) {
+	    	if(league.getRacesCompleted()<10) {
+	    		league.setMoto3Active(true);
+	    		league.setMoto2Active(false);//menos de 10 carreras es moto3
+	    		league.setMotogpActive(false);
+
+	    	}else if(league.getRacesCompleted()>=10 && league.getRacesCompleted()<15 ) {
+	    		league.setMoto2Active(true);
+	    		league.setMotogpActive(false); // si las carreras estan entre 10 y 15 pues estamos en moto2
+	    		league.setMoto3Active(false);
+
+	    	}else if(league.getRacesCompleted()>=15 ) {
+	    		league.setMoto2Active(false);
+	    		league.setMotogpActive(true); // mas de 15 carreras es motogp
+	    		league.setMoto3Active(false);
+	    	}
+	    	
+	    	if(league.getRacesCompleted()>20) league.setRacesCompleted(20);
+	    }
+		
+		modelMap.addAttribute("ligas", leagueService.findAll());
 	
 		return "leagues/leagueList";
 	}
@@ -96,7 +121,7 @@ public class LeagueController {
 		return "leagues/leagueList";
 	}
 	
-	@GetMapping("/myLeagues")
+	@GetMapping("/leagues/myLeagues")
 	public String myLeagues(ModelMap modelMap) {
 		Iterable<League> leagues = leagueService.findAll() ;
 		List<League> result = new ArrayList<League>();
@@ -115,5 +140,17 @@ public class LeagueController {
 	    
 	    modelMap.addAttribute("misLigas", myLeaguesList);
 	return "leagues/myLeagues";
+	}
+	
+	
+	
+	@GetMapping(path="/leagues/{leagueId}/increase")
+	public String crearEquipo(@PathVariable("leagueId") int leagueId, ModelMap model) {	
+		
+		League league = leagueService.findLeague(leagueId).get();
+		league.setRacesCompleted(league.getRacesCompleted()+1);
+		
+		model.addAttribute("ligas", leagueService.findAll());
+		return "redirect:/leagues";
 	}
 }

@@ -7,7 +7,7 @@
 
 <petclinic:layout pageName="leagues">
 	<h2>Your Leagues</h2>
-
+	
 	<table id="leaguesTable" class="table table-striped">
 		<thead>
 			<tr>

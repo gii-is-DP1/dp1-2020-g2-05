@@ -40,6 +40,12 @@
 							<spring:param name="leagueId" value="${league.id}" />
 						</spring:url> <a href="${fn:escapeXml(leagueUrl)}">Teams</a>
 					</td>
+					<td>
+					<spring:url value="/leagues/{leagueId}/increase" var="leagueUrl">
+							<spring:param name="leagueId" value="${league.id}" />
+						</spring:url> <a href="${fn:escapeXml(leagueUrl)}">+1</a>
+<%-- 					<input id="button${league.id}"  type="submit" name="button" onclick="window.location.href='/leagues'" value="enter"/> --%>
+					</td>
 				</tr>
 			</c:forEach>
 		</tbody>
