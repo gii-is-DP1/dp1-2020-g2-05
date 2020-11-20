@@ -57,6 +57,8 @@ public class TeamController {
 
 //
 	
+	private static boolean messageequipoduplicado;
+	
 	public User getUserSession() {
 		User usuario = new User();  
 		try {
@@ -102,11 +104,12 @@ public class TeamController {
 		
 		System.out.println(tem);
 		if (result.hasErrors()) {
-			model.put("message", "Team have some errors!");
+			model.addAttribute("message", "Team have some errors!");
 			return "/leagues/TeamsEdit";
 	}
 		else if(tem.size()>= 1){
-			model.put("message", "Sorry, you cannot have more teams in this league!");
+//			model.addAttribute("message", "Sorry, you cannot have more teams in this league!");
+			messageequipoduplicado = true;
 			
 			return "redirect:/leagues/{leagueId}/teams";
 			
@@ -114,7 +117,7 @@ public class TeamController {
 			else {
 			team.setUser(usuario);
 			this.leagueService.saveTeam(team);
-			model.put("message", "Team successfully saved!");
+			model.addAttribute("message", "Team successfully saved!");
 			
 			return "redirect:/leagues/{leagueId}/teams";
 		}
@@ -182,6 +185,11 @@ public class TeamController {
 		model.put("teams", this.leagueService.findLeague(leagueId).get().getTeam());
 		model.put("league", this.leagueService.findLeague(leagueId).get());
 		model.put("user", usuario);
+		if(messageequipoduplicado) {
+			model.put("message", true);
+			messageequipoduplicado = false;
+		}
+		
 		return "/leagues/TeamList";
 	}
 }
