@@ -147,10 +147,23 @@ INSERT INTO team(id,name,points,money,league_id, username) VALUES (7,'Miguelito'
 
 INSERT INTO recruit(id,pilot_id,team_id) VALUES (1,1,1);
 INSERT INTO recruit(id,pilot_id,team_id) VALUES (2,2,1);
+INSERT INTO recruit(id,pilot_id,team_id) VALUES (3,3,1);
+INSERT INTO recruit(id,pilot_id,team_id) VALUES (4,4,1);
+INSERT INTO recruit(id,pilot_id,team_id) VALUES (5,2,2);
+INSERT INTO recruit(id,pilot_id,team_id) VALUES (6,3,2);
+INSERT INTO recruit(id,pilot_id,team_id) VALUES (7,1,2);
+INSERT INTO recruit(id,pilot_id,team_id) VALUES (8,6,2);
+INSERT INTO recruit(id,pilot_id,team_id) VALUES (9,6,3);
+INSERT INTO recruit(id,pilot_id,team_id) VALUES (10,5,3);
+INSERT INTO recruit(id,pilot_id,team_id) VALUES (11,2,4);
 
 
 INSERT INTO lineup(id,category,gp_id,league_id,recruit1_id,recruit2_id,team_id) VALUES (1,'MOTOGP',1,2,1,2,1); 
 INSERT INTO lineup(id,category,gp_id,league_id,recruit1_id,recruit2_id,team_id) VALUES (2,'MOTOGP',2,2,2,1,1); 
-INSERT INTO lineup(id,category,gp_id,league_id,recruit1_id,recruit2_id,team_id) VALUES (3,'MOTOGP',3,2,1,2,1); 
-INSERT INTO lineup(id,category,gp_id,league_id,recruit1_id,recruit2_id,team_id) VALUES (4,'MOTOGP',3,1,1,2,1); 
-INSERT INTO lineup(id,category,gp_id,league_id,recruit1_id,recruit2_id,team_id) VALUES (5,'MOTOGP',3,1,1,2,1); 
+INSERT INTO lineup(id,category,gp_id,league_id,recruit1_id,recruit2_id,team_id) VALUES (3,'MOTOGP',3,2,3,4,1); 
+INSERT INTO lineup(id,category,gp_id,league_id,recruit1_id,recruit2_id,team_id) VALUES (5,'MOTOGP',5,1,2,4,2);
+INSERT INTO lineup(id,category,gp_id,league_id,recruit1_id,recruit2_id,team_id) VALUES (6,'MOTOGP',1,2,1,2,2); 
+INSERT INTO lineup(id,category,gp_id,league_id,recruit1_id,recruit2_id,team_id) VALUES (7,'MOTOGP',2,2,2,1,2); 
+INSERT INTO lineup(id,category,gp_id,league_id,recruit1_id,recruit2_id,team_id) VALUES (8,'MOTOGP',3,2,3,4,3); 
+INSERT INTO lineup(id,category,gp_id,league_id,recruit1_id,recruit2_id,team_id) VALUES (9,'MOTOGP',3,1,1,4,3); 
+INSERT INTO lineup(id,category,gp_id,league_id,recruit1_id,recruit2_id,team_id) VALUES (10,'MOTOGP',3,1,2,4,4);

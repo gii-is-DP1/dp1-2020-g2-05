@@ -15,12 +15,13 @@
     <form:form modelAttribute="lineup" class="form-horizontal" id="add-lineup-form" action="/lineups/save">
         <div class="form-group has-feedback">
         	<input type="hidden" name="id" value="${lineup.id}"/>
-            <petclinic:inputField label="Category" name="category"/>
+            <input type="hidden" label="Category" name="category" value="${leagueCategory}"/>
+            <input  type="hidden" label="League" name="league" value="${leagueId}"/>
+            <input type="hidden" label="Team" name="team" value="${teamId}"/>
             <petclinic:inputField label="GP" name="gp.id"/>
-            <petclinic:inputField label="League" name="league"/>
             <petclinic:inputField label="Recruit1" name="recruit1.id"/>
             <petclinic:inputField label="Recruit2" name="recruit2.id"/>
-            <petclinic:inputField label="Team" name="team"/>
+            
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
