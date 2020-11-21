@@ -74,23 +74,7 @@ public class LeagueService {
 //	}
 //	
 	
-	public User getUserSession() {
-		User usuario = new User();  
-		try {
-			  Object auth = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-			  
-			  Integer index1 = auth.toString().indexOf("Username:");
-			  Integer index2 = auth.toString().indexOf("; Password:"); // CON ESTO TENEMOS EL STRIN Username: user
-			  
-			  String nombreUsuario = auth.toString().substring(index1, index2).split(": ")[1]; //con esto hemos spliteado lo de arriba y nos hemos quedado con user.
-
-			  Optional<User> user = findUserByUsername(nombreUsuario);
-			  usuario =  user.get();
-		  }catch (Exception e) {	
-		  }
-		return usuario;
-	}
 	@Transactional
 	public Iterable<League> findAll(){
 		return leagueRepository.findAll();

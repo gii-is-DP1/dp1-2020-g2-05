@@ -110,6 +110,7 @@
 										<div class="col-lg-12">
 											<p>
 												<a href="/messages/" class="btn btn-primary btn-block">My messages</a>
+												<a href="/friends/" class="btn btn-primary btn-block">My friends</a>
 <!-- 												<a href="#" class="btn btn-danger btn-block">Change -->
 <!-- 													Password</a> -->
 											</p>
