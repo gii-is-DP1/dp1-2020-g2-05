@@ -12,12 +12,12 @@
     <h2>
         <c:if test="${lineup['new']}">New </c:if> Lineup
     </h2>
-    <form:form modelAttribute="lineup" class="form-horizontal" id="add-lineup-form" action="/lineups/save">
+    <form:form modelAttribute="lineup" class="form-horizontal" id="add-lineup-form" action="newLineup/save">
         <div class="form-group has-feedback">
         	<input type="hidden" name="id" value="${lineup.id}"/>
-            <input type="hidden" label="Category" name="category" value="${leagueCategory}"/>
-            <input  type="hidden" label="League" name="league" value="${leagueId}"/>
-            <input type="hidden" label="Team" name="team" value="${teamId}"/>
+            <input type="hidden" name="category" value="${leagueCategory}"/>
+            <input type="hidden" name="league" value="${leagueId}"/>
+            <input type="hidden" name="team" value="${teamId}"/>
             <petclinic:inputField label="GP" name="gp.id"/>
             <petclinic:inputField label="Recruit1" name="recruit1.id"/>
             <petclinic:inputField label="Recruit2" name="recruit2.id"/>
