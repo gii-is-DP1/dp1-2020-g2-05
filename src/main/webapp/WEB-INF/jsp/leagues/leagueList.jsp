@@ -25,14 +25,14 @@
 					<td><c:out value="${league.name} " /></td>
 					<td><c:out value="${league.leagueCode} " /></td>
 					<td><c:out value="${league.leagueDate}" /></td>
-					<c:if test="${league.motogpActive==true}">  
-					<td>Moto GP </td>					
+					<c:if test="${league.racesCompleted<10}">  
+					<td>Moto 3 </td>					
 					</c:if>
-					<c:if test="${league.moto2Active==true}">  
+					<c:if test="${league.racesCompleted>=10 && league.racesCompleted<15}">  
 					<td>Moto 2 </td>					
 					</c:if>
-					<c:if test="${league.moto3Active==true}">  
-					<td>Moto 3 </td>					
+					<c:if test="${league.racesCompleted>=15}">  
+					<td>Moto GP </td>					
 					</c:if>  
 					<td><c:out value="${league.racesCompleted}" /></td>
 					<td>
@@ -40,12 +40,15 @@
 							<spring:param name="leagueId" value="${league.id}" />
 						</spring:url> <a href="${fn:escapeXml(leagueUrl)}">Teams</a>
 					</td>
-					<td>
+					<c:if test="${league.racesCompleted<20}">
+										<td>
 					<spring:url value="/leagues/{leagueId}/increase" var="leagueUrl">
 							<spring:param name="leagueId" value="${league.id}" />
 						</spring:url> <a href="${fn:escapeXml(leagueUrl)}"><img src="resources/images/meta.png" style="height:15px;weight:15px;border:none;"/></a>
 <%-- 					<input id="button${league.id}"  type="submit" name="button" onclick="window.location.href='/leagues'" value="enter"/> --%>
 					</td>
+					</c:if>
+					
 				</tr>
 			</c:forEach>
 		</tbody>

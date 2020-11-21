@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Team;
@@ -59,9 +60,23 @@ public class LeagueService {
 		return leagueRepository.findLeaguesByUsername(username);
 	}
 	
-//	public void activeMoto3(Integer leagueId) throws DataAccessException {
-//		leagueRepository.activeMoto3(leagueId);
-//	}
+	@Modifying
+	@Transactional
+	public void activeMoto3(Integer leagueId) throws DataAccessException {
+		leagueRepository.activeMoto3(leagueId);
+	}
+	
+	@Modifying
+	@Transactional
+	public void activeMoto2(Integer leagueId) throws DataAccessException {
+		leagueRepository.activeMoto2(leagueId);
+	}
+	
+	@Modifying
+	@Transactional
+	public void activeMotogp(Integer leagueId) throws DataAccessException {
+		leagueRepository.activeMotogp(leagueId);
+	}
 //	public void activeMoto2(Integer leagueId) throws DataAccessException {
 //		leagueRepository.activeMoto2(leagueId);
 //	}
