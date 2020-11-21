@@ -10,7 +10,9 @@
 <petclinic:layout pageName="Teams">
 	<h2>Teams</h2>
 	
-	<c:if test="${message=true}">team dont saved </c:if>
+	<c:if test="${EquipoSi!=null}"><h2><c:out value="${EquipoSi}" /></h2></c:if>
+	<c:if test="${EquipoNo!=null}"><h2><c:out value="${EquipoNo}" /></h2></c:if>
+	<c:if test="${Error!=null}"><h2><c:out value="${Error}" /></h2></c:if>
 	
 	<table id="teamsTable" class="table table-striped">
 		<thead>
@@ -33,10 +35,10 @@
 					<td><c:out value="${team.money}" /></td>
 					<td><c:out value="${team.user.username}" /></td>
 					<td>
-<%-- 						<spring:url value="/leagues/{leagueId}/teams/{teamId}/edit" var="TeamUrl"> --%>
-<%-- 								<spring:param name="teamId" value="${team.id}" /> --%>
-<%-- 							<spring:param name="leagueId" value="${league.id}" /> --%>
-<%-- 						</spring:url> <a href="${fn:escapeXml(TeamUrl)}">Edit</a> --%>
+						<spring:url value="/leagues/{leagueId}/teams/{teamId}/edit" var="TeamUrl">
+								<spring:param name="teamId" value="${team.id}" />
+							<spring:param name="leagueId" value="${league.id}" />
+						</spring:url> <a href="${fn:escapeXml(TeamUrl)}">Edit</a>
 						<spring:url value="/leagues/{leagueId}/teams/{teamId}/delete" var="TeamUrl">
 							<spring:param name="teamId" value="${team.id}" />
 							<spring:param name="leagueId" value="${league.id}" />

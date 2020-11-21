@@ -1,17 +1,26 @@
 package org.springframework.samples.petclinic.web;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.User;
+import org.springframework.samples.petclinic.model.Visit;
 import org.springframework.samples.petclinic.service.LeagueService;
+import org.springframework.samples.petclinic.service.PetService;
 import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,8 +28,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class TeamController {
@@ -38,9 +51,8 @@ public class TeamController {
 	LeagueService leagueService;
 	
 	@Autowired
+	
 	RecruitService recruitService;
-	
-	
 	
 //	@Autowired
 //	public TeamController(UserService userService) {
@@ -50,7 +62,9 @@ public class TeamController {
 
 //
 	
-	private static boolean messageequipoduplicado;
+	private Boolean EquipoSi=false;
+	private Boolean EquipoNo=false;
+	private Boolean Error=false;
 	
 	public User getUserSession() {
 		User usuario = new User();  
@@ -97,20 +111,19 @@ public class TeamController {
 		
 		System.out.println(tem);
 		if (result.hasErrors()) {
-			model.addAttribute("message", "Team have some errors!");
+			Error=true;
 			return "/leagues/TeamsEdit";
 	}
 		else if(tem.size()>= 1){
 //			model.addAttribute("message", "Sorry, you cannot have more teams in this league!");
-			messageequipoduplicado = true;
-			
+			EquipoNo=true;
 			return "redirect:/leagues/{leagueId}/teams";
 			
 		}
 			else {
 			team.setUser(usuario);
 			this.leagueService.saveTeam(team);
-			model.addAttribute("message", "Team successfully saved!");
+			EquipoSi=true;
 			
 			return "redirect:/leagues/{leagueId}/teams";
 		}
@@ -168,19 +181,22 @@ public class TeamController {
 		List<League> result = new ArrayList<League>();
 	    leagues.forEach(result::add);
 	    List<Team> myTeamsList = new ArrayList<Team>();
-	    String username = getUserSession().getUsername();
-	    ;
+	    List<Integer> ids = new ArrayList<Integer>();
+	    String username = getUserSession().getUsername();;
 	    for(int i=0;i<result.size();i++) {
 		    List<Team> teams = new ArrayList<>(result.get(i).getTeam());
 		    for(int j=0;j<teams.size();j++) {
 		    	if(teams.get(j).getUser().getUsername().equals(username)){
 		    		myTeamsList.add(teams.get(j));
+		    		ids.add(teams.get(j).getLeague().getId());
+		    		
 		    		
 		    	}
 		    }
 	    }
 	    
-	    
+	   modelMap.addAttribute("leagues", ids);
+	   System.out.println(ids);
 	    modelMap.addAttribute("teams", myTeamsList);
 		return "leagues/myTeams";
 	}
@@ -189,14 +205,18 @@ public class TeamController {
 	@GetMapping(value = "/leagues/{leagueId}/teams")
 	public String showTeams(@PathVariable int leagueId, Map<String, Object> model) {
 		User usuario = getUserSession();
-		model.put("teams", this.leagueService.findLeague(leagueId).get().getTeam());
+		List<Team> tem = this.leagueService.findLeague(leagueId).get().getTeam().stream().collect(Collectors.toList());
+		tem = tem.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+		System.out.println(tem);
+		model.put("teams", tem);
 		model.put("league", this.leagueService.findLeague(leagueId).get());
 		model.put("user", usuario);
-		if(messageequipoduplicado) {
-			model.put("message", true);
-			messageequipoduplicado = false;
-		}
-		
+		if(EquipoNo) model.put("EquipoNo", "You cannot have more than 1 teams in the same league");
+		EquipoNo=false;
+		if(EquipoSi) model.put("EquipoSi", "Team created succesfully!");
+		EquipoSi=false;
+		if(Error) model.put("Error", "Your team have some errors!");
+		Error=false;
 		return "/leagues/TeamList";
 	}
 }
