@@ -49,26 +49,38 @@ public class League extends NamedEntity {
 	private String leagueDate;
 
 	@Column(name = "league_code", unique=true)       
-    @Size(min = 10, max = 10)
+	@Size(min = 10, max = 10)
 	private String leagueCode;
-	
+
 	@Column(name = "motogp_active")        
 	private boolean motogpActive;
-	
+
 	@Column(name = "moto2_active")        
 	private boolean moto2Active;
-	
+
 	@Column(name = "moto3_active")        
 	private boolean moto3Active;
-	
+
 	@Column(name = "races_completed")        
 	private Integer racesCompleted;
-	
+
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="league")
 	Set<Team> team;
-	
+
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "league")
 	private Set<Lineup> lineups;
+
+	public Category getCurrentCategory() {
+		Category res = null;
+		if (isMotogpActive()) {
+			res = Category.MOTOGP;
+		} else if (isMoto2Active()) {
+			res = Category.MOTO2;
+		} else if (isMoto3Active()) {
+			res = Category.MOTO3;
+		}
+		return res;
+	}
 
 	public String getLeagueDate() {
 		return leagueDate;
@@ -117,11 +129,11 @@ public class League extends NamedEntity {
 	public void setTeam(Set<Team> team) {
 		this.team = team;
 	}
-	
+
 	public String getLeagueCode() {
 		return leagueCode;
 	}
-	
+
 	public String setLeagueCode(String leagueCode1) {
 		return this.leagueCode=leagueCode1;
 	}
@@ -135,7 +147,7 @@ public class League extends NamedEntity {
 		getTeam().add(team);
 		team.setLeague(this);
 	}
-	
-	
-	
+
+
+
 }

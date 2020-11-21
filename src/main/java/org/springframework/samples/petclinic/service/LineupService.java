@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,4 +36,10 @@ public class LineupService {
 	public void delete(Lineup lineup) {
 		lineupRepository.delete(lineup);
 	}
+	
+	public List<Lineup> findByTeam(int team_id) {
+		return this.lineupRepository.findByTeam(team_id);
+	}
+	
+	
 }

@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Lineup;
+import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.LineupService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -45,6 +46,9 @@ public class LineupController {
 	
 	@Autowired
 	LineupService lineupService;
+	
+	@Autowired
+	LeagueService leagueService;
 
 	@GetMapping("/lineups")
 	public String listadoAlineaciones(ModelMap modelMap) {
@@ -63,9 +67,10 @@ public class LineupController {
 		return "lineups/lineupDetails";
 	}
 	
-	@GetMapping(path="/lineups/new")
-	public String crearAlineacion(ModelMap model) {
+	@GetMapping(path="leagues/{leagueId}/teams/{teamId}/newLineup")
+	public String crearAlineacion(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, ModelMap model) {
 		model.addAttribute("lineup", new Lineup());
+		model.addAttribute("leagueCategory", this.leagueService.findLeague(leagueId).get().getCurrentCategory());
 		return "lineups/lineupsEdit";
 	}
 	

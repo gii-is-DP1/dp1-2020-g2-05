@@ -20,6 +20,7 @@ import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.model.Visit;
 import org.springframework.samples.petclinic.service.LeagueService;
+import org.springframework.samples.petclinic.service.LineupService;
 import org.springframework.samples.petclinic.service.PetService;
 import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.UserService;
@@ -51,8 +52,10 @@ public class TeamController {
 	LeagueService leagueService;
 	
 	@Autowired
-	
 	RecruitService recruitService;
+	
+	@Autowired
+	LineupService lineupService;
 	
 //	@Autowired
 //	public TeamController(UserService userService) {
@@ -135,11 +138,12 @@ public class TeamController {
 	public String mostrarDetallesEscuderia (@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamID,  ModelMap model) {
 		Optional<Team> team = leagueService.findTeamById(teamID);
 		if(team.isPresent()) {
-			model.addAttribute("message", "Team found!");
+//			model.addAttribute("message", "Team found!");
 			model.addAttribute("team", team.get());
 			List<Pilot> l = recruitService.getRecruits(teamID);
 			System.out.println(l);
 			model.addAttribute("misFichajes", l);
+			model.addAttribute("misAlineaciones", lineupService.findByTeam(teamID));
 		}else {
 			model.addAttribute("message", "Team not found!");
 		}
