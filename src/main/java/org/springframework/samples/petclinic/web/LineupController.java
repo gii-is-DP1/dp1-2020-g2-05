@@ -74,16 +74,18 @@ public class LineupController {
 		return "lineups/lineupsEdit";
 	}
 	
-	@PostMapping(path="lineups/save")
+	@PostMapping(path="leagues/{leagueId}/teams/{teamId}/newLineup/save")
 	public String guardarLineup(@Valid Lineup lineup, BindingResult result, ModelMap model) {
-		String view = "lineups/lineupsList";
+		System.out.println("Hola jeje");
+		String view = "redirect:/leagues/{leagueId}/teams/{teamId}/details";
 		if(result.hasErrors()) {
+			System.out.println("Han habido errores ");
 			model.addAttribute("lineup", lineup);
-			return "lineups/lineupsEdit";
+			view = "lineups/lineupsEdit";
 		}else {
 			lineupService.saveLineup(lineup);
 			model.addAttribute("message", "Lineup successfully saved!");
-			model.addAttribute("resultados", lineupService.findAll());
+//			model.addAttribute("resultados", lineupService.findAll());
 		}
 		return view;
 	}
