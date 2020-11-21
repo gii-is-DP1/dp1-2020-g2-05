@@ -118,7 +118,7 @@ public class LeagueController {
 	
 	@GetMapping("/leagues/myLeagues")
 	public String myLeagues(ModelMap modelMap) {
-		User user = leagueService.getUserSession();
+		User user = userService.getUserSession();
 		
 		Collection<Integer> collect = leagueService.findTeamsByUsername(user.getUsername());
 		
@@ -164,7 +164,7 @@ public class LeagueController {
 	@GetMapping(path="/leagues/new")
 	public String crearLiga(ModelMap model) {	
 		
-		Integer num_leagues = leagueService.findLeaguesByUsername(leagueService.getUserSession().getUsername());
+		Integer num_leagues = leagueService.findLeaguesByUsername(userService.getUserSession().getUsername());
 		
 		if(num_leagues==5) {
 			yaTieneMaxLigas=true;
@@ -205,7 +205,7 @@ public class LeagueController {
 	
 	@PostMapping(value="/leagues/join")
 	public String unirseLigaCode(League league,ModelMap model) {	
-		User user = leagueService.getUserSession();
+		User user = userService.getUserSession();
 		Collection<Integer> collect = leagueService.findTeamsByUsername(user.getUsername());
 		
 		List<Integer> idLeague = new ArrayList<Integer>();
