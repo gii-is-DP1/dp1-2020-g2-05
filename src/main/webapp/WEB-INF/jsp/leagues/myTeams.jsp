@@ -21,6 +21,7 @@
 			</tr>
 		</thead>
 		<tbody>
+		<c:forEach items="${leagues}" var="league">
 			<c:forEach items="${teams}" var="team">
 				<tr>
 					<td><c:out value="${team.name} " /></td>
@@ -31,12 +32,13 @@
 						
 						<spring:url value="/leagues/{leagueId}/teams/{teamId}/delete" var="TeamUrl">
 							<spring:param name="teamId" value="${team.id}" />
-							<spring:param name="leagueId" value="${league.id}" />
+							<spring:param name="leagueId" value="${league}" />
 						</spring:url> <a href="${fn:escapeXml(TeamUrl)}">Delete</a>
 						
 					
 					</td>
 				</tr>
+			</c:forEach>
 			</c:forEach>
 		</tbody>
 	</table>
