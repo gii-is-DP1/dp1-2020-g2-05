@@ -38,12 +38,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class TeamController {
 	
-//	@Autowired
-//	public TeamController(LeagueService leagueService) {
-//		this.leagueService = leagueService;
-//	}
-	
-//	
+
 	@Autowired
 	UserService userService;
 	
@@ -54,13 +49,6 @@ public class TeamController {
 	
 	RecruitService recruitService;
 	
-//	@Autowired
-//	public TeamController(UserService userService) {
-//		this.userService = userService;
-//	}
-//
-
-//
 	
 	private Boolean EquipoSi=false;
 	private Boolean EquipoNo=false;
@@ -159,22 +147,22 @@ public class TeamController {
 		return "redirect:/leagues/{leagueId}/teams";
 	}
 	
-	@GetMapping(path="/leagues/{leagueId}/teams/{teamId}/edit")
-	public String editarPiloto(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, ModelMap model) {
-		Optional<Team> team = leagueService.findTeamById(teamId);
-		String view = "leagues/TeamList";
-		model.addAttribute(team.get());
-		if(team.isPresent()) {
-			System.out.println("hola");
-			view = "leagues/TeamsEdit";
-			
-		}else {
-			model.addAttribute("message", "team not found!");
-			view=showTeams(leagueId, model);
-		}
-		return view;
-	}
-	
+//	@GetMapping(path="/leagues/{leagueId}/teams/{teamId}/edit")
+//	public String editarPiloto(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, ModelMap model) {
+//		Optional<Team> team = leagueService.findTeamById(teamId);
+//		String view = "leagues/TeamList";
+//		model.addAttribute(team.get());
+//		if(team.isPresent()) {
+//			System.out.println("hola");
+//			view = "leagues/TeamsEdit";
+//			
+//		}else {
+//			model.addAttribute("message", "team not found!");
+//			view=showTeams(leagueId, model);
+//		}
+//		return view;
+//	}
+//	
 	@GetMapping("/myTeams")
 	public String myTeams(ModelMap modelMap) {
 		Iterable<League> leagues = leagueService.findAll() ;
