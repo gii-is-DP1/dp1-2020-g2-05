@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.repository.UserRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,5 +50,28 @@ public class UserService {
 	
 	public Optional<User> findUser(String username) {
 		return userRepository.findById(username);
+	}
+	
+	public User getUserSession() {
+		User usuario = new User();  
+		try {
+			  Object auth = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+			  
+			  Integer index1 = auth.toString().indexOf("Username:");
+			  Integer index2 = auth.toString().indexOf("; Password:"); // CON ESTO TENEMOS EL STRIN Username: user
+			  
+			  String nombreUsuario = auth.toString().substring(index1, index2).split(": ")[1]; //con esto hemos spliteado lo de arriba y nos hemos quedado con user.
+
+			  Optional<User> user = findUser(nombreUsuario);
+			  usuario =  user.get();
+		  }catch (Exception e) {	
+		  }
+		return usuario;
+	}
+
+	public Object findFriendByUser(String username) {
+		return userRepository.findFriendByUser(username);
+		
 	}
 }

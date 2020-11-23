@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Team;
@@ -59,9 +60,23 @@ public class LeagueService {
 		return leagueRepository.findLeaguesByUsername(username);
 	}
 	
-//	public void activeMoto3(Integer leagueId) throws DataAccessException {
-//		leagueRepository.activeMoto3(leagueId);
-//	}
+	@Modifying
+	@Transactional
+	public void activeMoto3(Integer leagueId) throws DataAccessException {
+		leagueRepository.activeMoto3(leagueId);
+	}
+	
+	@Modifying
+	@Transactional
+	public void activeMoto2(Integer leagueId) throws DataAccessException {
+		leagueRepository.activeMoto2(leagueId);
+	}
+	
+	@Modifying
+	@Transactional
+	public void activeMotogp(Integer leagueId) throws DataAccessException {
+		leagueRepository.activeMotogp(leagueId);
+	}
 //	public void activeMoto2(Integer leagueId) throws DataAccessException {
 //		leagueRepository.activeMoto2(leagueId);
 //	}
@@ -74,23 +89,7 @@ public class LeagueService {
 //	}
 //	
 	
-	public User getUserSession() {
-		User usuario = new User();  
-		try {
-			  Object auth = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-			  
-			  Integer index1 = auth.toString().indexOf("Username:");
-			  Integer index2 = auth.toString().indexOf("; Password:"); // CON ESTO TENEMOS EL STRIN Username: user
-			  
-			  String nombreUsuario = auth.toString().substring(index1, index2).split(": ")[1]; //con esto hemos spliteado lo de arriba y nos hemos quedado con user.
-
-			  Optional<User> user = findUserByUsername(nombreUsuario);
-			  usuario =  user.get();
-		  }catch (Exception e) {	
-		  }
-		return usuario;
-	}
 	@Transactional
 	public Iterable<League> findAll(){
 		return leagueRepository.findAll();

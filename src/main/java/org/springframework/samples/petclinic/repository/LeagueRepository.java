@@ -15,20 +15,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface LeagueRepository extends CrudRepository<League, Integer>{
 
-//	@Transactional
-//	@Modifying
-//	@Query("UPDATE League l SET l.moto3Active=true,l.moto2Active=false,l.motogpActive=false WHERE l.id = id")	
-//	public void activeMoto3(@Param("id") int id);	
-//	
-//	@Transactional
-//	@Modifying
-//	@Query("UPDATE League l SET l.moto3Active=false,l.moto2Active=true,l.motogpActive=false WHERE l.id = id")	
-//	public void activeMoto2(@Param("id") int id);	
-//	
-//	@Transactional
-//	@Modifying
-//	@Query("UPDATE League l SET l.moto3Active=false,l.moto2Active=false,l.motogpActive=true WHERE l.id = id")	
-//	public void activeMotogp(@Param("id") int id);	
+	@Transactional
+	@Modifying
+	@Query("UPDATE League l SET l.moto3Active=true,l.moto2Active=false,l.motogpActive=false WHERE l.id = :id")	
+	public void activeMoto3(@Param("id") int id);	
+
+	@Transactional
+	@Modifying
+	@Query("UPDATE League l SET l.moto3Active=false,l.moto2Active=true,l.motogpActive=false WHERE l.id = :id")	
+	public void activeMoto2(@Param("id") int id);	
+	
+	@Transactional
+	@Modifying
+	@Query("UPDATE League l SET l.moto3Active=false,l.moto2Active=false,l.motogpActive=true WHERE l.id = :id")	
+	public void activeMotogp(@Param("id") int id);	
 	
 	@Query("SELECT league FROM League league WHERE league.leagueCode LIKE :leagueCode")
 	public Optional<League> findLeagueByLeagueCode(@Param("leagueCode") String leagueCode);

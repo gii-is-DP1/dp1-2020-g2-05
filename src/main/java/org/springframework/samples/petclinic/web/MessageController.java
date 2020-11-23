@@ -67,28 +67,13 @@ public class MessageController {
 
 	UserService userService;
 	
-	public User getUserSession() {
-		User usuario = new User();  
-		try {
-			  Object auth = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			  Integer index1 = auth.toString().indexOf("Username:");
-			  Integer index2 = auth.toString().indexOf("; Password:"); // CON ESTO TENEMOS EL STRIN Username: user
-			  String nombreUsuario = auth.toString().substring(index1, index2).split(": ")[1]; //con esto hemos spliteado lo de arriba y nos hemos quedado con user.
 
-			  Optional<User> user = this.userService.findUser(nombreUsuario);
-			  
-			  usuario =  user.get();
-		  }catch (Exception e) {	
-			// TODO: handle exception
-		  }
-		return usuario;
-	}
 
 	
 	@GetMapping("/messages")
 	public String listadoMensajes(ModelMap modelMap) {
-		System.out.println(getUserSession().getUsername());
-		modelMap.addAttribute("resultados", messageService.findAllUsernameReceive(getUserSession().getUsername()));
+		System.out.println(userService.getUserSession().getUsername());
+		modelMap.addAttribute("resultados", messageService.findAllUsernameReceive(userService.getUserSession().getUsername()));
 		return "messages/messagesList";
 	}
 	
@@ -117,10 +102,11 @@ public class MessageController {
 			return "messages/messagesEdit";
 		}
 		else {
-			message.setUsernamesend(getUserSession());
+			message.setUsernamesend(userService.getUserSession());
 			message.setVisto(0); 
-			//creating owner, user and authorities
+			
 			this.messageService.saveMessage(message);
+			
 			
 			return "redirect:/messages/";
 		}

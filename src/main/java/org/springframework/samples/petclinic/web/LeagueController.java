@@ -85,30 +85,21 @@ public class LeagueController {
 		List<League> result = new ArrayList<League>();
 	    leagues.forEach(result::add);
 		
+//		leagueService.activeMotogp(3);
+
 	    for(League league:result) {
-	    	if(league.getRacesCompleted()<10) {
-	    		league.setMoto3Active(true);
-	    		league.setMoto2Active(false);//menos de 10 carreras es moto3
-	    		league.setMotogpActive(false);
-
-	    	}else if(league.getRacesCompleted()>=10 && league.getRacesCompleted()<15 ) {
-	    		league.setMoto2Active(true);
-	    		league.setMotogpActive(false); // si las carreras estan entre 10 y 15 pues estamos en moto2
-	    		league.setMoto3Active(false);
-
-
-	    	}else if(league.getRacesCompleted()>=15 ) {
-	    		league.setMoto2Active(false);
-	    		league.setMotogpActive(true); // mas de 15 carreras es motogp
-	    		league.setMoto3Active(false);
-
-	    	}
+	    	if(league.getRacesCompleted()<10) leagueService.activeMoto3(league.getId());
+	    	//activar moto3 si las carreras son > que 10
+	    	else if(league.getRacesCompleted()>=10 && league.getRacesCompleted()<15 ) leagueService.activeMoto2(league.getId());
+	    	//activar moto2 si las carreras son >= que 10 y < 15
+	    	else if(league.getRacesCompleted()>=15 )leagueService.activeMotogp(league.getId());
+	    	//activar motogp si las carreras son >= 15
 	    	
 	    	if(league.getRacesCompleted()>20) league.setRacesCompleted(20);
 	    	
 			if(league.getTeam().isEmpty()) leagueService.deleteLeague(league);
 
- 	    }
+	    }
 		
 		modelMap.addAttribute("ligas", leagueService.findAll());
 	
@@ -118,7 +109,7 @@ public class LeagueController {
 	
 	@GetMapping("/leagues/myLeagues")
 	public String myLeagues(ModelMap modelMap) {
-		User user = leagueService.getUserSession();
+		User user = userService.getUserSession();
 		
 		Collection<Integer> collect = leagueService.findTeamsByUsername(user.getUsername());
 		
@@ -164,7 +155,7 @@ public class LeagueController {
 	@GetMapping(path="/leagues/new")
 	public String crearLiga(ModelMap model) {	
 		
-		Integer num_leagues = leagueService.findLeaguesByUsername(leagueService.getUserSession().getUsername());
+		Integer num_leagues = leagueService.findLeaguesByUsername(userService.getUserSession().getUsername());
 		
 		if(num_leagues==5) {
 			yaTieneMaxLigas=true;
@@ -205,7 +196,7 @@ public class LeagueController {
 	
 	@PostMapping(value="/leagues/join")
 	public String unirseLigaCode(League league,ModelMap model) {	
-		User user = leagueService.getUserSession();
+		User user = userService.getUserSession();
 		Collection<Integer> collect = leagueService.findTeamsByUsername(user.getUsername());
 		
 		List<Integer> idLeague = new ArrayList<Integer>();
