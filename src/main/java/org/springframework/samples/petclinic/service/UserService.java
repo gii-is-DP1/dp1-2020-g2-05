@@ -55,15 +55,7 @@ public class UserService {
 	public User getUserSession() {
 		User usuario = new User();  
 		try {
-			  Object auth = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-			  
-			  Integer index1 = auth.toString().indexOf("Username:");
-			  Integer index2 = auth.toString().indexOf("; Password:"); // CON ESTO TENEMOS EL STRIN Username: user
-			  
-			  String nombreUsuario = auth.toString().substring(index1, index2).split(": ")[1]; //con esto hemos spliteado lo de arriba y nos hemos quedado con user.
-
-			  Optional<User> user = findUser(nombreUsuario);
+			  Optional<User> user = findUser(SecurityContextHolder.getContext().getAuthentication().getName());
 			  usuario =  user.get();
 		  }catch (Exception e) {	
 		  }

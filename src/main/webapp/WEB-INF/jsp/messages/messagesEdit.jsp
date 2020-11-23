@@ -5,6 +5,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ page import="org.springframework.samples.petclinic.model.User"%>
 
 <petclinic:layout pageName="messagese">
 	
@@ -14,6 +15,9 @@
     </h2>
     <form:form modelAttribute="messagee" class="form-horizontal" id="add-message-form">
         <div class="form-group has-feedback">
+        
+        	<input type="hidden" name="visto" value="0"/>
+        	<input type="hidden"  name="usernamesend" value="${usersend}"/>	
             <petclinic:inputField label="Asunto" name="asunto"/>
             <petclinic:inputField label="Cuerpo" name="cuerpo"/>
             <petclinic:inputField label="Destinatario" name="usernamereceive"/>
