@@ -229,7 +229,11 @@ public class LeagueController {
 		return "redirect:/leagues/"+liga.get().getId()+"/teams/new";
 		 }
 	
-	
+	@GetMapping(path="/leagues/{leagueId}/details")
+	public String detallesLiga(@PathVariable("leagueId") int leagueId,ModelMap model) {	
+		User user = userService.getUserSession();
+		return "/leagues/leagueDetails";
+		 }
 
 	
 }
