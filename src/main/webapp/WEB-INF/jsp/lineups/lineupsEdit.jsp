@@ -12,7 +12,7 @@
     <h2>
         <c:if test="${lineup['new']}">New </c:if> Lineup
     </h2>
-    <form:form modelAttribute="lineup" class="form-horizontal" id="add-lineup-form" action="newLineup/save">
+    <form:form modelAttribute="lineup" class="form-horizontal" id="add-lineup-form"> <%-- action="save"> --%>
         <div class="form-group has-feedback">
         	<input type="hidden" name="id" value="${lineup.id}"/>
             <input type="hidden" name="category" value="${leagueCategory}"/>
