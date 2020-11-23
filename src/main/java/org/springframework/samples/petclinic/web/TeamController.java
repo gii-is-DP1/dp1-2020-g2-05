@@ -1,26 +1,28 @@
 package org.springframework.samples.petclinic.web;
 
 import java.util.ArrayList;
-import java.util.Collections;
+
+
 import java.util.Comparator;
-import java.util.Iterator;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import javax.validation.Valid;
+import java.util.stream.Collectors;
+
+
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.User;
-import org.springframework.samples.petclinic.model.Visit;
+
 import org.springframework.samples.petclinic.service.LeagueService;
-import org.springframework.samples.petclinic.service.PetService;
+import org.springframework.samples.petclinic.service.LineupService;
+
 import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,12 +30,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Controller
 public class TeamController {
@@ -46,9 +46,21 @@ public class TeamController {
 	LeagueService leagueService;
 	
 	@Autowired
-	
 	RecruitService recruitService;
 	
+
+
+	@Autowired
+	LineupService lineupService;
+	
+//	@Autowired
+//	public TeamController(UserService userService) {
+//		this.userService = userService;
+//	}
+//
+
+//
+
 	
 	private Boolean EquipoSi=false;
 	private Boolean EquipoNo=false;
@@ -123,11 +135,12 @@ public class TeamController {
 	public String mostrarDetallesEscuderia (@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamID,  ModelMap model) {
 		Optional<Team> team = leagueService.findTeamById(teamID);
 		if(team.isPresent()) {
-			model.addAttribute("message", "Team found!");
+//			model.addAttribute("message", "Team found!");
 			model.addAttribute("team", team.get());
 			List<Pilot> l = recruitService.getRecruits(teamID);
 			System.out.println(l);
 			model.addAttribute("misFichajes", l);
+			model.addAttribute("misAlineaciones", lineupService.findByTeam(teamID));
 		}else {
 			model.addAttribute("message", "Team not found!");
 		}
@@ -173,7 +186,9 @@ public class TeamController {
 	    String username = getUserSession().getUsername();;
 	    for(int i=0;i<result.size();i++) {
 		    List<Team> teams = new ArrayList<>(result.get(i).getTeam());
+		    System.out.println(teams.size()-1);
 		    for(int j=0;j<teams.size();j++) {
+		    	System.out.println(teams.get(j).getUser());
 		    	if(teams.get(j).getUser().getUsername().equals(username)){
 		    		myTeamsList.add(teams.get(j));
 		    		ids.add(teams.get(j).getLeague().getId());
