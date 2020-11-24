@@ -27,8 +27,7 @@ INSERT INTO authorities(id,username,authority) VALUES (8,'alvcorcas','owner');
 INSERT INTO users(username,password,enabled) VALUES ('martorsan13','mariano',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (9,'martorsan13','owner');
 
-INSERT INTO users(username,password,enabled) VALUES ('admin2','admin2',TRUE);
-INSERT INTO authorities(id,username,authority) VALUES (1,'admin2','admin2');
+
 
 
 INSERT INTO messages (id,asunto,cuerpo,usernamesend,usernamereceive) VALUES (1,'Prueba1','Prueba1','serrojjim','martorsan13');
