@@ -78,30 +78,64 @@ public class LeagueServiceTest {
 		assertThat(found.size()).isEqualTo(found1 + 1);
 	 }
 	 
+	 @Test
+	 @Transactional
+	 void shouldDeleteLeague() {
+		Iterable<League> league = this.leagueService.findAll();
+		List<League> found = new ArrayList<League>();
+	    league.forEach(found::add);
+		Integer found1=found.size();
+		
+		League newLeague = new League();
+		newLeague.setLeagueCode("UDTQCSSOND");
+		newLeague.setLeagueDate("22/12/2222");
+		newLeague.setMoto2Active(false);
+		newLeague.setMotogpActive(false);
+		newLeague.setMoto3Active(false);
+		newLeague.setName("liga2222");
+		newLeague.setRacesCompleted(2);
+		
+		this.leagueService.saveLeague(newLeague);		
+		this.leagueService.deleteLeague(newLeague);
+		league = this.leagueService.findAll();
+		found=new ArrayList<League>();
+	    league.forEach(found::add);
+	    
+		assertThat(found.size()).isEqualTo(found1);
+	 }
+	 
 	 
 	 
 	 
 	 @Test
 	 @Transactional
 	 @Modifying
-	 void shouldActiveLeagueCategories() {
-	    League newLeague = new League();
-		newLeague.setLeagueCode("UDTQCSSOND");
-		newLeague.setLeagueDate("22/12/2222");
-		newLeague.setName("liga2222");
-		newLeague.setRacesCompleted(2);
+	 void shouldActiveLeagueMoto2() {
+		this.leagueService.activeMoto2(1);
+		League league = this.leagueService.findLeague(1).get();
 
-		this.leagueService.saveLeague(newLeague);
-		System.out.println(newLeague.getId());
-		this.leagueService.activeMoto2(newLeague.getId());
-
-
-		League league2 = this.leagueService.findLeague(newLeague.getId()).get();
-		
-		System.out.println("LIGA->"+league2);
-		
-//		 assertThat().isTrue();
-		
-		 
+	    assertThat(league.isMoto2Active()).isTrue();
 	 }
+	 
+	 @Test
+	 @Transactional
+	 @Modifying
+	 void shouldActiveLeagueMoto3() {
+		this.leagueService.activeMoto3(1);
+		League league = this.leagueService.findLeague(1).get();
+
+	    assertThat(league.isMoto3Active()).isTrue();
+	 }
+	 
+	 @Test
+	 @Transactional
+	 @Modifying
+	 void shouldActiveLeagueMotogp() {
+		this.leagueService.activeMotogp(1);
+		League league = this.leagueService.findLeague(1).get();
+	    assertThat(league.isMotogpActive()).isTrue();
+	 }
+	 
+	 
+	 
 }
