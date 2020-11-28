@@ -21,6 +21,7 @@ import org.springframework.samples.petclinic.repository.UserRepository;
 import org.springframework.samples.petclinic.repository.VisitRepository;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedTeamNameException;
+import org.springframework.samples.petclinic.web.duplicatedLeagueNameException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +44,13 @@ public class LeagueService {
 //	}
 
 	@Transactional
-	public void saveLeague(League league) throws DataAccessException {
+	public void saveLeague(League league) throws DataAccessException,duplicatedLeagueNameException{
+		Iterable<League> ligas = leagueRepository.findAll();
+		List<League> listLigas = new ArrayList<League>();
+		ligas.forEach(listLigas::add);
+		for(int i=0;i<listLigas.size();i++) {
+			if(listLigas.get(i).getName().equals(league.getName())) throw new duplicatedLeagueNameException();
+		}
 		leagueRepository.save(league);
 	}
 	

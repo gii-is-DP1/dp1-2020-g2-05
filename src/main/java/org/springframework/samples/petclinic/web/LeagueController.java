@@ -16,7 +16,9 @@ import javax.validation.Valid;
 import org.apache.jasper.tagplugins.jstl.core.Set;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.League;
+import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Result;
 import org.springframework.samples.petclinic.model.Team;
@@ -76,6 +78,10 @@ public class LeagueController {
 	}
 	
 	
+	@InitBinder("league")
+	public void initPetBinder(WebDataBinder dataBinder) {
+		dataBinder.setValidator(new LeagueValidator());
+	}
 	
 
 	
@@ -85,8 +91,6 @@ public class LeagueController {
 		List<League> result = new ArrayList<League>();
 	    leagues.forEach(result::add);
 		
-//		leagueService.activeMotogp(3);
-
 	    for(League league:result) {
 	    	if(league.getRacesCompleted()<10) leagueService.activeMoto3(league.getId());
 	    	//activar moto3 si las carreras son > que 10
@@ -152,49 +156,59 @@ public class LeagueController {
 	}
 	
 	@GetMapping(path="/leagues/new")
-	public String crearLiga(ModelMap model) {	
-		model.addAttribute("league", new League());
+	public String initcrearLiga(ModelMap model) {	
+		Iterable<League> leagues = leagueService.findAll() ;
+		List<League> result = new ArrayList<League>();
+	    leagues.forEach(result::add);
+	    
+	    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");  
+	    Date date = new Date();  
+	    
+	    
+	    League newLeague = new League();
+	    newLeague.setId(result.get(result.size()-1).getId()+1);
+	    newLeague.setLeagueCode(randomString(10));
+	    newLeague.setLeagueDate(formatter.format(date));
+	    newLeague.setMoto2Active(false);
+	    newLeague.setMoto3Active(true);
+	    newLeague.setMotogpActive(false);
+	    newLeague.setRacesCompleted(0);
+		model.addAttribute("league",newLeague);
 		return "/leagues/createLeagueName";
 		 }
 	
 	@PostMapping(path="/leagues/new")
-	public String crearLigaFinal(League league,ModelMap model) {	
-		try {
-			
-			model.addAttribute("league", new League());
-			
-			Integer num_leagues = leagueService.findLeaguesByUsername(userService.getUserSession().getUsername());
-			
-			if(num_leagues==5) {
-				yaTieneMaxLigas=true;
-				return "redirect:/leagues/myLeagues";
-			}
-			
-			Iterable<League> leagues = leagueService.findAll() ;
-			List<League> result = new ArrayList<League>();
-		    leagues.forEach(result::add);
-		    
-		    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");  
-		    Date date = new Date();  
-		    
-		    
-		    League newLeague = new League();
-		    newLeague.setId(result.get(result.size()-1).getId()+1);
-		    newLeague.setLeagueCode(randomString(10));
-		    newLeague.setLeagueDate(formatter.format(date));
-		    newLeague.setMoto2Active(false);
-		    newLeague.setMoto3Active(true);
-		    newLeague.setMotogpActive(false);
-		    newLeague.setName(league.getName());
-		    newLeague.setRacesCompleted(0);
-
-		    leagueService.saveLeague(newLeague);
-
-			 return "redirect:/leagues/"+newLeague.getId()+"/teams/new";	
-		
-		}catch(Exception e) {
-			model.addAttribute("malNombre", true);
+	public String processCrearLiga(@Valid League league, BindingResult results,ModelMap model) {	
+		if(results.hasErrors()) {
+			System.out.println(results);
+			model.put("league", league);
+			model.put("message",results.getAllErrors());
 			return "/leagues/createLeagueName";
+		}else {
+
+			
+			
+				Integer num_leagues = leagueService.findLeaguesByUsername(userService.getUserSession().getUsername());
+				
+				if(num_leagues==5) {
+					yaTieneMaxLigas=true;
+					return "redirect:/leagues/myLeagues";
+				}
+				
+				  try {
+						this.leagueService.saveLeague(league);
+					}catch (duplicatedLeagueNameException e) {
+	                    results.rejectValue("name", "duplicate", "already exists a league with that name");
+	        			model.put("message",results.getAllErrors());
+	                    return "/leagues/createLeagueName";
+					}
+				
+			
+			  
+
+				 return "redirect:/leagues/"+league.getId()+"/teams/new";	
+			
+			
 		}
 	
 	}

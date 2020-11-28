@@ -11,10 +11,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.User;
+import org.springframework.samples.petclinic.web.duplicatedLeagueNameException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,7 +60,7 @@ public class LeagueServiceTest {
 	 
 	 @Test
 	 @Transactional
-	 void shouldInsertLeague() {
+	 void shouldInsertLeague()  throws DataAccessException, duplicatedLeagueNameException {
 		Iterable<League> league = this.leagueService.findAll();
 		List<League> found = new ArrayList<League>();
 	    league.forEach(found::add);
@@ -74,6 +76,36 @@ public class LeagueServiceTest {
 		newLeague.setRacesCompleted(2);
 		
 		this.leagueService.saveLeague(newLeague);
+		
+		assertThat(newLeague.getId().longValue()).isNotEqualTo(0);
+
+		league = this.leagueService.findAll();
+		found=new ArrayList<League>();
+	    league.forEach(found::add);
+
+		assertThat(found.size()).isEqualTo(found1 + 1);
+	 }
+	 
+	 
+	 @Test
+	 @Transactional
+	 void shouldNotInsertLeague()  throws DataAccessException, duplicatedLeagueNameException  {
+		Iterable<League> league = this.leagueService.findAll();
+		List<League> found = new ArrayList<League>();
+	    league.forEach(found::add);
+		Integer found1=found.size();
+		
+		League newLeague = new League();
+		newLeague.setLeagueCode("UDTQCSSOND");
+		newLeague.setLeagueDate("22/12/2222");
+		newLeague.setMoto2Active(false);
+		newLeague.setMotogpActive(false);
+		newLeague.setMoto3Active(false);
+		newLeague.setName("liga2222");
+		newLeague.setRacesCompleted(2);
+		
+		this.leagueService.saveLeague(newLeague);
+		
 		assertThat(newLeague.getId().longValue()).isNotEqualTo(0);
 
 		league = this.leagueService.findAll();
@@ -85,7 +117,7 @@ public class LeagueServiceTest {
 	 
 	 @Test
 	 @Transactional
-	 void shouldDeleteLeague() {
+	 void shouldDeleteLeague() throws DataAccessException, duplicatedLeagueNameException {
 		Iterable<League> league = this.leagueService.findAll();
 		List<League> found = new ArrayList<League>();
 	    league.forEach(found::add);
