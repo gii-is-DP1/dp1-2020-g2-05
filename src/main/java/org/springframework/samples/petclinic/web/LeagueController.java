@@ -130,7 +130,6 @@ public class LeagueController {
 	    if(yaTienesEquipo) {
 	    	modelMap.addAttribute("yaTienesEquipo",true);yaTienesEquipo=false;
 			modelMap.addAttribute("leagueYaEquipoId", leagueYaEquipoId);leagueYaEquipoId=-1;
-
 	    }
 	    
 	    if(yaTieneMaxLigas) modelMap.addAttribute("yaTieneMaxLigas",true);yaTieneMaxLigas=false;
@@ -154,36 +153,51 @@ public class LeagueController {
 	
 	@GetMapping(path="/leagues/new")
 	public String crearLiga(ModelMap model) {	
-		
-		Integer num_leagues = leagueService.findLeaguesByUsername(userService.getUserSession().getUsername());
-		
-		if(num_leagues==5) {
-			yaTieneMaxLigas=true;
-			return "redirect:/leagues/myLeagues";
-		}
-		
-		Iterable<League> leagues = leagueService.findAll() ;
-		List<League> result = new ArrayList<League>();
-	    leagues.forEach(result::add);
-	    
-	    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");  
-	    Date date = new Date();  
-	    
-	    
-	    League newLeague = new League();
-	    newLeague.setId(result.get(result.size()-1).getId()+1);
-	    newLeague.setLeagueCode(randomString(10));
-	    newLeague.setLeagueDate(formatter.format(date));
-	    newLeague.setMoto2Active(false);
-	    newLeague.setMoto3Active(true);
-	    newLeague.setMotogpActive(false);
-	    newLeague.setName("Liga"+newLeague.getId().toString());
-	    newLeague.setRacesCompleted(0);
-
-	    leagueService.saveLeague(newLeague);
-
-		 return "redirect:/leagues/"+newLeague.getId()+"/teams/new";	
+		model.addAttribute("league", new League());
+		return "/leagues/createLeagueName";
 		 }
+	
+	@PostMapping(path="/leagues/new")
+	public String crearLigaFinal(League league,ModelMap model) {	
+		try {
+			
+			model.addAttribute("league", new League());
+			
+			Integer num_leagues = leagueService.findLeaguesByUsername(userService.getUserSession().getUsername());
+			
+			if(num_leagues==5) {
+				yaTieneMaxLigas=true;
+				return "redirect:/leagues/myLeagues";
+			}
+			
+			Iterable<League> leagues = leagueService.findAll() ;
+			List<League> result = new ArrayList<League>();
+		    leagues.forEach(result::add);
+		    
+		    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");  
+		    Date date = new Date();  
+		    
+		    
+		    League newLeague = new League();
+		    newLeague.setId(result.get(result.size()-1).getId()+1);
+		    newLeague.setLeagueCode(randomString(10));
+		    newLeague.setLeagueDate(formatter.format(date));
+		    newLeague.setMoto2Active(false);
+		    newLeague.setMoto3Active(true);
+		    newLeague.setMotogpActive(false);
+		    newLeague.setName(league.getName());
+		    newLeague.setRacesCompleted(0);
+
+		    leagueService.saveLeague(newLeague);
+
+			 return "redirect:/leagues/"+newLeague.getId()+"/teams/new";	
+		
+		}catch(Exception e) {
+			model.addAttribute("malNombre", true);
+			return "/leagues/createLeagueName";
+		}
+	
+	}
 	
 	@GetMapping(path="/leagues/join")
 	public String unirseLiga(ModelMap model) {	
