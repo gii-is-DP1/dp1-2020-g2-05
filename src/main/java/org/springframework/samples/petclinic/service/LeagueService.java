@@ -135,8 +135,13 @@ public class LeagueService {
 			}
 		}
 		
+		if(!igual) {
+			teamRepository.save(team);
+
+		}else {
+			System.out.println("hhhh");
+		}
 		
-		teamRepository.save(team);
 		}
 
 	public void delete(Team team) {
