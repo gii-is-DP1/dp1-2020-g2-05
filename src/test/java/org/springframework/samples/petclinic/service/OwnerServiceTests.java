@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +73,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Dave Syer
  */
 
+@Disabled
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 class OwnerServiceTests {                
         @Autowired
