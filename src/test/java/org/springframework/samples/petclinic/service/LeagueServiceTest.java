@@ -13,6 +13,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.samples.petclinic.model.League;
+import org.springframework.samples.petclinic.model.Team;
+import org.springframework.samples.petclinic.model.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class LeagueServiceTest {
 	 @Autowired
 		protected LeagueService leagueService;
+	 
+	 @Autowired
+	 	protected UserService userService;
 	 
 	 @Test
 		void shouldFindLeaguesByCode() {
@@ -136,6 +141,100 @@ public class LeagueServiceTest {
 	    assertThat(league.isMotogpActive()).isTrue();
 	 }
 	 
+	 @Test
+		void shouldFindTeamsById() {
+			Optional<Team> team = this.leagueService.findTeamById(1);
+			assertThat(team.isPresent());
+			
+			
+			Optional<Team> team_fail = this.leagueService.findTeamById(300);
+			assertThat(team_fail.isPresent()).isFalse();
+		}
 	 
+	 @Test
+		void shouldFindTeamsByUsername() {
+			Collection<Integer> teams = this.leagueService.findTeamsByUsername("migniearj");
+			assertThat(teams.size()> 0);
+			
+
+			
+			Collection<Integer> teams_fail = this.leagueService.findTeamsByUsername("negative_test");
+			assertThat(teams_fail.size() == 0);
+		}
+	 
+//	 @Test
+//	 @Transactional
+//	 void shouldInsertTeam() {
+//		 
+//		Iterable<Team> team = this.leagueService.findAllTeams();
+//		List<Team> found = new ArrayList<Team>();
+//	    team.forEach(found::add);
+//		Integer found1=found.size();
+//		
+//		User newUser = new User();
+//		
+//		newUser.setUsername("migniearj");
+//		newUser.setPassword("awdw");
+//		
+//		League newLeague = new League();
+//		newLeague.setId(300);
+//		newLeague.setLeagueCode("UDTQCSSOND");
+//		newLeague.setLeagueDate("22/12/2222");
+//		newLeague.setMoto2Active(false);
+//		newLeague.setMotogpActive(false);
+//		newLeague.setMoto3Active(false);
+//		newLeague.setName("liga2222");
+//		newLeague.setRacesCompleted(2);
+//		
+//		Team newTeam = new Team();
+//		newTeam.setId(300);
+//		newTeam.setMoney("300");
+//		newTeam.setName("MigueTeam");
+//		newTeam.setPoints("122");
+//
+//		
+//		System.out.println(newTeam);
+//		System.out.println(newUser);
+//		System.out.println(newLeague);
+//		
+//	    this.leagueService.saveTeam(newTeam);
+//		assertThat(newTeam.getId().longValue()).isNotEqualTo(0);
+//
+//		team = this.leagueService.findAllTeams();
+//		found=new ArrayList<Team>();
+//	    team.forEach(found::add);
+//
+//		assertThat(found.size()).isEqualTo(found1 + 1);
+//	 }
+//	 
+	 
+	 
+	 @Test
+	 @Transactional
+	 void shouldInsertTeam() {
+		 
+		 Iterable<Team> teams = this.leagueService.findAllTeams();
+		 List<Team> team = new ArrayList<Team>();
+		 teams.forEach(team::add);
+		 Integer equipo1 = team.size();
+		 
+		 Team team_new = new Team();
+		 team_new.setMoney("200");
+		 team_new.setName("TEST");
+		 team_new.setPoints("222");
+		 team_new.setLeague(this.leagueService.findLeague(1).get());
+		 team_new.setUser(this.userService.findUser("migniearj").get());
+		 System.out.println(team_new);
+		 this.leagueService.saveTeam(team_new);
+		 assertThat(team_new.getId().longValue()).isNotEqualTo(0);
+		 
+		teams = this.leagueService.findAllTeams();
+		team = new ArrayList<Team>();
+		 	 teams.forEach(team::add);
+		 
+		 		assertThat(team.size()).isEqualTo(equipo1 + 1);
+		 
+	 
+	 }
 	 
 }

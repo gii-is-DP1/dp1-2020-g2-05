@@ -48,7 +48,7 @@ public class OfferService {
 	}
 	
 	@Transactional
-	public void saveTeamMoney(Team team, String price) throws DataAccessException {
+	public void saveTeamMoney(Team team, String price) {
 		team.setMoney(String.valueOf(Integer.parseInt(team.getMoney()) 
 				- Integer.parseInt(price)));
 		leagueService.saveTeam(team);		
