@@ -29,7 +29,7 @@ public class LeagueServiceTest {
 	 @Test
 		void shouldFindLeaguesByCode() {
 			Optional<League> league = this.leagueService.findLeagueByLeagueCode("QWEASDFRGT");
-			assertThat(league.isPresent());
+			assertThat(league.isPresent()).isTrue();
 			
 			
 			Optional<League> league_fail = this.leagueService.findLeagueByLeagueCode("NEGATIVE_TEST");
@@ -39,17 +39,17 @@ public class LeagueServiceTest {
 	 @Test
 	   void shouldFindLeaguesByUsernames() {
 		 	Integer num_leagues = this.leagueService.findLeaguesByUsername("antcammar4");
-			assertThat(num_leagues!=0);
+			assertThat(num_leagues).isNotEqualTo(0);
 			
 			
 			Integer num_leagues_zero = this.leagueService.findLeaguesByUsername("ZERO_TEST");
-			assertThat(num_leagues_zero==0).isTrue();
+			assertThat(num_leagues_zero).isEqualTo(0);
 	 }
 	 
 	 @Test
 	 void shouldFindLeaguesById() {
 		 Optional<League> league = this.leagueService.findLeague(1);
-		assertThat(league.isPresent());
+		assertThat(league.isPresent()).isTrue();
 		
 		Optional<League> league_fail = this.leagueService.findLeague(12311);
 		assertThat(league_fail.isPresent()).isFalse();
@@ -144,7 +144,7 @@ public class LeagueServiceTest {
 	 @Test
 		void shouldFindTeamsById() {
 			Optional<Team> team = this.leagueService.findTeamById(1);
-			assertThat(team.isPresent());
+			assertThat(team.isPresent()).isTrue();
 			
 			
 			Optional<Team> team_fail = this.leagueService.findTeamById(300);
@@ -154,59 +154,13 @@ public class LeagueServiceTest {
 	 @Test
 		void shouldFindTeamsByUsername() {
 			Collection<Integer> teams = this.leagueService.findTeamsByUsername("migniearj");
-			assertThat(teams.size()> 0);
+			assertThat(teams.size()> 0).isTrue();
 			
 
 			
 			Collection<Integer> teams_fail = this.leagueService.findTeamsByUsername("negative_test");
-			assertThat(teams_fail.size() == 0);
+			assertThat(teams_fail.size()).isEqualTo(0);
 		}
-	 
-//	 @Test
-//	 @Transactional
-//	 void shouldInsertTeam() {
-//		 
-//		Iterable<Team> team = this.leagueService.findAllTeams();
-//		List<Team> found = new ArrayList<Team>();
-//	    team.forEach(found::add);
-//		Integer found1=found.size();
-//		
-//		User newUser = new User();
-//		
-//		newUser.setUsername("migniearj");
-//		newUser.setPassword("awdw");
-//		
-//		League newLeague = new League();
-//		newLeague.setId(300);
-//		newLeague.setLeagueCode("UDTQCSSOND");
-//		newLeague.setLeagueDate("22/12/2222");
-//		newLeague.setMoto2Active(false);
-//		newLeague.setMotogpActive(false);
-//		newLeague.setMoto3Active(false);
-//		newLeague.setName("liga2222");
-//		newLeague.setRacesCompleted(2);
-//		
-//		Team newTeam = new Team();
-//		newTeam.setId(300);
-//		newTeam.setMoney("300");
-//		newTeam.setName("MigueTeam");
-//		newTeam.setPoints("122");
-//
-//		
-//		System.out.println(newTeam);
-//		System.out.println(newUser);
-//		System.out.println(newLeague);
-//		
-//	    this.leagueService.saveTeam(newTeam);
-//		assertThat(newTeam.getId().longValue()).isNotEqualTo(0);
-//
-//		team = this.leagueService.findAllTeams();
-//		found=new ArrayList<Team>();
-//	    team.forEach(found::add);
-//
-//		assertThat(found.size()).isEqualTo(found1 + 1);
-//	 }
-//	 
 	 
 	 
 	 @Test
