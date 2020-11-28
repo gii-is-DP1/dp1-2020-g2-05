@@ -61,7 +61,7 @@ public class TeamController {
 
 //
 
-	
+	private Boolean EquipoNoMismoNombre=false;
 	private Boolean EquipoSi=false;
 	private Boolean EquipoNo=false;
 	private Boolean Error=false;
@@ -114,6 +114,7 @@ public class TeamController {
 			Error=true;
 			return "/leagues/TeamsEdit";
 	}
+		
 		else if(tem.size()>= 1){
 //			model.addAttribute("message", "Sorry, you cannot have more teams in this league!");
 			EquipoNo=true;
@@ -218,6 +219,8 @@ public class TeamController {
 		EquipoNo=false;
 		if(EquipoSi) model.put("EquipoSi", "Team created succesfully!");
 		EquipoSi=false;
+		if(Error) model.put("Error", "Your team have some errors!");
+		Error=false;
 		if(Error) model.put("Error", "Your team have some errors!");
 		Error=false;
 		return "/leagues/TeamList";

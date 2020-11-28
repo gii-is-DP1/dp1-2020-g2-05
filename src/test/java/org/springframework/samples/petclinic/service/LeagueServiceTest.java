@@ -191,4 +191,42 @@ public class LeagueServiceTest {
 	 
 	 }
 	 
+	 @Test
+	 @Transactional
+	 void shouldDeleteTeam() {
+		 
+		 Iterable<Team> teams = this.leagueService.findAllTeams();
+		 List<Team> team = new ArrayList<Team>();
+		 teams.forEach(team::add);
+		 Integer equipo1 = team.size();
+		 
+		 Team team_new = new Team();
+		 team_new.setMoney("200");
+		 team_new.setName("TEST");
+		 team_new.setPoints("222");
+		 team_new.setLeague(this.leagueService.findLeague(1).get());
+		 team_new.setUser(this.userService.findUser("migniearj").get());
+		 
+		 this.leagueService.saveTeam(team_new);
+		 assertThat(team_new.getId().longValue()).isNotEqualTo(0);
+		 
+		 Iterable<Team> teams1 = this.leagueService.findAllTeams();
+		 List<Team> team1 = new ArrayList<Team>();
+		 teams1.forEach(team1::add);
+		 
+		 
+		 this.leagueService.delete(team_new);
+		 assertThat(team_new.getId().longValue()).isNotEqualTo(0);
+		 
+		 teams = this.leagueService.findAllTeams();
+			team = new ArrayList<Team>();
+			 	 teams.forEach(team::add);
+			 	 
+		
+			 
+			 		assertThat(team.size()).isEqualTo(equipo1);
+
+	 }
+	 
+	 
 }
