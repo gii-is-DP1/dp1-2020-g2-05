@@ -15,6 +15,9 @@
  */
 package org.springframework.samples.petclinic.web;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.util.StringUtils;
@@ -39,8 +42,14 @@ public class LeagueValidator implements Validator {
 	public void validate(Object obj, Errors errors) {
 		League league = (League) obj;
 		String name = league.getName();
+		Pattern p = Pattern.compile("\\p{Punct}");
+		Matcher m = p.matcher(name);
+		 int count = 0;
+		while (m.find()) {
+           count++;
+		}
 		// name validation
-		if (!StringUtils.hasLength(name) || name.length()>10 || name.length()<3 || name.contains("(") ||name.contains(")") ||name.contains("'") ||name.contains("=") ||name.contains("¿") ||name.contains("?") || name.contains("!") || name.contains("¡") || name.contains("º") || name.contains("ª") || name.contains("-") || name.contains(".") || name.contains(":") || name.contains(",") ||name.contains(",") || name.contains(">") || name.contains("<") || name.contains("_") || name.contains("{") || name.contains("}") || name.contains("+") || name.contains("*") || name.contains("[") || name.contains("]") || name.contains("$") || name.contains("%") || name.contains("@")){
+		if (!StringUtils.hasLength(name) || name.length()>10 || name.length()<3 || count != 0 ){
 			errors.rejectValue("name", REQUIRED+" and between 3 and 50 characters", REQUIRED+" and between 3 and 50 characters and no special ones");
 		}
 		
