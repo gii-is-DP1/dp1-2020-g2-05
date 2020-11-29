@@ -19,8 +19,6 @@ public class Team extends BaseEntity implements Comparable<Team> {
 	@NotEmpty
 	private String name;
 	
-
-
 	@Column(name = "points")
 	@NotEmpty
 	private String points;
