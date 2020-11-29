@@ -17,6 +17,7 @@ package org.springframework.samples.petclinic.web;
 
 
 import java.util.Collection;
+						
 
 
 
@@ -67,28 +68,13 @@ public class MessageController {
 
 	UserService userService;
 	
-	public User getUserSession() {
-		User usuario = new User();  
-		try {
-			  Object auth = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			  Integer index1 = auth.toString().indexOf("Username:");
-			  Integer index2 = auth.toString().indexOf("; Password:"); // CON ESTO TENEMOS EL STRIN Username: user
-			  String nombreUsuario = auth.toString().substring(index1, index2).split(": ")[1]; //con esto hemos spliteado lo de arriba y nos hemos quedado con user.
 
-			  Optional<User> user = this.userService.findUser(nombreUsuario);
-			  
-			  usuario =  user.get();
-		  }catch (Exception e) {	
-			// TODO: handle exception
-		  }
-		return usuario;
-	}
 
 	
 	@GetMapping("/messages")
 	public String listadoMensajes(ModelMap modelMap) {
-		System.out.println(getUserSession().getUsername());
-		modelMap.addAttribute("resultados", messageService.findAllUsernameReceive(getUserSession().getUsername()));
+		System.out.println(userService.getUserSession().getUsername());
+		modelMap.addAttribute("resultados", messageService.findAllUsernameReceive(userService.getUserSession().getUsername()));
 		return "messages/messagesList";
 	}
 	
@@ -107,19 +93,27 @@ public class MessageController {
 	@GetMapping(path="/messages/new")
 	public String crearMensaje(ModelMap model) {
 		Message message = new Message();
+		
 		model.put("messagee", message);		
+		model.put("usersend", userService.getUserSession());		
+
 		return "messages/messagesEdit";
 	}
 	
+
+	
+	
 	@PostMapping(value = "/messages/new")
-	public String processCreationForm(@Valid Message message, BindingResult result) {
+	public String processCreationForm(@Valid Message message, BindingResult result,ModelMap model) {
+		
 		if (result.hasErrors()) {
+			model.put("messagee", message);		
+
 			return "messages/messagesEdit";
 		}
 		else {
-			message.setUsernamesend(getUserSession());
 			message.setVisto(0); 
-			//creating owner, user and authorities
+			message.setUsernamesend(userService.getUserSession());
 			this.messageService.saveMessage(message);
 			
 			return "redirect:/messages/";
@@ -147,20 +141,20 @@ public class MessageController {
 ////	}
 //	
 
-	 
-	@PostMapping(path="messages/save")
-	public String guardarMensaje(@Valid Message message, BindingResult result, ModelMap model) {
-		String view = "messages/messagesList";
-		if(result.hasErrors()) {
-			model.addAttribute("messagee", message);
-			return "messages/messagesEdit";
-		}else {
-			System.out.println(message.getId());
-			messageService.saveMessage(message);
-			model.addAttribute("message", "Message successfully saved!");
-		}
-		return view;
-	}
+//	 
+//	@PostMapping(path="messages/save")
+//	public String guardarMensaje(@Valid Message message, BindingResult result, ModelMap model) {
+//		String view = "messages/messagesList";
+//		if(result.hasErrors()) {
+//			model.addAttribute("messagee", message);
+//			return "messages/messagesEdit";
+//		}else {
+//			System.out.println(message.getId());
+//			messageService.saveMessage(message);
+//			model.addAttribute("message", "Message successfully saved!");
+//		}
+//		return view;
+//	}
 	
 
 

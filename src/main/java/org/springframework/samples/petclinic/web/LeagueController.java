@@ -1,4 +1,4 @@
-	package org.springframework.samples.petclinic.web;
+package org.springframework.samples.petclinic.web;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -16,7 +16,9 @@ import javax.validation.Valid;
 import org.apache.jasper.tagplugins.jstl.core.Set;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.League;
+import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Result;
 import org.springframework.samples.petclinic.model.Team;
@@ -41,37 +43,21 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import lombok.extern.java.Log;
 
 @Controller
-//@RequestMapping("/leagues/{leagueId}")
 public class LeagueController {
 
 	private Boolean yaTienesEquipo=false;
 	private Boolean noLeagueFound=false;
-	//private static final String VIEWS_RESULT_CREATE_OR_UPDATE_FORM = "result/createOrUpdateResultForm";
+	private Integer leagueYaEquipoId=-1;
+	private Boolean yaTieneMaxLigas=false;
 	@Autowired
 
 	LeagueService leagueService;
-	//private final TeamService pilotService;
 	@Autowired
 
 	UserService userService;
 	
 		
-//	public LeagueController(LeagueService leagueService, UserService userService) {
-//		this.leagueService = leagueService;
-//		this.userService = userService;
-//	}
 
-//
-//	@ModelAttribute("league")
-//	public Optional<League> findLeague(@PathVariable("leagueId") int leagueId) {
-//		return this.leagueService.findLeague(leagueId);
-//	}
-
-
-//	@InitBinder("league")
-//	public void initPilotBinder(WebDataBinder dataBinder) {
-//		dataBinder.setDisallowedFields("id");
-//	}
 	
 	public String randomString(int longitud) {
 		 String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -92,22 +78,11 @@ public class LeagueController {
 	}
 	
 	
-	public User getUserSession() {
-		User usuario = new User();  
-		try {
-			  Object auth = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			  Integer index1 = auth.toString().indexOf("Username:");
-			  Integer index2 = auth.toString().indexOf("; Password:"); // CON ESTO TENEMOS EL STRIN Username: user
-			  String nombreUsuario = auth.toString().substring(index1, index2).split(": ")[1]; //con esto hemos spliteado lo de arriba y nos hemos quedado con user.
-
-			  Optional<User> user = this.userService.findUser(nombreUsuario);
-			  
-			  usuario =  user.get();
-		  }catch (Exception e) {	
-			// TODO: handle exception
-		  }
-		return usuario;
+	@InitBinder("league")
+	public void initPetBinder(WebDataBinder dataBinder) {
+		dataBinder.setValidator(new LeagueValidator());
 	}
+	
 
 	
 	@GetMapping("/leagues")
@@ -117,40 +92,28 @@ public class LeagueController {
 	    leagues.forEach(result::add);
 		
 	    for(League league:result) {
-	    	if(league.getRacesCompleted()<10) {
-	    		league.setMoto3Active(true);
-	    		league.setMoto2Active(false);//menos de 10 carreras es moto3
-	    		league.setMotogpActive(false);
-
-	    	}else if(league.getRacesCompleted()>=10 && league.getRacesCompleted()<15 ) {
-	    		league.setMoto2Active(true);
-	    		league.setMotogpActive(false); // si las carreras estan entre 10 y 15 pues estamos en moto2
-	    		league.setMoto3Active(false);
-
-	    	}else if(league.getRacesCompleted()>=15 ) {
-	    		league.setMoto2Active(false);
-	    		league.setMotogpActive(true); // mas de 15 carreras es motogp
-	    		league.setMoto3Active(false);
-	    	}
+	    	if(league.getRacesCompleted()<10) leagueService.activeMoto3(league.getId());
+	    	//activar moto3 si las carreras son > que 10
+	    	else if(league.getRacesCompleted()>=10 && league.getRacesCompleted()<15 ) leagueService.activeMoto2(league.getId());
+	    	//activar moto2 si las carreras son >= que 10 y < 15
+	    	else if(league.getRacesCompleted()>=15 )leagueService.activeMotogp(league.getId());
+	    	//activar motogp si las carreras son >= 15
 	    	
 	    	if(league.getRacesCompleted()>20) league.setRacesCompleted(20);
 	    	
- 	    }
+			if(league.getTeam().isEmpty()) leagueService.deleteLeague(league);
+
+	    }
 		
 		modelMap.addAttribute("ligas", leagueService.findAll());
 	
 		return "leagues/leagueList";
 	}
 	
-//	@GetMapping("/createLeague")
-//	public String crearLiga(ModelMap modelMap) {
-//		modelMap.addAttribute("ligas", leagueService.findAll());
-//		return "leagues/leagueList";
-//	}
 	
 	@GetMapping("/leagues/myLeagues")
 	public String myLeagues(ModelMap modelMap) {
-		User user = getUserSession();
+		User user = userService.getUserSession();
 		
 		Collection<Integer> collect = leagueService.findTeamsByUsername(user.getUsername());
 		
@@ -161,15 +124,23 @@ public class LeagueController {
 
 	    
 		for(Integer i:idLeague) {
-			myLeaguesList.add(leagueService.findLeague(i).get());
+			League league_i = leagueService.findLeague(i).get();
+			myLeaguesList.add(league_i);
 		}
 		
 		
+		
 	    
-	    if(yaTienesEquipo) modelMap.addAttribute("yaTienesEquipo",true);yaTienesEquipo=false;
+	    if(yaTienesEquipo) {
+	    	modelMap.addAttribute("yaTienesEquipo",true);yaTienesEquipo=false;
+			modelMap.addAttribute("leagueYaEquipoId", leagueYaEquipoId);leagueYaEquipoId=-1;
+	    }
+	    
+	    if(yaTieneMaxLigas) modelMap.addAttribute("yaTieneMaxLigas",true);yaTieneMaxLigas=false;
+
 	    
 	    modelMap.addAttribute("misLigas", myLeaguesList);
-	return "leagues/myLeagues";
+	    return "leagues/myLeagues";
 	}
 	
 	
@@ -179,13 +150,13 @@ public class LeagueController {
 		
 		League league = leagueService.findLeague(leagueId).get();
 		league.setRacesCompleted(league.getRacesCompleted()+1);
-		
+//		leagueService.incrementarCarrerasLiga(leagueId);
 		model.addAttribute("ligas", leagueService.findAll());
 		return "redirect:/leagues";
 	}
 	
 	@GetMapping(path="/leagues/new")
-	public String crearLiga(ModelMap model) {	
+	public String initcrearLiga(ModelMap model) {	
 		Iterable<League> leagues = leagueService.findAll() ;
 		List<League> result = new ArrayList<League>();
 	    leagues.forEach(result::add);
@@ -201,14 +172,46 @@ public class LeagueController {
 	    newLeague.setMoto2Active(false);
 	    newLeague.setMoto3Active(true);
 	    newLeague.setMotogpActive(false);
-	    newLeague.setName("Liga"+newLeague.getId().toString());
 	    newLeague.setRacesCompleted(0);
-
-	    
-	    leagueService.saveLeague(newLeague);
-	    model.addAttribute("messageNewLiga", true);
-		 return "redirect:/leagues/"+newLeague.getId()+"/teams/new";	
+		model.addAttribute("league",newLeague);
+		return "/leagues/createLeagueName";
 		 }
+	
+	@PostMapping(path="/leagues/new")
+	public String processCrearLiga(@Valid League league, BindingResult results,ModelMap model) {	
+		if(results.hasErrors()) {
+			System.out.println(results);
+			model.put("league", league);
+			model.put("message",results.getAllErrors());
+			return "/leagues/createLeagueName";
+		}else {
+
+			
+			
+				Integer num_leagues = leagueService.findLeaguesByUsername(userService.getUserSession().getUsername());
+				
+				if(num_leagues==5) {
+					yaTieneMaxLigas=true;
+					return "redirect:/leagues/myLeagues";
+				}
+				
+				  try {
+						this.leagueService.saveLeague(league);
+					}catch (duplicatedLeagueNameException e) {
+	                    results.rejectValue("name", "duplicate", "already exists a league with that name");
+	        			model.put("message",results.getAllErrors());
+	                    return "/leagues/createLeagueName";
+					}
+				
+			
+			  
+
+				 return "redirect:/leagues/"+league.getId()+"/teams/new";	
+			
+			
+		}
+	
+	}
 	
 	@GetMapping(path="/leagues/join")
 	public String unirseLiga(ModelMap model) {	
@@ -221,7 +224,7 @@ public class LeagueController {
 	
 	@PostMapping(value="/leagues/join")
 	public String unirseLigaCode(League league,ModelMap model) {	
-		User user = getUserSession();
+		User user = userService.getUserSession();
 		Collection<Integer> collect = leagueService.findTeamsByUsername(user.getUsername());
 		
 		List<Integer> idLeague = new ArrayList<Integer>();
@@ -231,41 +234,34 @@ public class LeagueController {
 		
 		Optional<League> liga = leagueService.findLeagueByLeagueCode(league.getLeagueCode().trim());
 
+		
 		if(!liga.isPresent()) {
 			noLeagueFound=true;
 			return "redirect:/leagues/join";
 		}
 		
 		if(idLeague.contains(liga.get().getId())) {
-
+			
 			yaTienesEquipo=true;
+			leagueYaEquipoId=liga.get().getId();
 			return "redirect:/leagues/myLeagues";
 
 		}
 		
-		
+		if(idLeague.size()==5) {
+			yaTieneMaxLigas=true;
+			return "redirect:/leagues/myLeagues";
+		}
 
 		model.addAttribute("yaTienesEquipo", false);
 		return "redirect:/leagues/"+liga.get().getId()+"/teams/new";
 		 }
 	
-	
-	
-	
-	
-//	
-//	@PostMapping(value = "/leagues/new/league")
-//	public String saveNewLeague(@PathVariable("leagueId") int leagueId,Team team, BindingResult result) {
-//		User usuario = getUserSession();
-//		if (result.hasErrors()) {
-//			return "/leagues/TeamsEdit";
-//		}
-//		else {
-//			team.setUser(usuario);
-//			this.leagueService.saveTeam(team);
-//			
-//			return "redirect:/leagues/{leagueId}/teams";
-//		}
-//	}
+	@GetMapping(path="/leagues/{leagueId}/details")
+	public String detallesLiga(@PathVariable("leagueId") int leagueId,ModelMap model) {	
+		User user = userService.getUserSession();
+		return "/leagues/leagueDetails";
+		 }
+
 	
 }

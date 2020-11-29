@@ -35,11 +35,7 @@
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Lineups</span>
 				</petclinic:menuItem>
-				<petclinic:menuItem active="${name eq 'myLeagues'}" url="/leagues/myLeagues"
-					title="leads to /leagues/myLeagues">
-					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-					<span>myLeagues</span>
-				</petclinic:menuItem>
+			
 				<petclinic:menuItem active="${name eq 'myTeams'}" url="/myTeams"
 					title="leads to /myTeams">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
@@ -110,6 +106,8 @@
 										<div class="col-lg-12">
 											<p>
 												<a href="/messages/" class="btn btn-primary btn-block">My messages</a>
+												<a href="/friends/" class="btn btn-primary btn-block">My friends</a>
+												<a href="/leagues/myLeagues" class="btn btn-primary btn-block">My leagues</a>
 <!-- 												<a href="#" class="btn btn-danger btn-block">Change -->
 <!-- 													Password</a> -->
 											</p>

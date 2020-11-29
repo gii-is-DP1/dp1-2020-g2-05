@@ -13,7 +13,7 @@ import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "team")
-public class Team extends BaseEntity {
+public class Team extends BaseEntity implements Comparable<Team> {
 	
 	@Column(name = "name")
 	@NotEmpty
@@ -91,6 +91,11 @@ public class Team extends BaseEntity {
 	@Override
 	public String toString() {
 		return "Team [name =" + name + ", points=" + points + ", money=" + money + " username =" + user + "]";
+	}
+
+	@Override
+	public int compareTo(Team o) {
+		return Integer.valueOf(this.getPoints()).compareTo(Integer.valueOf(o.getPoints()));
 	}
 	
 
