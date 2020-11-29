@@ -108,6 +108,7 @@ public class MessageController {
 		
 		if (result.hasErrors()) {
 			model.put("messagee", message);		
+			model.put("usersend", userService.getUserSession());		
 
 			return "messages/messagesEdit";
 		}
