@@ -11,8 +11,7 @@ import java.util.Optional;
 
 import java.util.stream.Collectors;
 
-
-
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.League;
@@ -29,8 +28,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
-
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -53,13 +53,11 @@ public class TeamController {
 	@Autowired
 	LineupService lineupService;
 	
-//	@Autowired
-//	public TeamController(UserService userService) {
-//		this.userService = userService;
-//	}
-//
+	@InitBinder("team")
+	public void initPetBinder(WebDataBinder dataBinder) {
+		dataBinder.setValidator(new TeamValidator());
+	}
 
-//
 
 	private Boolean EquipoNoMismoNombre=false;
 	private Boolean EquipoSi=false;
@@ -86,18 +84,31 @@ public class TeamController {
 	
 	@GetMapping(path="/leagues/{leagueId}/teams/new")
 	public String crearEquipo(@PathVariable("leagueId") int leagueId, ModelMap model) {
-		model.addAttribute("teams", new Team());
+		model.addAttribute("team", new Team());
+		
 	  return "/leagues/TeamsEdit";
 	}
 	
 	
 	
 	@PostMapping(value = "/leagues/{leagueId}/teams/new")
-	public String saveNewTeam(@PathVariable("leagueId") int leagueId,Team team, BindingResult result, ModelMap model) {
+	public String saveNewTeam(@PathVariable("leagueId") int leagueId, @Valid Team team, BindingResult result, ModelMap model) {
+		System.out.println("holaaa");
+		
+
+		if(result.hasErrors()) {
+			System.out.println(result);
+			model.put("team", team);
+			model.put("message",result.getAllErrors());
+			return "/leagues/TeamsEdit";
+		}else {
+		
+		
 		User usuario = getUserSession();
 			List<Team> tem = new ArrayList<Team>();
 			Optional<League> league = this.leagueService.findLeague(leagueId);
 			List<Team> list = league.get().getTeam().stream().collect(Collectors.toList());
+			System.out.println("wajdbaiwjdbnkjwd");
 			System.out.println(list);
 			String username = getUserSession().getUsername();
 			for(int i = 0; i<list.size(); i++) {
@@ -109,13 +120,8 @@ public class TeamController {
 		System.out.println(tem.size());
 
 		
-		System.out.println(tem);
-		if (result.hasErrors()) {
-			Error=true;
-			return "/leagues/TeamsEdit";
-	}
 		
-		else if(tem.size()>= 1){
+		 if(tem.size()>= 1){
 //			model.addAttribute("message", "Sorry, you cannot have more teams in this league!");
 			EquipoNo=true;
 			return "redirect:/leagues/{leagueId}/teams";
@@ -128,7 +134,7 @@ public class TeamController {
 			
 			return "redirect:/leagues/{leagueId}/teams";
 		}
-		
+		}
 		
 	}
 	
