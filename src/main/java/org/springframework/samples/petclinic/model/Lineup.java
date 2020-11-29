@@ -91,6 +91,14 @@ public class Lineup extends BaseEntity {
 	public void setGp(GranPremio gp) {
 		this.gp = gp;
 	}
+	
+	public Pilot getRider1() {
+		return recruit1.getPilot();
+	}
+	
+	public Pilot getRider2() {
+		return recruit2.getPilot();
+	}
 
 	@Override
 	public String toString() {

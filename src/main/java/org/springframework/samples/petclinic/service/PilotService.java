@@ -117,7 +117,9 @@ public class PilotService {
 //		return pilotRepository.findAll();
 //	}	
 
-	
+	public List<Pilot> getRecruits() throws DataAccessException {
+		return this.pilotRepository.findAllRecruits();
+	}
 	
 	public List<Pilot> getRecruits(int teamID) throws DataAccessException {
 		return this.pilotRepository.findAllRecruits(teamID);

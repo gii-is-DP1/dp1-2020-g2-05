@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.web;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -9,19 +10,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Lineup;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
+import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.LineupService;
+import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-//@RequestMapping("/leagues/{leagueId}")
+@RequestMapping("/leagues/{leagueId}/teams/{teamId}")
 public class LineupController {
 
 
@@ -37,49 +42,59 @@ public class LineupController {
 	//		this.userService = userService;
 	//	}
 
-	//
-	//	@ModelAttribute("league")
-	//	public Optional<League> findLeague(@PathVariable("leagueId") int leagueId) {
-	//		return this.leagueService.findLeague(leagueId);
-	//	}
-
-
 	//	@InitBinder("league")
 	//	public void initLineupBinder(WebDataBinder dataBinder) {
 	//		dataBinder.setDisallowedFields("id");
 	//	}
+	
+//	private final LineupService lineupService;
+//	private final LeagueService leagueService;
+//	
+//	@Autowired
+//	public LeagueController(LeagueService leagueService, LineupService lineupService) {
+//		this.leagueService = leagueService;
+//		this.lineupService = lineupService;
+//	}
 
 	@Autowired
 	LineupService lineupService;
 
 	@Autowired
 	LeagueService leagueService;
-
-	@GetMapping("/lineups")
-	public String listadoAlineaciones(ModelMap modelMap) {
-		modelMap.addAttribute("resultados", lineupService.findAll());
-		return "lineups/lineupsList";
+	
+	@Autowired
+	RecruitService recruitService;
+	
+	@ModelAttribute("recruitsSelection")
+	public List<Pilot> getAllRecruits(@PathVariable("teamId") int teamId) {
+		return this.recruitService.getRecruits(teamId);
 	}
 
-	@GetMapping(path="/lineups/{lineupId}")
-	public String muestraAlineacionPorId(@PathVariable("lineupId") int lineupId, ModelMap model) {
-		Optional<Lineup> lineup = lineupService.findLineup(lineupId);
-		if(lineup.isPresent()) {
-			model.addAttribute("lineup", lineup.get());
-		}else {
-			model.addAttribute("encontrado", false);
-		}
-		return "lineups/lineupDetails";
-	}
+//	@GetMapping("/lineups")
+//	public String listadoAlineaciones(ModelMap modelMap) {
+//		modelMap.addAttribute("resultados", lineupService.findAll());
+//		return "lineups/lineupsList";
+//	}
+//
+//	@GetMapping(path="/lineups/{lineupId}")
+//	public String muestraAlineacionPorId(@PathVariable("lineupId") int lineupId, ModelMap model) {
+//		Optional<Lineup> lineup = lineupService.findLineup(lineupId);
+//		if(lineup.isPresent()) {
+//			model.addAttribute("lineup", lineup.get());
+//		}else {
+//			model.addAttribute("encontrado", false);
+//		}
+//		return "lineups/lineupDetails";
+//	}
 
-	@GetMapping(path="/leagues/{leagueId}/teams/{teamId}/newLineup")
+	@GetMapping(path="/newLineup")
 	public String crearAlineacionGet(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, ModelMap model) {
 		model.put("lineup", new Lineup());
 		model.addAttribute("leagueCategory", this.leagueService.findLeague(leagueId).get().getCurrentCategory());
 		return "lineups/lineupsEdit";
 	}
 
-	@PostMapping(value = "/leagues/{leagueId}/teams/{teamId}/newLineup")
+	@PostMapping(value = "/newLineup")
 	public String crearAlineacionPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, Lineup lineup, BindingResult result, ModelMap model) {		
 		if (result.hasErrors()) {
 			model.put("lineup", lineup);
@@ -91,7 +106,7 @@ public class LineupController {
 		}
 	}
 
-	@GetMapping(path="/leagues/{leagueId}/teams/{teamId}/editLineup/{lineupId}")
+	@GetMapping(path="/editLineup/{lineupId}")
 	public String editarLineupGet(@RequestHeader(name = "Referer") String referer, @PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
 			@PathVariable("lineupId") int lineupId, ModelMap model) {
 		Optional<Lineup> lineup = this.lineupService.findLineup(lineupId);
@@ -107,7 +122,7 @@ public class LineupController {
 		return view;
 	}
 
-	@PostMapping(value = "/leagues/{leagueId}/teams/{teamId}/editLineup/{lineupId}")
+	@PostMapping(value = "/editLineup/{lineupId}")
 	public String editarLineupPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, Lineup lineup, BindingResult result, ModelMap model) {
 		if (result.hasErrors()) {
 			model.put("lineup", lineup);
@@ -123,7 +138,7 @@ public class LineupController {
 		}
 	}
 
-	@GetMapping(path="/lineups/delete/{lineupId}")
+	@GetMapping(path="/delete/{lineupId}")
 	public String borrarLineup(@RequestHeader(name = "Referer") String referer, @PathVariable("lineupId") int lineupId, ModelMap model) {
 		Optional<Lineup> lineup = lineupService.findLineup(lineupId);
 		if(lineup.isPresent()) {

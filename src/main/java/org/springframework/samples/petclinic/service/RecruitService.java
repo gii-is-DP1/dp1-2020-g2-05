@@ -33,8 +33,15 @@ public class RecruitService {
 		return recruitRepository.findById(recruitId);
 	}
 	
+	public List<Pilot> getRecruits() throws DataAccessException {
+		return this.pilotService.getRecruits();
+	}
+	
 	public List<Pilot> getRecruits(int teamID) throws DataAccessException {
 		return this.pilotService.getRecruits(teamID);
 	}
 
+	public Optional<Recruit> getRecruitByPilotId(int pilotId) throws DataAccessException {
+		return this.recruitRepository.findRecruitByPilotId(pilotId);
+	}
 }
