@@ -5,7 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.samples.petclinic.util.Status;
 
@@ -14,10 +15,12 @@ import org.springframework.samples.petclinic.util.Status;
 public class Offer extends BaseEntity{
 
 	@Column(name = "price")
-	@NotEmpty
-	private String price;
+	@NotNull
+	@Min(0)
+	private Integer price;
 	
 	@Column(name = "status")
+	@NotNull
 	private Status status;
 	
 	@ManyToOne
@@ -48,11 +51,11 @@ public class Offer extends BaseEntity{
 		this.pilot = pilot;
 	}
 
-	public String getPrice() {
+	public Integer getPrice() {
 		return price;
 	}
 
-	public void setPrice(String price) {
+	public void setPrice(Integer price) {
 		this.price = price;
 	}
 

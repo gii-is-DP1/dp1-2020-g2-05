@@ -151,7 +151,7 @@ INSERT INTO team(id,name,points,money,league_id, username) VALUES (7,'Miguelito'
 INSERT INTO offer(id,price,status,pilot_id,team_id) VALUES (1,2000,2,1,8);
 INSERT INTO offer(id,price,status,pilot_id,team_id) VALUES (2,3000,2,2,8);
 INSERT INTO offer(id,price,status,pilot_id,team_id) VALUES (3,1500,2,3,8);
-INSERT INTO offer(id,price,status,pilot_id,team_id) VALUES (4,1800,2,4,8);
+INSERT INTO offer(id,price,status,pilot_id,team_id) VALUES (4,1800.5,2,4,8);
 INSERT INTO offer(id,price,status,pilot_id,team_id) VALUES (5,2000,2,5,8);
 INSERT INTO offer(id,price,status,pilot_id,team_id) VALUES (6,2100,2,6,8);
 INSERT INTO offer(id,price,status,pilot_id,team_id) VALUES (7,1500,2,3,9);
