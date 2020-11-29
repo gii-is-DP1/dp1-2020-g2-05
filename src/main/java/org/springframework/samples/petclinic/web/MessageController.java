@@ -17,6 +17,7 @@ package org.springframework.samples.petclinic.web;
 
 
 import java.util.Collection;
+						
 
 
 
@@ -92,21 +93,28 @@ public class MessageController {
 	@GetMapping(path="/messages/new")
 	public String crearMensaje(ModelMap model) {
 		Message message = new Message();
+		
 		model.put("messagee", message);		
+		model.put("usersend", userService.getUserSession());		
+
 		return "messages/messagesEdit";
 	}
 	
+
+	
+	
 	@PostMapping(value = "/messages/new")
-	public String processCreationForm(@Valid Message message, BindingResult result) {
+	public String processCreationForm(@Valid Message message, BindingResult result,ModelMap model) {
+		
 		if (result.hasErrors()) {
+			model.put("messagee", message);		
+
 			return "messages/messagesEdit";
 		}
 		else {
-			message.setUsernamesend(userService.getUserSession());
 			message.setVisto(0); 
-			
+			message.setUsernamesend(userService.getUserSession());
 			this.messageService.saveMessage(message);
-			
 			
 			return "redirect:/messages/";
 		}
@@ -133,20 +141,20 @@ public class MessageController {
 ////	}
 //	
 
-	 
-	@PostMapping(path="messages/save")
-	public String guardarMensaje(@Valid Message message, BindingResult result, ModelMap model) {
-		String view = "messages/messagesList";
-		if(result.hasErrors()) {
-			model.addAttribute("messagee", message);
-			return "messages/messagesEdit";
-		}else {
-			System.out.println(message.getId());
-			messageService.saveMessage(message);
-			model.addAttribute("message", "Message successfully saved!");
-		}
-		return view;
-	}
+//	 
+//	@PostMapping(path="messages/save")
+//	public String guardarMensaje(@Valid Message message, BindingResult result, ModelMap model) {
+//		String view = "messages/messagesList";
+//		if(result.hasErrors()) {
+//			model.addAttribute("messagee", message);
+//			return "messages/messagesEdit";
+//		}else {
+//			System.out.println(message.getId());
+//			messageService.saveMessage(message);
+//			model.addAttribute("message", "Message successfully saved!");
+//		}
+//		return view;
+//	}
 	
 
 
