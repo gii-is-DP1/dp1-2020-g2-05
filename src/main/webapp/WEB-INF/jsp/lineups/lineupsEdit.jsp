@@ -19,10 +19,14 @@
             <input type="hidden" name="league" value="${leagueId}"/>
             <input type="hidden" name="team" value="${teamId}"/>
             <petclinic:inputField label="GP" name="gp.id"/>
-            <petclinic:inputField label="Recruit1" name="recruit1.id"/>
-            <petclinic:inputField label="Recruit2" name="recruit2.id"/>
+<%--             <petclinic:inputField label="Recruit1" name="recruit1.id"/> --%>
+<%--             <petclinic:inputField label="Recruit2" name="recruit2.id"/> --%>
             
-        </div>
+			<div class="control-group">
+				<petclinic:selectField name="recruit1" label="Recruit1" names="${recruitsSelection}" size="5" />
+				<petclinic:selectField name="recruit2" label="Recruit2" names="${recruitsSelection}" size="5" />
+			</div>
+		</div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <c:choose>

@@ -11,22 +11,25 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+import com.sun.istack.NotNull;
+
 @Entity
 @Table(name = "team")
 public class Team extends BaseEntity implements Comparable<Team> {
 	
 	@Column(name = "name")
 	@NotEmpty
+	@NotNull
 	private String name;
 	
-
-
 	@Column(name = "points")
 	@NotEmpty
+	@NotNull
 	private String points;
 	
 	@Column(name = "money")
 	@NotEmpty
+	@NotNull
 	private String money;
 	
 	@ManyToOne()

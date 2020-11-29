@@ -25,12 +25,10 @@ public class Recruit extends BaseEntity {
 	
 	@ManyToOne
 	@JoinColumn(name = "pilot_id")
-	@NotEmpty
 	private Pilot pilot;
 	
 	@ManyToOne
 	@JoinColumn(name = "team_id")
-	@NotEmpty
 	private Team team;
 
 	public Set<Lineup> getLineup1() {

@@ -4,11 +4,13 @@ import java.util.ArrayList;
 
 
 import java.util.Comparator;
-
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -186,28 +188,30 @@ public class TeamController {
 	@GetMapping("/myTeams")
 	public String myTeams(ModelMap modelMap) {
 		Iterable<League> leagues = leagueService.findAll() ;
-		List<League> result = new ArrayList<League>();
-	    leagues.forEach(result::add);
-	    List<Team> myTeamsList = new ArrayList<Team>();
-	    List<Integer> ids = new ArrayList<Integer>();
-	    String username = getUserSession().getUsername();;
-	    for(int i=0;i<result.size();i++) {
-		    List<Team> teams = new ArrayList<>(result.get(i).getTeam());
-		    System.out.println(teams.size()-1);
-		    for(int j=0;j<teams.size();j++) {
-		    	System.out.println(teams.get(j).getUser());
-		    	if(teams.get(j).getUser().getUsername().equals(username)){
-		    		myTeamsList.add(teams.get(j));
-		    		ids.add(teams.get(j).getLeague().getId());
-		    		
-		    		
-		    	}
-		    }
-	    }
+//		List<League> result = new ArrayList<League>();
+//	    leagues.forEach(result::add);
+//	    List<Team> myTeamsList = new ArrayList<Team>();
+//	    SortedSet<Integer> ids = new TreeSet<Integer>();
+//	    String username = getUserSession().getUsername();;
+//	    for(int i=0;i<result.size();i++) {
+//		    List<Team> teams = new ArrayList<>(result.get(i).getTeam());
+//		    System.out.println(teams.size()-1);
+//		    for(int j=0;j<teams.size();j++) {
+//		    	System.out.println(teams.get(j).getUser());
+//		    	if(teams.get(j).getUser().getUsername().equals(username)){
+//		    		myTeamsList.add(teams.get(j));
+//		    		ids.add(teams.get(j).getLeague().getId());
+//		    		
+//		    		
+//		    	}
+//		    }
+//	    }
+		
+		String username = getUserSession().getUsername();
+		List<Team> team = this.leagueService.findTeamByUsername(username);
 	    
-	   modelMap.addAttribute("leagues", ids);
-	   System.out.println(ids);
-	    modelMap.addAttribute("teams", myTeamsList);
+	   
+	    modelMap.addAttribute("teams", team);
 		return "leagues/myTeams";
 	}
 

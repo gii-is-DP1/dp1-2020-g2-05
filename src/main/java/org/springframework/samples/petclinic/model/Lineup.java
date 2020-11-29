@@ -34,10 +34,10 @@ public class Lineup extends BaseEntity {
 	@NotNull
 	private Team team;
 	
-	@ManyToOne
-	@JoinColumn(name = "league_id")
-	@NotNull
-	private League league;
+//	@ManyToOne
+//	@JoinColumn(name = "league_id")
+//	@NotNull
+//	private League league;
 	
 	@ManyToOne
 	@JoinColumn(name = "gp_id")
@@ -76,13 +76,13 @@ public class Lineup extends BaseEntity {
 		this.team = team;
 	}
 
-	public League getLeague() {
-		return league;
-	}
-
-	public void setLeague(League league) {
-		this.league = league;
-	}
+//	public League getLeague() {
+//		return league;
+//	}
+//
+//	public void setLeague(League league) {
+//		this.league = league;
+//	}
 
 	public GranPremio getGp() {
 		return gp;
@@ -91,10 +91,18 @@ public class Lineup extends BaseEntity {
 	public void setGp(GranPremio gp) {
 		this.gp = gp;
 	}
+	
+	public Pilot getRider1() {
+		return recruit1.getPilot();
+	}
+	
+	public Pilot getRider2() {
+		return recruit2.getPilot();
+	}
 
 	@Override
 	public String toString() {
 		return "Lineup [category=" + category + ", recruit1=" + recruit1 + ", recruit2=" + recruit2 + ", team=" + team
-				+ ", league=" + league + ", gp=" + gp + "]";
+				+ /*", league=" + league + */", gp=" + gp + "]";
 	}
 }

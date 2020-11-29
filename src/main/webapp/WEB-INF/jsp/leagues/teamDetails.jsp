@@ -82,7 +82,7 @@
 							var="lineupUrl">
 							<spring:param name="lineupId" value="${lineup.id}" />
 						</spring:url> <a href="${fn:escapeXml(lineupUrl)}">Edit</a> <spring:url
-							value="/lineups/delete/{lineupId}" var="lineupUrl">
+							value="delete/{lineupId}" var="lineupUrl">
 							<spring:param name="lineupId" value="${lineup.id}" />
 						</spring:url> <a href="${fn:escapeXml(lineupUrl)}">Delete</a></td>
 
