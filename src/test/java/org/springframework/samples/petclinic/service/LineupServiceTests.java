@@ -81,7 +81,7 @@ public class LineupServiceTests {
 		Lineup newLineup = new Lineup();
 		newLineup.setCategory(Category.MOTOGP);
 		newLineup.setGp(this.lineupService.findLineup(1).get().getGp());
-		newLineup.setLeague(this.leagueService.findLeague(1).get());
+//		newLineup.setLeague(this.leagueService.findLeague(1).get());
 		newLineup.setRecruit1(this.recruitService.findRecruit(1).get());
 		newLineup.setRecruit2(this.recruitService.findRecruit(2).get());
 		newLineup.setTeam(this.leagueService.findTeamById(1).get());
@@ -106,7 +106,7 @@ public class LineupServiceTests {
 		Lineup newLineup = new Lineup();
 		newLineup.setCategory(Category.MOTOGP);
 		newLineup.setGp(this.lineupService.findLineup(1).get().getGp());
-		newLineup.setLeague(this.leagueService.findLeague(1).get());
+//		newLineup.setLeague(this.leagueService.findLeague(1).get());
 		newLineup.setRecruit1(this.recruitService.findRecruit(1).get());
 		newLineup.setRecruit2(this.recruitService.findRecruit(2).get());
 		newLineup.setTeam(this.leagueService.findTeamById(1).get());
