@@ -5,7 +5,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Offer;
 import org.springframework.samples.petclinic.model.Team;
-import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.OfferService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.util.Status;
@@ -41,11 +40,12 @@ public class OfferController {
 		if(opo.isPresent() && opt.isPresent()) {
 			Offer offer = opo.get();
 			Team team = opt.get();
+			Integer price = offer.getPrice();
 			if (!offer.getStatus().equals(Status.Outstanding)){
 				modelMap.addAttribute("message","This pilot isn't on sale");
-			}else if(offer.getStatus().equals(Status.Outstanding) && Integer.parseInt(team.getMoney()) 
-					>= Integer.parseInt(offer.getPrice())) {
-				offerService.saveTeamMoney(team, offer.getPrice());
+			}else if(Integer.parseInt(team.getMoney()) >= price) {
+				offerService.saveTeamMoney(team, -price);//Restar dinero al comprador
+				offerService.saveTeamMoney(offer.getTeam(), price);//Dar dinero al vendedor
 				offer.setStatus(Status.Accepted);
 				offerService.saveOffer(offer);
 				modelMap.addAttribute("message","Pilot recruit!");
@@ -57,7 +57,6 @@ public class OfferController {
 		}
 		modelMap.addAttribute("leagueId",leagueId);
 		return getOffers(leagueId, modelMap);
-		//return "redirect:/leagues/{leagueId}/market";
 	}
 	
 }

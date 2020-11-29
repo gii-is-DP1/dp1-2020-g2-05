@@ -20,6 +20,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Message;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.repository.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -43,6 +44,11 @@ public class UserService {
 	}
 
 	@Transactional
+	public Iterable<User> findAll(){
+		return userRepository.findAll();
+	}
+	
+	@Transactional
 	public void saveUser(User user) throws DataAccessException {
 		user.setEnabled(true);
 		userRepository.save(user);
@@ -55,15 +61,7 @@ public class UserService {
 	public User getUserSession() {
 		User usuario = new User();  
 		try {
-			  Object auth = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-			  
-			  Integer index1 = auth.toString().indexOf("Username:");
-			  Integer index2 = auth.toString().indexOf("; Password:"); // CON ESTO TENEMOS EL STRIN Username: user
-			  
-			  String nombreUsuario = auth.toString().substring(index1, index2).split(": ")[1]; //con esto hemos spliteado lo de arriba y nos hemos quedado con user.
-
-			  Optional<User> user = findUser(nombreUsuario);
+			  Optional<User> user = findUser(SecurityContextHolder.getContext().getAuthentication().getName());
 			  usuario =  user.get();
 		  }catch (Exception e) {	
 		  }
@@ -74,4 +72,9 @@ public class UserService {
 		return userRepository.findFriendByUser(username);
 		
 	}
+	
+	public void delete(User user) {
+		userRepository.delete(user);
+		
+	}	
 }
