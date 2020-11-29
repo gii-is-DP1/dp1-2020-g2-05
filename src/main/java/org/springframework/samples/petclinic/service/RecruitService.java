@@ -12,6 +12,7 @@ import org.springframework.samples.petclinic.repository.PilotRepository;
 import org.springframework.samples.petclinic.repository.RecruitRepository;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class RecruitService {
