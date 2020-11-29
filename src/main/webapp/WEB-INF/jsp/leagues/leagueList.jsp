@@ -21,7 +21,7 @@
 		</thead>
 		<tbody>
 			<c:forEach items="${ligas}" var="league">
-				<tr>
+					<tr>	<!--  onclick="window.location='/leagues/${league.id}/details'"  -->
 					<td><c:out value="${league.name} " /></td>
 					<td><c:out value="${league.leagueCode} " /></td>
 					<td><c:out value="${league.leagueDate}" /></td>

@@ -1,27 +1,28 @@
 package org.springframework.samples.petclinic.web;
 
 import java.util.ArrayList;
-import java.util.Collections;
+
+
 import java.util.Comparator;
-import java.util.Iterator;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import javax.validation.Valid;
+import java.util.stream.Collectors;
+
+
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.User;
-import org.springframework.samples.petclinic.model.Visit;
+
 import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.LineupService;
-import org.springframework.samples.petclinic.service.PetService;
+
 import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,22 +30,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Controller
 public class TeamController {
 	
-//	@Autowired
-//	public TeamController(LeagueService leagueService) {
-//		this.leagueService = leagueService;
-//	}
-	
-//	
+
 	@Autowired
 	UserService userService;
 	
@@ -54,6 +48,8 @@ public class TeamController {
 	@Autowired
 	RecruitService recruitService;
 	
+
+
 	@Autowired
 	LineupService lineupService;
 	
@@ -64,7 +60,8 @@ public class TeamController {
 //
 
 //
-	
+
+	private Boolean EquipoNoMismoNombre=false;
 	private Boolean EquipoSi=false;
 	private Boolean EquipoNo=false;
 	private Boolean Error=false;
@@ -117,6 +114,7 @@ public class TeamController {
 			Error=true;
 			return "/leagues/TeamsEdit";
 	}
+		
 		else if(tem.size()>= 1){
 //			model.addAttribute("message", "Sorry, you cannot have more teams in this league!");
 			EquipoNo=true;
@@ -163,22 +161,22 @@ public class TeamController {
 		return "redirect:/leagues/{leagueId}/teams";
 	}
 	
-	@GetMapping(path="/leagues/{leagueId}/teams/{teamId}/edit")
-	public String editarPiloto(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, ModelMap model) {
-		Optional<Team> team = leagueService.findTeamById(teamId);
-		String view = "leagues/TeamList";
-		model.addAttribute(team.get());
-		if(team.isPresent()) {
-			System.out.println("hola");
-			view = "leagues/TeamsEdit";
-			
-		}else {
-			model.addAttribute("message", "team not found!");
-			view=showTeams(leagueId, model);
-		}
-		return view;
-	}
-	
+//	@GetMapping(path="/leagues/{leagueId}/teams/{teamId}/edit")
+//	public String editarPiloto(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, ModelMap model) {
+//		Optional<Team> team = leagueService.findTeamById(teamId);
+//		String view = "leagues/TeamList";
+//		model.addAttribute(team.get());
+//		if(team.isPresent()) {
+//			System.out.println("hola");
+//			view = "leagues/TeamsEdit";
+//			
+//		}else {
+//			model.addAttribute("message", "team not found!");
+//			view=showTeams(leagueId, model);
+//		}
+//		return view;
+//	}
+//	
 	@GetMapping("/myTeams")
 	public String myTeams(ModelMap modelMap) {
 		Iterable<League> leagues = leagueService.findAll() ;
@@ -189,7 +187,9 @@ public class TeamController {
 	    String username = getUserSession().getUsername();;
 	    for(int i=0;i<result.size();i++) {
 		    List<Team> teams = new ArrayList<>(result.get(i).getTeam());
+		    System.out.println(teams.size()-1);
 		    for(int j=0;j<teams.size();j++) {
+		    	System.out.println(teams.get(j).getUser());
 		    	if(teams.get(j).getUser().getUsername().equals(username)){
 		    		myTeamsList.add(teams.get(j));
 		    		ids.add(teams.get(j).getLeague().getId());
@@ -219,6 +219,8 @@ public class TeamController {
 		EquipoNo=false;
 		if(EquipoSi) model.put("EquipoSi", "Team created succesfully!");
 		EquipoSi=false;
+		if(Error) model.put("Error", "Your team have some errors!");
+		Error=false;
 		if(Error) model.put("Error", "Your team have some errors!");
 		Error=false;
 		return "/leagues/TeamList";
