@@ -103,7 +103,7 @@ class OfferServiceTests {
 		assertThat(constraintViolations.size()).isEqualTo(1);
 		ConstraintViolation<Offer> violation = constraintViolations.iterator().next();
 		assertThat(violation.getPropertyPath().toString()).isEqualTo("price");
-		assertThat(violation.getMessage()).isEqualTo("tiene que ser mayor o igual que 0");
+		assertThat(violation.getMessage()).isNotEmpty();
 	}
 	
 	@Test
