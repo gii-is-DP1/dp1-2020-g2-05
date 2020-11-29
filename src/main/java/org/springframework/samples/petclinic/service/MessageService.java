@@ -82,6 +82,11 @@ public class MessageService {
 		return messageRepository.findByUsernameReceive(usernamereceive);
 	}
 	
+	@Transactional
+	public Iterable<Message> findAllUsernameSend(String usernamesend){
+		return messageRepository.findByUsernameSend(usernamesend);
+	}
+	
 	
 
 
@@ -89,6 +94,8 @@ public class MessageService {
 		messageRepository.delete(messageId);
 		
 	}	
+	
+	
 
     @Transactional
 	public Optional<Message> findMessageById(int messageId) {

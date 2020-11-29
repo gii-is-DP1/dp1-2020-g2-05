@@ -21,6 +21,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Owner;
+import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.OwnerService;
 import org.springframework.samples.petclinic.service.VetService;
@@ -40,7 +41,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class UserController {
 
-	private static final String VIEWS_OWNER_CREATE_FORM = "users/createOwnerForm";
+	private static final String USER_CREATE_FORM = "users/createUserForm";
 
 	private final UserService userService;
 
@@ -54,24 +55,24 @@ public class UserController {
 		dataBinder.setDisallowedFields("id");
 	}
 
-//	@GetMapping(value = "/users/new")
-//	public String initCreationForm(Map<String, Object> model) {
-//		Owner owner = new Owner();
-//		model.put("owner", owner);
-//		return VIEWS_OWNER_CREATE_FORM;
-//	}
-//
-//	@PostMapping(value = "/users/new")
-//	public String processCreationForm(@Valid Owner owner, BindingResult result) {
-//		if (result.hasErrors()) {
-//			return VIEWS_OWNER_CREATE_FORM;
-//		}
-//		else {
-//			//creating owner, user, and authority
-//			this.ownerService.saveOwner(owner);
-//			return "redirect:/";
-//		}
-//	}
+	@GetMapping(value = "/users/new")
+	public String initCreationForm(ModelMap model) {
+		User user = new User();
+		model.put("userr", user);
+		return USER_CREATE_FORM;
+	}
+
+	@PostMapping(value = "/users/new")
+	public String processCreationForm(@Valid User user, BindingResult result) {
+		if (result.hasErrors()) {
+			return USER_CREATE_FORM;
+		}
+		else {
+			//creating owner, user, and authority
+			this.userService.saveUser(user);
+			return "redirect:/";
+		}
+	}
 	
 	@GetMapping("/friends")
 	public String listadoAmigos(ModelMap modelMap) {
