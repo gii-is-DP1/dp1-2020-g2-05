@@ -157,8 +157,8 @@ public class LeagueService {
 
 
 
-//	public Optional<Team> findTeam(Integer teamId) {
-//		return leagueRepository.findById(teamId);
-//	}
-
+	
+	public List<Team> findTeamByUsername(String username){
+		return teamRepository.findTeamByUsername(username );
+	}
 }

@@ -13,6 +13,7 @@
 	<table id="TeamsTable" class="table table-striped">
 		<thead>
 			<tr>
+				<th>Liga</th>
 				<th>Name</th>
 				<th>Points</th>
 				<th>Money</th>
@@ -21,9 +22,9 @@
 			</tr>
 		</thead>
 		<tbody>
-		<c:forEach items="${leagues}" var="league">
 			<c:forEach items="${teams}" var="team">
 				<tr>
+					<td><c:out value="${team.league.name} " /></td>
 					<td><c:out value="${team.name} " /></td>
 					<td><c:out value="${team.points}" /></td>
 					<td><c:out value="${team.money}" /></td>
@@ -39,7 +40,7 @@
 					</td>
 				</tr>
 			</c:forEach>
-			</c:forEach>
+		
 		</tbody>
 	</table>
 </petclinic:layout>
