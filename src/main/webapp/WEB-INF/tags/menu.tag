@@ -30,17 +30,12 @@
 				</petclinic:menuItem>
 			
 				
-				<petclinic:menuItem active="${name eq 'lineups'}" url="/lineups"
-					title="leads to /lineups">
-					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-					<span>Lineups</span>
-				</petclinic:menuItem>
-			
 				<petclinic:menuItem active="${name eq 'myTeams'}" url="/myTeams"
 					title="leads to /myTeams">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>myTeams</span>
 				</petclinic:menuItem>
+				
 				<petclinic:menuItem active="${name eq 'leagues'}" url="/leagues"
 					title="leads to /leagues">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
