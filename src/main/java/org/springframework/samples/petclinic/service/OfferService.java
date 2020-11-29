@@ -25,11 +25,11 @@ public class OfferService {
 	@Autowired
 	public OfferService(OfferRepository offerRepository) {
 		this.offerRepository = offerRepository;
-	}	
+	}
 	
 	@Transactional
-	public Iterable<Offer> findAllOffers() {
-		return offerRepository.findAll();
+	public Collection<Offer> findAllOffers() {
+		return (Collection<Offer>) offerRepository.findAll();
 	}
 	
 	@Transactional
@@ -48,9 +48,8 @@ public class OfferService {
 	}
 	
 	@Transactional
-	public void saveTeamMoney(Team team, String price) throws DataAccessException {
-		team.setMoney(String.valueOf(Integer.parseInt(team.getMoney()) 
-				- Integer.parseInt(price)));
+	public void saveTeamMoney(Team team, Integer price) throws DataAccessException {
+		team.setMoney(String.valueOf(Integer.parseInt(team.getMoney()) + price));
 		leagueService.saveTeam(team);		
 	}
 	
