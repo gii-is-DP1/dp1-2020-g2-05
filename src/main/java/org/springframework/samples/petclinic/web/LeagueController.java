@@ -16,7 +16,9 @@ import javax.validation.Valid;
 import org.apache.jasper.tagplugins.jstl.core.Set;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.League;
+import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Result;
 import org.springframework.samples.petclinic.model.Team;
@@ -76,6 +78,10 @@ public class LeagueController {
 	}
 	
 	
+	@InitBinder("league")
+	public void initPetBinder(WebDataBinder dataBinder) {
+		dataBinder.setValidator(new LeagueValidator());
+	}
 	
 
 	
@@ -85,8 +91,6 @@ public class LeagueController {
 		List<League> result = new ArrayList<League>();
 	    leagues.forEach(result::add);
 		
-//		leagueService.activeMotogp(3);
-
 	    for(League league:result) {
 	    	if(league.getRacesCompleted()<10) leagueService.activeMoto3(league.getId());
 	    	//activar moto3 si las carreras son > que 10
@@ -130,7 +134,6 @@ public class LeagueController {
 	    if(yaTienesEquipo) {
 	    	modelMap.addAttribute("yaTienesEquipo",true);yaTienesEquipo=false;
 			modelMap.addAttribute("leagueYaEquipoId", leagueYaEquipoId);leagueYaEquipoId=-1;
-
 	    }
 	    
 	    if(yaTieneMaxLigas) modelMap.addAttribute("yaTieneMaxLigas",true);yaTieneMaxLigas=false;
@@ -153,15 +156,7 @@ public class LeagueController {
 	}
 	
 	@GetMapping(path="/leagues/new")
-	public String crearLiga(ModelMap model) {	
-		
-		Integer num_leagues = leagueService.findLeaguesByUsername(userService.getUserSession().getUsername());
-		
-		if(num_leagues==5) {
-			yaTieneMaxLigas=true;
-			return "redirect:/leagues/myLeagues";
-		}
-		
+	public String initcrearLiga(ModelMap model) {	
 		Iterable<League> leagues = leagueService.findAll() ;
 		List<League> result = new ArrayList<League>();
 	    leagues.forEach(result::add);
@@ -177,13 +172,46 @@ public class LeagueController {
 	    newLeague.setMoto2Active(false);
 	    newLeague.setMoto3Active(true);
 	    newLeague.setMotogpActive(false);
-	    newLeague.setName("Liga"+newLeague.getId().toString());
 	    newLeague.setRacesCompleted(0);
-
-	    leagueService.saveLeague(newLeague);
-
-		 return "redirect:/leagues/"+newLeague.getId()+"/teams/new";	
+		model.addAttribute("league",newLeague);
+		return "/leagues/createLeagueName";
 		 }
+	
+	@PostMapping(path="/leagues/new")
+	public String processCrearLiga(@Valid League league, BindingResult results,ModelMap model) {	
+		if(results.hasErrors()) {
+			System.out.println(results);
+			model.put("league", league);
+			model.put("message",results.getAllErrors());
+			return "/leagues/createLeagueName";
+		}else {
+
+			
+			
+				Integer num_leagues = leagueService.findLeaguesByUsername(userService.getUserSession().getUsername());
+				
+				if(num_leagues==5) {
+					yaTieneMaxLigas=true;
+					return "redirect:/leagues/myLeagues";
+				}
+				
+				  try {
+						this.leagueService.saveLeague(league);
+					}catch (duplicatedLeagueNameException e) {
+	                    results.rejectValue("name", "duplicate", "already exists a league with that name");
+	        			model.put("message",results.getAllErrors());
+	                    return "/leagues/createLeagueName";
+					}
+				
+			
+			  
+
+				 return "redirect:/leagues/"+league.getId()+"/teams/new";	
+			
+			
+		}
+	
+	}
 	
 	@GetMapping(path="/leagues/join")
 	public String unirseLiga(ModelMap model) {	
