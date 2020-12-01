@@ -15,8 +15,11 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.League;
+import org.springframework.samples.petclinic.model.Lineup;
+import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.User;
@@ -65,6 +68,7 @@ public class TeamController {
 	private Boolean EquipoSi=false;
 	private Boolean EquipoNo=false;
 	private Boolean Error=false;
+	private Boolean Editar=false;
 	
 	public User getUserSession() {
 		User usuario = new User();  
@@ -169,22 +173,38 @@ public class TeamController {
 		return "redirect:/leagues/{leagueId}/teams";
 	}
 	
-//	@GetMapping(path="/leagues/{leagueId}/teams/{teamId}/edit")
-//	public String editarPiloto(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, ModelMap model) {
-//		Optional<Team> team = leagueService.findTeamById(teamId);
-//		String view = "leagues/TeamList";
-//		model.addAttribute(team.get());
-//		if(team.isPresent()) {
-//			System.out.println("hola");
-//			view = "leagues/TeamsEdit";
-//			
-//		}else {
-//			model.addAttribute("message", "team not found!");
-//			view=showTeams(leagueId, model);
-//		}
-//		return view;
-//	}
-//	
+	@GetMapping(path="/leagues/{leagueId}/teams/{teamId}/edit")
+	public String editarPiloto(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, ModelMap model) {
+		Optional<Team> team = leagueService.findTeamById(teamId);
+				model.put("team", team.get());
+				
+				Editar = true;
+				
+				model.put("Editar", Editar);
+				return "leagues/TeamsEdit";
+		
+	}
+	
+	@PostMapping(value = "/leagues/{leagueId}/teams/{teamId}/edit")
+	public String editarPilotoPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, Team team, ModelMap model, BindingResult result) {
+		if (result.hasErrors()) {
+			model.put("team", team);
+			
+			return "leagues/TeamsEdit";
+		}
+		else {
+			User usuario = getUserSession();
+
+			Editar = false;
+			Team teamToUpdate = this.leagueService.findTeamById(team.getId()).get();
+			BeanUtils.copyProperties(team, teamToUpdate);
+			teamToUpdate.setUser(usuario);
+			this.leagueService.saveTeam(teamToUpdate);
+			model.addAttribute("message", "Team successfully saved!");
+			return "redirect:/leagues/{leagueId}/teams";
+		}
+	}
+	
 	@GetMapping("/myTeams")
 	public String myTeams(ModelMap modelMap) {
 		Iterable<League> leagues = leagueService.findAll() ;
@@ -233,6 +253,7 @@ public class TeamController {
 		Error=false;
 		if(Error) model.put("Error", "Your team have some errors!");
 		Error=false;
+		
 		return "/leagues/TeamList";
 	}
 }
