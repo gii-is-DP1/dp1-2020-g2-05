@@ -93,13 +93,23 @@ public class MessageController {
 	@GetMapping(path="/messages/new")
 	public String crearMensaje(ModelMap model) {
 		Message message = new Message();
-		
+		message.setUsernamesend(userService.getUserSession());
+		message.setVisto(0);
 		model.put("messagee", message);		
 		model.put("usersend", userService.getUserSession());		
-
+		
 		return "messages/messagesEdit";
 	}
 	
+	@GetMapping(path="/messages/new/{username}")
+	public String crearMensajePredefinido(@PathVariable("username") String username,ModelMap model) {
+		Message message = new Message();
+		message.setUsernamesend(userService.getUserSession());
+		message.setUsernamereceive(userService.findUser(username).get());
+		message.setVisto(0);
+		model.put("messagee", message);		
+		return "messages/messagesEdit";
+	}
 
 	
 	
@@ -113,8 +123,23 @@ public class MessageController {
 			return "messages/messagesEdit";
 		}
 		else {
-			message.setVisto(0); 
-			message.setUsernamesend(userService.getUserSession());
+			this.messageService.saveMessage(message);
+			
+			return "redirect:/messages/";
+		}
+	}
+	
+	@PostMapping(value = "/messages/new/{username}")
+	public String processCreationFormPredefinido(@Valid Message message, BindingResult result,ModelMap model) {
+		
+		if (result.hasErrors()) {
+			model.put("messagee", message);		
+			model.put("usersend", userService.getUserSession());		
+
+			return "messages/messagesEdit";
+		}
+		else {
+
 			this.messageService.saveMessage(message);
 			
 			return "redirect:/messages/";

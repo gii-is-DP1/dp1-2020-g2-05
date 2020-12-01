@@ -15,4 +15,6 @@ public interface UserRepository extends  CrudRepository<User, String>{
 	public Collection<User> findFriendByUser(@Param("username") String username);
 	
 
+	
+
 }
