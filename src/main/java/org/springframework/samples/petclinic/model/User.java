@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.model;
 
+import java.util.List;
 import java.util.Set;
 
 
@@ -55,7 +56,7 @@ public class User{
 	@ManyToMany
 	@JoinTable(name="friends", joinColumns={@JoinColumn(name="userqueagrega")}, inverseJoinColumns={@JoinColumn(name="useragregado")})
 
-	private Set<User> friends;
+	private List<User> friends;
 	
 	@Override
 	public String toString() {
