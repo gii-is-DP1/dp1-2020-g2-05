@@ -10,9 +10,6 @@
 
 
 	
-	 <h2>
-        <c:if test="${messageNewLiga=true}">Before creating or joining a league, you have to create a team which belongs to this league! </c:if> 
-    </h2>
 	
     <h2>
         <c:if test="${team['new']}">New </c:if> Team
