@@ -15,20 +15,24 @@ UserRepository.java * Copyright 2002-2013 the original author or authors.
  */
 package org.springframework.samples.petclinic.service;
 
+import java.io.IOException;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.GranPremio;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
 import org.springframework.samples.petclinic.model.Pilot;
-
+import org.springframework.samples.petclinic.model.Result;
 import org.springframework.samples.petclinic.model.Vet;
 import org.springframework.samples.petclinic.model.Visit;
 import org.springframework.samples.petclinic.repository.OwnerRepository;
@@ -40,6 +44,11 @@ import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNam
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+
+import motogpAPI.Category;
+import motogpAPI.PeticionesGet;
+import motogpAPI.Session;
+import motogpAPI.model.InfoCarrera;
 
 /**
  * Mostly used as a facade for all Petclinic controllers Also a placeholder
@@ -84,7 +93,35 @@ public class PilotService {
 
 	}
 
-//	
+	public void poblarBD() throws JSONException, IOException {
+		 
+	    List<InfoCarrera> infoCarrera = PeticionesGet.getResultsByRaceNumberCampu(Category.Moto3, 2019, 1, Session.RACE);
+		GranPremio gp = new GranPremio();
+		HashSet<Result> setResult = new HashSet<Result>();
+		for(int i=0;i<infoCarrera.size();i++) {
+			InfoCarrera infoCarrerafor = infoCarrera.get(i);				
+			gp.setCircuit(infoCarrerafor.getNombreEvento());
+			gp.setSite(infoCarrerafor.getNombreEvento());
+			
+			Pilot pilot = new Pilot();
+			pilot.setName(infoCarrerafor.getPiloto().split(" ")[0]);
+			pilot.setLastName(infoCarrerafor.getPiloto().split(" ")[1]);
+			pilot.setDorsal(infoCarrerafor.getNumeros().toString());
+			pilot.setNationality(infoCarrerafor.getPais());
+
+			pilot.setCategory("Moto3");
+			Result result = new Result();
+			result.setPilot(pilot);
+			result.setPosition(infoCarrerafor.getPosicion());
+			result.setGp(gp);
+			setResult.add(result);
+			this.pilotRepository.save(pilot);
+			
+
+		}
+		gp.setResults(setResult);
+	}
+	
 //	@Autowired
 //	private UserService userService;
 //	
