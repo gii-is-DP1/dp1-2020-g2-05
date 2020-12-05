@@ -80,8 +80,7 @@ public class LeagueController {
 
 		 String sb="";
 		 Random random = new Random();
-		
-
+		 
 	    for(int i = 0; i < longitud; i++) {
 
 	      int index = random.nextInt(alphabet.length());
@@ -266,12 +265,13 @@ public class LeagueController {
 		
 		Optional<League> liga = this.leagueService.findLeagueByLeagueCode(league.getLeagueCode().trim());
 				
-		Integer numTeamsLeague = leagueService.findTeamsByLeagueId(liga.get().getId());
 		
 		if(!liga.isPresent()) {
 			noLeagueFound=true;
 			return "redirect:/leagues/join";
 		}
+		
+		Integer numTeamsLeague = leagueService.findTeamsByLeagueId(liga.get().getId());
 		
 		if(idLeague.contains(liga.get().getId())) {
 			

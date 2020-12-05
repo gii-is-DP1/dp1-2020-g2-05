@@ -1,11 +1,13 @@
 package org.springframework.samples.petclinic.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 
 @Entity
@@ -13,19 +15,19 @@ import javax.validation.constraints.NotEmpty;
 public class Result extends BaseEntity {
 	
 	@Column(name = "position")
-	@NotEmpty
+	@NotNull
 	private Integer position;
 
 
 	@Column(name = "pole")
-	@NotEmpty
+	@NotNull
 	private Boolean pole; //0-> false , 1-> true
 	
 	@Column(name = "lap")
-	@NotEmpty
+	@NotNull
 	private Boolean lap; //0-> false , 1-> true
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "pilot_id")
 	private Pilot pilot;
 	

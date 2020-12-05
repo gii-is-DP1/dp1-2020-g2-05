@@ -64,7 +64,11 @@ public class PilotService {
 	private PilotRepository pilotRepository;
 
 	@Autowired
-	private UserService userService;
+	private GranPremioService gpService;
+	
+
+	@Autowired
+	private ResultService resultService;
 
 	@Autowired
 	private AuthoritiesService authoritiesService;
@@ -101,6 +105,12 @@ public class PilotService {
 			for(int j=0;j<18;j++) {
 				GranPremio gp = new GranPremio(); //entidad de una carrera
 				List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceNumberCampu(categoria, i, j, Session.RACE);
+				gp.setSite(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
+				gp.setCircuit(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
+				gp.setDate0(Integer.toString(i));
+				gp.setRaceCode("hayQueHacerloBien");
+				this.gpService.saveGP(gp);
+				
 				for(int k=0;k<todosLosResultadosDeUnaCarrera.size();k++) {
 					InfoCarrera resultado_k = todosLosResultadosDeUnaCarrera.get(k);
 					gp.setCircuit(resultado_k.getNombreEvento());
@@ -122,10 +132,19 @@ public class PilotService {
 					
 					pilot.setCategory(categoria.toString());
 					Result result = new Result();
-					result.setPilot(pilot);
+					
+					if(this.countByName(pilot.getLastName(), pilot.getName())!=0) {
+						result.setPilot(this.pilotRepository.findByName(pilot.getLastName(), pilot.getName()).get());
+
+					}else {
+						result.setPilot(pilot);
+
+					}
 					result.setPosition(resultado_k.getPosicion());
 					result.setGp(gp);
-					
+					result.setLap(false);
+					result.setPole(false);
+					this.resultService.saveResult(result);
 					this.savePilot(pilot);
 				}
 				
@@ -157,16 +176,21 @@ public class PilotService {
 //
 	@Transactional
 	public void savePilot(Pilot pilot) throws DataAccessException {
-		if(this.findByName(pilot.getLastName(), pilot.getName())==0) {
+		if(this.countByName(pilot.getLastName(), pilot.getName())==0) {
 			pilotRepository.save(pilot);
 		}
 		
 	}
 	
 	
-	public Integer findByName(String lastName,String name) {
+	public Optional<Pilot> findByName(String lastName,String name) {
 		return this.pilotRepository.findByName(lastName, name);
 	}
+	
+	public Integer countByName(String lastName,String name) {
+		return this.pilotRepository.countByName(lastName, name);
+	}
+
 
 	
 	
