@@ -75,8 +75,12 @@ public interface PilotRepository extends CrudRepository<Pilot, Integer> {
 //	public Pilot findById(@Param("id")int id);
 
 	@Query("SELECT COUNT(pilot) FROM Pilot pilot WHERE pilot.name LIKE :name AND pilot.lastName LIKE :lastName")
+	public Integer countByName(@Param("lastName")String lastName,@Param("name")String name);
+	
+	
 
-	public Integer findByName(@Param("lastName")String lastName,@Param("name")String name);
+	@Query("SELECT pilot FROM Pilot pilot WHERE pilot.name LIKE :name AND pilot.lastName LIKE :lastName")
+	public Optional<Pilot> findByName(@Param("lastName")String lastName,@Param("name")String name);
 
 	
 	/**
