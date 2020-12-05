@@ -103,7 +103,7 @@ public class LeagueController {
 	@GetMapping("/leagues")
 	public String leagues(ModelMap modelMap) throws JSONException, IOException {
 		AUTHORITY = this.leagueService.findAuthoritiesByUsername(this.userService.getUserSession().getUsername());
-		pilotService.poblarBD(2015,2017,Category.Moto3);
+//		pilotService.poblarBD(2015,2017,Category.Moto3);
 //		pilotService.poblarBD(2015,2017,Category.Moto2);
 //		pilotService.poblarBD(2015,2017,Category.MotoGP);
 
