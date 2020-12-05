@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -11,6 +12,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.samples.petclinic.model.Authorities;
 import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Team;
@@ -65,9 +67,19 @@ public class LeagueService {
 	public Collection<Integer> findTeamsByUsername(String username) throws DataAccessException {
 		return leagueRepository.findTeamsByUsername(username);
 	}
+	
+	public Integer findTeamsByLeagueId(Integer id) throws DataAccessException {
+		return leagueRepository.findTeamsByLeagueId(id);
+	}
+	
 	public Optional<User> findUserByUsername(String username) throws DataAccessException {
 		return leagueRepository.findUserByUsername(username);
 	}
+	
+	public String findAuthoritiesByUsername(String username) throws DataAccessException {
+		return leagueRepository.findAuthoritiesByUsername(username);
+	}
+	
 	public Integer findLeaguesByUsername(String username) throws DataAccessException {
 		return leagueRepository.findLeaguesByUsername(username);
 	}

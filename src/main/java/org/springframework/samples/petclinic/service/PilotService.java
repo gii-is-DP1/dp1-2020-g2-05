@@ -15,20 +15,25 @@ UserRepository.java * Copyright 2002-2013 the original author or authors.
  */
 package org.springframework.samples.petclinic.service;
 
+import java.io.IOException;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.repository.query.Param;
+import org.springframework.samples.petclinic.model.GranPremio;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
 import org.springframework.samples.petclinic.model.Pilot;
-
+import org.springframework.samples.petclinic.model.Result;
 import org.springframework.samples.petclinic.model.Vet;
 import org.springframework.samples.petclinic.model.Visit;
 import org.springframework.samples.petclinic.repository.OwnerRepository;
@@ -40,6 +45,11 @@ import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNam
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+
+import motogpAPI.Category;
+import motogpAPI.PeticionesGet;
+import motogpAPI.Session;
+import motogpAPI.model.InfoCarrera;
 
 /**
  * Mostly used as a facade for all Petclinic controllers Also a placeholder
@@ -84,7 +94,46 @@ public class PilotService {
 
 	}
 
-//	
+	public void poblarBD(Integer anyo_inicio,Integer anyo_final,Category categoria) throws JSONException, IOException {
+
+		for(int i=anyo_inicio;i<anyo_final;i++) {
+
+			for(int j=0;j<18;j++) {
+				GranPremio gp = new GranPremio(); //entidad de una carrera
+				List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceNumberCampu(categoria, i, j, Session.RACE);
+				for(int k=0;k<todosLosResultadosDeUnaCarrera.size();k++) {
+					InfoCarrera resultado_k = todosLosResultadosDeUnaCarrera.get(k);
+					gp.setCircuit(resultado_k.getNombreEvento());
+					gp.setSite(resultado_k.getNombreEvento());
+					
+					Pilot pilot = new Pilot();
+					pilot.setName(resultado_k.getPiloto().split(" ")[0]);
+					pilot.setLastName(resultado_k.getPiloto().split(" ")[1]);
+					pilot.setDorsal(resultado_k.getNumeros().toString());
+
+					if(resultado_k.getPais().isEmpty()) {
+						pilot.setNationality("Andorra");
+
+					}else {
+						pilot.setNationality(resultado_k.getPais());
+
+					}
+				
+					
+					pilot.setCategory(categoria.toString());
+					Result result = new Result();
+					result.setPilot(pilot);
+					result.setPosition(resultado_k.getPosicion());
+					result.setGp(gp);
+					
+					this.savePilot(pilot);
+				}
+				
+				
+			}			
+		}
+	}
+	
 //	@Autowired
 //	private UserService userService;
 //	
@@ -108,9 +157,20 @@ public class PilotService {
 //
 	@Transactional
 	public void savePilot(Pilot pilot) throws DataAccessException {
-
-		pilotRepository.save(pilot);
+		if(this.findByName(pilot.getLastName(), pilot.getName())==0) {
+			pilotRepository.save(pilot);
+		}
+		
 	}
+	
+	
+	public Integer findByName(String lastName,String name) {
+		return this.pilotRepository.findByName(lastName, name);
+	}
+
+	
+	
+	
 //	
 //	@Transactional(readOnly = true)	
 //	public Collection<Pilot> findPilots() throws DataAccessException {
