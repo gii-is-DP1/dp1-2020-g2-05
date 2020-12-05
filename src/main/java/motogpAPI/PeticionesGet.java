@@ -34,47 +34,64 @@ public class PeticionesGet {
 		JSONObject result = new JSONObject();
 		JSONObject result2= new JSONObject();
 
-		String url;
-		if (category == Category.MotoGP)
-			url = URL_JSON_SEASONS + year + "-" + category.toString().toLowerCase() + "/standings/drivers";
-		else
-			url = URL_JSON_SEASONS + category.toString().toLowerCase() + "-" + year + "/standings/drivers";
-
-		String refer = URL + "series/" + category.toString().toLowerCase();
-		result = new JSONObject(JsonReader.readJsonFromUrl(url, refer, URL));//.getJSONArray("standings");
-
-		System.out.println("url: " + url);
-		System.out.println("refer: " + refer);
-		System.out.println("URL (origin): " + URL);
-		
-		Example example = new ObjectMapper().readValue(result.toString(),Example.class);
-		
-
-		List<String> idCarreras = new ArrayList<String>();
-		for(int i=0;i<example.getRaces().size();i++) {
-			idCarreras.add(example.getRaces().get(i).getSession().getUuid());
-			
-		}
-		String urlId = "https://mssproxy.motorsportstats.com/web/3.0.0/sessions/"+idCarreras.get(raceNumber) +"/classification";
-		
-		result2 = new JSONObject(JsonReader.readJsonFromUrl(urlId, refer, URL));
-		
-		Example2 example2 = new ObjectMapper().readValue(result2.toString(),Example2.class);
-		
-		String nombreEvento = example2.getEvent().getName();
 		List<InfoCarrera> listaCarrera = new ArrayList<InfoCarrera>();
-		for(int i=0;i<example2.getDetails().size();i++) {
+
+		try {
+			String url;
+			if (category == Category.MotoGP)
+				url = URL_JSON_SEASONS + year + "-" + category.toString().toLowerCase() + "/standings/drivers";
+			else
+				url = URL_JSON_SEASONS + category.toString().toLowerCase() + "-" + year + "/standings/drivers";
+
+			String refer = URL + "series/" + category.toString().toLowerCase();
+			result = new JSONObject(JsonReader.readJsonFromUrl(url, refer, URL));//.getJSONArray("standings");
+
+			System.out.println("url: " + url);
+			System.out.println("refer: " + refer);
+			System.out.println("URL (origin): " + URL);
 			
-			Integer posicion = example2.getDetails().get(i).getFinishPosition();
-			Integer numero = Integer.parseInt(example2.getDetails().get(i).getCarNumber());
-			String piloto = example2.getDetails().get(i).getDrivers().get(0).getName();
-			String pais = example2.getDetails().get(i).getNationality().getName();
-			String equipo = example2.getDetails().get(i).getTeam().getName();
-			Double kmh = example2.getDetails().get(i).getAvgLapSpeed();
-			Integer vueltaMasRapidaPole =example2.getDetails().get(i).getBestLap().getTime();
-			InfoCarrera n = new InfoCarrera(nombreEvento, posicion,calculaPuntos(posicion), numero, piloto, pais, equipo, kmh, vueltaMasRapidaPole);
-			listaCarrera.add(n);
+			Example example = new ObjectMapper().readValue(result.toString(),Example.class);
+			
+
+			List<String> idCarreras = new ArrayList<String>();
+			for(int i=0;i<example.getRaces().size();i++) {
+				idCarreras.add(example.getRaces().get(i).getSession().getUuid());
+				
 			}
+			String urlId = "https://mssproxy.motorsportstats.com/web/3.0.0/sessions/"+idCarreras.get(raceNumber) +"/classification";
+			
+			result2 = new JSONObject(JsonReader.readJsonFromUrl(urlId, refer, URL));
+			
+			Example2 example2 = new ObjectMapper().readValue(result2.toString(),Example2.class);
+			
+			String nombreEvento = example2.getEvent().getName();
+//			List<InfoCarrera> listaCarrera = new ArrayList<InfoCarrera>();
+			for(int i=0;i<example2.getDetails().size();i++) {
+				
+				Integer posicion = example2.getDetails().get(i).getFinishPosition();
+				Integer numero = Integer.parseInt(example2.getDetails().get(i).getCarNumber());
+				String piloto = example2.getDetails().get(i).getDrivers().get(0).getName();
+				String pais ="";
+				try {
+					 pais += example2.getDetails().get(i).getNationality().getName();
+
+				}catch (Exception e) {
+					
+				}
+		
+				
+				String equipo = example2.getDetails().get(i).getTeam().getName();
+				Double kmh = example2.getDetails().get(i).getAvgLapSpeed();
+				Integer vueltaMasRapidaPole =example2.getDetails().get(i).getBestLap().getTime();
+				InfoCarrera n = new InfoCarrera(nombreEvento, posicion,calculaPuntos(posicion), numero, piloto, pais, equipo, kmh, vueltaMasRapidaPole);
+				listaCarrera.add(n);
+				}
+			
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		
 		return listaCarrera;
 	}
 	

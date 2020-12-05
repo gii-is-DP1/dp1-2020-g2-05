@@ -104,7 +104,9 @@ public class LeagueController {
 	@GetMapping("/leagues")
 	public String leagues(ModelMap modelMap) throws JSONException, IOException {
 		AUTHORITY = this.leagueService.findAuthoritiesByUsername(this.userService.getUserSession().getUsername());
-		pilotService.poblarBD();
+		pilotService.poblarBD(2015,2017,Category.Moto3);
+//		pilotService.poblarBD(2015,2017,Category.Moto2);
+//		pilotService.poblarBD(2015,2017,Category.MotoGP);
 
 		Iterable<League> leagues = leagueService.findAll() ;
 		List<League> result = new ArrayList<League>();
@@ -121,11 +123,8 @@ public class LeagueController {
 	    
 	    if(AUTHORITY.equals("admin")) {
 		modelMap.addAttribute("admin", true);
-		System.out.println("ASI ES");
 	    }else if(AUTHORITY.equals("user")) {
 		modelMap.addAttribute("user", true);	
-		System.out.println("ASI ES 2");
-
 	    }
 	    
 		modelMap.addAttribute("ligas", leagueService.findAll());
