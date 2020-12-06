@@ -50,6 +50,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import lombok.extern.java.Log;
 import motogpAPI.Category;
 import motogpAPI.PeticionesGet;
+import motogpAPI.RaceCode;
 import motogpAPI.Session;
 import motogpAPI.model.InfoCarrera;
 
@@ -103,9 +104,10 @@ public class LeagueController {
 	@GetMapping("/leagues")
 	public String leagues(ModelMap modelMap) throws JSONException, IOException {
 		AUTHORITY = this.leagueService.findAuthoritiesByUsername(this.userService.getUserSession().getUsername());
-//		pilotService.poblarBD(2015,2017,Category.Moto3);
+//     	pilotService.poblarBD(2015,2017,Category.Moto3);
 //		pilotService.poblarBD(2015,2017,Category.Moto2);
 //		pilotService.poblarBD(2015,2017,Category.MotoGP);
+//		pilotService.poblarBDCarreraACarrera(Category.MotoGP, 2016, RaceCode.AUT, Session.RACE); //este se usaria para ir poblando a medida que se vayan corriendo carreras
 
 		Iterable<League> leagues = leagueService.findAll() ;
 		List<League> result = new ArrayList<League>();
