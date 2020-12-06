@@ -33,11 +33,17 @@ public class LeagueService {
 	private LeagueRepository leagueRepository;
 	private TeamRepository teamRepository;
 	private UserService userService;
+	private PilotService pilotService;
+	private RecruitService recruitService;
 
 	@Autowired
-	public LeagueService(LeagueRepository leagueRepository, TeamRepository teamRepository) {
+	public LeagueService(LeagueRepository leagueRepository, TeamRepository teamRepository,
+			UserService userService, PilotService pilotService, RecruitService recruitService) {
 		this.leagueRepository = leagueRepository;
 		this.teamRepository = teamRepository;
+		this.userService = userService;
+		this.pilotService = pilotService;
+		this.recruitService = recruitService;
 	}
 	
 //	@Autowired
@@ -161,15 +167,34 @@ public class LeagueService {
 			System.out.println("hhhh");
 		}
 		
+	}
+
+	@Transactional
+	public void saveSystemTeam(League league) {
+		Team sysTeam = new Team();
+		sysTeam.setName("Sistema");
+		sysTeam.setLeague(league);
+		sysTeam.setMoney("0");
+		sysTeam.setPoints("0");
+		sysTeam.setUser(userService.findUser("admin1").get());
+		teamRepository.save(sysTeam);
+		
+		//Fichamos a todos los pilotos con la escudería sistema
+		Iterable<Pilot> pilots = pilotService.findAll();
+		List<Pilot> listPilots = new ArrayList<Pilot>();
+		pilots.forEach(listPilots::add);
+		for (int i=0;i<listPilots.size();i++) {
+			recruitService.saveRecruit(listPilots.get(i),sysTeam);
 		}
+		
+		//Ponemos en oferta a todos los pilotos de la categoría actual con la escudería sistema(Por hacer)
+		//(Por hacer)
+	}
 
 	public void delete(Team team) {
 		teamRepository.delete(team);
 	}
 
-
-
-	
 	public List<Team> findTeamByUsername(String username){
 		return teamRepository.findTeamByUsername(username );
 	}

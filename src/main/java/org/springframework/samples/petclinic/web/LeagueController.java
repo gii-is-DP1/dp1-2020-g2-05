@@ -235,8 +235,8 @@ public class LeagueController {
 	        			model.put("message",results.getAllErrors());
 	                    return "/leagues/createLeagueName";
 					}
-				
-			
+				 
+				 leagueService.saveSystemTeam(league);
 			  
 
 				 return "redirect:/leagues/"+league.getId()+"/teams/new";	
