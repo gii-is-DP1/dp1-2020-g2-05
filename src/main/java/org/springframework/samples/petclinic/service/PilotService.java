@@ -48,6 +48,7 @@ import org.springframework.util.StringUtils;
 
 import motogpAPI.Category;
 import motogpAPI.PeticionesGet;
+import motogpAPI.RaceCode;
 import motogpAPI.Session;
 import motogpAPI.model.InfoCarrera;
 
@@ -105,53 +106,119 @@ public class PilotService {
 			for(int j=0;j<18;j++) {
 				GranPremio gp = new GranPremio(); //entidad de una carrera
 				List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceNumberCampu(categoria, i, j, Session.RACE);
-				gp.setSite(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
-				gp.setCircuit(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
-				gp.setDate0(Integer.toString(i));
-				gp.setRaceCode("hayQueHacerloBien");
-				this.gpService.saveGP(gp);
-				
-				for(int k=0;k<todosLosResultadosDeUnaCarrera.size();k++) {
-					InfoCarrera resultado_k = todosLosResultadosDeUnaCarrera.get(k);
-					gp.setCircuit(resultado_k.getNombreEvento());
-					gp.setSite(resultado_k.getNombreEvento());
+				if(todosLosResultadosDeUnaCarrera.size()==0) {
 					
-					Pilot pilot = new Pilot();
-					pilot.setName(resultado_k.getPiloto().split(" ")[0]);
-					pilot.setLastName(resultado_k.getPiloto().split(" ")[1]);
-					pilot.setDorsal(resultado_k.getNumeros().toString());
+				}else {
+					gp.setSite(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
+					gp.setCircuit(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
+					gp.setDate0(todosLosResultadosDeUnaCarrera.get(0).getFecha());
+					gp.setRaceCode(todosLosResultadosDeUnaCarrera.get(0).getRaceCode());
+					this.gpService.saveGP(gp);
+					 
+					for(int k=0;k<todosLosResultadosDeUnaCarrera.size();k++) {
+						InfoCarrera resultado_k = todosLosResultadosDeUnaCarrera.get(k);
+						gp.setCircuit(resultado_k.getLugar());
+						gp.setSite(resultado_k.getNombreEvento());
+						
+						Pilot pilot = new Pilot();
+						pilot.setName(resultado_k.getPiloto().split(" ")[0]);
+						pilot.setLastName(resultado_k.getPiloto().split(" ")[1]);
+						pilot.setDorsal(resultado_k.getNumeros().toString());
 
-					if(resultado_k.getPais().isEmpty()) {
-						pilot.setNationality("Andorra");
+						if(resultado_k.getPais().isEmpty()) {
+							pilot.setNationality("Andorra");
 
-					}else {
-						pilot.setNationality(resultado_k.getPais());
+						}else {
+							pilot.setNationality(resultado_k.getPais());
 
+						}
+					
+						
+						pilot.setCategory(categoria.toString());
+						Result result = new Result();
+						
+						if(this.countByName(pilot.getLastName(), pilot.getName())!=0) {
+							result.setPilot(this.pilotRepository.findByName(pilot.getLastName(), pilot.getName()).get());
+
+						}else {
+							result.setPilot(pilot);
+
+						}
+						result.setPosition(resultado_k.getPosicion());
+						result.setGp(gp);
+						result.setLap(false);
+						result.setPole(false);
+						this.resultService.saveResult(result);
+						this.savePilot(pilot);
 					}
-				
 					
-					pilot.setCategory(categoria.toString());
-					Result result = new Result();
-					
-					if(this.countByName(pilot.getLastName(), pilot.getName())!=0) {
-						result.setPilot(this.pilotRepository.findByName(pilot.getLastName(), pilot.getName()).get());
-
-					}else {
-						result.setPilot(pilot);
-
-					}
-					result.setPosition(resultado_k.getPosicion());
-					result.setGp(gp);
-					result.setLap(false);
-					result.setPole(false);
-					this.resultService.saveResult(result);
-					this.savePilot(pilot);
 				}
+				
 				
 				
 			}			
 		}
 	}
+	
+//	2016, RaceCode.AUT, Session.RACE
+	public void poblarBDCarreraACarrera(Category category,Integer year,RaceCode raceCode,Session session) throws JSONException, IOException {
+
+
+				GranPremio gp = new GranPremio(); //entidad de una carrera
+				List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceCodeCampu(category,year,raceCode, session);
+				if(todosLosResultadosDeUnaCarrera.size()==0) {
+					
+				}else {
+					gp.setSite(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
+					gp.setCircuit(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
+					gp.setDate0(todosLosResultadosDeUnaCarrera.get(0).getFecha());
+					gp.setRaceCode(todosLosResultadosDeUnaCarrera.get(0).getRaceCode());
+					this.gpService.saveGP(gp);
+					 
+					for(int k=0;k<todosLosResultadosDeUnaCarrera.size();k++) {
+						InfoCarrera resultado_k = todosLosResultadosDeUnaCarrera.get(k);
+						gp.setCircuit(resultado_k.getLugar());
+						gp.setSite(resultado_k.getNombreEvento());
+						
+						Pilot pilot = new Pilot();
+						pilot.setName(resultado_k.getPiloto().split(" ")[0]);
+						pilot.setLastName(resultado_k.getPiloto().split(" ")[1]);
+						pilot.setDorsal(resultado_k.getNumeros().toString());
+
+						if(resultado_k.getPais().isEmpty()) {
+							pilot.setNationality("Andorra");
+
+						}else {
+							pilot.setNationality(resultado_k.getPais());
+
+						}
+					
+						
+						pilot.setCategory(resultado_k.getCategory().toString());
+						Result result = new Result();
+						
+						if(this.countByName(pilot.getLastName(), pilot.getName())!=0) {
+							result.setPilot(this.pilotRepository.findByName(pilot.getLastName(), pilot.getName()).get());
+
+						}else {
+							result.setPilot(pilot);
+
+						}
+						result.setPosition(resultado_k.getPosicion());
+						result.setGp(gp);
+						result.setLap(false);
+						result.setPole(false);
+						this.resultService.saveResult(result);
+						this.savePilot(pilot);
+					}
+					
+				}
+				
+				
+				
+			}			
+		
+	
 	
 //	@Autowired
 //	private UserService userService;
