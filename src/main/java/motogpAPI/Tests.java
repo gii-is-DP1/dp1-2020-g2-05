@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.hibernate.internal.build.AllowSysOut;
@@ -46,13 +47,15 @@ public class Tests {
 			Record prueba = PeticionesGet.obtieneRecords("2012", Pais.SPA, Category.Moto2);
 
 			
-
+			TreeSet<Pilot> pilotos = new TreeSet<Pilot>();
+			TreeSet<Result> results = new TreeSet<Result>();
+			
 	
 			for(int i=2015;i<2019;i++) {
 
 				for(int j=0;j<18;j++) {
 					GranPremio gp = new GranPremio(); //entidad de una carrera
-					List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceNumberCampu(Category.Moto3, i, j, Session.RACE);
+					List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceNumberCampu(Category.MotoGP, i, j, Session.RACE);
 					
 					for(int k=0;k<todosLosResultadosDeUnaCarrera.size();k++) {
 						InfoCarrera resultado_k = todosLosResultadosDeUnaCarrera.get(k);
@@ -64,16 +67,20 @@ public class Tests {
 						pilot.setLastName(resultado_k.getPiloto().split(" ")[1]);
 						pilot.setDorsal(resultado_k.getNumeros().toString());
 						pilot.setNationality(resultado_k.getPais());
-						pilot.setCategory("MOTO 3");
+						pilot.setCategory("MOTOGP");
 						Result result = new Result();
 						result.setPilot(pilot);
 						result.setPosition(resultado_k.getPosicion());
 						result.setGp(gp);
+						pilotos.add(pilot);
+						results.add(result);
 					}
 					
 					
 				}			
 			}
+			for (Pilot p:pilotos) System.out.println(p);
+			for (Result r:results) System.out.println(r);
 
 			
 			
