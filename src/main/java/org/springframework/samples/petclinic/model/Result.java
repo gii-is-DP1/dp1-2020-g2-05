@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "results")
-public class Result extends BaseEntity {
+public class Result extends BaseEntity implements Comparable<Result> {
 	
 	@Column(name = "position")
 	@NotNull
@@ -78,8 +78,18 @@ public class Result extends BaseEntity {
 
 	@Override
 	public String toString() {
-		return "[Position=" + position + ", Pole=" + pole +  ", Location=" + gp.getSite() + "]";
+		return "[Position=" + position +  ", Location=" + gp.getSite() + ", Rider=" + pilot.getName() + " " + pilot.getLastName()  + ", Pole=" + pole + "]";
 	}
 
+	@Override
+	public int compareTo(Result o) {
+		if (!(gp==null) && !(gp.getDate0()==null) && !this.gp.getDate0().equalsIgnoreCase(o.gp.getDate0()))
+			return this.gp.getDate0().compareTo(o.gp.getDate0());
+		if (!(gp==null) && !(gp.getSite()==null) && !this.gp.getSite().equalsIgnoreCase(o.gp.getSite()))
+			return this.gp.getSite().compareTo(o.gp.getSite());
+		if (!this.position.equals(o.position))
+			return this.position.compareTo(o.position);
+		return this.pilot.compareTo(o.pilot);
+	}
 	
 }
