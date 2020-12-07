@@ -17,9 +17,11 @@
      <form:form modelAttribute="FormRellenarBD" class="form-horizontal" id="add-pilot-form" actions="/"  > 
         <div class="form-group has-feedback">
        	
-            <petclinic:inputField label="anyoInicial" name="anyoInicial"/>
-            <petclinic:inputField label="anyoFinal" name="anyoFinal"/>
-            <petclinic:inputField label="Category" name="Category"/>
+            <petclinic:inputField label="Año Inicial" name="anyoInicial"/>
+            <petclinic:inputField label="Año Final" name="anyoFinal"/>               
+            <div class="control-group">
+				<petclinic:selectField name="Category" label="Categoria" names="${listaCategoria}" size="3" />
+			</div>
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
@@ -27,9 +29,7 @@
                     <c:when test="${FormRellenarBD['new']}">
                         <button class="btn btn-default" type="submit">Poblar</button>
                     </c:when>
-                    <c:otherwise>
-                        <button class="btn btn-default" type="submit">Update Teams</button>
-                    </c:otherwise>
+                 
                 </c:choose>
             </div>
         </div>

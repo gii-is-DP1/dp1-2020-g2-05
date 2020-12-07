@@ -7,6 +7,8 @@ import javax.validation.constraints.NotEmpty;
 
 import com.sun.istack.NotNull;
 
+import motogpAPI.Category;
+
 
 @Entity
 @Table(name = "FormRellenarBD")
@@ -27,7 +29,7 @@ public class FormRellenarBD extends BaseEntity {
 	@Column(name = "Category")
 	@NotEmpty
 	@NotNull
-	private motogpAPI.Category Category;
+	private Category Category;
 
 	public Integer getAnyoInicial() {
 		return anyoInicial;
@@ -45,12 +47,12 @@ public class FormRellenarBD extends BaseEntity {
 		this.anyoFinal = anyoFinal;
 	}
 
-	public motogpAPI.Category getCategory() {
+	public Category getCategory() {
 		return Category;
 	}
 
-	public void setCategory(motogpAPI.Category category) {
-		Category = category;
+	public void setCategory(motogpAPI.Category categoria) {
+		Category = categoria;
 	}
 	
 	@Override
