@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.repository.query.Param;
+import org.springframework.samples.petclinic.model.FormRellenarBD;
 import org.springframework.samples.petclinic.model.GranPremio;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
@@ -98,14 +99,23 @@ public class PilotService {
 		pilotRepository.delete(pilotId);
 
 	}
+	
+//	public void prueba() throws JSONException, IOException{
+//		FormRellenarBD form = new FormRellenarBD();
+//		
+//		form.setAnyoFinal(2019);
+//		form.setAnyoFinal(2018);
+//		form.setCategory(Category.Moto3);
+//		
+//	}
 
-	public void poblarBD(Integer anyo_inicio,Integer anyo_final,Category categoria) throws JSONException, IOException {
+	public void poblarBD(FormRellenarBD form) throws JSONException, IOException {
 
-		for(int i=anyo_inicio;i<anyo_final;i++) {
+		for(int i=form.getAnyoInicial();i<form.getAnyoFinal();i++) {
 
 			for(int j=0;j<18;j++) {
 				GranPremio gp = new GranPremio(); //entidad de una carrera
-				List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceNumberCampu(categoria, i, j, Session.RACE);
+				List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceNumberCampu(form.getCategory(), i, j, Session.RACE);
 				if(todosLosResultadosDeUnaCarrera.size()==0) {
 					
 				}else {
@@ -134,7 +144,7 @@ public class PilotService {
 						}
 					
 						
-						pilot.setCategory(categoria.toString());
+						pilot.setCategory(form.getCategory().toString());
 						Result result = new Result();
 						
 						if(this.countByName(pilot.getLastName(), pilot.getName())!=0) {

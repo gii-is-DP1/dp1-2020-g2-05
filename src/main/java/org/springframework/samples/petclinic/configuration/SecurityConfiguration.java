@@ -53,6 +53,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/myLeagues/**").permitAll()
 				.antMatchers("/leagues/teams").permitAll()
 				.antMatchers("/myTeams/**").permitAll()
+				.antMatchers("/BD/**").permitAll()
 				.anyRequest().denyAll()
 				.and()
 				 	.formLogin()
