@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.repository.query.Param;
+import org.springframework.samples.petclinic.model.BDCarrera;
 import org.springframework.samples.petclinic.model.FormRellenarBD;
 import org.springframework.samples.petclinic.model.GranPremio;
 import org.springframework.samples.petclinic.model.Owner;
@@ -171,11 +172,11 @@ public class PilotService {
 	}
 	
 //	2016, RaceCode.AUT, Session.RACE
-	public void poblarBDCarreraACarrera(Category category,Integer year,RaceCode raceCode,Session session) throws JSONException, IOException {
+	public void poblarBDCarreraACarrera(BDCarrera form) throws JSONException, IOException {
 
 
 				GranPremio gp = new GranPremio(); //entidad de una carrera
-				List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceCodeCampu(category,year,raceCode, session);
+				List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceCodeCampu(form.getCategory(), form.getYear(), form.getRacecode(), form.getSession());
 				if(todosLosResultadosDeUnaCarrera.size()==0) {
 					
 				}else {

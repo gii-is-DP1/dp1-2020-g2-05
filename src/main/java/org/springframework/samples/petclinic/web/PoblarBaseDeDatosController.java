@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.model.BDCarrera;
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.FormRellenarBD;
 import org.springframework.samples.petclinic.model.Team;
@@ -77,6 +78,59 @@ public class PoblarBaseDeDatosController {
 		
 		
 	}
+	
+	
+	@GetMapping(path="/BD/carrerasBD")
+	public String PoblarBDCarreras(ModelMap model) {
+		model.addAttribute("BDCarrera", new BDCarrera());	
+		motogpAPI.Category[] yourEnums = motogpAPI.Category.values();
+		List<motogpAPI.Category> num = new ArrayList<>();
+		
+		for(int i = 0; i<yourEnums.length; i++) {
+			num.add(yourEnums[i]);
+		}
+		
+		motogpAPI.RaceCode[] enums = motogpAPI.RaceCode.values();
+		List<motogpAPI.RaceCode> num1 = new ArrayList<>();
+		
+		for(int i = 0; i<enums.length; i++) {
+			num1.add(enums[i]);
+		}
+		
+		motogpAPI.Session[] enums2 = motogpAPI.Session.values();
+		List<motogpAPI.Session> num2 = new ArrayList<>();
+		
+		for(int i = 0; i<enums2.length; i++) {
+			num2.add(enums2[i]);
+		}
+		model.addAttribute("listaCategoria", num);
+		model.addAttribute("listaRacecode", num1);
+		model.addAttribute("listaSession", num2);
+
+	  return "/BD/BDCarrera";
+	}
+	
+	@PostMapping(path = "/BD/carrerasBD")	
+	public String PoblarBDcarrera( BDCarrera form, BindingResult result, ModelMap model) throws JSONException, IOException {
+		System.out.println(result);
+
+		if(result.hasErrors()) {
+			System.out.println(result);
+			model.put("BDCarrera", form);
+			model.put("message",result.getAllErrors());
+			return "/BD/BD";
+		}else {
+			
+			this.pilotService.poblarBDCarreraACarrera(form);
+			
+			return "redirect:/pilots";
+		}
+		
+		
+	}
+	
+	
+	
 
 
 }

@@ -57,7 +57,7 @@ public class FormRellenarBD extends BaseEntity {
 	
 	@Override
 	public String toString() {
-		return "Team [anyoInicial =" + anyoInicial + ", anyoFinal=" + anyoFinal + ", Category=" + Category +  "]";
+		return "FormRellenarBD [anyoInicial =" + anyoInicial + ", anyoFinal=" + anyoFinal + ", Category=" + Category +  "]";
 	}
 
 
