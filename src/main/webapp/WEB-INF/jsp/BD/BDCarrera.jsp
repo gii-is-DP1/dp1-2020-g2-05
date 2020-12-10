@@ -8,7 +8,11 @@
 
 <petclinic:layout pageName="BDCarrera">
 
-
+<c:if test="${messageNullPointerException==true}">
+    <h2>
+    API has not found any result to return with values that have been entered
+    </h2>
+    </c:if>
 	
 	
     <h2>

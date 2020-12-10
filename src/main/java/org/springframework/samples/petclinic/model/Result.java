@@ -78,7 +78,7 @@ public class Result extends BaseEntity implements Comparable<Result> {
 
 	@Override
 	public String toString() {
-		return "[Position=" + position +  ", Location=" + gp.getSite() + ", Rider=" + pilot.getName() + " " + pilot.getLastName()  + ", Pole=" + pole + "]";
+		return "[Position=" + position +  ", Location=" + gp.getSite() + ", Rider=" + pilot.getName() + " " + pilot.getLastName()  + ", Pole=" + pole +", GP=" +gp.getId()+ " ]";
 	}
 
 	@Override

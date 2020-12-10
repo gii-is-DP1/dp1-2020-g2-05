@@ -34,6 +34,9 @@
 						<spring:url value="/pilots/delete/{pilotId}" var="pilotUrl">
 							<spring:param name="pilotId" value="${pilot.id}" />
 						</spring:url> <a href="${fn:escapeXml(pilotUrl)}">Delete</a>
+						<spring:url value="/pilots/{pilotId}" var="pilotUrl">
+							<spring:param name="pilotId" value="${pilot.id}" />
+						</spring:url> <a href="${fn:escapeXml(pilotUrl)}">Details</a>
 					</td>
 				</tr>
 			</c:forEach>
