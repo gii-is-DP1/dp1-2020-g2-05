@@ -10,7 +10,6 @@
 
 
 	
-	
     <h2>
         <c:if test="${FormRellenarBD['new']}">New </c:if> BD
     </h2>

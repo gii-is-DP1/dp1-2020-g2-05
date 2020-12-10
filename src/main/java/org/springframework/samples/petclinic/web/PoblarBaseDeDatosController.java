@@ -38,13 +38,19 @@ public class PoblarBaseDeDatosController {
 	
 	
 	private String AUTHORITY;
-	
-	
+	private Boolean messageNullPointerException = false;
+	private BDCarrera formError = new BDCarrera();
 	@InitBinder("form")
 	public void initPetBinder(WebDataBinder dataBinder) {
 		dataBinder.setValidator(new BDValidator());
 	}
 
+	
+	@GetMapping(path="/BD")
+	public String seleccionarTipoPoblacion(ModelMap model) {
+	  return "/BD/seleccionarTipoPoblacion";
+	}
+	
 	
 	@GetMapping(path="/BD/pilotsBD")
 	public String PoblarBD(ModelMap model) {
@@ -70,9 +76,11 @@ public class PoblarBaseDeDatosController {
 			model.put("message",result.getAllErrors());
 			return "/BD/BD";
 		}else {
-			
+			try {
 			this.pilotService.poblarBD(form);
-			
+			}catch(NullPointerException e) {
+				return "redirect:/BD/pilotsBD";
+			}
 			return "redirect:/pilots";
 		}
 		
@@ -107,6 +115,10 @@ public class PoblarBaseDeDatosController {
 		model.addAttribute("listaRacecode", num1);
 		model.addAttribute("listaSession", num2);
 
+		if(messageNullPointerException) model.put("messageNullPointerException",true);messageNullPointerException=false;
+		if(formError.getYear()!=null) model.addAttribute("BDCarrera", formError); formError=new BDCarrera();
+
+		
 	  return "/BD/BDCarrera";
 	}
 	
@@ -120,9 +132,15 @@ public class PoblarBaseDeDatosController {
 			model.put("message",result.getAllErrors());
 			return "/BD/BD";
 		}else {
-			
-			this.pilotService.poblarBDCarreraACarrera(form);
-			
+			try {
+				this.pilotService.poblarBDCarreraACarrera(form);
+			}catch (NullPointerException e) {
+				messageNullPointerException=true;
+				formError=form;
+				return "redirect:/BD/carrerasBD";
+					
+			}
+			 
 			return "redirect:/pilots";
 		}
 		

@@ -41,6 +41,12 @@
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Leagues</span>
 				</petclinic:menuItem>
+				
+				<petclinic:menuItem active="${name eq 'BD'}" url="/BD"
+					title="leads to /BD">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					<span>Settle DB</span>
+				</petclinic:menuItem>
 
 			</ul>
 
