@@ -2,6 +2,7 @@ package org.springframework.samples.petclinic.web;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -27,17 +28,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class PoblarBaseDeDatosController {
 	
-	@Autowired
+	private String AUTHORITY;
+
+
+	LeagueService leagueService;
+
+	UserService userService;
+
 	PilotService pilotService;
 	
 	@Autowired
-	UserService userService;
-	
-	@Autowired
-	LeagueService leagueService;
-	
-	
-	private String AUTHORITY;
+	public PoblarBaseDeDatosController(LeagueService leagueService, UserService userService,PilotService pilotService) {
+		this.leagueService = leagueService;
+		this.userService = userService;
+		this.pilotService = pilotService;
+	}
+
+
 	private Boolean messageNullPointerException = false;
 	private BDCarrera formError = new BDCarrera();
 	@InitBinder("form")
@@ -67,7 +74,7 @@ public class PoblarBaseDeDatosController {
 	}
 	
 	@PostMapping(path = "/BD/pilotsBD")	
-	public String Poblar( FormRellenarBD form, BindingResult result, ModelMap model) throws JSONException, IOException {
+	public String Poblar( @Valid FormRellenarBD form, BindingResult result, ModelMap model) throws JSONException, IOException {
 		System.out.println(result);
 
 		if(result.hasErrors()) {
@@ -99,12 +106,14 @@ public class PoblarBaseDeDatosController {
 		}
 		
 		motogpAPI.RaceCode[] enums = motogpAPI.RaceCode.values();
-		List<motogpAPI.RaceCode> num1 = new ArrayList<>();
+		List<String> num1 = new ArrayList<>();
 		
 		for(int i = 0; i<enums.length; i++) {
-			num1.add(enums[i]);
+			num1.add(enums[i].toString());
 		}
 		
+		Collections.sort(num1);
+		System.out.println(num1);
 		motogpAPI.Session[] enums2 = motogpAPI.Session.values();
 		List<motogpAPI.Session> num2 = new ArrayList<>();
 		
@@ -123,7 +132,7 @@ public class PoblarBaseDeDatosController {
 	}
 	
 	@PostMapping(path = "/BD/carrerasBD")	
-	public String PoblarBDcarrera( BDCarrera form, BindingResult result, ModelMap model) throws JSONException, IOException {
+	public String PoblarBDcarrera(@Valid BDCarrera form, BindingResult result, ModelMap model) throws JSONException, IOException {
 		System.out.println(result);
 
 		if(result.hasErrors()) {

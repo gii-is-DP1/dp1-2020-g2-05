@@ -16,7 +16,7 @@
 	
 	
     <h2>
-        <c:if test="${BDCarrera['new']}">New </c:if> BD
+       BD
     </h2>
      <form:form modelAttribute="BDCarrera" class="form-horizontal" id="add-pilot-form" actions="/"  > 
         <div class="form-group has-feedback">
@@ -34,12 +34,7 @@
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <c:choose>
-                    <c:when test="${BDCarrera['new']}">
                         <button class="btn btn-default" type="submit">Poblar</button>
-                    </c:when>
-                 
-                </c:choose>
             </div>
         </div>
      </form:form> 
