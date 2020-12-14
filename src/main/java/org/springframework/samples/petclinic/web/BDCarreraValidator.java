@@ -12,29 +12,21 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-public class BDValidator implements Validator{
+public class BDCarreraValidator implements Validator{
 	
 private static final String REQUIRED = "required";
 	
 	
 	@Override
 	public void validate(Object obj, Errors errors) {
-		FormRellenarBD form = (FormRellenarBD) obj;
-
+		BDCarrera form1 = (BDCarrera) obj;
 		Calendar fecha = new GregorianCalendar();
+
 		
-		 //AÑO INICIAL validation
-		if (form.getAnyoInicial()>=form.getAnyoFinal() || form.getAnyoInicial()!=(int) form.getAnyoInicial() || form.getAnyoInicial()>fecha.get(Calendar.YEAR)){
+		if (form1.getYear()!=(int) form1.getYear() || form1.getYear()>fecha.get(Calendar.YEAR)){
 			errors.rejectValue("name", REQUIRED+" and between 3 and 50 characters", REQUIRED+" and between 3 and 50 characters and no special ones");
 		}
-		
-		
-		//Año FInal validation
-		if(form.getAnyoFinal()>fecha.get(Calendar.YEAR) || form.getAnyoInicial()>=form.getAnyoFinal() || form.getAnyoInicial()!=(int) form.getAnyoInicial()) {
-			 errors.rejectValue("points", REQUIRED, "Team Id cannot be null");
-		}
-	
-		
+
 	}
 
 	/**
@@ -42,7 +34,7 @@ private static final String REQUIRED = "required";
 	 */
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return FormRellenarBD.class.isAssignableFrom(clazz);
+		return BDCarrera.class.isAssignableFrom(clazz);
 	}
 
 

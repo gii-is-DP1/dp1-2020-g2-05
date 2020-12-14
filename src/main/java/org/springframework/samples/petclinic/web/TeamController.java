@@ -64,7 +64,6 @@ public class TeamController {
 	}
 
 
-	private Boolean EquipoNoMismoNombre=false;
 	private Boolean EquipoSi=false;
 	private Boolean EquipoNo=false;
 	private Boolean Error=false;
@@ -112,19 +111,7 @@ public class TeamController {
 		
 		
 		User usuario = getUserSession();
-			List<Team> tem = new ArrayList<Team>();
-			Optional<League> league = this.leagueService.findLeague(leagueId);
-			List<Team> list = league.get().getTeam().stream().collect(Collectors.toList());
-			System.out.println("wajdbaiwjdbnkjwd");
-			System.out.println(list);
-			String username = getUserSession().getUsername();
-			for(int i = 0; i<list.size(); i++) {
-				if(list.get(i).getUser().getUsername().equals(username)){
-		    		tem.add(list.get(i));
-		    		
-	    	}
-		}
-		System.out.println(tem.size());
+			List<Team> tem = this.leagueService.findTeamByUsernameAndLeagueId(usuario.getUsername(), leagueId);
 
 		
 		
@@ -226,7 +213,7 @@ public class TeamController {
 	@GetMapping(value = "/leagues/{leagueId}/teams")
 	public String showTeams(@PathVariable int leagueId, Map<String, Object> model) {
 		User usuario = getUserSession();
-		List<Team> tem = this.leagueService.findLeague(leagueId).get().getTeam().stream().collect(Collectors.toList());
+		List<Team> tem = this.leagueService.findTeamByLeagueId(leagueId);
 		tem = tem.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
 		System.out.println(tem);
 		model.put("teams", tem);
