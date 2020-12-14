@@ -163,8 +163,10 @@ public class PilotController {
 	@GetMapping(path="pilots/{pilotId}")
 	public String muestraPilotoPorId(@PathVariable("pilotId") int pilotId, ModelMap model) {
 		Optional<Pilot> pilot = pilotService.findPilotById(pilotId);
+		
 		if(pilot.isPresent()) {
 			model.addAttribute("pilot", pilot.get());
+			model.addAttribute("results",pilotService.obtenerResultsFormatted(pilot.get().getResults()));
 		}else {
 			model.addAttribute("encontrado", false);
 		}
