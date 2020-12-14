@@ -247,4 +247,12 @@ public class LeagueService {
 	public List<Team> findTeamByUsername(String username){
 		return teamRepository.findTeamByUsername(username );
 	}
+	
+	public List<Team> findTeamByUsernameAndLeagueId(String username, Integer id){
+		return teamRepository.findTeamByUsernameAndLeagueId(username, id);
+	}
+	
+	public List<Team> findTeamByLeagueId(Integer id){
+		return teamRepository.findTeamByLeagueId(id);
+	}
 }

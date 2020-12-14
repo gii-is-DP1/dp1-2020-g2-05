@@ -271,5 +271,35 @@ public class LeagueServiceTest {
 
 	 }
 	 
+	 @Test
+	 @Transactional
+	 void shouldFindTeamByLeagueId() {
+		 List<Team> team = this.leagueService.findTeamByLeagueId(1);
+		 Integer equipo1 = team.size();
+			 
+			 		assertThat(equipo1).isNotEqualTo(0);
+
+	 }
+	 
+	 @Test
+	 @Transactional
+	 void shouldFindTeamByUsername() {
+		 List<Team> team = this.leagueService.findTeamByUsername("migniearj");
+		 Integer equipo1 = team.size();
+			 
+			 		assertThat(equipo1).isNotEqualTo(0);
+
+	 }
+	 
+	 @Test
+	 @Transactional
+	 void shouldFindTeamByUsernameAndLeagueId() {
+		 List<Team> team = this.leagueService.findTeamByUsernameAndLeagueId("migniearj", 2);
+		 Integer equipo1 = team.size();
+			 
+			 		assertThat(equipo1).isNotEqualTo(0);
+
+	 }
+	 
 	 
 }
