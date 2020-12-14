@@ -53,7 +53,7 @@ public class Tests {
 //			System.out.println(resultado2);
 //			System.out.println(todosLosResultadosDeUnaCarrera.get(0));
 //			
-		System.out.println(PeticionesGet.getResultsByRaceCodeCampu(Category.MotoGP, 2016, RaceCode.AUT, Session.RACE));
+//		System.out.println(PeticionesGet.getResultsByRaceCodeCampu(Category.MotoGP, 2016, RaceCode.AUT, Session.RACE));
 //			TreeSet<Pilot> pilotos = new TreeSet<Pilot>();
 //			TreeSet<Result> results = new TreeSet<Result>();
 //			
@@ -89,9 +89,10 @@ public class Tests {
 //			for (Pilot p:pilotos) System.out.println(p);
 //			for (Result r:results) System.out.println(r);
 
+//			RaceCode[] yourEnums = RaceCode.values();		
 			
 			
-
+		
 //			for(int i=0;i<infoCarrera.size();i++) {
 //				System.out.println(infoCarrera.get(i));
 //			}

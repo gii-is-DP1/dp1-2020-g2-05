@@ -62,7 +62,9 @@ import motogpAPI.model.InfoCarrera;
  */
 @Service
 public class PilotService {
-
+	
+	public static final Integer MAXIMO_CARRERAS=18;
+	
 	@Autowired
 	private PilotRepository pilotRepository;
 
@@ -114,7 +116,7 @@ public class PilotService {
 
 		for(int i=form.getAnyoInicial();i<form.getAnyoFinal();i++) {
 
-			for(int j=0;j<18;j++) {
+			for(int j=0;j<MAXIMO_CARRERAS;j++) {
 				GranPremio gp = new GranPremio(); //entidad de una carrera
 				List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceNumberCampu(form.getCategory(), i, j, Session.RACE);
 				if(todosLosResultadosDeUnaCarrera.size()==0) {
