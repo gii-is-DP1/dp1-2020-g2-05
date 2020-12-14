@@ -7,9 +7,9 @@
 
 <petclinic:layout pageName="leagues">
 	<c:if test="${noTengoLigas==false}"><h2>Your Leagues</h2></c:if>
-	<h2>        <c:if test="${yaTienesEquipo}">You already have a team in this League :( !</c:if>  </h2>
-	<h2>        <c:if test="${yaTieneMaxLigas}">This league already have 5 teams !</c:if> </h2>
-	<h2><c:if test="${noTengoLigas==true}">You have no Leagues!</c:if></h2>
+	<c:if test="${yaTienesEquipo}"><h2>You already have a team in this League :( ! </h2></c:if> 
+	<c:if test="${yaTieneMaxLigas}"><h2>This league already have 5 teams !/h2></c:if>
+	<c:if test="${yaTieneMaxLigas}"><h2>You have no Leagues!</h2></c:if>
 	<c:if test="${noTengoLigas==false}"><table id="leaguesTable" class="table table-striped">
 		<thead>
 			<tr>

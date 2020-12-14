@@ -57,41 +57,29 @@ import motogpAPI.model.InfoCarrera;
 @Controller
 public class LeagueController {
 
-	private Boolean yaTienesEquipo=false; //si ya tiene equipo en esa liga
-	private Boolean noLeagueFound=false; //si no se ha encontrado liga
-	private Integer leagueYaEquipoId=-1; // para que te señale la liga
-	private Boolean yaTieneMaxTeams=false; // no puedes unirte a esa liga
+//	private Boolean yaTienesEquipo=false; //si ya tiene equipo en esa liga
+//	private Boolean noLeagueFound=false; //si no se ha encontrado liga
+//	private Integer leagueYaEquipoId=-1; // para que te señale la liga
+//	private Boolean yaTieneMaxTeams=false; // no puedes unirte a esa liga
 	private String AUTHORITY;
 
-	@Autowired
 
 	LeagueService leagueService;
-	@Autowired
 
 	UserService userService;
-	
-	@Autowired
 
 	PilotService pilotService;
 	
+	@Autowired
+	public LeagueController(LeagueService leagueService, UserService userService,PilotService pilotService) {
+		this.leagueService = leagueService;
+		this.userService = userService;
+		this.pilotService = pilotService;
+	}
+
 
 	
-	public String randomString(int longitud) {
-		 String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-		 String sb="";
-		 Random random = new Random();
-		 
-	    for(int i = 0; i < longitud; i++) {
-
-	      int index = random.nextInt(alphabet.length());
-
-	      char randomChar = alphabet.charAt(index);
-
-	      sb+=(randomChar);
-	    }
-	    return sb;
-	}
+	
 	
 	
 	@InitBinder("league")
@@ -104,23 +92,12 @@ public class LeagueController {
 	@GetMapping("/leagues")
 	public String leagues(ModelMap modelMap) throws JSONException, IOException {
 		AUTHORITY = this.leagueService.findAuthoritiesByUsername(this.userService.getUserSession().getUsername());
-//     	pilotService.poblarBD(2015,2017,Category.Moto3);
-//		pilotService.poblarBD(2015,2017,Category.Moto2);
-//		pilotService.poblarBD(2015,2017,Category.MotoGP);
-//		pilotService.poblarBDCarreraACarrera(Category.MotoGP, 2016, RaceCode.AUT, Session.RACE); //este se usaria para ir poblando a medida que se vayan corriendo carreras
 
 		Iterable<League> leagues = leagueService.findAll() ;
-		List<League> result = new ArrayList<League>();
-	    leagues.forEach(result::add);
-		
-	    for(League league:result) {
-	    	if(league.getRacesCompleted()<10) leagueService.activeMoto3(league.getId());  //activar moto3 si las carreras son > que 10  
-	    	else if(league.getRacesCompleted()>=10 && league.getRacesCompleted()<15 ) leagueService.activeMoto2(league.getId());  //activar moto2 si las carreras son >= que 10 y < 15
-	    	else if(league.getRacesCompleted()>=15 )leagueService.activeMotogp(league.getId()); //activar motogp si las carreras son >= 15
-	    	if(league.getRacesCompleted()>20) league.setRacesCompleted(20);
-			if(league.getTeam().isEmpty()) leagueService.deleteLeague(league);
-	    }
-	 
+		List<League> result = leagueService.convertirIterableLista(leagues);
+	  
+		this.leagueService.avanceIncremental(result);
+
 	    
 	    if(AUTHORITY.equals("admin")) {
 		modelMap.addAttribute("admin", true);
@@ -140,26 +117,26 @@ public class LeagueController {
 		
 		Collection<Integer> collect = leagueService.findTeamsByUsername(user.getUsername());
 		
-		List<Integer> idLeague = new ArrayList<Integer>();
+		List<League> myLeaguesList = leagueService.obtenerLigasPorUsuario(collect); //obtengo las ligas por usuario
 		
-		collect.forEach(idLeague::add);
-	    List<League> myLeaguesList = new ArrayList<League>();
-
 	    
-		for(Integer i:idLeague) {
-			League league_i = leagueService.findLeague(i).get();
-			myLeaguesList.add(league_i);
+	
+	    try {
+	    	if(modelMap.getAttribute("vengoDeAbajo").equals(true)) {
+		   		 modelMap.addAttribute("vengoDeAbajo",false);
+		    	return myLeagues(modelMap);
+		    	}
+	    	else {
+	    		if(modelMap.getAttribute("yaTienesEquipo").equals(true)) {
+					modelMap.addAttribute("leagueYaEquipoId", modelMap.getAttribute("leagueYaEquipoId"));
+					//yaTienesEquipo=false;
+					//leagueYaEquipoId=-1;
+			    }
+	    		
+	    	}
+	    }catch (NullPointerException e) {
 		}
 		
-	    
-	    if(yaTienesEquipo) {
-	    	modelMap.addAttribute("yaTienesEquipo",true);yaTienesEquipo=false;
-			modelMap.addAttribute("leagueYaEquipoId", leagueYaEquipoId);leagueYaEquipoId=-1;
-	    }
-	    
-	    if(yaTieneMaxTeams) modelMap.addAttribute("yaTieneMaxLigas",true);yaTieneMaxTeams=false;
-	    
-	    
 	    if(myLeaguesList.size()==0) {
 		    modelMap.addAttribute("noTengoLigas", true);
 		    return "leagues/myLeagues";
@@ -167,7 +144,7 @@ public class LeagueController {
 		    modelMap.addAttribute("noTengoLigas", false);
 
 		    modelMap.addAttribute("misLigas", myLeaguesList);
-		    System.out.println(myLeaguesList);
+
 		    return "leagues/myLeagues";
 	    }
 	   
@@ -200,12 +177,13 @@ public class LeagueController {
 	    
 	    League newLeague = new League();
 	    newLeague.setId(result.get(result.size()-1).getId()+1);
-	    newLeague.setLeagueCode(randomString(10));
+	    newLeague.setLeagueCode(leagueService.randomString(10));
 	    newLeague.setLeagueDate(formatter.format(date));
 	    newLeague.setMoto2Active(false);
 	    newLeague.setMoto3Active(true);
 	    newLeague.setMotogpActive(false);
 	    newLeague.setRacesCompleted(0);
+	    
 		model.addAttribute("league",newLeague);
 		return "/leagues/createLeagueName";
 		 }
@@ -249,9 +227,16 @@ public class LeagueController {
 	@GetMapping(path="/leagues/join")
 	public String unirseLiga(ModelMap model) {	
 		model.addAttribute("league", new League());
+		
+		try {
+			if(model.getAttribute("noLeagueFound").equals(true)) {
+				model.addAttribute("noLeagueFound", "Any league has been found with the code provided :(");
+				}
+		}catch (NullPointerException e) {
 
-		if(noLeagueFound) model.addAttribute("noLeagueFound", "Any league has been found with the code provided :(");
-		noLeagueFound=false;
+		}
+		
+		//noLeagueFound=false;
 		return "/leagues/createLeague";
 		 }
 	
@@ -261,31 +246,29 @@ public class LeagueController {
 		
 		Collection<Integer> collect = leagueService.findTeamsByUsername(user.getUsername());
 		
-		List<Integer> idLeague = new ArrayList<Integer>();
-		
-		collect.forEach(idLeague::add);
-		
+		List<Integer> idLeague = leagueService.convertirIterableLista(collect);
+			
 		Optional<League> liga = this.leagueService.findLeagueByLeagueCode(league.getLeagueCode().trim());
 				
 		
 		if(!liga.isPresent()) {
-			noLeagueFound=true;
-			return "redirect:/leagues/join";
+			model.addAttribute("noLeagueFound",true);
+			return unirseLiga(model);
 		}
 		
 		Integer numTeamsLeague = leagueService.findTeamsByLeagueId(liga.get().getId());
 		
 		if(idLeague.contains(liga.get().getId())) {
-			
-			yaTienesEquipo=true;
-			leagueYaEquipoId=liga.get().getId();
-			return "redirect:/leagues/myLeagues";
-
+			model.addAttribute("yaTienesEquipo",true);
+			model.addAttribute("leagueYaEquipoId",liga.get().getId());
+			model.addAttribute("vengoDeAbajo",true);
+			return myLeagues(model);
 		}
 		
 		if(numTeamsLeague>5) {
-			yaTieneMaxTeams=true;
-			return "redirect:/leagues/myLeagues";
+			model.addAttribute("yaTieneMaxTeams",true);
+			model.addAttribute("vengoDeAbajo",true);
+			return myLeagues(model);
 		}
 
 		model.addAttribute("yaTienesEquipo", false);
