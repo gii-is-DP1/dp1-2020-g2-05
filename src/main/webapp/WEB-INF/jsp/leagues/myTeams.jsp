@@ -33,7 +33,7 @@
 						
 						<spring:url value="/leagues/{leagueId}/teams/{teamId}/delete" var="TeamUrl">
 							<spring:param name="teamId" value="${team.id}" />
-							<spring:param name="leagueId" value="${league}" />
+							<spring:param name="leagueId" value="${team.league.id}" />
 						</spring:url> <a href="${fn:escapeXml(TeamUrl)}">Delete</a>
 						
 					

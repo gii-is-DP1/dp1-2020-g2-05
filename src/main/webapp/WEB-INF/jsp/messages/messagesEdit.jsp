@@ -15,12 +15,11 @@
     </h2>
     <form:form modelAttribute="messagee" class="form-horizontal" id="add-message-form">
         <div class="form-group has-feedback">
-        
-        	<input type="hidden" name="visto" value="0"/>
-        	<input type="hidden"  name="usernamesend" value="${usersend}"/>	
+            <form:hidden path="visto"/>
+            <form:hidden path="usernamesend"/>
             <petclinic:inputField label="Asunto" name="asunto"/>
             <petclinic:inputField label="Cuerpo" name="cuerpo"/>
-            <petclinic:inputField label="Destinatario" name="usernamereceive"/>
+            <petclinic:inputField label="Destinatario" name="usernamereceive" />
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">

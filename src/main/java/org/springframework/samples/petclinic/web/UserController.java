@@ -1,5 +1,6 @@
 /*
  * Copyright 2002-2013 the original author or authors.
+
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +16,12 @@
  */
 package org.springframework.samples.petclinic.web;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -78,7 +84,23 @@ public class UserController {
 	public String listadoAmigos(ModelMap modelMap) {
 		System.out.println(userService.getUserSession().getUsername());
 		modelMap.addAttribute("resultados", userService.findFriendByUser(userService.getUserSession().getUsername()));
+		modelMap.addAttribute("user",new User());
 		return "friends/friendsList";
+	}
+	
+	@PostMapping("/friends")
+	public String processAddFollower(User user) {
+	
+			List <User> friends1 =  userService.getUserSession().getFriends();
+			
+			friends1.add(userService.findUser(user.getUsername()).get());
+	
+			userService.getUserSession().setFriends(friends1);
+			
+			userService.saveUser(userService.getUserSession());
+
+			return "redirect:/friends";
+	
 	}
 
 }

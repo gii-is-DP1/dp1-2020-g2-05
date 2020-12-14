@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -11,6 +12,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.samples.petclinic.model.Authorities;
 import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Team;
@@ -31,11 +33,17 @@ public class LeagueService {
 	private LeagueRepository leagueRepository;
 	private TeamRepository teamRepository;
 	private UserService userService;
+	private PilotService pilotService;
+	private RecruitService recruitService;
 
 	@Autowired
-	public LeagueService(LeagueRepository leagueRepository, TeamRepository teamRepository) {
+	public LeagueService(LeagueRepository leagueRepository, TeamRepository teamRepository,
+			UserService userService, PilotService pilotService, RecruitService recruitService) {
 		this.leagueRepository = leagueRepository;
 		this.teamRepository = teamRepository;
+		this.userService = userService;
+		this.pilotService = pilotService;
+		this.recruitService = recruitService;
 	}
 	
 //	@Autowired
@@ -65,9 +73,19 @@ public class LeagueService {
 	public Collection<Integer> findTeamsByUsername(String username) throws DataAccessException {
 		return leagueRepository.findTeamsByUsername(username);
 	}
+	
+	public Integer findTeamsByLeagueId(Integer id) throws DataAccessException {
+		return leagueRepository.findTeamsByLeagueId(id);
+	}
+	
 	public Optional<User> findUserByUsername(String username) throws DataAccessException {
 		return leagueRepository.findUserByUsername(username);
 	}
+	
+	public String findAuthoritiesByUsername(String username) throws DataAccessException {
+		return leagueRepository.findAuthoritiesByUsername(username);
+	}
+	
 	public Integer findLeaguesByUsername(String username) throws DataAccessException {
 		return leagueRepository.findLeaguesByUsername(username);
 	}
@@ -149,15 +167,34 @@ public class LeagueService {
 			System.out.println("hhhh");
 		}
 		
+	}
+
+	@Transactional
+	public void saveSystemTeam(League league) {
+		Team sysTeam = new Team();
+		sysTeam.setName("Sistema");
+		sysTeam.setLeague(league);
+		sysTeam.setMoney("0");
+		sysTeam.setPoints("0");
+		sysTeam.setUser(userService.findUser("admin1").get());
+		teamRepository.save(sysTeam);
+		
+		//Fichamos a todos los pilotos con la escudería sistema
+		Iterable<Pilot> pilots = pilotService.findAll();
+		List<Pilot> listPilots = new ArrayList<Pilot>();
+		pilots.forEach(listPilots::add);
+		for (int i=0;i<listPilots.size();i++) {
+			recruitService.saveRecruit(listPilots.get(i),sysTeam);
 		}
+		
+		//Ponemos en oferta a todos los pilotos de la categoría actual con la escudería sistema(Por hacer)
+		//(Por hacer)
+	}
 
 	public void delete(Team team) {
 		teamRepository.delete(team);
 	}
 
-
-
-	
 	public List<Team> findTeamByUsername(String username){
 		return teamRepository.findTeamByUsername(username );
 	}

@@ -15,20 +15,27 @@ UserRepository.java * Copyright 2002-2013 the original author or authors.
  */
 package org.springframework.samples.petclinic.service;
 
+import java.io.IOException;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.repository.query.Param;
+import org.springframework.samples.petclinic.model.BDCarrera;
+import org.springframework.samples.petclinic.model.FormRellenarBD;
+import org.springframework.samples.petclinic.model.GranPremio;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
 import org.springframework.samples.petclinic.model.Pilot;
-
+import org.springframework.samples.petclinic.model.Result;
 import org.springframework.samples.petclinic.model.Vet;
 import org.springframework.samples.petclinic.model.Visit;
 import org.springframework.samples.petclinic.repository.OwnerRepository;
@@ -40,6 +47,12 @@ import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNam
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+
+import motogpAPI.Category;
+import motogpAPI.PeticionesGet;
+import motogpAPI.RaceCode;
+import motogpAPI.Session;
+import motogpAPI.model.InfoCarrera;
 
 /**
  * Mostly used as a facade for all Petclinic controllers Also a placeholder
@@ -54,7 +67,11 @@ public class PilotService {
 	private PilotRepository pilotRepository;
 
 	@Autowired
-	private UserService userService;
+	private GranPremioService gpService;
+	
+
+	@Autowired
+	private ResultService resultService;
 
 	@Autowired
 	private AuthoritiesService authoritiesService;
@@ -83,8 +100,137 @@ public class PilotService {
 		pilotRepository.delete(pilotId);
 
 	}
+	
+//	public void prueba() throws JSONException, IOException{
+//		FormRellenarBD form = new FormRellenarBD();
+//		
+//		form.setAnyoFinal(2019);
+//		form.setAnyoFinal(2018);
+//		form.setCategory(Category.Moto3);
+//		
+//	}
 
-//	
+	public void poblarBD(FormRellenarBD form) throws JSONException, IOException {
+
+		for(int i=form.getAnyoInicial();i<form.getAnyoFinal();i++) {
+
+			for(int j=0;j<18;j++) {
+				GranPremio gp = new GranPremio(); //entidad de una carrera
+				List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceNumberCampu(form.getCategory(), i, j, Session.RACE);
+				if(todosLosResultadosDeUnaCarrera.size()==0) {
+					
+				}else {
+					gp.setSite(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
+					gp.setCircuit(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
+					gp.setDate0(todosLosResultadosDeUnaCarrera.get(0).getFecha());
+					gp.setRaceCode(todosLosResultadosDeUnaCarrera.get(0).getRaceCode());
+					this.gpService.saveGP(gp);
+					 
+					for(int k=0;k<todosLosResultadosDeUnaCarrera.size();k++) {
+						InfoCarrera resultado_k = todosLosResultadosDeUnaCarrera.get(k);
+						gp.setCircuit(resultado_k.getLugar());
+						gp.setSite(resultado_k.getNombreEvento());
+						
+						Pilot pilot = new Pilot();
+						pilot.setName(resultado_k.getPiloto().split(" ")[0]);
+						pilot.setLastName(resultado_k.getPiloto().split(" ")[1]);
+						pilot.setDorsal(resultado_k.getNumeros().toString());
+
+						if(resultado_k.getPais().isEmpty()) {
+							pilot.setNationality("Andorra");
+
+						}else {
+							pilot.setNationality(resultado_k.getPais());
+
+						}
+					
+						
+						pilot.setCategory(form.getCategory().toString());
+						Result result = new Result();
+						
+						if(this.countByName(pilot.getLastName(), pilot.getName())!=0) {
+							result.setPilot(this.pilotRepository.findByName(pilot.getLastName(), pilot.getName()).get());
+
+						}else {
+							result.setPilot(pilot);
+
+						}
+						result.setPosition(resultado_k.getPosicion());
+						result.setGp(gp);
+						result.setLap(false);
+						result.setPole(false);
+						this.resultService.saveResult(result);
+						this.savePilot(pilot);
+					}
+					
+				}
+				
+				
+				
+			}			
+		}
+	}
+	
+//	2016, RaceCode.AUT, Session.RACE
+	public void poblarBDCarreraACarrera(BDCarrera form) throws JSONException, IOException {
+
+
+				GranPremio gp = new GranPremio(); //entidad de una carrera
+				List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceCodeCampu(form.getCategory(), form.getYear(), form.getRacecode(), form.getSession());
+				if(todosLosResultadosDeUnaCarrera.size()==0) {
+					
+				}else {
+					gp.setSite(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
+					gp.setCircuit(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
+					gp.setDate0(todosLosResultadosDeUnaCarrera.get(0).getFecha());
+					gp.setRaceCode(todosLosResultadosDeUnaCarrera.get(0).getRaceCode());
+					this.gpService.saveGP(gp);
+					 
+					for(int k=0;k<todosLosResultadosDeUnaCarrera.size();k++) {
+						InfoCarrera resultado_k = todosLosResultadosDeUnaCarrera.get(k);
+						gp.setCircuit(resultado_k.getLugar());
+						gp.setSite(resultado_k.getNombreEvento());
+						
+						Pilot pilot = new Pilot();
+						pilot.setName(resultado_k.getPiloto().split(" ")[0]);
+						pilot.setLastName(resultado_k.getPiloto().split(" ")[1]);
+						pilot.setDorsal(resultado_k.getNumeros().toString());
+
+						if(resultado_k.getPais().isEmpty()) {
+							pilot.setNationality("Andorra");
+
+						}else {
+							pilot.setNationality(resultado_k.getPais());
+
+						}
+					
+						
+						pilot.setCategory(resultado_k.getCategory().toString());
+						Result result = new Result();
+						
+						if(this.countByName(pilot.getLastName(), pilot.getName())!=0) {
+							result.setPilot(this.pilotRepository.findByName(pilot.getLastName(), pilot.getName()).get());
+
+						}else {
+							result.setPilot(pilot);
+
+						}
+						result.setPosition(resultado_k.getPosicion());
+						result.setGp(gp);
+						result.setLap(false);
+						result.setPole(false);
+						this.resultService.saveResult(result);
+						this.savePilot(pilot);
+					}
+					
+				}
+				
+				
+				
+			}			
+		
+	
+	
 //	@Autowired
 //	private UserService userService;
 //	
@@ -108,9 +254,25 @@ public class PilotService {
 //
 	@Transactional
 	public void savePilot(Pilot pilot) throws DataAccessException {
-
-		pilotRepository.save(pilot);
+		if(this.countByName(pilot.getLastName(), pilot.getName())==0) {
+			pilotRepository.save(pilot);
+		}
+		
 	}
+	
+	
+	public Optional<Pilot> findByName(String lastName,String name) {
+		return this.pilotRepository.findByName(lastName, name);
+	}
+	
+	public Integer countByName(String lastName,String name) {
+		return this.pilotRepository.countByName(lastName, name);
+	}
+
+
+	
+	
+	
 //	
 //	@Transactional(readOnly = true)	
 //	public Collection<Pilot> findPilots() throws DataAccessException {

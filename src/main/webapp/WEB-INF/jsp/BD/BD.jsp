@@ -10,27 +10,25 @@
 
 
 	
-	
     <h2>
-        <c:if test="${team['new']}">New </c:if> Team
+        <c:if test="${FormRellenarBD['new']}">New </c:if> BD
     </h2>
-     <form:form modelAttribute="team" class="form-horizontal" id="add-pilot-form" actions="/leagues/{leagueId}/teams/new"  > 
+     <form:form modelAttribute="FormRellenarBD" class="form-horizontal" id="add-pilot-form" actions="/"  > 
         <div class="form-group has-feedback">
-        	<input type="hidden" name="id" value="${team.id}"/>
-        <input type="hidden"  name="league" value="${leagueId}"/>	
-            <petclinic:inputField label="Name" name="name"/>
-            <petclinic:inputField label="points" name="points"/>
-            <petclinic:inputField label="money" name="money"/>
+       	
+            <petclinic:inputField label="Año Inicial" name="anyoInicial"/>
+            <petclinic:inputField label="Año Final" name="anyoFinal"/>               
+            <div class="control-group">
+				<petclinic:selectField name="Category" label="Categoria" names="${listaCategoria}" size="3" />
+			</div>
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <c:choose>
-                    <c:when test="${team['new']}">
-                        <button class="btn btn-default" type="submit">Add Teams</button>
+                    <c:when test="${FormRellenarBD['new']}">
+                        <button class="btn btn-default" type="submit">Poblar</button>
                     </c:when>
-                    <c:otherwise>
-                        <button class="btn btn-default" type="submit">Update Teams</button>
-                    </c:otherwise>
+                 
                 </c:choose>
             </div>
         </div>
