@@ -191,7 +191,6 @@ public class LeagueService {
 	}
 	
 	public Optional<Team> findTeamById(Integer teamId) {
-		
 		return teamRepository.findById(teamId);
 	}
 

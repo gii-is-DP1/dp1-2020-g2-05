@@ -16,10 +16,14 @@ UserRepository.java * Copyright 2002-2013 the original author or authors.
 package org.springframework.samples.petclinic.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Formatter;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -44,6 +48,7 @@ import org.springframework.samples.petclinic.repository.PilotRepository;
 import org.springframework.samples.petclinic.repository.VetRepository;
 import org.springframework.samples.petclinic.repository.VisitRepository;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
+import org.springframework.samples.petclinic.web.ResultFormatter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -111,7 +116,16 @@ public class PilotService {
 //		form.setCategory(Category.Moto3);
 //		
 //	}
-
+	
+	public List<String> obtenerResultsFormatted(Set<Result> result){
+		ResultFormatter formatter = new ResultFormatter(resultService);
+		List<String> res = new ArrayList<String>();
+		for(Result r:result) {
+			res.add(formatter.print(r, Locale.ENGLISH));
+		}
+		return res;
+	}
+	
 	public void poblarBD(FormRellenarBD form) throws JSONException, IOException {
 
 		for(int i=form.getAnyoInicial();i<form.getAnyoFinal();i++) {

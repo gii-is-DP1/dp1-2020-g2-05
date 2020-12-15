@@ -93,8 +93,7 @@ public class LeagueController {
 	public String leagues(ModelMap modelMap) throws JSONException, IOException {
 		AUTHORITY = this.leagueService.findAuthoritiesByUsername(this.userService.getUserSession().getUsername());
 
-		Iterable<League> leagues = leagueService.findAll() ;
-		List<League> result = leagueService.convertirIterableLista(leagues);
+		List<League> result = leagueService.convertirIterableLista(leagueService.findAll());
 	  
 		this.leagueService.avanceIncremental(result);
 
@@ -115,25 +114,25 @@ public class LeagueController {
 	public String myLeagues(ModelMap modelMap) {
 		User user = userService.getUserSession();
 		
-		Collection<Integer> collect = leagueService.findTeamsByUsername(user.getUsername());
 		
-		List<League> myLeaguesList = leagueService.obtenerLigasPorUsuario(collect); //obtengo las ligas por usuario
+		List<League> myLeaguesList = leagueService.obtenerLigasPorUsuario(leagueService.findTeamsByUsername(user.getUsername())); //obtengo las ligas por usuario
 		
 	    
 	
 	    try {
-	    	if(modelMap.getAttribute("vengoDeAbajo").equals(true)) {
-		   		 modelMap.addAttribute("vengoDeAbajo",false);
-		    	return myLeagues(modelMap);
-		    	}
-	    	else {
+//	    	if(modelMap.getAttribute("vengoDeAbajo").equals(true)) {
+//		   		 modelMap.addAttribute("vengoDeAbajo",false);
+//		    	return myLeagues(modelMap);
+//		    	} //si es necesario se descomenta
+//	    	else {
 	    		if(modelMap.getAttribute("yaTienesEquipo").equals(true)) {
 					modelMap.addAttribute("leagueYaEquipoId", modelMap.getAttribute("leagueYaEquipoId"));
 					//yaTienesEquipo=false;
 					//leagueYaEquipoId=-1;
 			    }
 	    		
-	    	}
+	    		
+	    	
 	    }catch (NullPointerException e) {
 		}
 		
@@ -167,9 +166,13 @@ public class LeagueController {
 	
 	@GetMapping(path="/leagues/new")
 	public String initcrearLiga(ModelMap model) {	
-		Iterable<League> leagues = leagueService.findAll() ;
-		List<League> result = new ArrayList<League>();
-	    leagues.forEach(result::add);
+		Integer num_leagues = leagueService.findLeaguesByUsername(userService.getUserSession().getUsername());
+		
+		if(num_leagues==5) {
+			model.addAttribute("yaTieneMaxTeams",true);
+			return myLeagues(model);
+		}
+		List<League> result = leagueService.convertirIterableLista(leagueService.findAll());
 	    
 	    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");  
 	    Date date = new Date();  
@@ -191,20 +194,14 @@ public class LeagueController {
 	@PostMapping(path="/leagues/new")
 	public String processCrearLiga(@Valid League league, BindingResult results,ModelMap model) {	
 		if(results.hasErrors()) {
-			System.out.println(results);
 			model.put("league", league);
 			model.put("message",results.getAllErrors());
 			return "/leagues/createLeagueName";
 		}else {
 
 			
-//			
-//				Integer num_leagues = leagueService.findLeaguesByUsername(userService.getUserSession().getUsername());
-//				
-//				if(num_leagues==5) {
-//					yaTieneMaxTeams=true;
-//					return "redirect:/leagues/myLeagues";
-//				} QUITADO PORQUE ME CONFUNDI, UNA LIGA NO PUEDE TENER MAS DE 5 teams , pero un usuario si puede tener mas de 5 teams
+			
+				
 				
 				  try {
 						this.leagueService.saveLeague(league);
@@ -227,7 +224,13 @@ public class LeagueController {
 	@GetMapping(path="/leagues/join")
 	public String unirseLiga(ModelMap model) {	
 		model.addAttribute("league", new League());
+		Integer num_leagues = leagueService.findLeaguesByUsername(userService.getUserSession().getUsername());
 		
+		if(num_leagues==5) {
+			model.addAttribute("yaTieneMaxTeams",true);
+//			model.addAttribute("vengoDeAbajo",true);
+			return myLeagues(model);
+		}
 		try {
 			if(model.getAttribute("noLeagueFound").equals(true)) {
 				model.addAttribute("noLeagueFound", "Any league has been found with the code provided :(");
@@ -261,13 +264,13 @@ public class LeagueController {
 		if(idLeague.contains(liga.get().getId())) {
 			model.addAttribute("yaTienesEquipo",true);
 			model.addAttribute("leagueYaEquipoId",liga.get().getId());
-			model.addAttribute("vengoDeAbajo",true);
+//			model.addAttribute("vengoDeAbajo",true);
 			return myLeagues(model);
 		}
 		
 		if(numTeamsLeague>5) {
 			model.addAttribute("yaTieneMaxTeams",true);
-			model.addAttribute("vengoDeAbajo",true);
+//			model.addAttribute("vengoDeAbajo",true);
 			return myLeagues(model);
 		}
 
