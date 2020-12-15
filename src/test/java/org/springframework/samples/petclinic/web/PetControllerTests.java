@@ -123,17 +123,17 @@ class PetControllerTests {
 				.andExpect(view().name("pets/createOrUpdatePetForm"));
 	}
     
-//    @WithMockUser(value = "spring")
-//	@Test
-//	void testProcessUpdateFormSuccess() throws Exception {
-//		mockMvc.perform(post("/owners/{ownerId}/pets/{petId}/edit", TEST_OWNER_ID, TEST_PET_ID)
-//							.with(csrf())
-//							.param("name", "Betty")
-//							.param("type", "hamster")
-//							.param("birthDate", "2015/02/12"))
-//				.andExpect(status().is3xxRedirection())
-//				.andExpect(view().name("redirect:/owners/{ownerId}"));
-//	}
+    @WithMockUser(value = "spring")
+	@Test
+	void testProcessUpdateFormSuccess() throws Exception {
+		mockMvc.perform(post("/owners/{ownerId}/pets/{petId}/edit", TEST_OWNER_ID, TEST_PET_ID)
+							.with(csrf())
+							.param("name", "Betty")
+							.param("type", "hamster")
+							.param("birthDate", "2015/02/12"))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/owners/{ownerId}"));
+	}
     
     @WithMockUser(value = "spring")
 	@Test
