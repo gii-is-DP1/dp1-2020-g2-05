@@ -111,5 +111,52 @@ void testInitCreationForm() throws Exception {
 				.andExpect(view().name("leagues/TeamsEdit"));
 	}
 
-
+	  @WithMockUser(value = "team")
+		@Test
+		void testInitUpdateForm() throws Exception {
+			mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/edit", TEST_LEAGUE_ID, TEST_TEAM_ID))
+					.andExpect(status().isOk()).andExpect(model().attributeExists("team"))
+					.andExpect(view().name("leagues/TeamsEdit"));
+		}
+	  
+	  @WithMockUser(value = "team")
+		@Test
+		void testProcessUpdateFormSuccess() throws Exception {
+			mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/edit", TEST_LEAGUE_ID, TEST_TEAM_ID)
+								.with(csrf())
+								.param("name", "scudery")
+								.param("points", "1254")
+								.param("money", "30000"))
+					.andExpect(status().is3xxRedirection())
+					.andExpect(view().name("redirect:/leagues/{leagueId}/teams"));
+		}
+	  
+	  @WithMockUser(value = "team")
+		@Test
+		void testProcessUpdateFormHasErrors() throws Exception {
+			mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/edit", TEST_LEAGUE_ID, TEST_TEAM_ID)
+								.with(csrf())
+								.param("name", "@@@@")
+								.param("points", "aaaa"))
+					.andExpect(model().attributeHasNoErrors("league"))
+					.andExpect(model().attributeHasErrors("team")).andExpect(status().isOk())
+					.andExpect(view().name("leagues/TeamsEdit"));
+		}
+	  
+	  
+	  @WithMockUser(value = "team")
+			@Test
+			void testDeleteTeam() throws Exception {
+				mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/delete", TEST_LEAGUE_ID, TEST_TEAM_ID))
+						.andExpect(status().isOk()).andExpect(model().attributeExists("team"))
+						.andExpect(view().name("redirect:/leagues/{leagueId}/teams"));
+			}
+	  
+	  @WithMockUser(value = "team")
+		@Test
+		void testMyTeams() throws Exception {
+			mockMvc.perform(get("/myTeams"))
+					.andExpect(status().isOk()).andExpect(model().attributeExists("team"))
+					.andExpect(view().name("redirect:/myTeams"));
+		}
 }
