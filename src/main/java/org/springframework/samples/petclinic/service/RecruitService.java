@@ -61,4 +61,8 @@ public class RecruitService {
 	public Optional<Recruit> getRecruitByPilotId(int pilotId) throws DataAccessException {
 		return this.recruitRepository.findRecruitByPilotId(pilotId);
 	}
+	
+	public List<Recruit> getRecruitsByTeam(int teamID) throws DataAccessException {
+		return this.recruitRepository.findAllRecruits(teamID);
+	}
 }

@@ -55,19 +55,19 @@ public class GranPremioService {
 //	}
 
 
-	public <E> List<E> convertirIterableLista(Iterable<E> gps){
-		List<E> result = new ArrayList<E>();
-		gps.forEach(result::add);
-	    return result;
-	}
+//	public <E> List<E> convertirIterableLista(Iterable<E> gps){
+//		List<E> result = new ArrayList<E>();
+//		gps.forEach(result::add);
+//	    return result;
+//	}
 	
 	@Transactional
-	public Iterable<GranPremio> findAll() {
-		return GPRepository.findAll();
+	public List<GranPremio> findAll() {
+		return (List<GranPremio>) GPRepository.findAll();
 	}
 
 	@Transactional
-	public Iterable<GranPremio> findAllActualYear(Integer year) {
+	public List<GranPremio> findAllActualYear(Integer year) {
 //		Calendar cal= Calendar.getInstance();
 //		int year= cal.get(Calendar.YEAR);
 		String queryString = year+"-01-01";  // xxxx-01-01 , hago un select con todos los gps que sean >= a esa fecha
