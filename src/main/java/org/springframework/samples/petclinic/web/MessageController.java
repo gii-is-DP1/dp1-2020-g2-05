@@ -17,6 +17,7 @@ package org.springframework.samples.petclinic.web;
 
 
 import java.util.Collection;
+
 						
 
 
@@ -123,6 +124,9 @@ public class MessageController {
 			return "messages/messagesEdit";
 		}
 		else {
+			message.setVisto(0); 
+			message.setUsernamesend(userService.getUserSession());
+
 			this.messageService.saveMessage(message);
 			
 			return "redirect:/messages/";
@@ -139,6 +143,8 @@ public class MessageController {
 			return "messages/messagesEdit";
 		}
 		else {
+			message.setVisto(0); 
+			message.setUsernamesend(userService.getUserSession());
 
 			this.messageService.saveMessage(message);
 			
