@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.model;
 
+import java.text.Collator;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -114,12 +115,20 @@ public class Pilot extends BaseEntity implements Comparable<Pilot> {
 
 	@Override
 	public int compareTo(Pilot o) {
+		
+//		 final Collator sinAcentos = Collator.getInstance();
+//		 sinAcentos.setStrength(Collator.PRIMARY); //Comparador para ignorar acentos
+		    
 		if (!this.category.equalsIgnoreCase(o.category))
 			return this.category.compareTo(o.category);
 		if (!this.name.equalsIgnoreCase(o.name))
 			return this.name.compareTo(o.name);
+//		if (sinAcentos.compare(this.name, o.name)!=0)
+//			return sinAcentos.compare(this.name, o.name);
 		if (!this.lastName.equalsIgnoreCase(o.lastName))
 			return this.lastName.compareTo(o.lastName);
+//		if (sinAcentos.compare(this.lastName, o.lastName)!=0)
+//			return sinAcentos.compare(this.lastName, o.lastName);
 		if (!this.dorsal.equalsIgnoreCase(o.dorsal))
 			return this.dorsal.compareTo(o.dorsal);
 		return this.nationality.compareTo(o.nationality);

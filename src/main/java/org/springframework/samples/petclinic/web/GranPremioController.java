@@ -80,7 +80,8 @@ public class GranPremioController {
 
 	@GetMapping(path="/granPremios")
 	public String detallesLiga(ModelMap model) {	
-		List<GranPremio> gps = GPService.convertirIterableLista(GPService.findAllActualYear(2019));
+//		List<GranPremio> gps = GPService.convertirIterableLista(GPService.findAllActualYear(2019));
+		List<GranPremio> gps = GPService.findAllActualYear(2018);
 		List<List<GranPremio>> gps_calificados = GranPremioService.granPremiosPorCategoria(gps);
 		List<GranPremio> motogp = gps_calificados.get(0);
 		List<GranPremio> moto2 = gps_calificados.get(1);
