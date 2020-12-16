@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
@@ -12,5 +13,5 @@ public interface GranPremioRepository  extends  CrudRepository<GranPremio, Integ
 
 	
 	@Query("SELECT gp FROM GranPremio gp WHERE gp.date0 >= :year")
-	public Iterable<GranPremio> findAllActualYear(@Param("year") String year);
+	public List<GranPremio> findAllActualYear(@Param("year") String year);
 }

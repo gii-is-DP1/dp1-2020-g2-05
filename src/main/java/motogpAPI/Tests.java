@@ -44,14 +44,13 @@ public class Tests {
 //		for (int i=0; i < resultado3.size(); i++) {
 //			System.out.println(resultado3.get(i));
 //		}
-		List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceNumberCampu(Category.Moto2, 2012, 4, Session.RACE);
-//		
-//		
-//
-//			Record prueba = PeticionesGet.obtieneRecords("2012", Pais.SPA, Category.Moto2);
-//
-//			System.out.println(resultado2);
-//			System.out.println(todosLosResultadosDeUnaCarrera.get(0));
+//		List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceNumberCampu(Category.Moto2, 2012, 4, Session.RACE);
+		
+		
+
+			Record prueba = PeticionesGet.obtieneRecords("2012", Pais.SPA, Category.Moto2);
+
+			System.out.println(prueba);
 //			
 //		System.out.println(PeticionesGet.getResultsByRaceCodeCampu(Category.MotoGP, 2016, RaceCode.AUT, Session.RACE));
 //			TreeSet<Pilot> pilotos = new TreeSet<Pilot>();
@@ -123,11 +122,10 @@ public class Tests {
 //			gp.setResults(setResult);
 			
 			
-//		System.out.println(prueba.getMejorVuelta());
-//		System.out.println(prueba.getRecordDelCircuito());
-//		System.out.println(prueba.getVueltaDePole());
-//		System.out.println(prueba.getVueltaRapida());
-		
+		System.out.println(prueba.getVueltaDePole());
+		System.out.println(prueba.getVueltaRapida());
+		System.out.println(prueba.getRecordDelCircuito());
+		System.out.println(prueba.getMejorVuelta());
 	}
 	
 }

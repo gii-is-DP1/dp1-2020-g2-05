@@ -73,7 +73,11 @@ public interface PilotRepository extends CrudRepository<Pilot, Integer> {
 //	@Query("SELECT pilot FROM Pilot pilot left join fetch pilot.results WHERE pilot.id =:id")
 
 //	public Pilot findById(@Param("id")int id);
-
+	
+	@Override
+	@Query(value="SELECT * FROM PILOT order by category, name, lastname, dorsal, nationality", nativeQuery=true)
+	public List<Pilot> findAll();
+	
 	@Query("SELECT COUNT(pilot) FROM Pilot pilot WHERE pilot.name LIKE :name AND pilot.lastName LIKE :lastName")
 	public Integer countByName(@Param("lastName")String lastName,@Param("name")String name);
 	
