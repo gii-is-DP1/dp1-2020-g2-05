@@ -19,14 +19,16 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Lineup;
+import org.springframework.samples.petclinic.model.Offer;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.Pilot;
+import org.springframework.samples.petclinic.model.Recruit;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.User;
 
 import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.LineupService;
-
+import org.springframework.samples.petclinic.service.OfferService;
 import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -53,7 +55,8 @@ public class TeamController {
 	@Autowired
 	RecruitService recruitService;
 	
-
+	@Autowired
+	OfferService offerService;
 
 	@Autowired
 	LineupService lineupService;
@@ -138,7 +141,7 @@ public class TeamController {
 		if(team.isPresent()) {
 //			model.addAttribute("message", "Team found!");
 			model.addAttribute("team", team.get());
-			List<Pilot> l = recruitService.getRecruits(teamID);
+			List<Recruit> l = recruitService.getRecruitsByTeam(teamID);
 			System.out.println(l);
 			model.addAttribute("misFichajes", l);
 			model.addAttribute("misAlineaciones", lineupService.findByTeam(teamID));
@@ -146,6 +149,40 @@ public class TeamController {
 			model.addAttribute("message", "Team not found!");
 		}
 		return "/leagues/teamDetails";
+	}
+	
+	@GetMapping(path="/leagues/{leagueId}/teams/{teamId}/details/{recruitId}")
+	public String setPrice(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
+			@PathVariable("recruitId") int recruitId, ModelMap modelMap) {
+		
+		Optional<Recruit> opRecruit = recruitService.findRecruit(recruitId);
+		if(opRecruit.isPresent()) {
+			modelMap.addAttribute("offer", new Offer());
+			modelMap.addAttribute("recruitToSale",opRecruit.get());
+			return mostrarDetallesEscuderia(leagueId,teamId,modelMap);
+		}else {
+			modelMap.addAttribute("message", "Recruit not found!");
+			return "/leagues/teamDetails";
+		}
+	}
+	
+	@PostMapping(path="/leagues/{leagueId}/teams/{teamId}/details/{recruitId}")
+	public String putOnSale(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, @PathVariable("recruitId") int recruitId,
+			@Valid Offer offer,BindingResult result, ModelMap modelMap) {
+		if(result.hasErrors()) {
+			System.out.println(result);
+			modelMap.put("message",result.getAllErrors());
+			return setPrice(leagueId,teamId,recruitId,modelMap);
+		}else {
+			Optional<Recruit> opRecruit = recruitService.findRecruit(recruitId);
+			if(opRecruit.isPresent()) {
+				offerService.putOnSale(opRecruit.get(), offer.getPrice());
+				return "redirect:/leagues/{leagueId}/market";
+			}else {
+				modelMap.addAttribute("message", "Recruit not found!");
+				return "/leagues/teamDetails";
+			}
+		}
 	}
 	
 	@GetMapping(path="/leagues/{leagueId}/teams/{teamId}/delete")

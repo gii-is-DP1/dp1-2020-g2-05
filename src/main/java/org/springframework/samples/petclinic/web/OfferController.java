@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Offer;
+import org.springframework.samples.petclinic.model.Recruit;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.service.OfferService;
 import org.springframework.samples.petclinic.service.RecruitService;
@@ -13,10 +14,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/leagues/{leagueId}/market")
 public class OfferController {
 
 	private static final String VIEW_OFFERS = "offers/offersList";
@@ -31,13 +32,13 @@ public class OfferController {
 		this.recruitService = recruitService;
 	}
 
-	@GetMapping
+	@GetMapping(path = "/leagues/{leagueId}/market")
 	public String getOffers(@PathVariable("leagueId") int leagueId, ModelMap modelMap) {
 		modelMap.addAttribute("offers", offerService.findOffersByLeague(leagueId));
 		return VIEW_OFFERS;
 	}
 
-	@GetMapping(path = "{offerId}")
+	@GetMapping(path = "/leagues/{leagueId}/market/{offerId}")
 	public String recruitPilot(@PathVariable("leagueId") int leagueId, @PathVariable("offerId") int offerId,
 			ModelMap modelMap) {
 		Optional<Offer> opo = offerService.findOfferById(offerId);
@@ -64,5 +65,4 @@ public class OfferController {
 		modelMap.addAttribute("leagueId", leagueId);
 		return getOffers(leagueId, modelMap);
 	}
-
 }

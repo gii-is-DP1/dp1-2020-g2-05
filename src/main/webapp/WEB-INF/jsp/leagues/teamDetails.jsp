@@ -2,6 +2,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
 
 <petclinic:layout pageName="teamDetails">
@@ -37,16 +38,30 @@
 			<th>Nationality</th>
 			<th>Actions</th>
 		</tr>
-		<c:forEach items="${misFichajes}" var="piloto">
+		<c:forEach items="${misFichajes}" var="recruit">
 			<tr>
-				<td><c:out value="${piloto.name}" /></td>
-				<td><c:out value="${piloto.lastName}" /></td>
-				<td><c:out value="${piloto.category}" /></td>
-				<td><c:out value="${piloto.dorsal}" /></td>
-				<td><c:out value="${piloto.nationality}" /></td>
-				<td><spring:url value="/pilots/delete/{pilotoId}" var="pilotoUrl">
-						<spring:param name="pilotoId" value="${piloto.id}" />
-					</spring:url> <a href="${fn:escapeXml(pilotoUrl)}">Poner a la venta</a></td>
+				<td><c:out value="${recruit.pilot.name}" /></td>
+				<td><c:out value="${recruit.pilot.lastName}" /></td>
+				<td><c:out value="${recruit.pilot.category}" /></td>
+				<td><c:out value="${recruit.pilot.dorsal}" /></td>
+				<td><c:out value="${recruit.pilot.nationality}" /></td>
+				<c:choose>
+					<c:when test="${recruit.id == recruitToSale.id}">
+						<form:form modelAttribute="offer" class="form-horizontal" id="setPrice" actions="/leagues/{leagueId}/teams/{teamId}/details/{recruitId}"  > 
+					        <td><div class="form-group has-feedback">	
+								<petclinic:inputField label="Price" name="price"/>
+								<button class="btn btn-default" type="submit">Set Price</button>
+					        </div></td>
+					    </form:form>
+					</c:when>
+					<c:otherwise>
+						<td><spring:url value="/leagues/{leagueId}/teams/{teamId}/details/{recruitId}" var="putOnSaleUrl">
+								<spring:param name="leagueId" value="${team.league.id}" />
+								<spring:param name="teamId" value="${team.id}" />
+								<spring:param name="recruitId" value="${recruit.id}" />
+							</spring:url> <a href="${fn:escapeXml(putOnSaleUrl)}">Poner a la venta</a></td>
+					</c:otherwise>
+				</c:choose>
 			</tr>
 		</c:forEach>
 	</table>

@@ -20,7 +20,6 @@ public class Offer extends BaseEntity{
 	private Integer price;
 	
 	@Column(name = "status")
-	@NotNull
 	private Status status;
 	
 	@ManyToOne
@@ -65,6 +64,14 @@ public class Offer extends BaseEntity{
 
 	public void setStatus(Status status) {
 		this.status = status;
+	}
+	
+	public Recruit getRecruit() {
+		return recruit;
+	}
+
+	public void setRecruit(Recruit recruit) {
+		this.recruit = recruit;
 	}
 	
 }
