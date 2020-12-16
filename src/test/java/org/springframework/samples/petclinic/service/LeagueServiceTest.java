@@ -59,6 +59,17 @@ public class LeagueServiceTest {
 	 }
 	 
 	 @Test
+	 void shouldCountTeamsByLeagueId() {
+		Integer positive_test= this.leagueService.findTeamsByLeagueId(1);
+		assertThat(positive_test).isNotEqualTo(0);
+		
+		Integer negative_test= this.leagueService.findTeamsByLeagueId(2323);
+		assertThat(negative_test).isEqualTo(0);
+		
+	 }
+	 
+	 
+	 @Test
 	 @Transactional
 	 void shouldInsertLeague()  throws DataAccessException, duplicatedLeagueNameException {
 		Iterable<League> league = this.leagueService.findAll();
@@ -158,7 +169,7 @@ public class LeagueServiceTest {
 	 @Transactional
 	 @Modifying
 	 void shouldActiveLeagueMoto3() {
-		this.leagueService.activeMoto3(1);
+		 this.leagueService.activeMoto3(1);
 		League league = this.leagueService.findLeague(1).get();
 
 	    assertThat(league.isMoto3Active()).isTrue();
@@ -257,6 +268,36 @@ public class LeagueServiceTest {
 		
 			 
 			 		assertThat(team.size()).isEqualTo(equipo1);
+
+	 }
+	 
+	 @Test
+	 @Transactional
+	 void shouldFindTeamByLeagueId() {
+		 List<Team> team = this.leagueService.findTeamByLeagueId(1);
+		 Integer equipo1 = team.size();
+			 
+			 		assertThat(equipo1).isNotEqualTo(0);
+
+	 }
+	 
+	 @Test
+	 @Transactional
+	 void shouldFindTeamByUsername() {
+		 List<Team> team = this.leagueService.findTeamByUsername("migniearj");
+		 Integer equipo1 = team.size();
+			 
+			 		assertThat(equipo1).isNotEqualTo(0);
+
+	 }
+	 
+	 @Test
+	 @Transactional
+	 void shouldFindTeamByUsernameAndLeagueId() {
+		 List<Team> team = this.leagueService.findTeamByUsernameAndLeagueId("migniearj", 2);
+		 Integer equipo1 = team.size();
+			 
+			 		assertThat(equipo1).isNotEqualTo(0);
 
 	 }
 	 

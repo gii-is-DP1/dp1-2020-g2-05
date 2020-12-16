@@ -1,5 +1,7 @@
 package motogpAPI.model;
 
+import motogpAPI.Category;
+
 public class InfoCarrera {
 	
 	String nombreEvento;
@@ -9,11 +11,16 @@ public class InfoCarrera {
 	String piloto;
 	String pais;
 	String equipo;
-
+	String raceCode;
+	Category category;
+	String lugar;
+	String fecha;
+	
 	Double kmh;
 	Integer vueltaMasRapidaPole;
 	public InfoCarrera(String nombreEvento, Integer posicion, Integer puntos, Integer numeros, String piloto,
-			String pais, String equipo, Double kmh, Integer vueltaMasRapidaPole) {
+			String pais, String equipo, Double kmh, Integer vueltaMasRapidaPole,String raceCode,Category category,String lugar,	String fecha
+) {
 		super();
 		this.nombreEvento = nombreEvento;
 		this.posicion = posicion;
@@ -24,6 +31,10 @@ public class InfoCarrera {
 		this.equipo = equipo;
 		this.kmh = kmh;
 		this.vueltaMasRapidaPole = vueltaMasRapidaPole;
+		this.category=category;
+		this.lugar=lugar;
+		this.fecha=fecha;
+		this.raceCode=raceCode;
 	}
 	public String getNombreEvento() {
 		return nombreEvento;
@@ -67,7 +78,30 @@ public class InfoCarrera {
 	public void setEquipo(String equipo) {
 		this.equipo = equipo;
 	}
-
+	public String getRaceCode() {
+		return raceCode;
+	}
+	public void setRaceCode(String raceCode) {
+		this.raceCode = raceCode;
+	}
+	public Category getCategory() {
+		return category;
+	}
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+	public String getLugar() {
+		return lugar;
+	}
+	public void setLugar(String lugar) {
+		this.lugar = lugar;
+	}
+	public String getFecha() {
+		return fecha;
+	}
+	public void setFecha(String fecha) {
+		this.fecha = fecha;
+	}
 	public Double getKmh() {
 		return kmh;
 	}
@@ -84,14 +118,18 @@ public class InfoCarrera {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((category == null) ? 0 : category.hashCode());
 		result = prime * result + ((equipo == null) ? 0 : equipo.hashCode());
+		result = prime * result + ((fecha == null) ? 0 : fecha.hashCode());
 		result = prime * result + ((kmh == null) ? 0 : kmh.hashCode());
+		result = prime * result + ((lugar == null) ? 0 : lugar.hashCode());
 		result = prime * result + ((nombreEvento == null) ? 0 : nombreEvento.hashCode());
 		result = prime * result + ((numeros == null) ? 0 : numeros.hashCode());
 		result = prime * result + ((pais == null) ? 0 : pais.hashCode());
 		result = prime * result + ((piloto == null) ? 0 : piloto.hashCode());
 		result = prime * result + ((posicion == null) ? 0 : posicion.hashCode());
 		result = prime * result + ((puntos == null) ? 0 : puntos.hashCode());
+		result = prime * result + ((raceCode == null) ? 0 : raceCode.hashCode());
 		result = prime * result + ((vueltaMasRapidaPole == null) ? 0 : vueltaMasRapidaPole.hashCode());
 		return result;
 	}
@@ -104,15 +142,27 @@ public class InfoCarrera {
 		if (getClass() != obj.getClass())
 			return false;
 		InfoCarrera other = (InfoCarrera) obj;
+		if (category != other.category)
+			return false;
 		if (equipo == null) {
 			if (other.equipo != null)
 				return false;
 		} else if (!equipo.equals(other.equipo))
 			return false;
+		if (fecha == null) {
+			if (other.fecha != null)
+				return false;
+		} else if (!fecha.equals(other.fecha))
+			return false;
 		if (kmh == null) {
 			if (other.kmh != null)
 				return false;
 		} else if (!kmh.equals(other.kmh))
+			return false;
+		if (lugar == null) {
+			if (other.lugar != null)
+				return false;
+		} else if (!lugar.equals(other.lugar))
 			return false;
 		if (nombreEvento == null) {
 			if (other.nombreEvento != null)
@@ -144,6 +194,11 @@ public class InfoCarrera {
 				return false;
 		} else if (!puntos.equals(other.puntos))
 			return false;
+		if (raceCode == null) {
+			if (other.raceCode != null)
+				return false;
+		} else if (!raceCode.equals(other.raceCode))
+			return false;
 		if (vueltaMasRapidaPole == null) {
 			if (other.vueltaMasRapidaPole != null)
 				return false;
@@ -154,8 +209,9 @@ public class InfoCarrera {
 	@Override
 	public String toString() {
 		return "InfoCarrera [nombreEvento=" + nombreEvento + ", posicion=" + posicion + ", puntos=" + puntos
-				+ ", numeros=" + numeros + ", piloto=" + piloto + ", pais=" + pais + ", equipo=" + equipo + ", kmh="
-				+ kmh + ", vueltaMasRapidaPole=" + vueltaMasRapidaPole + "]";
+				+ ", numeros=" + numeros + ", piloto=" + piloto + ", pais=" + pais + ", equipo=" + equipo
+				+ ", raceCode=" + raceCode + ", category=" + category + ", lugar=" + lugar + ", fecha=" + fecha
+				+ ", kmh=" + kmh + ", vueltaMasRapidaPole=" + vueltaMasRapidaPole + "]";
 	}
 	
 	

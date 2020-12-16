@@ -10,23 +10,25 @@ INSERT INTO authorities(id,username,authority) VALUES (3,'vet1','veterinarian');
 
 -- Usuario de antcammar4 como owner
 INSERT INTO users(username,password,enabled) VALUES ('antcammar4','123456',TRUE);
-INSERT INTO authorities(id,username,authority) VALUES (4,'antcammar4','owner');
+INSERT INTO authorities(id,username,authority) VALUES (4,'antcammar4','admin');
 -- Usuario de serrojjim como owner
 INSERT INTO users(username,password,enabled) VALUES ('serrojjim','123456',TRUE);
-INSERT INTO authorities(id,username,authority) VALUES (5,'serrojjim','owner');
+INSERT INTO authorities(id,username,authority) VALUES (5,'serrojjim','admin');
 -- Usuario de aleruijur como owner
 INSERT INTO users(username,password,enabled) VALUES ('aleruijur','aleale',TRUE);
-INSERT INTO authorities(id,username,authority) VALUES (6,'aleruijur','owner');
+INSERT INTO authorities(id,username,authority) VALUES (6,'aleruijur','admin');
 -- Usuario de migniearj como owner
 INSERT INTO users(username,password,enabled) VALUES ('migniearj','miguesnow',TRUE);
-INSERT INTO authorities(id,username,authority) VALUES (7,'migniearj','owner');
+INSERT INTO authorities(id,username,authority) VALUES (7,'migniearj','admin');
 -- Usuario de alvcorcas como owner
 INSERT INTO users(username,password,enabled) VALUES ('alvcorcas','1eB@6!XYUYe6c33&',TRUE);
-INSERT INTO authorities(id,username,authority) VALUES (8,'alvcorcas','owner');
+INSERT INTO authorities(id,username,authority) VALUES (8,'alvcorcas','admin');
 -- Usuario de martorsan13 como owner
 INSERT INTO users(username,password,enabled) VALUES ('martorsan13','mariano',TRUE);
-INSERT INTO authorities(id,username,authority) VALUES (9,'martorsan13','owner');
-
+INSERT INTO authorities(id,username,authority) VALUES (9,'martorsan13','admin');
+--Usuario para testear las vistas de user
+INSERT INTO users(username,password,enabled) VALUES ('xnegis','12345',TRUE);
+INSERT INTO authorities(id,username,authority) VALUES (10,'xnegis','user');
 
 
 

@@ -7,12 +7,11 @@
 
 <petclinic:layout pageName="leagues">
 	<h2>Leagues</h2>
-
 	<table id="leaguesTable" class="table table-striped">
 		<thead>
 			<tr>
 				<th>Name</th>
-				<th>Code</th>
+			<c:if test="${admin==true}"><th>Code</th></c:if>	
 				<th>Date</th>
 				<th>Category</th>
 				<th>Races Completed</th>
@@ -23,7 +22,7 @@
 			<c:forEach items="${ligas}" var="league">
 					<tr>	<!--  onclick="window.location='/leagues/${league.id}/details'"  -->
 					<td><c:out value="${league.name} " /></td>
-					<td><c:out value="${league.leagueCode} " /></td>
+					<c:if test="${admin==true}"><td><c:out value="${league.leagueCode} " /></td></c:if>
 					<td><c:out value="${league.leagueDate}" /></td>
 					<c:if test="${league.racesCompleted<10}">  
 					<td>Moto 3 </td>					
@@ -42,9 +41,9 @@
 					</td>
 					<c:if test="${league.racesCompleted<20}">
 										<td>
-					<spring:url value="/leagues/{leagueId}/increase" var="leagueUrl">
+					<c:if test="${admin==true}"><spring:url value="/leagues/{leagueId}/increase" var="leagueUrl">
 							<spring:param name="leagueId" value="${league.id}" />
-						</spring:url> <a href="${fn:escapeXml(leagueUrl)}"><img src="resources/images/meta.png" style="height:15px;weight:15px;border:none;"/></a>
+						</spring:url> <a href="${fn:escapeXml(leagueUrl)}"><img src="resources/images/meta.png" style="height:15px;weight:15px;border:none;"/></a></c:if>
 <%-- 					<input id="button${league.id}"  type="submit" name="button" onclick="window.location.href='/leagues'" value="enter"/> --%>
 					</td>
 					</c:if>

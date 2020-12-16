@@ -6,11 +6,12 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
 
 <petclinic:layout pageName="leagues">
-	<h2>Your Leagues</h2>
-	<h2>        <c:if test="${yaTienesEquipo}">You already have a team in this League :( !</c:if> 
-	<h2>        <c:if test="${yaTieneMaxLigas}">You already participate in 5 leagues !</c:if> 
-	</h2>
-	<table id="leaguesTable" class="table table-striped">
+	<c:if test="${noTengoLigas==false}"><h2>Your Leagues</h2></c:if>
+	<c:if test="${yaTienesEquipo}"><h2>You already have a team in this League :( ! </h2></c:if> 
+	<c:if test="${yaTieneMaxLigas}"><h2>This league already have 5 teams !/h2></c:if>
+	<c:if test="${yaTieneMaxLigas}"><h2>You have no Leagues!</h2></c:if>
+	<c:if test="${yaTieneMaxTeams}"><h2>You already participate in 5 leagues!</h2></c:if>
+	<c:if test="${noTengoLigas==false}"><table id="leaguesTable" class="table table-striped">
 		<thead>
 			<tr>
 				<th style="text-align:center;">Name</th>
@@ -90,6 +91,7 @@
 			</c:forEach>
 		</tbody>
 	</table>
+	</c:if>
 	<spring:url value="/leagues/new" var="messageUrl">
 	</spring:url> <a href="${fn:escapeXml(messageUrl)}">New league</a>
 	<spring:url value="/leagues/join" var="messageUrl">

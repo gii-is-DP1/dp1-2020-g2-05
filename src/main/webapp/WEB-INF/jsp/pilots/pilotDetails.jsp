@@ -16,8 +16,7 @@
 			<th>Dorsal</th>
 			<th>Nationality</th>
 			<th>Category</th>
-			<th>Results</th>
-			<th>Actions</th>
+		
 		</tr>
 		<tr>
 			<td><c:out value="${pilot.name} " /></td>
@@ -25,8 +24,23 @@
 			<td><c:out value="${pilot.dorsal}" /></td>
 			<td><c:out value="${pilot.nationality}" /></td>
 			<td><c:out value="${pilot.category}" /></td>
-			<td>${pilot.results}</td>
+			
 		</tr>
+	</table>
+	
+	<table class="table table-striped">
+		<tr>
+			<th>Result Details</th>
+		</tr>
+		
+		
+		
+		<c:forEach items="${results}" var="res" varStatus="loop">
+		<tr>
+			 <td><c:out value="${loop.index+1}. ${res} "  /> </td>
+		</tr>
+			 
+		</c:forEach>
 	</table>
 
 

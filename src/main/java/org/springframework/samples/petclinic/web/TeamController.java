@@ -15,15 +15,20 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.League;
+import org.springframework.samples.petclinic.model.Lineup;
+import org.springframework.samples.petclinic.model.Offer;
+import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.Pilot;
+import org.springframework.samples.petclinic.model.Recruit;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.User;
 
 import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.LineupService;
-
+import org.springframework.samples.petclinic.service.OfferService;
 import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -50,7 +55,8 @@ public class TeamController {
 	@Autowired
 	RecruitService recruitService;
 	
-
+	@Autowired
+	OfferService offerService;
 
 	@Autowired
 	LineupService lineupService;
@@ -61,10 +67,11 @@ public class TeamController {
 	}
 
 
-	private Boolean EquipoNoMismoNombre=false;
 	private Boolean EquipoSi=false;
 	private Boolean EquipoNo=false;
 	private Boolean Error=false;
+	private Boolean Editar=false;
+	private Boolean BorrarDesdeMyTeams=false;
 	
 	public User getUserSession() {
 		User usuario = new User();  
@@ -107,19 +114,7 @@ public class TeamController {
 		
 		
 		User usuario = getUserSession();
-			List<Team> tem = new ArrayList<Team>();
-			Optional<League> league = this.leagueService.findLeague(leagueId);
-			List<Team> list = league.get().getTeam().stream().collect(Collectors.toList());
-			System.out.println("wajdbaiwjdbnkjwd");
-			System.out.println(list);
-			String username = getUserSession().getUsername();
-			for(int i = 0; i<list.size(); i++) {
-				if(list.get(i).getUser().getUsername().equals(username)){
-		    		tem.add(list.get(i));
-		    		
-	    	}
-		}
-		System.out.println(tem.size());
+			List<Team> tem = this.leagueService.findTeamByUsernameAndLeagueId(usuario.getUsername(), leagueId);
 
 		
 		
@@ -146,7 +141,7 @@ public class TeamController {
 		if(team.isPresent()) {
 //			model.addAttribute("message", "Team found!");
 			model.addAttribute("team", team.get());
-			List<Pilot> l = recruitService.getRecruits(teamID);
+			List<Recruit> l = recruitService.getRecruitsByTeam(teamID);
 			System.out.println(l);
 			model.addAttribute("misFichajes", l);
 			model.addAttribute("misAlineaciones", lineupService.findByTeam(teamID));
@@ -156,9 +151,42 @@ public class TeamController {
 		return "/leagues/teamDetails";
 	}
 	
+	@GetMapping(path="/leagues/{leagueId}/teams/{teamId}/details/{recruitId}")
+	public String setPrice(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
+			@PathVariable("recruitId") int recruitId, ModelMap modelMap) {
+		
+		Optional<Recruit> opRecruit = recruitService.findRecruit(recruitId);
+		if(opRecruit.isPresent()) {
+			modelMap.addAttribute("offer", new Offer());
+			modelMap.addAttribute("recruitToSale",opRecruit.get());
+			return mostrarDetallesEscuderia(leagueId,teamId,modelMap);
+		}else {
+			modelMap.addAttribute("message", "Recruit not found!");
+			return "/leagues/teamDetails";
+		}
+	}
+	
+	@PostMapping(path="/leagues/{leagueId}/teams/{teamId}/details/{recruitId}")
+	public String putOnSale(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, @PathVariable("recruitId") int recruitId,
+			@Valid Offer offer,BindingResult result, ModelMap modelMap) {
+		if(result.hasErrors()) {
+			System.out.println(result);
+			modelMap.put("message",result.getAllErrors());
+			return setPrice(leagueId,teamId,recruitId,modelMap);
+		}else {
+			Optional<Recruit> opRecruit = recruitService.findRecruit(recruitId);
+			if(opRecruit.isPresent()) {
+				offerService.putOnSale(opRecruit.get(), offer.getPrice());
+				return "redirect:/leagues/{leagueId}/market";
+			}else {
+				modelMap.addAttribute("message", "Recruit not found!");
+				return "/leagues/teamDetails";
+			}
+		}
+	}
+	
 	@GetMapping(path="/leagues/{leagueId}/teams/{teamId}/delete")
 	public String borrarEscuderia (@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,  ModelMap model) {
-		System.out.println(leagueId);
 		Optional<Team> team = leagueService.findTeamById(teamId);
 		if(team.isPresent()) {
 			leagueService.delete(team.get());
@@ -166,52 +194,55 @@ public class TeamController {
 		}else {
 			model.addAttribute("message", "Team not found!");
 		}
+		if(BorrarDesdeMyTeams) {
+			BorrarDesdeMyTeams = false;
+			return "redirect:/myTeams"; 
+		}else {
 		return "redirect:/leagues/{leagueId}/teams";
+		}
+		
+//		return "redirect:/leagues/{leagueId}/teams";
+
 	}
 	
-//	@GetMapping(path="/leagues/{leagueId}/teams/{teamId}/edit")
-//	public String editarPiloto(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, ModelMap model) {
-//		Optional<Team> team = leagueService.findTeamById(teamId);
-//		String view = "leagues/TeamList";
-//		model.addAttribute(team.get());
-//		if(team.isPresent()) {
-//			System.out.println("hola");
-//			view = "leagues/TeamsEdit";
-//			
-//		}else {
-//			model.addAttribute("message", "team not found!");
-//			view=showTeams(leagueId, model);
-//		}
-//		return view;
-//	}
-//	
+	@GetMapping(path="/leagues/{leagueId}/teams/{teamId}/edit")
+	public String editarPiloto(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, ModelMap model) {
+		Optional<Team> team = leagueService.findTeamById(teamId);
+				model.put("team", team.get());
+				
+				Editar = true;
+				
+				model.put("Editar", Editar);
+				return "leagues/TeamsEdit";
+		
+	}
+	
+	@PostMapping(value = "/leagues/{leagueId}/teams/{teamId}/edit")
+	public String editarPilotoPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, Team team, ModelMap model, BindingResult result) {
+		if (result.hasErrors()) {
+			model.put("team", team);
+			
+			return "leagues/TeamsEdit";
+		}
+		else {
+			User usuario = getUserSession();
+
+			Editar = false;
+			Team teamToUpdate = this.leagueService.findTeamById(team.getId()).get();
+			BeanUtils.copyProperties(team, teamToUpdate);
+			teamToUpdate.setUser(usuario);
+			this.leagueService.saveTeam(teamToUpdate);
+			model.addAttribute("message", "Team successfully saved!");
+			return "redirect:/leagues/{leagueId}/teams";
+		}
+	}
+	
 	@GetMapping("/myTeams")
 	public String myTeams(ModelMap modelMap) {
-		Iterable<League> leagues = leagueService.findAll() ;
-//		List<League> result = new ArrayList<League>();
-//	    leagues.forEach(result::add);
-//	    List<Team> myTeamsList = new ArrayList<Team>();
-//	    SortedSet<Integer> ids = new TreeSet<Integer>();
-//	    String username = getUserSession().getUsername();;
-//	    for(int i=0;i<result.size();i++) {
-//		    List<Team> teams = new ArrayList<>(result.get(i).getTeam());
-//		    System.out.println(teams.size()-1);
-//		    for(int j=0;j<teams.size();j++) {
-//		    	System.out.println(teams.get(j).getUser());
-//		    	if(teams.get(j).getUser().getUsername().equals(username)){
-//		    		myTeamsList.add(teams.get(j));
-//		    		ids.add(teams.get(j).getLeague().getId());
-//		    		
-//		    		
-//		    	}
-//		    }
-//	    }
-		
 		String username = getUserSession().getUsername();
 		List<Team> team = this.leagueService.findTeamByUsername(username);
-	    
-	   
 	    modelMap.addAttribute("teams", team);
+	    BorrarDesdeMyTeams = true;
 		return "leagues/myTeams";
 	}
 
@@ -219,12 +250,13 @@ public class TeamController {
 	@GetMapping(value = "/leagues/{leagueId}/teams")
 	public String showTeams(@PathVariable int leagueId, Map<String, Object> model) {
 		User usuario = getUserSession();
-		List<Team> tem = this.leagueService.findLeague(leagueId).get().getTeam().stream().collect(Collectors.toList());
+		List<Team> tem = this.leagueService.findTeamByLeagueId(leagueId);
 		tem = tem.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
 		System.out.println(tem);
 		model.put("teams", tem);
 		model.put("league", this.leagueService.findLeague(leagueId).get());
 		model.put("user", usuario);
+		BorrarDesdeMyTeams = false;
 		if(EquipoNo) model.put("EquipoNo", "You cannot have more than 1 teams in the same league");
 		EquipoNo=false;
 		if(EquipoSi) model.put("EquipoSi", "Team created succesfully!");
@@ -233,6 +265,7 @@ public class TeamController {
 		Error=false;
 		if(Error) model.put("Error", "Your team have some errors!");
 		Error=false;
+		
 		return "/leagues/TeamList";
 	}
 }

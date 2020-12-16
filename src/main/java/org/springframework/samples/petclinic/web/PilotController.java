@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2013 the original author or authors.
+d * Copyright 2002-2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,13 @@
 package org.springframework.samples.petclinic.web;
 
 import java.util.Collection;
-
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import javax.validation.Valid;
 import javax.websocket.server.PathParam;
@@ -156,15 +160,19 @@ public class PilotController {
 	
 	@GetMapping("/pilots")
 	public String listadoPilotos(ModelMap modelMap) {
-		modelMap.addAttribute("resultados", pilotService.findAll());
+		List<Pilot> pilotos = StreamSupport.stream(pilotService.findAll().spliterator(), false).collect(Collectors.toList());
+//		Collections.sort(pilotos);//.sort(Comparator.naturalOrder());
+		modelMap.addAttribute("resultados", pilotos);
 		return "pilots/pilotsList";
 	}
 	
 	@GetMapping(path="pilots/{pilotId}")
 	public String muestraPilotoPorId(@PathVariable("pilotId") int pilotId, ModelMap model) {
 		Optional<Pilot> pilot = pilotService.findPilotById(pilotId);
+		
 		if(pilot.isPresent()) {
 			model.addAttribute("pilot", pilot.get());
+			model.addAttribute("results",pilotService.obtenerResultsFormatted(pilot.get().getResults()));
 		}else {
 			model.addAttribute("encontrado", false);
 		}
