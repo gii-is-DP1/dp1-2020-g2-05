@@ -72,7 +72,7 @@ public class LeagueService {
 		return leagueRepository.findLeagueByLeagueCode(leagueCode);
 	}
 	
-	public Collection<Integer> findTeamsByUsername(String username) throws DataAccessException {
+	public List<Integer> findTeamsByUsername(String username) throws DataAccessException {
 		return leagueRepository.findTeamsByUsername(username);
 	}
 	
@@ -97,7 +97,23 @@ public class LeagueService {
 	public void activeCategory(Integer id, Category idCategory) {
 		 leagueRepository.activeCategory(id, idCategory);
 	}
+	
+
+	public List<League> findAllLeaguesByCategory(Category idCategory) {
+		 return leagueRepository.findAllLeaguesByCategory(idCategory);
+	}
+	
+	public void updateGPsFromLeagueWithCategory(Category category) throws DataAccessException, duplicatedLeagueNameException{
+		List<League> listaCategorias= leagueRepository.findAllLeaguesByCategory(category);
+		List<League> listaCategoriasActualizada = new ArrayList<League>();
+		for(League league:listaCategorias) {
+			Integer racesCompleted =league.getRacesCompleted()+1;
+			listaCategoriasActualizada.add(league);
+			this.leagueRepository.increaseRacesCompleted(league.getId(), racesCompleted);
+		}
+	}
 	//	public void activeMoto2(Integer leagueId) throws DataAccessException {
+
 //		leagueRepository.activeMoto2(leagueId);
 //	}
 //	public void activeMotogp(Integer leagueId) throws DataAccessException {
@@ -132,14 +148,51 @@ public class LeagueService {
 	    return result;
 	}
 	
-	public void avanceIncremental(List<League> result) {
+	public boolean avanceIncremental(List<League> result) {
 		   for(League league:result) {
-		    	if(league.getRacesCompleted()<10) this.activeCategory(league.getId(),Category.MOTO2);  //activar moto3 si las carreras son > que 10  
-		    	else if(league.getRacesCompleted()>=10 && league.getRacesCompleted()<15 ) this.activeCategory(league.getId(),Category.MOTO2);  //activar moto2 si las carreras son >= que 10 y < 15
-		    	else if(league.getRacesCompleted()>=15 )this.activeCategory(league.getId(),Category.MOTO2); //activar motogp si las carreras son >= 15
-		    	if(league.getRacesCompleted()>20) league.setRacesCompleted(20);
-				if(league.getTeam().isEmpty()) this.deleteLeague(league);
+		    	if(league.getRacesCompleted()<10) {
+		    		this.activeCategory(league.getId(),Category.MOTO2);  //activar moto3 si las carreras son > que 10  
+		    	}
+		    	else if(league.getRacesCompleted()>=10 && league.getRacesCompleted()<15 ) {
+		    		this.activeCategory(league.getId(),Category.MOTO2);  //activar moto2 si las carreras son >= que 10 y < 15
+		    	}
+		    	else if(league.getRacesCompleted()>=15 ) {
+		    		this.activeCategory(league.getId(),Category.MOTO2); //activar motogp si las carreras son >= 15
+		    	}
+		    	if(league.getRacesCompleted()>20) {
+		    		league.setRacesCompleted(20);
+		    	}
+				if(league.getTeam().size()==1) {
+					this.deleteLeague(league);
+					return true;
+				}
+				if(league.getTeam().size()==0) {
+					this.deleteLeague(league);
+					return true;
+				}
+				
 		    }
+		   return false;
+	}
+	
+	public List<Integer> GPsPorCategoria(List<League> result) {
+	   			Integer moto2=0;
+	   			Integer moto3=0;
+	   			Integer motogp=0;
+			for(League league:result) {
+		    	if(league.getActiveCategory().equals(Category.MOTO2)) {
+		    		moto2=league.getRacesCompleted();
+		    	}else if(league.getActiveCategory().equals(Category.MOTO3)) {
+		    		moto3=league.getRacesCompleted();
+		    	}else if(league.getActiveCategory().equals(Category.MOTOGP)) {
+		    		motogp=league.getRacesCompleted();
+		    	}
+		    }
+			List<Integer> lista=new ArrayList<Integer>();
+			lista.add(moto2);
+			lista.add(moto3);
+			lista.add(motogp);
+			return lista;
 	}
 
 	public List<League> obtenerLigasPorUsuario(Collection<Integer> collect){

@@ -7,6 +7,7 @@
 
 <petclinic:layout pageName="leagues">
 	<h2>Leagues</h2>
+	
 	<table id="leaguesTable" class="table table-striped">
 		<thead>
 			<tr>
@@ -42,18 +43,21 @@
 			</c:forEach>
 		</tbody>
 	</table>
-					<spring:url value="/leagues/{leagueId}/increase" var="leagueUrl">
-							<spring:param name="leagueId" value="${league.id}" />
+					<spring:url value="/BD/carrerasBD" var="leagueUrl">
 						</spring:url> <a href="${fn:escapeXml(leagueUrl)}"><img src="resources/images/meta.png" style="height:15px;weight:15px;border:none;"/></a>
 <%-- 					<input id="button${league.id}"  type="submit" name="button" onclick="window.location.href='/leagues'" value="enter"/> --%>
-		<c:if test="${league.racesCompleted<10}">  
-					<h2>Moto 3 </h2>					
-					</c:if>
-					<c:if test="${league.racesCompleted>=10 && league.racesCompleted<15}">  
-					<h2>Moto 2 </h2>				
-					</c:if>
-					<c:if test="${league.racesCompleted>=15}">  
-					<h2>Moto GP </h2>					
-					</c:if>  
-
+<%-- 		<c:if test="${league.racesCompleted<10}">   --%>
+<!-- 					<h2>Moto 3 </h2>					 -->
+<%-- 					</c:if> --%>
+<%-- 					<c:if test="${league.racesCompleted>=10 && league.racesCompleted<15}">   --%>
+<!-- 					<h2>Moto 2 </h2>				 -->
+<%-- 					</c:if> --%>
+<%-- 					<c:if test="${league.racesCompleted>=15}">   --%>
+<!-- 					<h2>Moto GP </h2>					 -->
+<%-- 					</c:if>   --%>
+	<spring:url value="/granPremios" var="leagueUrl">
+	</spring:url> <a href="${fn:escapeXml(leagueUrl)}">Gran Premios</a>
+				<h4>Races Completed(MOTO2) : <c:out value="${rcc2}" /></h4>
+				<h4>Races Completed(MOTO3) : <c:out value="${rcc3}" /></h4>
+				<h4>Races Completed(MOTOgp) : <c:out value="${rccgp}" /></h4>
 </petclinic:layout>
