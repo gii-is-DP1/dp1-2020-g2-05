@@ -15,7 +15,7 @@ import org.springframework.samples.petclinic.model.Category;
 @Table(name = "lineup")
 public class Lineup extends BaseEntity {
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
 	@Column(name = "category")
 	@NotNull
 	private Category category;
@@ -45,13 +45,13 @@ public class Lineup extends BaseEntity {
 	@NotNull
 	private GranPremio gp;
 
-//	public Category getCategory() {
-//		return (Category) category;
-//	} 
-//
-//	public void setCategory(Category category) {
-//		this.category = category;
-//	}
+	public Category getCategory() {
+		return (Category) category;
+	} 
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
 
 	public Recruit getRecruit1() {
 		return recruit1;

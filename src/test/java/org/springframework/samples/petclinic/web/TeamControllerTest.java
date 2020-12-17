@@ -20,6 +20,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
+import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.service.LeagueService;
@@ -63,9 +64,7 @@ public class TeamControllerTest {
 		liga.setId(TEST_LEAGUE_ID);
 		liga.setLeagueCode("IOKASXISAU");
 		liga.setLeagueDate("15/10/2020");
-		liga.setMoto2Active(true);
-		liga.setMoto3Active(false);
-		liga.setMotogpActive(false);
+		liga.setActiveCategory(Category.MOTO3);
 		liga.setName("liga");
 		liga.setRacesCompleted(2);
 		
