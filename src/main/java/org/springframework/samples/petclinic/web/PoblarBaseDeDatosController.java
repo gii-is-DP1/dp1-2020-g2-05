@@ -9,6 +9,7 @@ import javax.validation.Valid;
 
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.BDCarrera;
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.FormRellenarBD;
@@ -30,7 +31,8 @@ public class PoblarBaseDeDatosController {
 	
 	private String AUTHORITY;
 
-
+	
+	LeagueController leagueController;
 	LeagueService leagueService;
 
 	UserService userService;
@@ -38,10 +40,11 @@ public class PoblarBaseDeDatosController {
 	PilotService pilotService;
 	
 	@Autowired
-	public PoblarBaseDeDatosController(LeagueService leagueService, UserService userService,PilotService pilotService) {
+	public PoblarBaseDeDatosController(LeagueService leagueService, UserService userService,PilotService pilotService,LeagueController leagueController) {
 		this.leagueService = leagueService;
 		this.userService = userService;
 		this.pilotService = pilotService;
+		this.leagueController=leagueController;
 	}
 
 
@@ -62,14 +65,14 @@ public class PoblarBaseDeDatosController {
 	@GetMapping(path="/BD/pilotsBD")
 	public String PoblarBD(ModelMap model) {
 		model.addAttribute("FormRellenarBD", new FormRellenarBD());	
-		motogpAPI.Category[] yourEnums = motogpAPI.Category.values();
-		List<motogpAPI.Category> num = new ArrayList<>();
+		Category[] yourEnums = Category.values();
+		List<Category> num = new ArrayList<>();
 		
 		for(int i = 0; i<yourEnums.length; i++) {
 			num.add(yourEnums[i]);
 		}
 		model.addAttribute("listaCategoria", num);
-		System.out.println("hola");
+	
 	  return "/BD/BD";
 	}
 	
@@ -98,8 +101,8 @@ public class PoblarBaseDeDatosController {
 	@GetMapping(path="/BD/carrerasBD")
 	public String PoblarBDCarreras(ModelMap model) {
 		model.addAttribute("BDCarrera", new BDCarrera());	
-		motogpAPI.Category[] yourEnums = motogpAPI.Category.values();
-		List<motogpAPI.Category> num = new ArrayList<>();
+		Category[] yourEnums = Category.values();
+		List<Category> num = new ArrayList<>();
 		
 		for(int i = 0; i<yourEnums.length; i++) {
 			num.add(yourEnums[i]);
@@ -132,7 +135,7 @@ public class PoblarBaseDeDatosController {
 	}
 	
 	@PostMapping(path = "/BD/carrerasBD")	
-	public String PoblarBDcarrera(@Valid BDCarrera form, BindingResult result, ModelMap model) throws JSONException, IOException {
+	public String PoblarBDcarrera(@Valid BDCarrera form, BindingResult result, ModelMap model) throws JSONException, IOException, DataAccessException, duplicatedLeagueNameException {
 		System.out.println(result);
 
 		if(result.hasErrors()) {
@@ -149,8 +152,8 @@ public class PoblarBaseDeDatosController {
 				return "redirect:/BD/carrerasBD";
 					
 			}
-			 
-			return "redirect:/pilots";
+			model.addAttribute("category", form.getCategory());
+			return this.leagueController.incrementarLiga(model);
 		}
 		
 		

@@ -12,7 +12,7 @@ import javax.validation.constraints.NotEmpty;
 
 import com.sun.istack.NotNull;
 
-import motogpAPI.Category;
+import org.springframework.samples.petclinic.model.Category;
 import motogpAPI.RaceCode;
 import motogpAPI.Session;
 
