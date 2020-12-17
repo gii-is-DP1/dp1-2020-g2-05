@@ -134,11 +134,11 @@ INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (6,6,fal
 
 
 --Cada liga con su escudería sistema que tiene todos los pilotos que nadie posee
-INSERT INTO league(id,name,league_code,league_date,active_category,races_completed) VALUES (1,'Liga1','QWEASDFRGT','2019/02/01',1,3);
+INSERT INTO league(id,name,league_code,league_date,active_category,races_completed) VALUES (1,'Liga1','QWEASDFRGT','2019/02/01',2,3);
 INSERT INTO team(id,name,points,money,league_id, username) VALUES (8,'Sistema',0,0,1, 'admin1');
 INSERT INTO league(id,name,league_code,league_date,active_category,races_completed) VALUES (2,'Liga1','OLIKJUHMNJ','2019/06/12',2,3);
 INSERT INTO team(id,name,points,money,league_id, username) VALUES (9,'Sistema',0,0,2, 'admin1');
-INSERT INTO league(id,name,league_code,league_date,active_category,races_completed) VALUES (3,'Liga1','UHJNBGFVTR','2019/09/21',1,3);
+INSERT INTO league(id,name,league_code,league_date,active_category,races_completed) VALUES (3,'Liga1','UHJNBGFVTR','2019/09/21',2,3);
 INSERT INTO team(id,name,points,money,league_id, username) VALUES (10,'Sistema',0,0,3, 'admin1');
 
 
