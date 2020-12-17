@@ -151,13 +151,13 @@ public class LeagueService {
 	public boolean avanceIncremental(List<League> result) {
 		   for(League league:result) {
 		    	if(league.getRacesCompleted()<10) {
-		    		this.activeCategory(league.getId(),Category.MOTO2);  //activar moto3 si las carreras son > que 10  
+		    		this.activeCategory(league.getId(),Category.MOTO3);  //activar moto3 si las carreras son > que 10  
 		    	}
 		    	else if(league.getRacesCompleted()>=10 && league.getRacesCompleted()<15 ) {
 		    		this.activeCategory(league.getId(),Category.MOTO2);  //activar moto2 si las carreras son >= que 10 y < 15
 		    	}
 		    	else if(league.getRacesCompleted()>=15 ) {
-		    		this.activeCategory(league.getId(),Category.MOTO2); //activar motogp si las carreras son >= 15
+		    		this.activeCategory(league.getId(),Category.MOTOGP); //activar motogp si las carreras son >= 15
 		    	}
 		    	if(league.getRacesCompleted()>20) {
 		    		league.setRacesCompleted(20);
