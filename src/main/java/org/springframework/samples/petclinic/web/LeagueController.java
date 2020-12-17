@@ -55,8 +55,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import lombok.extern.java.Log;
-import motogpAPI.Category;
-import motogpAPI.PeticionesGet;
+import org.springframework.samples.petclinic.model.Category;
 import motogpAPI.RaceCode;
 import motogpAPI.Session;
 import motogpAPI.model.InfoCarrera;
@@ -93,18 +92,18 @@ public class LeagueController{
 	
 	@GetMapping("/leagues")
 	public String leagues(ModelMap modelMap) throws JSONException, IOException {
-//		AUTHORITY = this.leagueService.findAuthoritiesByUsername(this.userService.getUserSession().getUsername());
+		AUTHORITY = this.leagueService.findAuthoritiesByUsername(this.userService.getUserSession().getUsername());
 
 		List<League> result = leagueService.convertirIterableLista(leagueService.findAll());
 	  
 		this.leagueService.avanceIncremental(result);
 
 	    
-//	    if(AUTHORITY.equals("admin")) {
-//		modelMap.addAttribute("admin", true);
-//	    }else if(AUTHORITY.equals("user")) {
-//		modelMap.addAttribute("user", true);	
-//	    }
+	    if(AUTHORITY.equals("admin")) {
+		modelMap.addAttribute("admin", true);
+	    }else if(AUTHORITY.equals("user")) {
+		modelMap.addAttribute("user", true);	
+	    }
 	    
 		modelMap.addAttribute("ligas", result);
 	
@@ -168,7 +167,7 @@ public class LeagueController{
 	}
 	
 	@GetMapping(path="/leagues/new")
-	public String initcrearLiga(ModelMap model) {	
+	public String initcrearLiga(ModelMap model) throws DataAccessException, duplicatedLeagueNameException {	
 		User user = this.userService.getUserSession();
 		
 		if(!Optional.of(user).isPresent()) {
@@ -191,11 +190,8 @@ public class LeagueController{
 	    newLeague.setId(result.get(result.size()-1).getId()+1);
 	    newLeague.setLeagueCode(leagueService.randomString(10));
 	    newLeague.setLeagueDate(formatter.format(date));
-	    newLeague.setMoto2Active(false);
-	    newLeague.setMoto3Active(true);
-	    newLeague.setMotogpActive(false);
+	    newLeague.setActiveCategory(Category.MOTO3);
 	    newLeague.setRacesCompleted(0);
-	    
 		model.addAttribute("league",newLeague);
 		return "/leagues/createLeagueName";
 		 }
@@ -298,42 +294,5 @@ public class LeagueController{
 		User user = userService.getUserSession();
 		return "/leagues/leagueDetails";
 		 } //DE MOMENTO NO HACE NADA
-	
-	@GetMapping(path="/leagues/probando")
-	public String detallesLiga2(ModelMap model) {	
-//		User user = userService.getUserSession();
 
-
-		String name = SecurityContextHolder.getContext().getAuthentication().getName();
-		
-		List<League> myLeaguesList = leagueService.obtenerLigasPorUsuario(leagueService.findTeamsByUsername(name )); //obtengo las ligas por usuario
-
-		return "/leagues/myLeagues";
-
-		 } //DE MOMENTO NO HACE NADA
-
-
-
-
-
-
-//	@Override
-//	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//		User user = this.userService.findUser(username).get();
-////		User user = new User();
-////		user.setUsername("antcammar4");
-////		
-////		Set<Authorities> set = new HashSet<Authorities>();
-////		Authorities auth = new Authorities();
-////		auth.setAuthority("admin");
-////		auth.setUser(user);
-////		set.add(auth);
-//	   return new org.springframework.security.core.userdetails.User(
-//                user.getUsername(),
-//                user.getPassword(),
-//                AuthorityUtils.createAuthorityList(user.getAuthorities().toString())
-//        );
-//	}
-
-	
 }

@@ -1,6 +1,6 @@
 package motogpAPI.model;
 
-import motogpAPI.Category;
+import org.springframework.samples.petclinic.model.Category;
 
 public class InfoCarrera {
 	

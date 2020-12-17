@@ -15,6 +15,7 @@ import org.jsoup.nodes.Element;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.samples.petclinic.model.Category;
 
 import motogpAPI.model2.Detail;
 import motogpAPI.model2.Example2;
@@ -43,7 +44,7 @@ public class PeticionesGet {
 
 		try {
 			String url;
-			if (category == Category.MotoGP)
+			if (category == Category.MOTOGP)
 				url = URL_JSON_SEASONS + year + "-" + category.toString().toLowerCase() + "/standings/drivers";
 			else
 				url = URL_JSON_SEASONS + category.toString().toLowerCase() + "-" + year + "/standings/drivers";
@@ -287,7 +288,7 @@ public class PeticionesGet {
 		String grandprix = "";
 
 		String urlRequest;
-		if (category == Category.MotoGP)
+		if (category == Category.MOTOGP)
 			urlRequest = URL_JSON_SEASONS + year + "-" + category.toString().toLowerCase() + "/races";
 		else
 			 urlRequest = URL_JSON_SEASONS + category.toString().toLowerCase() + "-" + year + "/races";

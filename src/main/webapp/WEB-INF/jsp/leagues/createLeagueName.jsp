@@ -5,6 +5,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ page import="org.springframework.samples.petclinic.model.Category" %>
 
 
 <petclinic:layout pageName="leagues">
@@ -18,9 +19,8 @@
 		        	<input type="hidden" name="leagueCode" value="${league.leagueCode}"/>
 		        	<input type="hidden" name="leagueDate" value="${league.leagueDate}"/>
 		        	<input type="hidden" name="racesCompleted" value="${league.racesCompleted}"/>
-		        	<input type="hidden" name="moto2Active" value="${league.moto2Active}"/>
-		        	<input type="hidden" name="moto3Active" value="${league.moto3Active}"/>
-		        	<input type="hidden" name="motogpActive" value="${league.motogpActive}"/>
+		        	<input type="hidden" name="activeCategory" value="${league.activeCategory}"/>
+		        	
 		
             <petclinic:inputField label="League Name" name="Name"/>
         </div>

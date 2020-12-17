@@ -62,14 +62,14 @@ public class PoblarBaseDeDatosController {
 	@GetMapping(path="/BD/pilotsBD")
 	public String PoblarBD(ModelMap model) {
 		model.addAttribute("FormRellenarBD", new FormRellenarBD());	
-		motogpAPI.Category[] yourEnums = motogpAPI.Category.values();
-		List<motogpAPI.Category> num = new ArrayList<>();
+		Category[] yourEnums = Category.values();
+		List<Category> num = new ArrayList<>();
 		
 		for(int i = 0; i<yourEnums.length; i++) {
 			num.add(yourEnums[i]);
 		}
 		model.addAttribute("listaCategoria", num);
-		System.out.println("hola");
+	
 	  return "/BD/BD";
 	}
 	
@@ -98,8 +98,8 @@ public class PoblarBaseDeDatosController {
 	@GetMapping(path="/BD/carrerasBD")
 	public String PoblarBDCarreras(ModelMap model) {
 		model.addAttribute("BDCarrera", new BDCarrera());	
-		motogpAPI.Category[] yourEnums = motogpAPI.Category.values();
-		List<motogpAPI.Category> num = new ArrayList<>();
+		Category[] yourEnums = Category.values();
+		List<Category> num = new ArrayList<>();
 		
 		for(int i = 0; i<yourEnums.length; i++) {
 			num.add(yourEnums[i]);

@@ -17,6 +17,7 @@ import org.springframework.samples.petclinic.model.Result;
 import org.springframework.samples.petclinic.service.PilotService;
 
 import motogpAPI.model.InfoCarrera;
+import org.springframework.samples.petclinic.model.Category;
 
 
 public class Tests {
@@ -48,7 +49,7 @@ public class Tests {
 		
 		
 
-			Record prueba = PeticionesGet.obtieneRecords("2012", Pais.SPA, Category.Moto2);
+			Record prueba = PeticionesGet.obtieneRecords("2012", Pais.SPA, Category.MOTO2);
 
 			System.out.println(prueba);
 //			
