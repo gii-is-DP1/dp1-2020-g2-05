@@ -92,22 +92,26 @@ public class LeagueController{
 	
 	@GetMapping("/leagues")
 	public String leagues(ModelMap modelMap) throws JSONException, IOException {
-		AUTHORITY = this.leagueService.findAuthoritiesByUsername(this.userService.getUserSession().getUsername());
+		User user = this.userService.getUserSession();
+		AUTHORITY = this.leagueService.findAuthoritiesByUsername(user.getUsername());
 
 		List<League> result = leagueService.convertirIterableLista(leagueService.findAll());
 	  
-		this.leagueService.avanceIncremental(result);
-
-	    
+		if(this.leagueService.avanceIncremental(result)) { //si ha eliminado a una liga da true y refresco la pagina
+			return leagues(modelMap);
+		}
+		
 	    if(AUTHORITY.equals("admin")) {
 		modelMap.addAttribute("admin", true);
-	    }else if(AUTHORITY.equals("user")) {
+	    }else if(!AUTHORITY.equals("admin")) {
 		modelMap.addAttribute("user", true);	
 	    }
-	    
+	 
 		modelMap.addAttribute("ligas", result);
-	
-		return "/leagues/leagueList";
+		modelMap.addAttribute("rcc2",this.leagueService.GPsPorCategoria(result).get(0));
+		modelMap.addAttribute("rcc3",this.leagueService.GPsPorCategoria(result).get(1));
+		modelMap.addAttribute("rccgp",this.leagueService.GPsPorCategoria(result).get(2));
+		return "leagues/leagueList";
 	}
 	
 	
@@ -154,15 +158,16 @@ public class LeagueController{
 	
 	
 	
-	@GetMapping(path="/leagues/{leagueId}/increase")
-	public String incrementarLiga(@PathVariable("leagueId") int leagueId, ModelMap model) {	
-		AUTHORITY = this.leagueService.findAuthoritiesByUsername(this.userService.getUserSession().getUsername());
-		if(!(AUTHORITY.equals("admin"))) {
-			return "redirect:/leagues";
-		}
-		League league = leagueService.findLeague(leagueId).get();
-		league.setRacesCompleted(league.getRacesCompleted()+1);
-		model.addAttribute("ligas", leagueService.convertirIterableLista(leagueService.findAll()));
+	@GetMapping(path="/leagues/increase")
+	public String incrementarLiga(ModelMap model) throws DataAccessException, duplicatedLeagueNameException {	
+//		AUTHORITY = this.leagueService.findAuthoritiesByUsername(this.userService.getUserSession().getUsername());
+//		if(!(AUTHORITY.equals("admin"))) {
+//			return "redirect:/leagues";
+//		}
+		Category categoria = Category.valueOf(model.getAttribute("category").toString());
+
+		this.leagueService.updateGPsFromLeagueWithCategory(categoria);
+		
 		return "redirect:/leagues";
 	}
 	
@@ -193,6 +198,7 @@ public class LeagueController{
 	    newLeague.setActiveCategory(Category.MOTO3);
 	    newLeague.setRacesCompleted(0);
 		model.addAttribute("league",newLeague);
+		//borrar ligas sin equipos aqui para evitar que nos peten
 		return "/leagues/createLeagueName";
 		 }
 	
@@ -233,9 +239,10 @@ public class LeagueController{
 		if(!Optional.of(user).isPresent()) {
 			return "/leagues/leagueList";
 		}
+		
 		model.addAttribute("league", new League());
 
-		Integer num_leagues = leagueService.findLeaguesByUsername(user.getUsername());
+		Integer num_leagues = this.leagueService.findLeaguesByUsername("asdas");
 		
 		if(num_leagues==5) {
 			model.addAttribute("yaTieneMaxTeams",true);
@@ -256,11 +263,11 @@ public class LeagueController{
 	
 	@PostMapping(value="/leagues/join")
 	public String unirseLigaCode(League league,ModelMap model) {	
-		User user = userService.getUserSession();
+		User user = this.userService.getUserSession();
 		
-		Collection<Integer> collect = leagueService.findTeamsByUsername(user.getUsername());
+//		List<Integer> collect = leagueService.findTeamsByUsername(user.getUsername());
 		
-		List<Integer> idLeague = leagueService.convertirIterableLista(collect);
+		List<Integer> idLeague = this.leagueService.findTeamsByUsername(user.getUsername());
 			
 		Optional<League> liga = this.leagueService.findLeagueByLeagueCode(league.getLeagueCode().trim());
 				
@@ -270,7 +277,7 @@ public class LeagueController{
 			return unirseLiga(model);
 		}
 		
-		Integer numTeamsLeague = leagueService.findTeamsByLeagueId(liga.get().getId());
+		Integer numTeamsLeague = this.leagueService.findTeamsByLeagueId(liga.get().getId());
 		
 		if(idLeague.contains(liga.get().getId())) {
 			model.addAttribute("yaTienesEquipo",true);
