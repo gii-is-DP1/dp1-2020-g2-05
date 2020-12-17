@@ -26,7 +26,7 @@ import org.springframework.samples.petclinic.model.User;
 
 import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.LineupService;
-
+import org.springframework.samples.petclinic.service.PilotService;
 import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -44,19 +44,26 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class TeamController {
 	
 
-	@Autowired
+	
 	UserService userService;
 	
-	@Autowired
+	
 	LeagueService leagueService;
 	
-	@Autowired
 	RecruitService recruitService;
 	
-
-
-	@Autowired
 	LineupService lineupService;
+	
+	
+	@Autowired
+	public TeamController(LeagueService leagueService, UserService userService,RecruitService recruitService, LineupService lineupService) {
+		this.leagueService = leagueService;
+		this.userService = userService;
+		this.recruitService = recruitService;
+		this.lineupService = lineupService;	
+	}
+	
+
 	
 	@InitBinder("team")
 	public void initPetBinder(WebDataBinder dataBinder) {
@@ -90,7 +97,11 @@ public class TeamController {
 	
 	@GetMapping(path="/leagues/{leagueId}/teams/new")
 	public String crearEquipo(@PathVariable("leagueId") int leagueId, ModelMap model) {
-		model.addAttribute("team", new Team());
+		Team team = new Team();
+		League liga = this.leagueService.findLeague(leagueId).get();
+		team.setLeague(liga);
+		System.out.println(team.getLeague());
+		model.addAttribute("team",team);
 		
 	  return "/leagues/TeamsEdit";
 	}
@@ -99,37 +110,37 @@ public class TeamController {
 	
 	@PostMapping(value = "/leagues/{leagueId}/teams/new")
 	public String saveNewTeam(@PathVariable("leagueId") int leagueId, @Valid Team team, BindingResult result, ModelMap model) {
-		System.out.println("holaaa");
-		
-
+		User usuario = this.userService.getUserSession();
+		team.setUser(usuario);
+		System.out.println(team);
+		System.out.println(team.getLeague());
+		System.out.println(result.getAllErrors());
 		if(result.hasErrors()) {
-			System.out.println(result);
 			model.put("team", team);
 			model.put("message",result.getAllErrors());
 			return "/leagues/TeamsEdit";
 		}else {
 		
 		
-		User usuario = getUserSession();
 			List<Team> tem = this.leagueService.findTeamByUsernameAndLeagueId(usuario.getUsername(), leagueId);
-
-		
-		
+			League liga = this.leagueService.findLeague(leagueId).get();
+			team.setLeague(liga);
+			
+			
 		 if(tem.size()>= 1){
-//			model.addAttribute("message", "Sorry, you cannot have more teams in this league!");
+			model.addAttribute("message", "Sorry, you cannot have more teams in this league!");
 			EquipoNo=true;
 			return "redirect:/leagues/{leagueId}/teams";
 			
 		}
 			else {
-			team.setUser(usuario);
 			this.leagueService.saveTeam(team);
 			EquipoSi=true;
 			
 			return "redirect:/leagues/{leagueId}/teams";
+			}
 		}
-		}
-		
+
 	}
 	
 	@GetMapping(path="/leagues/{leagueId}/teams/{teamId}/details")
@@ -150,7 +161,7 @@ public class TeamController {
 	
 	@GetMapping(path="/leagues/{leagueId}/teams/{teamId}/delete")
 	public String borrarEscuderia (@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,  ModelMap model) {
-		Optional<Team> team = leagueService.findTeamById(teamId);
+		Optional<Team> team = this.leagueService.findTeamById(teamId);
 		if(team.isPresent()) {
 			leagueService.delete(team.get());
 			model.addAttribute("message", "Team successfully deleted!");
@@ -164,13 +175,12 @@ public class TeamController {
 		return "redirect:/leagues/{leagueId}/teams";
 		}
 		
-//		return "redirect:/leagues/{leagueId}/teams";
 
 	}
 	
 	@GetMapping(path="/leagues/{leagueId}/teams/{teamId}/edit")
 	public String editarPiloto(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, ModelMap model) {
-		Optional<Team> team = leagueService.findTeamById(teamId);
+		Optional<Team> team = this.leagueService.findTeamById(teamId);
 				model.put("team", team.get());
 				
 				Editar = true;
@@ -188,7 +198,7 @@ public class TeamController {
 			return "leagues/TeamsEdit";
 		}
 		else {
-			User usuario = getUserSession();
+			User usuario = this.userService.getUserSession();
 
 			Editar = false;
 			Team teamToUpdate = this.leagueService.findTeamById(team.getId()).get();
@@ -202,8 +212,8 @@ public class TeamController {
 	
 	@GetMapping("/myTeams")
 	public String myTeams(ModelMap modelMap) {
-		String username = getUserSession().getUsername();
-		List<Team> team = this.leagueService.findTeamByUsername(username);
+		User user  =this.userService.getUserSession();
+		List<Team> team = this.leagueService.findTeamByUsername(user.getUsername());
 	    modelMap.addAttribute("teams", team);
 	    BorrarDesdeMyTeams = true;
 		return "leagues/myTeams";
@@ -212,7 +222,7 @@ public class TeamController {
 	
 	@GetMapping(value = "/leagues/{leagueId}/teams")
 	public String showTeams(@PathVariable int leagueId, Map<String, Object> model) {
-		User usuario = getUserSession();
+		User usuario = this.userService.getUserSession();
 		List<Team> tem = this.leagueService.findTeamByLeagueId(leagueId);
 		tem = tem.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
 		System.out.println(tem);
