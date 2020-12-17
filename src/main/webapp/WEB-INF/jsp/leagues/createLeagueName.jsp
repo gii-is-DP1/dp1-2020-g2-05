@@ -18,8 +18,8 @@
 		        	<input type="hidden" name="id" value="${league.id}"/>
 		        	<input type="hidden" name="leagueCode" value="${league.leagueCode}"/>
 		        	<input type="hidden" name="leagueDate" value="${league.leagueDate}"/>
-		        	<input type="hidden" name="racesCompleted" value="${league.racesCompleted}"/>
-		        	<input type="hidden" name="activeCategory" value="${league.activeCategory}"/>
+<%-- 		        	<input type="hidden" name="racesCompleted" value="${league.racesCompleted}"/> --%>
+<%-- 		        	<input type="hidden" name="activeCategory" value="${league.activeCategory}"/> --%>
 		        	
 		
             <petclinic:inputField label="League Name" name="Name"/>
