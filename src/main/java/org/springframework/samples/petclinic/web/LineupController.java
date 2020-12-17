@@ -70,22 +70,22 @@ public class LineupController {
 		return this.recruitService.getRecruits(teamId);
 	}
 
-//	@GetMapping("/lineups")
-//	public String listadoAlineaciones(ModelMap modelMap) {
-//		modelMap.addAttribute("resultados", lineupService.findAll());
-//		return "lineups/lineupsList";
-//	}
-//
-//	@GetMapping(path="/lineups/{lineupId}")
-//	public String muestraAlineacionPorId(@PathVariable("lineupId") int lineupId, ModelMap model) {
-//		Optional<Lineup> lineup = lineupService.findLineup(lineupId);
-//		if(lineup.isPresent()) {
-//			model.addAttribute("lineup", lineup.get());
-//		}else {
-//			model.addAttribute("encontrado", false);
-//		}
-//		return "lineups/lineupDetails";
-//	}
+	@GetMapping("/lineups")
+	public String listadoAlineaciones(ModelMap modelMap) {
+		modelMap.addAttribute("resultados", lineupService.findAll());
+		return "lineups/lineupsList";
+	}
+
+	@GetMapping(path="/lineups/{lineupId}")
+	public String muestraAlineacionPorId(@PathVariable("lineupId") int lineupId, ModelMap model) {
+		Optional<Lineup> lineup = lineupService.findLineup(lineupId);
+		if(lineup.isPresent()) {
+			model.addAttribute("lineup", lineup.get());
+		}else {
+			model.addAttribute("encontrado", false);
+		}
+		return "lineups/lineupDetails";
+	}
 
 	@GetMapping(path="/newLineup")
 	public String crearAlineacionGet(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, ModelMap model) {

@@ -76,7 +76,7 @@
 	<table id="lineupsTable" class="table table-striped">
 		<thead>
 			<tr>
-<!-- 				<th>Category</th> -->
+				<th>Category</th>
 				<th>GP</th>
 				<th>Recruit1</th>
 				<th>Recruit2</th>
@@ -86,7 +86,7 @@
 		<tbody>
 			<c:forEach items="${misAlineaciones}" var="lineup">
 				<tr>
-<%-- 					<td>${lineup.category}</td> --%>
+					<td>${lineup.category}</td>
 					<td><c:out
 							value="${lineup.gp.site}, ${lineup.gp.circuit}, ${lineup.gp.date0} " /></td>
 					<td><c:out

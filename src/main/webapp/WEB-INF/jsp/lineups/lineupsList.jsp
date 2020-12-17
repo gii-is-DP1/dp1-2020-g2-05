@@ -13,7 +13,6 @@
 			<tr>
 				<th>Category</th>
 				<th>GP</th>
-				<th>League</th>
 				<th>Recruit1</th>
 				<th>Recruit2</th>
 				<th>Team</th>
@@ -24,7 +23,6 @@
 				<tr>
 					<td>${lineup.category}</td>
 					<td>${lineup.gp}</td>
-					<td>${lineup.league}</td>
 					<td>${lineup.recruit1}</td>
 					<td>${lineup.recruit2}</td>
 					<td>${lineup.team}</td>

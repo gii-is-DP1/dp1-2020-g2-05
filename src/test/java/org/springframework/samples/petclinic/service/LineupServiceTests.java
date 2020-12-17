@@ -79,7 +79,7 @@ public class LineupServiceTests {
 		Integer foundSize = lineupsFound.size();
 
 		Lineup newLineup = new Lineup();
-		newLineup.setCategory(Category.MOTOGP);
+//		newLineup.setCategory(Category.MOTOGP);
 		newLineup.setGp(this.lineupService.findLineup(1).get().getGp());
 //		newLineup.setLeague(this.leagueService.findLeague(1).get());
 		newLineup.setRecruit1(this.recruitService.findRecruit(1).get());
@@ -104,7 +104,7 @@ public class LineupServiceTests {
 		Integer foundSize = lineupsFound.size();
 
 		Lineup newLineup = new Lineup();
-		newLineup.setCategory(Category.MOTOGP);
+//		newLineup.setCategory(Category.MOTOGP);
 		newLineup.setGp(this.lineupService.findLineup(1).get().getGp());
 //		newLineup.setLeague(this.leagueService.findLeague(1).get());
 		newLineup.setRecruit1(this.recruitService.findRecruit(1).get());
