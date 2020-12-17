@@ -90,7 +90,7 @@ public class LineupController {
 	@GetMapping(path="/newLineup")
 	public String crearAlineacionGet(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, ModelMap model) {
 		model.put("lineup", new Lineup());
-		model.addAttribute("leagueCategory", this.leagueService.findLeague(leagueId).get().getCurrentCategory());
+		model.addAttribute("leagueCategory", this.leagueService.findLeague(leagueId).get().getActiveCategory());
 		return "lineups/lineupsEdit";
 	}
 
@@ -112,7 +112,7 @@ public class LineupController {
 		Optional<Lineup> lineup = this.lineupService.findLineup(lineupId);
 		String view = "redirect:/leagues/{leagueId}/teams/{teamId}/details";
 		model.addAttribute(lineup.get());
-		model.addAttribute("leagueCategory", this.leagueService.findLeague(leagueId).get().getCurrentCategory());
+		model.addAttribute("leagueCategory", this.leagueService.findLeague(leagueId).get().getActiveCategory());
 		if(lineup.isPresent()) {
 			view = "lineups/lineupsEdit";
 

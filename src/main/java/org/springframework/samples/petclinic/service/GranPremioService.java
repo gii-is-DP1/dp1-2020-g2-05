@@ -22,7 +22,7 @@ import org.springframework.samples.petclinic.repository.TeamRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import motogpAPI.Category;
+import org.springframework.samples.petclinic.model.Category;
 import motogpAPI.PeticionesGet;
 import motogpAPI.Session;
 import motogpAPI.model.InfoCarrera;
@@ -55,19 +55,19 @@ public class GranPremioService {
 //	}
 
 
-	public <E> List<E> convertirIterableLista(Iterable<E> gps){
-		List<E> result = new ArrayList<E>();
-		gps.forEach(result::add);
-	    return result;
-	}
+//	public <E> List<E> convertirIterableLista(Iterable<E> gps){
+//		List<E> result = new ArrayList<E>();
+//		gps.forEach(result::add);
+//	    return result;
+//	}
 	
 	@Transactional
-	public Iterable<GranPremio> findAll() {
-		return GPRepository.findAll();
+	public List<GranPremio> findAll() {
+		return (List<GranPremio>) GPRepository.findAll();
 	}
 
 	@Transactional
-	public Iterable<GranPremio> findAllActualYear(Integer year) {
+	public List<GranPremio> findAllActualYear(Integer year) {
 //		Calendar cal= Calendar.getInstance();
 //		int year= cal.get(Calendar.YEAR);
 		String queryString = year+"-01-01";  // xxxx-01-01 , hago un select con todos los gps que sean >= a esa fecha
@@ -81,12 +81,12 @@ public class GranPremioService {
 		 List<GranPremio> moto3 = new ArrayList<GranPremio>();
 		 for(int i=0;i<lista.size();i++) {
 			 
-			 Category category = Category.valueOf(lista.get(i).getResults().stream().collect(Collectors.toList()).get(i).getPilot().getCategory());
-			 if(category.equals(Category.MotoGP)) {
+			 Category category = lista.get(i).getResults().stream().collect(Collectors.toList()).get(i).getPilot().getCategory();
+			 if(category.equals(Category.MOTOGP)) {
 				 motoGP.add(lista.get(i));
-			 }else if(category.equals(Category.Moto2)) {
+			 }else if(category.equals(Category.MOTO2)) {
 				 moto2.add(lista.get(i));
-			 }else if(category.equals(Category.Moto3)) {
+			 }else if(category.equals(Category.MOTO3)) {
 				 moto3.add(lista.get(i));
 			 }
 		 }

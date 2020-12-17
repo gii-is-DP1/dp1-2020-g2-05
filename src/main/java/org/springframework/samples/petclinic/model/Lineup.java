@@ -7,8 +7,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
-import com.sun.istack.NotNull;
+import org.springframework.samples.petclinic.model.Category;
 
 @Entity
 @Table(name = "lineup")
@@ -44,13 +45,13 @@ public class Lineup extends BaseEntity {
 	@NotNull
 	private GranPremio gp;
 
-	public Category getCategory() {
-		return category;
-	} 
-
-	public void setCategory(Category category) {
-		this.category = category;
-	}
+//	public Category getCategory() {
+//		return (Category) category;
+//	} 
+//
+//	public void setCategory(Category category) {
+//		this.category = category;
+//	}
 
 	public Recruit getRecruit1() {
 		return recruit1;
@@ -102,7 +103,7 @@ public class Lineup extends BaseEntity {
 
 	@Override
 	public String toString() {
-		return "Lineup [category=" + category + ", recruit1=" + recruit1 + ", recruit2=" + recruit2 + ", team=" + team
+		return "Lineup [ , recruit1=" + recruit1 + ", recruit2=" + recruit2 + ", team=" + team
 				+ /*", league=" + league + */", gp=" + gp + "]";
 	}
 }

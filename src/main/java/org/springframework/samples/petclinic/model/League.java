@@ -38,6 +38,7 @@ import java.util.Set;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -52,14 +53,9 @@ public class League extends NamedEntity {
 	@Size(min = 10, max = 10)
 	private String leagueCode;
 
-	@Column(name = "motogp_active")        
-	private boolean motogpActive;
-
-	@Column(name = "moto2_active")        
-	private boolean moto2Active;
-
-	@Column(name = "moto3_active")        
-	private boolean moto3Active;
+	@Column(name = "active_category")       
+	@NotNull
+	private Category activeCategory;
 
 	@Column(name = "races_completed")        
 	private Integer racesCompleted;
@@ -70,18 +66,7 @@ public class League extends NamedEntity {
 //	@OneToMany(cascade = CascadeType.ALL, mappedBy = "league")
 //	private Set<Lineup> lineups;
 
-	public Category getCurrentCategory() {
-		Category res = null;
-		if (isMotogpActive()) {
-			res = Category.MOTOGP;
-		} else if (isMoto2Active()) {
-			res = Category.MOTO2;
-		} else if (isMoto3Active()) {
-			res = Category.MOTO3;
-		}
-		return res;
-	}
-
+	
 	public String getLeagueDate() {
 		return leagueDate;
 	}
@@ -90,29 +75,7 @@ public class League extends NamedEntity {
 		this.leagueDate = leagueDate;
 	}
 
-	public boolean isMotogpActive() {
-		return motogpActive;
-	}
 
-	public void setMotogpActive(boolean motogpActive) {
-		this.motogpActive = motogpActive;
-	}
-
-	public boolean isMoto2Active() {
-		return moto2Active;
-	}
-
-	public void setMoto2Active(boolean moto2Active) {
-		this.moto2Active = moto2Active;
-	}
-
-	public boolean isMoto3Active() {
-		return moto3Active;
-	}
-
-	public void setMoto3Active(boolean moto3Active) {
-		this.moto3Active = moto3Active;
-	}
 
 	public Integer getRacesCompleted() {
 		return racesCompleted;
@@ -134,14 +97,23 @@ public class League extends NamedEntity {
 		return leagueCode;
 	}
 
+
 	public String setLeagueCode(String leagueCode1) {
 		return this.leagueCode=leagueCode1;
 	}
 	
 	@Override
 	public String toString() {
-		return "League [leagueDate=" + leagueDate +", leagueaCode="+ leagueCode +", motogpActive=" + motogpActive + ", moto2Active=" + moto2Active
-				+ ", moto3Active=" + moto3Active + ", racesCompleted=" + racesCompleted + "]";
+		return "League ["+ "name="+ getName()+", leagueDate=" + leagueDate +", leagueCode="+ leagueCode 
+				 + ", racesCompleted=" + racesCompleted +", currentCategory="+activeCategory +"]";
+	}
+
+	public Category getActiveCategory() {
+		return activeCategory;
+	}
+
+	public void setActiveCategory(Category activeCategory) {
+		this.activeCategory = activeCategory;
 	}
 
 	public void addTeam(Team team) {
