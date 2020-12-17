@@ -20,7 +20,6 @@
 			 <td><c:out value="${res.circuit}"  /> </td>
 			 <td><c:out value="${res.site}"  /> </td>
 			 <td><c:out value="${res.date0}"  /> </td>
-			 <td><c:out value="${res.date0}"  /> </td>
 			 <td>
 				<spring:url value="/granPremios" var="leagueUrl">
 <%-- 				<spring:param name="leagueId" value="${league.id}" /> --%>

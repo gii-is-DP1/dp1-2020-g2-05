@@ -108,12 +108,12 @@ INSERT INTO visits(id,pet_id,visit_date,description) VALUES (2, 8, '2013-01-02',
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (3, 8, '2013-01-03', 'neutered');
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04', 'spayed');
 
-INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (1,'Sergio','Rojas','Espanola',93,'MOTOGP');
-INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (2,'Antonio','Rojas','Espanola',43,'MOTOGP');
-INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (3,'Miguel','Rojas','Espanola',234,'MOTOGP');
-INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (4,'Mariano','Rojas','Espanola',45,'MOTOGP');
-INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (5,'Alvaro','Rojas','Espanola',73,'MOTOGP');
-INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (6,'Alejandro','Rojas','Espanola',83,'MOTOGP');
+INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (1,'Sergio','Rojas','Espanola',93,1);
+INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (2,'Antonio','Rojas','Espanola',43,0);
+INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (3,'Miguel','Rojas','Espanola',234,1);
+INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (4,'Mariano','Rojas','Espanola',45,1);
+INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (5,'Alvaro','Rojas','Espanola',73,1);
+INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (6,'Alejandro','Rojas','Espanola',83,2);
 
 
 INSERT INTO granpremio(id,site,date0,circuit,racecode) VALUES (1,'Mallorca','15','Montercarlo','QAT');
@@ -134,11 +134,11 @@ INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (6,6,fal
 
 
 --Cada liga con su escudería sistema que tiene todos los pilotos que nadie posee
-INSERT INTO league(id,name,league_code,league_date,motogp_active,moto2_active,moto3_active,races_completed) VALUES (1,'Liga1','QWEASDFRGT','2019/02/01',true,false,false,3);
+INSERT INTO league(id,name,league_code,league_date,active_category,races_completed) VALUES (1,'Liga1','QWEASDFRGT','2019/02/01',1,3);
 INSERT INTO team(id,name,points,money,league_id, username) VALUES (8,'Sistema',0,0,1, 'admin1');
-INSERT INTO league(id,name,league_code,league_date,motogp_active,moto2_active,moto3_active,races_completed) VALUES (2,'Liga1','OLIKJUHMNJ','2019/06/12',false,true,false,3);
+INSERT INTO league(id,name,league_code,league_date,active_category,races_completed) VALUES (2,'Liga1','OLIKJUHMNJ','2019/06/12',2,3);
 INSERT INTO team(id,name,points,money,league_id, username) VALUES (9,'Sistema',0,0,2, 'admin1');
-INSERT INTO league(id,name,league_code,league_date,motogp_active,moto2_active,moto3_active,races_completed) VALUES (3,'Liga1','UHJNBGFVTR','2019/09/21',false,false,true,3);
+INSERT INTO league(id,name,league_code,league_date,active_category,races_completed) VALUES (3,'Liga1','UHJNBGFVTR','2019/09/21',1,3);
 INSERT INTO team(id,name,points,money,league_id, username) VALUES (10,'Sistema',0,0,3, 'admin1');
 
 
@@ -165,14 +165,8 @@ INSERT INTO recruit(id,pilot_id,team_id) VALUES (1,1,1);
 INSERT INTO recruit(id,pilot_id,team_id) VALUES (2,2,1);
 
 
---INSERT INTO lineup(id,category,gp_id,league_id,recruit1_id,recruit2_id,team_id) VALUES (1,'MOTOGP',1,2,1,2,1); 
---INSERT INTO lineup(id,category,gp_id,league_id,recruit1_id,recruit2_id,team_id) VALUES (2,'MOTOGP',2,2,2,1,1); 
---INSERT INTO lineup(id,category,gp_id,league_id,recruit1_id,recruit2_id,team_id) VALUES (3,'MOTOGP',3,2,1,2,1); 
---INSERT INTO lineup(id,category,gp_id,league_id,recruit1_id,recruit2_id,team_id) VALUES (4,'MOTOGP',3,1,1,2,1); 
---INSERT INTO lineup(id,category,gp_id,league_id,recruit1_id,recruit2_id,team_id) VALUES (5,'MOTOGP',3,1,1,2,1); 
-
-INSERT INTO lineup(id,category,gp_id,recruit1_id,recruit2_id,team_id) VALUES (1,'MOTOGP',1,2,2,1); 
-INSERT INTO lineup(id,category,gp_id,recruit1_id,recruit2_id,team_id) VALUES (2,'MOTOGP',2,2,1,1); 
-INSERT INTO lineup(id,category,gp_id,recruit1_id,recruit2_id,team_id) VALUES (3,'MOTOGP',3,2,2,1); 
-INSERT INTO lineup(id,category,gp_id,recruit1_id,recruit2_id,team_id) VALUES (4,'MOTOGP',3,1,2,1); 
-INSERT INTO lineup(id,category,gp_id,recruit1_id,recruit2_id,team_id) VALUES (5,'MOTOGP',3,1,2,1); 
+INSERT INTO lineup(id,category,gp_id,recruit1_id,recruit2_id,team_id) VALUES (1,1,1,2,2,1); 
+INSERT INTO lineup(id,category,gp_id,recruit1_id,recruit2_id,team_id) VALUES (2,1,2,2,1,1); 
+INSERT INTO lineup(id,category,gp_id,recruit1_id,recruit2_id,team_id) VALUES (3,1,3,2,2,1); 
+INSERT INTO lineup(id,category,gp_id,recruit1_id,recruit2_id,team_id) VALUES (4,1,3,1,2,1); 
+INSERT INTO lineup(id,category,gp_id,recruit1_id,recruit2_id,team_id) VALUES (5,1,3,1,2,1); 

@@ -52,8 +52,7 @@ import org.springframework.samples.petclinic.web.ResultFormatter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
-import motogpAPI.Category;
+import org.springframework.samples.petclinic.model.Category;
 import motogpAPI.PeticionesGet;
 import motogpAPI.RaceCode;
 import motogpAPI.Session;
@@ -161,7 +160,7 @@ public class PilotService {
 						}
 					
 						
-						pilot.setCategory(form.getCategory().toString());
+						pilot.setCategory((form.getCategory()));
 						Result result = new Result();
 						
 						if(this.countByName(pilot.getLastName(), pilot.getName())!=0) {
@@ -221,7 +220,7 @@ public class PilotService {
 						}
 					
 						
-						pilot.setCategory(resultado_k.getCategory().toString());
+						pilot.setCategory(resultado_k.getCategory());
 						Result result = new Result();
 						
 						if(this.countByName(pilot.getLastName(), pilot.getName())!=0) {

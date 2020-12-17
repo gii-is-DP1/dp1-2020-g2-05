@@ -13,6 +13,8 @@ public interface LineupRepository extends CrudRepository<Lineup, Integer>{
 //	@Query("SELECT * FROM PILOT p, RECRUIT r, TEAM t, WHERE p.id == r.pilot_id AND t.id == r.team_id")
 //	public Pilot findById(int id);
 	
+	
+
 	@Query(value="SELECT * FROM LINEUP AS l WHERE l.team_id = ?1", nativeQuery = true)
 	public List<Lineup> findByTeam(int team_id);
 

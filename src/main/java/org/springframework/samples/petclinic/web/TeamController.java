@@ -139,12 +139,12 @@ public class TeamController {
 	public String mostrarDetallesEscuderia (@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamID,  ModelMap model) {
 		Optional<Team> team = leagueService.findTeamById(teamID);
 		if(team.isPresent()) {
-//			model.addAttribute("message", "Team found!");
+			model.addAttribute("message", "Team found!");
 			model.addAttribute("team", team.get());
 			List<Recruit> l = recruitService.getRecruitsByTeam(teamID);
 			System.out.println(l);
 			model.addAttribute("misFichajes", l);
-			model.addAttribute("misAlineaciones", lineupService.findByTeam(teamID));
+			model.addAttribute("misAlineaciones", new ArrayList<Lineup>());//lineupService.findByTeam(teamID));
 		}else {
 			model.addAttribute("message", "Team not found!");
 		}

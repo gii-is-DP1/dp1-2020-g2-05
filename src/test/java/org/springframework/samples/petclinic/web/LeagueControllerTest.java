@@ -92,7 +92,7 @@ public class LeagueControllerTest {
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");  
 	    Date date = new Date();  
 	    liga.setId(TEST_LEAGUE_ID);
-	    liga.setLeagueCode(leagueService.randomString(10));
+	    liga.setLeagueCode("UDTQCSSOND");
 	    liga.setName("prueba");
 	    liga.setLeagueDate(formatter.format(date));
 	    liga.setMoto2Active(false);
@@ -203,6 +203,7 @@ public class LeagueControllerTest {
 		given(this.userService.getUserSession()).willReturn(user);
 		given(leagueService.obtenerLigasPorUsuario(leagueService.findTeamsByUsername(user.getUsername()))).willReturn(lista);
 		mockMvc.perform(get("/leagues/myLeagues").flashAttr("yaTienesEquipo", true).flashAttr("leagueYaEquipoId", 1))
+		.andExpect(status().isOk())
 		.andExpect(model().attribute("yaTienesEquipo", is(true)))
 		.andExpect(model().attribute("noTengoLigas", is(false)))
 		.andExpect(model().attribute("leagueYaEquipoId", is(1)))
@@ -225,7 +226,7 @@ public class LeagueControllerTest {
 //		
 	@WithMockUser(value = "spring")
 	@Test
-	void testNewLeague() throws Exception {
+	void testCreateNewLeagueGet() throws Exception {
 		given(this.userService.getUserSession()).willReturn(user);
 		given(leagueService.findLeaguesByUsername(user.getUsername())).willReturn(1);
 		given(leagueService.convertirIterableLista(leagueService.findAll())).willReturn(lista);
@@ -247,7 +248,66 @@ public class LeagueControllerTest {
 		
 	}
 	
+	@WithMockUser(value = "spring")
+	@Test
+	void testCreateNewLeaguePostSuccess() throws Exception {
+		mockMvc.perform(post("/leagues/new")
+				.with(csrf())
+				.param("id", liga.getId().toString())
+				.param("name", liga.getName())
+				.param("leagueCode", liga.getLeagueCode())
+				.param("leagueDate", liga.getLeagueDate())
+				.param("racesCompleted", liga.getRacesCompleted().toString())
+				.param("moto2Active", liga.getMoto2Active().toString())
+				.param("moto2Active", liga.getMoto3Active().toString())
+				.param("moto2Active", liga.getMotoGpActive().toString()))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/leagues/"+liga.getId()+"/teams/new"));
+	}
 
+	@WithMockUser(value = "spring")
+	@Test
+	void testCreateNewLeaguePostHasErrors() throws Exception {
+		mockMvc.perform(post("/leagues/new")
+				.with(csrf())
+				.param("id", liga.getId().toString())
+				.param("name", "prueba!!!")
+				.param("leagueCode", "1231as")
+				.param("leagueDate", liga.getLeagueDate())
+				.param("racesCompleted", "sad")
+				.param("moto2Active", liga.getMoto2Active().toString())
+				.param("moto2Active", liga.getMoto3Active().toString())
+				.param("moto2Active", liga.getMotoGpActive().toString()))
+				.andExpect(status().isOk())
+				.andExpect(model().attributeHasErrors("league"))
+				.andExpect(model().attributeHasFieldErrors("league", "name"))
+				.andExpect(model().attributeHasFieldErrors("league", "racesCompleted"))
+				.andExpect(model().attributeHasFieldErrors("league", "leagueCode"))
+				.andExpect(view().name("/leagues/createLeagueName"));
+	}
+	
+//	@WithMockUser(value = "spring")
+//	@Test
+//	void testJoinNewLeagueGet() throws Exception {
+//		given(this.userService.getUserSession()).willReturn(user);
+//		given(leagueService.findLeaguesByUsername(user.getUsername())).willReturn(1);
+//		mockMvc.perform(get("/leagues/new").flashAttr("noLeagueFound", false)).andExpect(status().isOk())
+//		.andExpect(model().attribute("league", is(new League())))
+//		.andExpect(view().name("/leagues/createLeague"));
+//		
+//	}
+	
+	@WithMockUser(value = "spring")
+	@Test
+	void testCantJoinNewLeagueGet() throws Exception {
+		given(this.userService.getUserSession()).willReturn(user);
+		given(leagueService.findLeaguesByUsername(user.getUsername())).willReturn(5);
+		mockMvc.perform(get("/leagues/new")).andExpect(status().isOk())
+		.andExpect(model().attribute("yaTieneMaxTeams", true))
+		.andExpect(view().name("leagues/myLeagues"));
+		
+	}
+	
 	
 //	
 //	@WithMockUser(value = "spring")

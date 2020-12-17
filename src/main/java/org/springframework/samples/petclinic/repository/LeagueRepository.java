@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.Authorities;
+import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.User;
@@ -17,20 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface LeagueRepository extends CrudRepository<League, Integer>{
 
-	@Transactional
-	@Modifying
-	@Query("UPDATE League l SET l.moto3Active=true,l.moto2Active=false,l.motogpActive=false WHERE l.id = :id")	
-	public void activeMoto3(@Param("id") int id);	
-
-	@Transactional
-	@Modifying
-	@Query("UPDATE League l SET l.moto3Active=false,l.moto2Active=true,l.motogpActive=false WHERE l.id = :id")	
-	public void activeMoto2(@Param("id") int id);	
 	
 	@Transactional
 	@Modifying
-	@Query("UPDATE League l SET l.moto3Active=false,l.moto2Active=false,l.motogpActive=true WHERE l.id = :id")	
-	public void activeMotogp(@Param("id") int id);	
+	@Query("UPDATE League l SET l.activeCategory = :idCategory WHERE l.id = :id")	
+	public void activeCategory(@Param("id") int id,@Param("idCategory") Category idCategory);	
 	
 	@Query("SELECT league FROM League league WHERE league.leagueCode LIKE :leagueCode")
 	public Optional<League> findLeagueByLeagueCode(@Param("leagueCode") String leagueCode);
