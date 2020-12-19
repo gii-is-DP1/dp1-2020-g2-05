@@ -116,9 +116,6 @@ public class LeagueController{
 		modelMap.addAttribute("ligas", result);
 		modelMap.addAttribute("categoriaActual", tabla.getCurrentCategory());
 		modelMap.addAttribute("carrerasCompletadas",tabla.getRacesCompleted());
-//		modelMap.addAttribute("rcc2",this.leagueService.GPsPorCategoria(result).get(0));
-//		modelMap.addAttribute("rcc3",this.leagueService.GPsPorCategoria(result).get(1));
-//		modelMap.addAttribute("rccgp",this.leagueService.GPsPorCategoria(result).get(2));
 		return "leagues/leagueList";
 	}
 	
