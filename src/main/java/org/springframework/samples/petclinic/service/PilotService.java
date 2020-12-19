@@ -199,6 +199,7 @@ public class PilotService {
 					gp.setCircuit(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
 					gp.setDate0(todosLosResultadosDeUnaCarrera.get(0).getFecha());
 					gp.setRaceCode(todosLosResultadosDeUnaCarrera.get(0).getRaceCode());
+					gp.setHasBeenRun(true);
 					this.gpService.saveGP(gp);
 					 
 					for(int k=0;k<todosLosResultadosDeUnaCarrera.size();k++) {

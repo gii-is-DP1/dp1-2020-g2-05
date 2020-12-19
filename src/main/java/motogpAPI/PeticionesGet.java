@@ -160,7 +160,7 @@ public class PeticionesGet {
 			raceCode = code;
 			JSONObject jsonObject = getJsonObjectResults(category, year, session);
 
-	
+			System.out.println(jsonObject);
 			raceCode = null;
 			raceNumber = -1;
 			Example2 example2 = new ObjectMapper().readValue(jsonObject.toString(),Example2.class);
@@ -169,14 +169,10 @@ public class PeticionesGet {
 
 			String nombreEvento = example2.getEvent().getName();
 			String raceCode = example2.getEvent().getCode();
-			String urlPeticionFecha = "https://www.motogp.com/es/ajax/results/parse/"+ year + "/"+raceCode+ "/"+category.toString()+"/";
-			String html = Jsoup.connect(urlPeticionFecha).get().text();
+			System.out.println(nombreEvento);
 
-			String fecha_lugar = html.split("Pos.")[0].split("Clasificación de Carrera")[1].substring(5);
-// example Phillip Island, Sunday, October 23, 2016 
 			String fecha_exacta = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
                     .format(new Date(example2.getDate() * 1000L)).split(" ")[0];
-			String lugar= fecha_lugar.split(", ")[0];
 			for(int i=0;i<example2.getDetails().size();i++) {
 
 				Integer posicion = example2.getDetails().get(i).getFinishPosition();
@@ -194,7 +190,7 @@ public class PeticionesGet {
 				Double kmh = example2.getDetails().get(i).getAvgLapSpeed();
 				Integer vueltaMasRapidaPole =example2.getDetails().get(i).getBestLap().getTime();
 				InfoCarrera n = new InfoCarrera(nombreEvento, posicion,calculaPuntos(posicion), numero, 
-						piloto, pais, equipo, kmh, vueltaMasRapidaPole,raceCode,category,lugar,fecha_exacta);
+						piloto, pais, equipo, kmh, vueltaMasRapidaPole,raceCode,category,nombreEvento,fecha_exacta);
 				listaCarrera.add(n);
 				}
 
