@@ -47,6 +47,11 @@
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Settle DB</span>
 				</petclinic:menuItem>
+				<petclinic:menuItem active="${name eq 'CP'}" url="/controlPanel"
+					title="leads to /controlPanel">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					<span>Control Panel<span>
+				</petclinic:menuItem>
 
 			</ul>
 

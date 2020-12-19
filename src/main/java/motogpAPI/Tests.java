@@ -30,7 +30,8 @@ public class Tests {
 		MotoGPData data = new MotoGPData();
 //
 //		List<RiderOnlineData> resultado = data.getResultsByRaceNumber(Category.MotoGP, 2016, 1, Session.RACE);
-//		List<RiderOnlineData> resultado2 = data.getResultsByRaceCode(Category.MotoGP, 2016, RaceCode.AUT, Session.RACE);
+//		List<RiderOnlineData> resultado2 = data.getResultsByRaceCode(motogpAPI.Category.Moto3, 2020, RaceCode.SMR, Session.RACE);
+		List<InfoCarrera> resultado3 = PeticionesGet.getResultsByRaceCodeCampu(Category.MOTO3, 2020, RaceCode.SMR, Session.RACE);
 //		List<RiderStandingsData> resultado3 = data.getChampionshipStandings(Category.MotoGP, 2016);
 //
 //		System.out.println("\n Get Result By Race Number \n");
@@ -48,9 +49,13 @@ public class Tests {
 //		List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceNumberCampu(Category.MOTO2, 2021, 1, Session.RACE);
 		
 //		System.out.println(todosLosResultadosDeUnaCarrera);
+//		for(int i=0;i<20;i++) {
+//			List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceNumberCampu(Category.MOTOGP, 2020, i, Session.RACE);
+//			System.out.println(todosLosResultadosDeUnaCarrera);
+//		}
+//		
 
 //			Record prueba = PeticionesGet.obtieneRecords("2012", Pais.SPA, Category.MOTO2);
-
 //			System.out.println(prueba);
 //			
 //		System.out.println(PeticionesGet.getResultsByRaceCodeCampu(Category.MotoGP, 2016, RaceCode.AUT, Session.RACE));

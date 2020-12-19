@@ -33,6 +33,10 @@ public class GranPremio extends BaseEntity {
 	@NotEmpty
 	private String raceCode;
 	
+	
+	@Column(name = "has_been_run")
+	private Boolean hasBeenRun;
+	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="gp")
 	private Set<Result> results;
 	
@@ -46,7 +50,12 @@ public class GranPremio extends BaseEntity {
 	public void setSite(String site) {
 		this.site = site;
 	}
-
+	public void setHasBeenRun(Boolean hasBeenRun) {
+		this.hasBeenRun = hasBeenRun;
+	}
+	public Boolean getHasBeenRun() {
+		return hasBeenRun;
+	}
 	public String getDate0() {
 		return date0;
 	}

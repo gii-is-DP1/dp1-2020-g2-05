@@ -26,6 +26,9 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import motogpAPI.RaceCode;
+import motogpAPI.Session;
+
 @Controller
 public class PoblarBaseDeDatosController {
 	
@@ -34,17 +37,18 @@ public class PoblarBaseDeDatosController {
 	
 	LeagueController leagueController;
 	LeagueService leagueService;
-
+	PanelDeControlController PController;
 	UserService userService;
 
 	PilotService pilotService;
 	
 	@Autowired
-	public PoblarBaseDeDatosController(LeagueService leagueService, UserService userService,PilotService pilotService,LeagueController leagueController) {
+	public PoblarBaseDeDatosController(LeagueService leagueService, UserService userService,PilotService pilotService,LeagueController leagueController,PanelDeControlController PController) {
 		this.leagueService = leagueService;
 		this.userService = userService;
 		this.pilotService = pilotService;
 		this.leagueController=leagueController;
+		this.PController=PController;
 	}
 
 
@@ -136,7 +140,6 @@ public class PoblarBaseDeDatosController {
 	
 	@PostMapping(path = "/BD/carrerasBD")	
 	public String PoblarBDcarrera(@Valid BDCarrera form, BindingResult result, ModelMap model) throws JSONException, IOException, DataAccessException, duplicatedLeagueNameException {
-		System.out.println(result);
 
 		if(result.hasErrors()) {
 			System.out.println(result);
@@ -160,6 +163,35 @@ public class PoblarBaseDeDatosController {
 	}
 	
 	
+	@GetMapping(path="/BD/carrerasBD/{date}/{code}")
+	public String PoblarBDCarreras(@PathVariable("date") String date,@PathVariable("code") String code,ModelMap model) throws JSONException, IOException {
+		BDCarrera form = new BDCarrera();
+		form.setCategory(Category.MOTO3);
+		form.setRacecode(RaceCode.valueOf(code));
+		form.setSession(Session.RACE);
+		form.setYear(Integer.parseInt((date.split("-")[0])));
+		try {
+			this.pilotService.poblarBDCarreraACarrera(form);
+		}catch (Exception e) {
+			model.addAttribute("messageMoto3NotFound","API has not found any result to date " + date +" and code "+code+" for moto3 ");
+		}
+		
+		try {
+			form.setCategory(Category.MOTO2);
+			this.pilotService.poblarBDCarreraACarrera(form);
+		}catch (Exception e) {
+			model.addAttribute("messageMoto2NotFound","API has not found any result to date " + date +" and code "+code+" for moto2");
+		}
+		
+		try {
+			form.setCategory(Category.MOTOGP);
+			this.pilotService.poblarBDCarreraACarrera(form);
+		}catch (Exception e) {
+			model.addAttribute("messageMotogpNotFound","API has not found any result to date " + date +" and code "+code+" for motogp");
+		}
+		
+	  return PController.muestraPanel(model);
+	}
 	
 
 

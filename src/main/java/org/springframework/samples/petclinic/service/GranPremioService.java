@@ -70,7 +70,7 @@ public class GranPremioService {
 	public List<GranPremio> findAllActualYear(Integer year) {
 //		Calendar cal= Calendar.getInstance();
 //		int year= cal.get(Calendar.YEAR);
-		String queryString = year+"-01-01";  // xxxx-01-01 , hago un select con todos los gps que sean >= a esa fecha
+		String queryString = "01-01-"+year;  // xxxx-01-01 , hago un select con todos los gps que sean >= a esa fecha
 		return GPRepository.findAllActualYear(queryString);
 	}
 

@@ -7,8 +7,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Set;
+import java.util.function.ToIntFunction;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -17,7 +20,6 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import org.apache.jasper.tagplugins.jstl.core.Set;
 import org.json.JSONException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,19 +83,33 @@ public class GranPremioController {
 	@GetMapping(path="/granPremios")
 	public String detallesLiga(ModelMap model) {	
 //		List<GranPremio> gps = GPService.convertirIterableLista(GPService.findAllActualYear(2019));
-		List<GranPremio> gps = GPService.findAllActualYear(2018);
-		List<List<GranPremio>> gps_calificados = GranPremioService.granPremiosPorCategoria(gps);
-		List<GranPremio> motogp = gps_calificados.get(0);
-		List<GranPremio> moto2 = gps_calificados.get(1);
-		List<GranPremio> moto3 = gps_calificados.get(2);
-		
-		
-		model.addAttribute("listaGP",motogp);
-		model.addAttribute("lista2",moto2);
-		model.addAttribute("lista3",moto3);
+//		List<List<GranPremio>> gps_calificados = GranPremioService.granPremiosPorCategoria(gps);
+//		List<GranPremio> motogp = gps_calificados.get(0);
+//		List<GranPremio> moto2 = gps_calificados.get(1);
+//		List<GranPremio> moto3 = gps_calificados.get(2);
+		List<GranPremio> gps = GPService.findAllActualYear(2021).stream().collect(Collectors.toSet()).stream().collect(Collectors.toList());
+		model.addAttribute("listaGP",gps.stream().sorted(Comparator.comparing(GranPremio::getId)).collect(Collectors.toList()));
 		return "/gp/gpList";
 		 
-	} //DE MOMENTO NO HACE NADA
-
+	}
 	
+	@GetMapping(path="/granPremios/new")
+	public String nuevoGranPremio(ModelMap model) {	
+
+		model.addAttribute("GranPremio",new GranPremio());
+
+		return "/gp/nuevoGP";
+		 
+	}
+	
+	@PostMapping(path="/granPremios/new")
+	public String nuevoGranPremio(GranPremio gp,ModelMap model) {	
+		
+		this.GPService.saveGP(gp);
+		
+		model.addAttribute("message","Gran Premio loaded succesfully!");
+
+		return "/panelControl/panelDeControl";
+		 
+	}
 }
