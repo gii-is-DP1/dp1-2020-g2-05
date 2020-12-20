@@ -113,6 +113,7 @@ public class TeamController {
 		Team team = new Team();
 		League liga = this.leagueService.findLeague(leagueId).get();
 		team.setLeague(liga);
+		team.setUser(this.userService.getUserSession());
 		System.out.println(team.getLeague());
 		model.addAttribute("team",team);
 		
@@ -123,10 +124,10 @@ public class TeamController {
 	
 	@PostMapping(value = "/leagues/{leagueId}/teams/new")
 	public String saveNewTeam(@PathVariable("leagueId") int leagueId, @Valid Team team, BindingResult result, ModelMap model) {
-		User usuario = this.userService.getUserSession();
-		team.setUser(usuario);
-		System.out.println(team);
+		Optional<League> league = this.leagueService.findLeague(leagueId);
+//		System.out.println(league.get().getId().equals(team.getLeague().getId()));
 		System.out.println(team.getLeague());
+		System.out.println(team.getUser());
 		System.out.println(result.getAllErrors());
 		if(result.hasErrors()) {
 			model.put("team", team);
@@ -134,8 +135,8 @@ public class TeamController {
 			return "/leagues/TeamsEdit";
 		}else {
 		
-		
-			List<Team> tem = this.leagueService.findTeamByUsernameAndLeagueId(usuario.getUsername(), leagueId);
+		team.setUser(this.userService.getUserSession());
+		List<Team> tem = this.leagueService.findTeamByUsernameAndLeagueId(team.getUser().getUsername(), leagueId);
 			League liga = this.leagueService.findLeague(leagueId).get();
 			team.setLeague(liga);
 			
@@ -143,14 +144,16 @@ public class TeamController {
 		 if(tem.size()>= 1){
 			model.addAttribute("message", "Sorry, you cannot have more teams in this league!");
 			EquipoNo=true;
-			return "redirect:/leagues/{leagueId}/teams";
+		//	return "redirect:/leagues/{leagueId}/teams";
+			return "leagues/TeamsEdit";
 			
 		}
 			else {
 			this.leagueService.saveTeam(team);
 			EquipoSi=true;
-			
-			return "redirect:/leagues/{leagueId}/teams";
+			return "leagues/TeamsEdit";
+
+			//return "redirect:/leagues/{leagueId}/teams";
 			}
 		}
 
