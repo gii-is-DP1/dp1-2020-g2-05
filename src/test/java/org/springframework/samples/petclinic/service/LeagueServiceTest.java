@@ -15,6 +15,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.League;
+import org.springframework.samples.petclinic.model.TablaConsultas;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.web.duplicatedLeagueNameException;
@@ -81,9 +82,7 @@ public class LeagueServiceTest {
 		League newLeague = new League();
 		newLeague.setLeagueCode("UDTQCSSOND");
 		newLeague.setLeagueDate("22/12/2222");
-		newLeague.setActiveCategory(Category.MOTO2);
 		newLeague.setName("liga2222");
-		newLeague.setRacesCompleted(2);
 		
 		this.leagueService.saveLeague(newLeague);
 		
@@ -108,9 +107,7 @@ public class LeagueServiceTest {
 		League newLeague = new League();
 		newLeague.setLeagueCode("UDTQCSSOND");
 		newLeague.setLeagueDate("22/12/2222");
-		newLeague.setActiveCategory(Category.MOTO2);
 		newLeague.setName("liga2222");
-		newLeague.setRacesCompleted(2);
 		
 		this.leagueService.saveLeague(newLeague);
 		
@@ -134,9 +131,7 @@ public class LeagueServiceTest {
 		League newLeague = new League();
 		newLeague.setLeagueCode("UDTQCSSOND");
 		newLeague.setLeagueDate("22/12/2222");
-		newLeague.setActiveCategory(Category.MOTO2);
 		newLeague.setName("liga2222");
-		newLeague.setRacesCompleted(2);
 		
 		this.leagueService.saveLeague(newLeague);		
 		this.leagueService.deleteLeague(newLeague);
@@ -149,35 +144,35 @@ public class LeagueServiceTest {
 	 
 	 
 	 
+//	 
+//	 @Test
+//	 @Transactional
+//	 @Modifying
+//	 void shouldActiveLeagueMoto2() {
+//		this.leagueService.activeCategory(1, Category.MOTO2);
+//		League league = this.leagueService.findLeague(1).get();
+//
+//	    assertThat(league.getActiveCategory().equals(Category.MOTO2)).isTrue();
+//	 }
+//	 
+//	 @Test
+//	 @Transactional
+//	 @Modifying
+//	 void shouldActiveLeagueMoto3() {
+//			this.leagueService.activeCategory(1, Category.MOTO3);
+//		League league = this.leagueService.findLeague(1).get();
+//
+//	    assertThat(league.getActiveCategory().equals(Category.MOTO3)).isTrue();
+//	 }
 	 
-	 @Test
-	 @Transactional
-	 @Modifying
-	 void shouldActiveLeagueMoto2() {
-		this.leagueService.activeCategory(1, Category.MOTO2);
-		League league = this.leagueService.findLeague(1).get();
-
-	    assertThat(league.getActiveCategory().equals(Category.MOTO2)).isTrue();
-	 }
-	 
-	 @Test
-	 @Transactional
-	 @Modifying
-	 void shouldActiveLeagueMoto3() {
-			this.leagueService.activeCategory(1, Category.MOTO3);
-		League league = this.leagueService.findLeague(1).get();
-
-	    assertThat(league.getActiveCategory().equals(Category.MOTO3)).isTrue();
-	 }
-	 
-	 @Test
-	 @Transactional
-	 @Modifying
-	 void shouldActiveLeagueMotogp() {
-			this.leagueService.activeCategory(1, Category.MOTOGP);
-		League league = this.leagueService.findLeague(1).get();
-	    assertThat(league.getActiveCategory().equals(Category.MOTOGP)).isTrue();
-	 }
+//	 @Test
+//	 @Transactional
+//	 @Modifying
+//	 void shouldActiveLeagueMotogp() {
+//			this.leagueService.activeCategory(1, Category.MOTOGP);
+//		League league = this.leagueService.findLeague(1).get();
+//	    assertThat(league.getActiveCategory().equals(Category.MOTOGP)).isTrue();
+//	 }
 	 
 	 @Test
 		void shouldFindTeamsById() {
