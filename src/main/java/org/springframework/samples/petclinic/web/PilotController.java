@@ -172,7 +172,7 @@ public class PilotController {
 	}
 	
 	@GetMapping("/pilotsPaged")
-	public String listadoPilotosPaginado(@RequestParam("pageNumber") Integer pageNumber, 
+	public String listadoPilotosPaginado(@RequestParam(name = "pageNumber", required = false, defaultValue = "0") Integer pageNumber, 
 			@RequestParam(name = "pageSize", required = false, defaultValue = "5") Integer pageSize, ModelMap modelMap) {
 		
         if (pageNumber == null || pageNumber < 1) pageNumber = 1;
