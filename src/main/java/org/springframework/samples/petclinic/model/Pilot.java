@@ -109,10 +109,15 @@ public class Pilot extends BaseEntity implements Comparable<Pilot> {
 	
 	
 
+//	@Override
+//	public String toString() {
+//		return "Pilot [name=" + name + ", lastName=" + lastName + ", nationality=" + nationality + ", dorsal=" + dorsal
+//				+ ", category=" + category + ", results=" + results + "]";
+//	}
+
 	@Override
 	public String toString() {
-		return "Pilot [name=" + name + ", lastName=" + lastName + ", nationality=" + nationality + ", dorsal=" + dorsal
-				+ ", category=" + category + ", results=" + results + "]";
+		return name + " " + lastName;
 	}
 
 	@Override

@@ -13,7 +13,9 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.BDCarrera;
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.FormRellenarBD;
+import org.springframework.samples.petclinic.model.GranPremio;
 import org.springframework.samples.petclinic.model.Team;
+import org.springframework.samples.petclinic.service.GranPremioService;
 import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.PilotService;
 import org.springframework.samples.petclinic.service.UserService;
@@ -26,6 +28,9 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import motogpAPI.RaceCode;
+import motogpAPI.Session;
+
 @Controller
 public class PoblarBaseDeDatosController {
 	
@@ -34,17 +39,20 @@ public class PoblarBaseDeDatosController {
 	
 	LeagueController leagueController;
 	LeagueService leagueService;
-
+	PanelDeControlController PController;
 	UserService userService;
-
+	GranPremioService GPService;
 	PilotService pilotService;
 	
 	@Autowired
-	public PoblarBaseDeDatosController(LeagueService leagueService, UserService userService,PilotService pilotService,LeagueController leagueController) {
+	public PoblarBaseDeDatosController(LeagueService leagueService, UserService userService,PilotService pilotService
+			,LeagueController leagueController,PanelDeControlController PController,GranPremioService GPService) {
 		this.leagueService = leagueService;
 		this.userService = userService;
 		this.pilotService = pilotService;
 		this.leagueController=leagueController;
+		this.PController=PController;
+		this.GPService=GPService;
 	}
 
 
@@ -136,7 +144,6 @@ public class PoblarBaseDeDatosController {
 	
 	@PostMapping(path = "/BD/carrerasBD")	
 	public String PoblarBDcarrera(@Valid BDCarrera form, BindingResult result, ModelMap model) throws JSONException, IOException, DataAccessException, duplicatedLeagueNameException {
-		System.out.println(result);
 
 		if(result.hasErrors()) {
 			System.out.println(result);
@@ -159,7 +166,41 @@ public class PoblarBaseDeDatosController {
 		
 	}
 	
-	
+	@GetMapping(path="/BD/carrerasBD/{date}/{code}/{id}")
+	public String actualizarTablaGPs(@PathVariable("date") String date,@PathVariable("code") String code,@PathVariable("id") String id,ModelMap model) throws JSONException, IOException {
+		GranPremio gp = this.GPService.findGPById(Integer.parseInt(id)).get();
+		gp.setHasBeenRun(true);		
+		return PoblarBDCarreras(date, code, model);
+	}
+	@GetMapping(path="/BD/carrerasBD/{date}/{code}")
+	public String PoblarBDCarreras(@PathVariable("date") String date,@PathVariable("code") String code,ModelMap model) throws JSONException, IOException {
+		BDCarrera form = new BDCarrera();
+		form.setCategory(Category.MOTO3);
+		form.setRacecode(RaceCode.valueOf(code));
+		form.setSession(Session.RACE);
+		form.setYear(Integer.parseInt((date.split("-")[0])));
+		try {
+			this.pilotService.poblarBDCarreraACarrera(form);
+		}catch (Exception e) {
+			model.addAttribute("messageMoto3NotFound","API has not found any result to date " + date +" and code "+code+" for moto3 ");
+		}
+		
+		try {
+			form.setCategory(Category.MOTO2);
+			this.pilotService.poblarBDCarreraACarrera(form);
+		}catch (Exception e) {
+			model.addAttribute("messageMoto2NotFound","API has not found any result to date " + date +" and code "+code+" for moto2");
+		}
+		
+		try {
+			form.setCategory(Category.MOTOGP);
+			this.pilotService.poblarBDCarreraACarrera(form);
+		}catch (Exception e) {
+			model.addAttribute("messageMotogpNotFound","API has not found any result to date " + date +" and code "+code+" for motogp");
+		}
+		
+	  return PController.muestraPanel(model);
+	}
 	
 
 

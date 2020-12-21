@@ -15,32 +15,21 @@ UserRepository.java * Copyright 2002-2013 the original author or authors.
  */
 package org.springframework.samples.petclinic.service;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-import javax.validation.Valid;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
+
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Message;
-import org.springframework.samples.petclinic.model.Owner;
-import org.springframework.samples.petclinic.model.Pet;
-import org.springframework.samples.petclinic.model.PetType;
-import org.springframework.samples.petclinic.model.Pilot;
-import org.springframework.samples.petclinic.model.User;
-import org.springframework.samples.petclinic.model.Vet;
-import org.springframework.samples.petclinic.model.Visit;
+
 import org.springframework.samples.petclinic.repository.MessageRepository;
-import org.springframework.samples.petclinic.repository.OwnerRepository;
-import org.springframework.samples.petclinic.repository.PetRepository;
-import org.springframework.samples.petclinic.repository.PilotRepository;
-import org.springframework.samples.petclinic.repository.VetRepository;
-import org.springframework.samples.petclinic.repository.VisitRepository;
-import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 /**
  * Mostly used as a facade for all Petclinic controllers Also a placeholder
@@ -51,20 +40,19 @@ import org.springframework.util.StringUtils;
 @Service
 public class MessageService {
 
-	@Autowired
 	private MessageRepository messageRepository;
-	
 
-	@Autowired
-	private MessageService messageService;
-	
-	@Autowired
-	private AuthoritiesService authoritiesService;
 
+	
 	@Autowired
 	public MessageService(MessageRepository messageRepository) {
+	
 		this.messageRepository = messageRepository;
-	}	
+	
+	}
+
+
+
 
 
 	@Transactional
@@ -73,12 +61,17 @@ public class MessageService {
 	}
 	
 	@Transactional
-	public Iterable<Message> findAll(){
-		return messageRepository.findAll();
+	public List<Message> findAll(){
+		
+		List<Message> result = new ArrayList<Message>();
+		messageRepository.findAll().forEach(result::add);
+	    return result;
+	    
+		
 	}
 	
 	@Transactional
-	public Iterable<Message> findAllUsernameReceive(String usernamereceive){
+	public List<Message> findAllUsernameReceive(String usernamereceive){
 		return messageRepository.findByUsernameReceive(usernamereceive);
 	}
 	

@@ -23,37 +23,17 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.BaseEntity;
+import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.Result;
 
-/**
- * Spring Data JPA specialization of the {@link ResultRepository} interface
- *
- * @author Michael Isvy
- * @since 15.1.2013
- */
+import motogpAPI.RaceCode;
+
+
 public interface ResultRepository extends CrudRepository<Result, Integer> {
 
-//	/**
-//	 * Retrieve all <code>PetType</code>s from the data store.
-//	 * @return a <code>Collection</code> of <code>PetType</code>s
-//	 */
-////	@Query("SELECT * FROM RESULTS WHERE RESULTS.pilot_id = SELECT id FROM Pilot  WHERE pilot.name=%name")
-////	List<Result> findResults(@Param("name")String name) throws DataAccessException;
-//	//Obtiene resultados del piloto pasado como parametro
-//	
-//	/**
-//	 * Retrieve a <code>Pet</code> from the data store by id.
-//	 * @param id the id to search for
-//	 * @return the <code>Pet</code> if found
-//	 * @throws org.springframework.dao.DataRetrievalFailureException if not found
-//	 */
-//	Result findById(int id) throws DataAccessException;
-//
-//	/**
-//	 * Save a <code>Pet</code> to the data store, either inserting or updating it.
-//	 * @param pet the <code>Pet</code> to save
-//	 * @see BaseEntity#isNew
-//	 */
-//	void save(Result pet) throws DataAccessException;
+
+	@Query("SELECT r FROM Result r WHERE r.gp.raceCode = :raceCode AND r.pilot.category = :category")
+	List<Result> findResultsByCategoryAndId(@Param("raceCode") String raceCode,@Param("category") Category category) throws DataAccessException;
+
 
 }

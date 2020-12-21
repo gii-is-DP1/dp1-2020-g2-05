@@ -25,8 +25,8 @@ public class LineupService {
 	}
 
 	@Transactional
-	public Iterable<Lineup> findAll(){
-		return lineupRepository.findAll();
+	public List<Lineup> findAll(){
+		return (List<Lineup>) lineupRepository.findAll();
 	}
 
 	public Optional<Lineup> findLineup(Integer lineupId) {

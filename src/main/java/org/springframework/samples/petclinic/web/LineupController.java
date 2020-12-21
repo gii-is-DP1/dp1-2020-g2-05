@@ -14,6 +14,8 @@ import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.LineupService;
 import org.springframework.samples.petclinic.service.RecruitService;
+import org.springframework.samples.petclinic.service.TablaConsultasService;
+import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -56,41 +58,45 @@ public class LineupController {
 //		this.lineupService = lineupService;
 //	}
 
-	@Autowired
+	TablaConsultasService TCService;
 	LineupService lineupService;
-
-	@Autowired
 	LeagueService leagueService;
+	RecruitService recruitService;
 	
 	@Autowired
-	RecruitService recruitService;
+	public LineupController(LeagueService leagueService, LineupService lineupService,TablaConsultasService TCService, RecruitService recruitService) {
+		this.lineupService = lineupService;
+		this.leagueService = leagueService;
+		this.TCService = TCService;
+		this.recruitService = recruitService;
+	}
 	
 	@ModelAttribute("recruitsSelection")
 	public List<Pilot> getAllRecruits(@PathVariable("teamId") int teamId) {
 		return this.recruitService.getRecruits(teamId);
 	}
 
-//	@GetMapping("/lineups")
-//	public String listadoAlineaciones(ModelMap modelMap) {
-//		modelMap.addAttribute("resultados", lineupService.findAll());
-//		return "lineups/lineupsList";
-//	}
-//
-//	@GetMapping(path="/lineups/{lineupId}")
-//	public String muestraAlineacionPorId(@PathVariable("lineupId") int lineupId, ModelMap model) {
-//		Optional<Lineup> lineup = lineupService.findLineup(lineupId);
-//		if(lineup.isPresent()) {
-//			model.addAttribute("lineup", lineup.get());
-//		}else {
-//			model.addAttribute("encontrado", false);
-//		}
-//		return "lineups/lineupDetails";
-//	}
+	@GetMapping("/lineups")
+	public String listadoAlineaciones(ModelMap modelMap) {
+		modelMap.addAttribute("resultados", lineupService.findAll());
+		return "lineups/lineupsList";
+	}
+
+	@GetMapping(path="/lineups/{lineupId}")
+	public String muestraAlineacionPorId(@PathVariable("lineupId") int lineupId, ModelMap model) {
+		Optional<Lineup> lineup = lineupService.findLineup(lineupId);
+		if(lineup.isPresent()) {
+			model.addAttribute("lineup", lineup.get());
+		}else {
+			model.addAttribute("encontrado", false);
+		}
+		return "lineups/lineupDetails";
+	}
 
 	@GetMapping(path="/newLineup")
 	public String crearAlineacionGet(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, ModelMap model) {
 		model.put("lineup", new Lineup());
-		model.addAttribute("leagueCategory", this.leagueService.findLeague(leagueId).get().getActiveCategory());
+		model.addAttribute("leagueCategory", this.TCService.getTabla().get().getCurrentCategory());
 		return "lineups/lineupsEdit";
 	}
 
@@ -112,7 +118,7 @@ public class LineupController {
 		Optional<Lineup> lineup = this.lineupService.findLineup(lineupId);
 		String view = "redirect:/leagues/{leagueId}/teams/{teamId}/details";
 		model.addAttribute(lineup.get());
-		model.addAttribute("leagueCategory", this.leagueService.findLeague(leagueId).get().getActiveCategory());
+		model.addAttribute("leagueCategory", this.TCService.getTabla().get().getCurrentCategory());
 		if(lineup.isPresent()) {
 			view = "lineups/lineupsEdit";
 

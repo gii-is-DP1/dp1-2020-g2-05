@@ -14,7 +14,7 @@
 				<th>Name</th>
 			<c:if test="${admin==true}"><th>Code</th></c:if>	
 				<th>Date</th>
-				<th>Category</th>
+<!-- 				<th>Category</th> -->
 				<th>Teams</th>
 			</tr>
 		</thead>
@@ -24,15 +24,15 @@
 					<td><c:out value="${league.name} " /></td>
 					<c:if test="${admin==true}"><td><c:out value="${league.leagueCode} " /></td></c:if>
 					<td><c:out value="${league.leagueDate}" /></td>
-					<c:if test="${league.racesCompleted<10}">  
-					<td>Moto 3 </td>					
-					</c:if>
-					<c:if test="${league.racesCompleted>=10 && league.racesCompleted<15}">  
-					<td>Moto 2 </td>					
-					</c:if>
-					<c:if test="${league.racesCompleted>=15}">  
-					<td>Moto GP </td>					
-					</c:if>  
+<%-- 					<c:if test="${league.racesCompleted<10}">   --%>
+<!-- 					<td>Moto 3 </td>					 -->
+<%-- 					</c:if> --%>
+<%-- 					<c:if test="${league.racesCompleted>=10 && league.racesCompleted<15}">   --%>
+<!-- 					<td>Moto 2 </td>					 -->
+<%-- 					</c:if> --%>
+<%-- 					<c:if test="${league.racesCompleted>=15}">   --%>
+<!-- 					<td>Moto GP </td>					 -->
+<%-- 					</c:if>   --%>
 					<td>
 					<spring:url value="/leagues/{leagueId}/teams" var="leagueUrl">
 							<spring:param name="leagueId" value="${league.id}" />
@@ -57,7 +57,8 @@
 <%-- 					</c:if>   --%>
 	<spring:url value="/granPremios" var="leagueUrl">
 	</spring:url> <a href="${fn:escapeXml(leagueUrl)}">Gran Premios</a>
-				<h4>Races Completed(MOTO3) : <c:out value="${rcc3}" /></h4>
-				<h4>Races Completed(MOTO2) : <c:out value="${rcc2}" /></h4>
-				<h4>Races Completed(MOTOgp) : <c:out value="${rccgp}" /></h4>
+				<h4>Current Category : <c:out value="${categoriaActual}" /></h4>
+				<h4>Races Completed : <c:out value="${carrerasCompletadas}" /></h4>
+<%-- 				<h4>Races Completed(MOTO2) : <c:out value="${rcc2}" /></h4> --%>
+<%-- 				<h4>Races Completed(MOTOgp) : <c:out value="${rccgp}" /></h4> --%>
 </petclinic:layout>

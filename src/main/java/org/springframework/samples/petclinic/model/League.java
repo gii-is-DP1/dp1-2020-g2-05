@@ -53,12 +53,12 @@ public class League extends NamedEntity {
 	@Size(min = 10, max = 10)
 	private String leagueCode;
 
-	@Column(name = "active_category")       
-	@NotNull
-	private Category activeCategory;
-
-	@Column(name = "races_completed")        
-	private Integer racesCompleted;
+//	@Column(name = "active_category")       
+//	@NotNull
+//	private Category activeCategory;
+//
+//	@Column(name = "races_completed")        
+//	private Integer racesCompleted;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="league")
 	Set<Team> team;
@@ -77,13 +77,13 @@ public class League extends NamedEntity {
 
 
 
-	public Integer getRacesCompleted() {
-		return racesCompleted;
-	}
-
-	public void setRacesCompleted(Integer racesCompleted) {
-		this.racesCompleted = racesCompleted;
-	}
+//	public Integer getRacesCompleted() {
+//		return racesCompleted;
+//	}
+//
+//	public void setRacesCompleted(Integer racesCompleted) {
+//		this.racesCompleted = racesCompleted;
+//	}
 
 	public Set<Team> getTeam() {
 		return team;
@@ -105,16 +105,18 @@ public class League extends NamedEntity {
 	@Override
 	public String toString() {
 		return "League ["+ "name="+ getName()+", leagueDate=" + leagueDate +", leagueCode="+ leagueCode 
-				 + ", racesCompleted=" + racesCompleted +", currentCategory="+activeCategory +"]";
+				
+//				+ ", racesCompleted=" + racesCompleted +", currentCategory="+activeCategory 
+				+"]";
 	}
-
-	public Category getActiveCategory() {
-		return activeCategory;
-	}
-
-	public void setActiveCategory(Category activeCategory) {
-		this.activeCategory = activeCategory;
-	}
+//
+//	public Category getActiveCategory() {
+//		return activeCategory;
+//	}
+//
+//	public void setActiveCategory(Category activeCategory) {
+//		this.activeCategory = activeCategory;
+//	}
 
 	public void addTeam(Team team) {
 		getTeam().add(team);

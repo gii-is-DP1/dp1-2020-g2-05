@@ -29,6 +29,11 @@ import javax.websocket.server.PathParam;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
@@ -166,6 +171,25 @@ public class PilotController {
 		return "pilots/pilotsList";
 	}
 	
+	@GetMapping("/pilotsPaged")
+	public String listadoPilotosPaginado(@RequestParam(name = "pageNumber", required = false, defaultValue = "0") Integer pageNumber, 
+			@RequestParam(name = "pageSize", required = false, defaultValue = "5") Integer pageSize, ModelMap modelMap) {
+		
+        if (pageNumber == null || pageNumber < 1) pageNumber = 1;
+        if (pageSize == null || pageSize < 1) pageSize = 1;
+        
+		Pageable pageable = PageRequest.of(pageNumber-1, pageSize, Sort.by(Order.asc("category"), Order.asc("name"), Order.desc("lastName")));
+		Page<Pilot> paginaPilotos = this.pilotService.findAllPage(pageable);
+		Integer maxPageNumber = (int) Math.ceil((double) paginaPilotos.getTotalElements()/paginaPilotos.getSize());
+		
+		modelMap.addAttribute("pageNumber", pageNumber-1);
+        modelMap.addAttribute("pageSize", pageSize);
+        modelMap.addAttribute("maxPageNumber", maxPageNumber);
+		modelMap.addAttribute("resultadosPaginados", paginaPilotos.getContent());
+
+		return "pilots/pilotsListPaged";
+	}
+	
 	@GetMapping(path="pilots/{pilotId}")
 	public String muestraPilotoPorId(@PathVariable("pilotId") int pilotId, ModelMap model) {
 		Optional<Pilot> pilot = pilotService.findPilotById(pilotId);
@@ -216,7 +240,7 @@ public class PilotController {
 		}else {
 			model.addAttribute("message", "Rider not found!");
 		}
-		return "redirect:/pilots";
+		return "redirect:/pilotsPaged";
 	}
 	
 	@GetMapping(path="pilots/edit/{pilotId}")

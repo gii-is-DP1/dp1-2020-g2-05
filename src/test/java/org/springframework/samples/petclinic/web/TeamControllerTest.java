@@ -29,7 +29,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
+
 import org.springframework.samples.petclinic.model.Authorities;
+
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Team;
@@ -120,10 +122,15 @@ public class TeamControllerTest {
 		Date date = new Date();
 		liga.setId(TEST_LEAGUE_ID);
 		liga.setLeagueCode("IOKASXISAU");
-		liga.setLeagueDate(formatter.format(date));
-	    liga.setActiveCategory(Category.MOTO3);
-		liga.setName("liga");
-		liga.setRacesCompleted(0);
+
+//		liga.setLeagueDate(formatter.format(date));
+//	    liga.setActiveCategory(Category.MOTO3);
+//
+//		liga.setLeagueDate("15/10/2020");
+//		liga.setActiveCategory(Category.MOTO3);
+//
+//		liga.setName("liga");
+//		liga.setRacesCompleted(0);
 
 		team.setId(TEST_TEAM_ID);
 		team.setName("Migue");

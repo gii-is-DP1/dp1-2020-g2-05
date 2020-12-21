@@ -168,7 +168,7 @@ public class TeamController {
 			List<Recruit> l = recruitService.getRecruitsByTeam(teamID);
 			System.out.println(l);
 			model.addAttribute("misFichajes", l);
-			model.addAttribute("misAlineaciones", new ArrayList<Lineup>());//lineupService.findByTeam(teamID));
+			model.addAttribute("misAlineaciones",lineupService.findByTeam(teamID));
 		}else {
 			model.addAttribute("message", "Team not found!");
 		}

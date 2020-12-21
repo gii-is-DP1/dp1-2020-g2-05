@@ -46,11 +46,14 @@ import org.springframework.samples.petclinic.model.Authorities;
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Owner;
+import org.springframework.samples.petclinic.model.TablaConsultas;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.User;
+import org.springframework.samples.petclinic.repository.TablaConsultasRepository;
 import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.LineupService;
 import org.springframework.samples.petclinic.service.RecruitService;
+import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -66,7 +69,10 @@ public class LeagueControllerTest {
 	private static final int TEST_LEAGUE_ID = 1;
 
 	private static final int TEST_TEAM_ID = 1;
-
+	
+	@MockBean
+	@Autowired
+	TablaConsultasService TCService;
 
 	@MockBean
 	@Autowired	
@@ -82,10 +88,13 @@ public class LeagueControllerTest {
 	private User user = new User();
 	private List<League> lista = new ArrayList<League>();
 	private	League liga = new League();
-	
+	TablaConsultas TCConsulta = new TablaConsultas();
+
 	@BeforeEach 
 	void setup() throws DataAccessException, duplicatedLeagueNameException {
 
+		TCConsulta.setCurrentCategory(Category.MOTO3);
+		TCConsulta.setRacesCompleted(0);
 		user.setUsername("antcammar4");
 		user.setEnabled(true);
 	
@@ -95,8 +104,7 @@ public class LeagueControllerTest {
 	    liga.setLeagueCode("UDTQCSSOND");
 	    liga.setName("prueba");
 	    liga.setLeagueDate(formatter.format(date));
-	    liga.setActiveCategory(Category.MOTO3);
-	    liga.setRacesCompleted(0);
+	   
 	    
 
 		
@@ -236,8 +244,8 @@ public class LeagueControllerTest {
 				.param("name", liga.getName())
 				.param("leagueCode", liga.getLeagueCode())
 				.param("leagueDate", liga.getLeagueDate())
-				.param("racesCompleted", liga.getRacesCompleted().toString())
-				.param("activeCategory", liga.getActiveCategory().toString()))
+				.param("racesCompleted", TCConsulta.getRacesCompleted().toString())
+				.param("activeCategory", TCConsulta.getCurrentCategory().toString()))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/leagues/"+liga.getId()+"/teams/new"));
 	}
@@ -252,7 +260,7 @@ public class LeagueControllerTest {
 				.param("leagueCode", "1231as")
 				.param("leagueDate", liga.getLeagueDate())
 				.param("racesCompleted", "sad")
-				.param("activeCategory", liga.getActiveCategory().toString()))
+				.param("activeCategory", TCConsulta.getCurrentCategory().toString()))
 				.andExpect(status().isOk())
 				.andExpect(model().attributeHasErrors("league"))
 				.andExpect(model().attributeHasFieldErrors("league", "name"))
@@ -299,8 +307,8 @@ public class LeagueControllerTest {
 				.param("name", liga.getName())
 				.param("leagueCode", liga.getLeagueCode())
 				.param("leagueDate", liga.getLeagueDate())
-				.param("racesCompleted", liga.getRacesCompleted().toString())
-				.param("activeCategory", liga.getActiveCategory().toString()))
+				.param("racesCompleted", TCConsulta.getRacesCompleted().toString())
+				.param("activeCategory", TCConsulta.getCurrentCategory().toString()))
 				.andExpect(model().attribute("yaTienesEquipo", true))
 				.andExpect(model().attribute("leagueYaEquipoId", liga.getId()))
 				.andExpect(status().isOk())
@@ -319,8 +327,8 @@ public class LeagueControllerTest {
 				.param("name", liga.getName())
 				.param("leagueCode", liga.getLeagueCode())
 				.param("leagueDate", liga.getLeagueDate())
-				.param("racesCompleted", liga.getRacesCompleted().toString())
-				.param("activeCategory", liga.getActiveCategory().toString()))
+				.param("racesCompleted", TCConsulta.getRacesCompleted().toString())
+				.param("activeCategory", TCConsulta.getCurrentCategory().toString()))
 				.andExpect(model().attribute("noLeagueFound", "Any league has been found with the code provided :("))
 				.andExpect(status().isOk())
 				.andExpect(view().name("/leagues/createLeague"));
@@ -339,8 +347,8 @@ public class LeagueControllerTest {
 				.param("name", liga.getName())
 				.param("leagueCode", liga.getLeagueCode())
 				.param("leagueDate", liga.getLeagueDate())
-				.param("racesCompleted", liga.getRacesCompleted().toString())
-				.param("activeCategory", liga.getActiveCategory().toString()))
+				.param("racesCompleted", TCConsulta.getRacesCompleted().toString())
+				.param("activeCategory", TCConsulta.getCurrentCategory().toString()))
 				.andExpect(model().attribute("yaTieneMaxTeams", true))
 				.andExpect(status().isOk())
 				.andExpect(view().name("leagues/myLeagues"));
@@ -359,8 +367,8 @@ public class LeagueControllerTest {
 				.param("name", liga.getName())
 				.param("leagueCode", liga.getLeagueCode())
 				.param("leagueDate", liga.getLeagueDate())
-				.param("racesCompleted", liga.getRacesCompleted().toString())
-				.param("activeCategory", liga.getActiveCategory().toString()))
+				.param("racesCompleted", TCConsulta.getRacesCompleted().toString())
+				.param("activeCategory", TCConsulta.getCurrentCategory().toString()))
 //				.andExpect(model().attribute("yaTienesEquipo", false))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/leagues/"+liga.getId()+"/teams/new"));

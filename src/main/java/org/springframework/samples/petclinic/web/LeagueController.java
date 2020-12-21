@@ -31,10 +31,12 @@ import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Result;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.User;
+import org.springframework.samples.petclinic.model.TablaConsultas;
 import org.springframework.samples.petclinic.repository.LeagueRepository;
 import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.PilotService;
 import org.springframework.samples.petclinic.service.ResultService;
+import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -69,13 +71,15 @@ public class LeagueController{
 //	private Boolean yaTieneMaxTeams=false; // no puedes unirte a esa liga
 	private String AUTHORITY;
 
+	TablaConsultasService TCService;
 	LeagueService leagueService;
 	UserService userService;
 	
 	@Autowired
-	public LeagueController(LeagueService leagueService, UserService userService) {
+	public LeagueController(LeagueService leagueService, UserService userService,TablaConsultasService TCService) {
 		this.leagueService = leagueService;
 		this.userService = userService;
+		this.TCService = TCService;
 	}
 
 
@@ -95,9 +99,11 @@ public class LeagueController{
 		User user = this.userService.getUserSession();
 		AUTHORITY = this.leagueService.findAuthoritiesByUsername(user.getUsername());
 
+		TablaConsultas tabla = this.TCService.getTabla().get();
+		
 		List<League> result = leagueService.convertirIterableLista(leagueService.findAll());
 	  
-		if(this.leagueService.avanceIncremental(result)) { //si ha eliminado a una liga da true y refresco la pagina
+		if(this.leagueService.comprobarLigaVacia(result)) { //si ha eliminado a una liga da true y refresco la pagina
 			return leagues(modelMap);
 		}
 		
@@ -108,9 +114,8 @@ public class LeagueController{
 	    }
 	 
 		modelMap.addAttribute("ligas", result);
-		modelMap.addAttribute("rcc2",this.leagueService.GPsPorCategoria(result).get(0));
-		modelMap.addAttribute("rcc3",this.leagueService.GPsPorCategoria(result).get(1));
-		modelMap.addAttribute("rccgp",this.leagueService.GPsPorCategoria(result).get(2));
+		modelMap.addAttribute("categoriaActual", tabla.getCurrentCategory());
+		modelMap.addAttribute("carrerasCompletadas",tabla.getRacesCompleted());
 		return "leagues/leagueList";
 	}
 	
@@ -164,9 +169,12 @@ public class LeagueController{
 //		if(!(AUTHORITY.equals("admin"))) {
 //			return "redirect:/leagues";
 //		}
-		Category categoria = Category.valueOf(model.getAttribute("category").toString());
-
-		this.leagueService.updateGPsFromLeagueWithCategory(categoria);
+		Category category = Category.valueOf(model.getAttribute("category").toString());
+		
+		
+		TCService.actualizarTabla(category);
+		
+//		this.leagueService.updateGPsFromLeagueWithCategory(categoria);
 		
 		return "redirect:/leagues";
 	}
@@ -192,11 +200,11 @@ public class LeagueController{
 	    
 	    
 	    League newLeague = new League();
-	    newLeague.setId(result.get(result.size()-1).getId()+1);
+//	    newLeague.setId(result.get(result.size()-1).getId()+1);
 	    newLeague.setLeagueCode(leagueService.randomString(10));
 	    newLeague.setLeagueDate(formatter.format(date));
-	    newLeague.setActiveCategory(Category.MOTO3);
-	    newLeague.setRacesCompleted(0);
+//	    newLeague.setActiveCategory(Category.MOTO3);
+//	    newLeague.setRacesCompleted(0);
 		model.addAttribute("league",newLeague);
 		//borrar ligas sin equipos aqui para evitar que nos peten
 		return "/leagues/createLeagueName";

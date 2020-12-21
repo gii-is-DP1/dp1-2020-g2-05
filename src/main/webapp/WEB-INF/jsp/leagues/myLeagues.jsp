@@ -18,7 +18,7 @@
 				<th style="text-align:center;">Name</th>
 				<th style="text-align:center;">Code</th>
 				<th style="text-align:center;">Date</th>
-				<th style="text-align:center;">Category</th>
+<!-- 				<th style="text-align:center;">Category</th> -->
 				<th style="text-align:center;">Teams</th>
 			</tr>
 		</thead>
@@ -32,17 +32,17 @@
 					<td style="text-align:center;background-color:#73bf41;color:white;"	><c:out value="${league.leagueCode} " /></td>
 					<td style="text-align:center;background-color:#73bf41;color:white;"><c:out value="${league.leagueDate}" /></td>
 					
-					<c:if test="${league.activeCategory==Category.MOTOGP}">  
-					<td style="text-align:center;background-color:#73bf41;color:white;">Moto GP </td>					
-					</c:if>
+<%-- 					<c:if test="${league.activeCategory==Category.MOTOGP}">   --%>
+<!-- 					<td style="text-align:center;background-color:#73bf41;color:white;">Moto GP </td>					 -->
+<%-- 					</c:if> --%>
 					
-					<c:if test="${league.activeCategory==Category.MOTO2}">  
-					<td style="text-align:center;background-color:#73bf41;color:white;">Moto 2 </td>					
-					</c:if>
+<%-- 					<c:if test="${league.activeCategory==Category.MOTO2}">   --%>
+<!-- 					<td style="text-align:center;background-color:#73bf41;color:white;">Moto 2 </td>					 -->
+<%-- 					</c:if> --%>
 					
-					<c:if test="${league.activeCategory==Category.MOTO3}">  
-					<td style="text-align:center;background-color:#73bf41;color:white;">Moto 3 </td>					
-					</c:if> 
+<%-- 					<c:if test="${league.activeCategory==Category.MOTO3}">   --%>
+<!-- 					<td style="text-align:center;background-color:#73bf41;color:white;">Moto 3 </td>					 -->
+<%-- 					</c:if>  --%>
 					
 					
 					<td style="text-align:center;background-color:#73bf41;color:white;">
@@ -62,17 +62,17 @@
 					<td style="text-align:center;"	><c:out value="${league.leagueCode} " /></td>
 					<td style="text-align:center;"><c:out value="${league.leagueDate}" /></td>
 					
-					<c:if test="${league.activeCategory==Category.MOTOGP}">  
-					<td style="text-align:center;">Moto GP </td>					
-					</c:if>
+<%-- 					<c:if test="${league.activeCategory==Category.MOTOGP}">   --%>
+<!-- 					<td style="text-align:center;">Moto GP </td>					 -->
+<%-- 					</c:if> --%>
 					
-					<c:if test="${league.activeCategory==Category.MOTO2}">  
-					<td style="text-align:center;">Moto 2 </td>					
-					</c:if>
+<%-- 					<c:if test="${league.activeCategory==Category.MOTO2}">   --%>
+<!-- 					<td style="text-align:center;">Moto 2 </td>					 -->
+<%-- 					</c:if> --%>
 					
-					<c:if test="${league.activeCategory==Category.MOTO3}">  
-					<td style="text-align:center;">Moto 3 </td>					
-					</c:if> 
+<%-- 					<c:if test="${league.activeCategory==Category.MOTO3}">   --%>
+<!-- 					<td style="text-align:center;">Moto 3 </td>					 -->
+<%-- 					</c:if>  --%>
 					
 					
 					<td style="text-align:center;">

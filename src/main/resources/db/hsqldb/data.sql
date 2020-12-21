@@ -116,12 +116,14 @@ INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (5,'Alvar
 INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (6,'Alejandro','Rojas','Espanola',83,2);
 
 
-INSERT INTO granpremio(id,site,date0,circuit,racecode) VALUES (1,'Mallorca','15','Montercarlo','QAT');
-INSERT INTO granpremio(id,site,date0,circuit,racecode) VALUES (2,'Menorca','15','Andalusia','SPA');
-INSERT INTO granpremio(id,site,date0,circuit,racecode) VALUES (3,'Menorca','15','Andalusia','SPA');
-INSERT INTO granpremio(id,site,date0,circuit,racecode) VALUES (4,'Menorca','15','Andalusia','SPA');
-INSERT INTO granpremio(id,site,date0,circuit,racecode) VALUES (5,'Menorca','15','Andalusia','SPA');
-INSERT INTO granpremio(id,site,date0,circuit,racecode) VALUES (6,'Menorca','15','Andalusia','SPA');
+INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run) VALUES (1,'Grand Prix Of Qatar','2020-03-08','Losail','QAT',false);
+INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run) VALUES (2,'GP Spain','2020-07-19','Jerez','ESP',false);
+INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run) VALUES (3,'GP Andalusia','2020-07-26','Jerez','ESP',false);
+INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run) VALUES (4,'Grand Czech Republic','2020-08-09','BRNO','CZE',false);
+INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run) VALUES (5,'Grand Prix Of Austria','2020-08-16','Red Bull Ring','AUT',false);
+INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run) VALUES (6,'Grand Prix Of Estiria','2020-08-23','Red Bull Ring','AUT',false);
+INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run) VALUES (7,'Grand Prix San Marino','2020-09-13','Misano','SMR',false);
+INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run) VALUES (8,'NoDebeDeSeleccionarse','2015-09-13','NoDebeDeSeleccionarse','NDS',false);
 
 
 INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (1,1,true,false,1,1);
@@ -134,11 +136,11 @@ INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (6,6,fal
 
 
 --Cada liga con su escudería sistema que tiene todos los pilotos que nadie posee
-INSERT INTO league(id,name,league_code,league_date,active_category,races_completed) VALUES (1,'Liga1','QWEASDFRGT','2019/02/01',2,3);
+INSERT INTO league(id,name,league_code,league_date) VALUES (1,'Liga1','QWEASDFRGT','2019/02/01');
 INSERT INTO team(id,name,points,money,league_id, username) VALUES (8,'Sistema',0,0,1, 'admin1');
-INSERT INTO league(id,name,league_code,league_date,active_category,races_completed) VALUES (2,'Liga1','OLIKJUHMNJ','2019/06/12',2,3);
+INSERT INTO league(id,name,league_code,league_date) VALUES (2,'Liga1','OLIKJUHMNJ','2019/06/12');
 INSERT INTO team(id,name,points,money,league_id, username) VALUES (9,'Sistema',0,0,2, 'admin1');
-INSERT INTO league(id,name,league_code,league_date,active_category,races_completed) VALUES (3,'Liga1','UHJNBGFVTR','2019/09/21',2,3);
+INSERT INTO league(id,name,league_code,league_date) VALUES (3,'Liga1','UHJNBGFVTR','2019/09/21');
 INSERT INTO team(id,name,points,money,league_id, username) VALUES (10,'Sistema',0,0,3, 'admin1');
 
 
@@ -170,3 +172,5 @@ INSERT INTO lineup(id,category,gp_id,recruit1_id,recruit2_id,team_id) VALUES (2,
 INSERT INTO lineup(id,category,gp_id,recruit1_id,recruit2_id,team_id) VALUES (3,1,3,2,2,1); 
 INSERT INTO lineup(id,category,gp_id,recruit1_id,recruit2_id,team_id) VALUES (4,1,3,1,2,1); 
 INSERT INTO lineup(id,category,gp_id,recruit1_id,recruit2_id,team_id) VALUES (5,1,3,1,2,1); 
+
+INSERT INTO tabla_consultas(actual_race,races_completed,categoria_actual) VALUES(2,1,'MOTO3')

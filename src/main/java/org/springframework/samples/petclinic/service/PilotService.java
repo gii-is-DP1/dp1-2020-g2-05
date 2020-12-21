@@ -31,6 +31,8 @@ import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.BDCarrera;
 import org.springframework.samples.petclinic.model.FormRellenarBD;
@@ -199,6 +201,7 @@ public class PilotService {
 					gp.setCircuit(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
 					gp.setDate0(todosLosResultadosDeUnaCarrera.get(0).getFecha());
 					gp.setRaceCode(todosLosResultadosDeUnaCarrera.get(0).getRaceCode());
+					gp.setHasBeenRun(true);
 					this.gpService.saveGP(gp);
 					 
 					for(int k=0;k<todosLosResultadosDeUnaCarrera.size();k++) {
@@ -288,11 +291,11 @@ public class PilotService {
 	
 	
 	
-//	
-//	@Transactional(readOnly = true)	
-//	public Collection<Pilot> findPilots() throws DataAccessException {
-//		return pilotRepository.findAll();
-//	}	
+	
+	@Transactional(readOnly = true)	
+	public Page<Pilot> findAllPage(Pageable pageable) throws DataAccessException {
+		return pilotRepository.findAllPage(pageable);
+	}	
 
 	public List<Pilot> getRecruits() throws DataAccessException {
 		return this.pilotRepository.findAllRecruits();
