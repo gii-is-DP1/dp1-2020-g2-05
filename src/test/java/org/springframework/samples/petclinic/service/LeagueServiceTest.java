@@ -284,10 +284,9 @@ public class LeagueServiceTest {
 	 @Test
 	 @Transactional
 	 void shouldFindTeamByUsernameAndLeagueId() {
-		 List<Team> team = this.leagueService.findTeamByUsernameAndLeagueId("migniearj", 2);
-		 Integer equipo1 = team.size();
+		 Team team = this.leagueService.findTeamByUsernameAndLeagueId("migniearj", 2).get();
 			 
-			 		assertThat(equipo1).isNotEqualTo(0);
+			 		assertThat(team).isNotNull();
 
 	 }
 	 
