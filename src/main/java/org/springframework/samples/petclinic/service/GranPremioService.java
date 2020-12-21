@@ -1,52 +1,34 @@
 package org.springframework.samples.petclinic.service;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.GranPremio;
-import org.springframework.samples.petclinic.model.Pilot;
-import org.springframework.samples.petclinic.model.Result;
 import org.springframework.samples.petclinic.repository.GranPremioRepository;
-import org.springframework.samples.petclinic.repository.LeagueRepository;
-import org.springframework.samples.petclinic.repository.PilotRepository;
-import org.springframework.samples.petclinic.repository.TeamRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import org.springframework.samples.petclinic.model.Category;
-import motogpAPI.PeticionesGet;
-import motogpAPI.Session;
-import motogpAPI.model.InfoCarrera;
-
 @Service
 public class GranPremioService {
-
+	private static Integer numGpsIniciales=0;
+	private static  Boolean haSidoConsultado =false;
+	
 	@Autowired
 	private GranPremioRepository GPRepository;
+//	private TablaConsultasService TCService;
 	@Autowired
-	public GranPremioService(GranPremioRepository GPRepository) {
+	public GranPremioService(GranPremioRepository GPRepository,TablaConsultasService TCService) {
 		this.GPRepository = GPRepository;		
+//		this.TCService=TCService;
 	}
 	
-	@Autowired
-	private UserService userService;
 	
-
-	@Autowired
-	private GranPremioService pilotService;
-
-	@Autowired
-	private AuthoritiesService authoritiesService;
-
+	
 	
 
 //	@Transactional(readOnly = true)
@@ -70,8 +52,9 @@ public class GranPremioService {
 	public List<GranPremio> findAllActualYear(Integer year) {
 //		Calendar cal= Calendar.getInstance();
 //		int year= cal.get(Calendar.YEAR);
-		String queryString = "01-01-"+year;  // xxxx-01-01 , hago un select con todos los gps que sean >= a esa fecha
-		return GPRepository.findAllActualYear(queryString);
+		Integer GPsIniciales = this.getNumeroGpsIniciales();
+		String queryString = year+"-01-01";  // xxxx-01-01 , hago un select con todos los gps que sean >= a esa fecha
+		return GPRepository.findAllActualYear(queryString,GPsIniciales);
 	}
 
 	public static List<List<GranPremio>> granPremiosPorCategoria(List<GranPremio> lista){
@@ -117,4 +100,15 @@ public class GranPremioService {
 		
 		
 	}
+	
+	@Transactional
+	public Integer getNumeroGpsIniciales() {
+		if(haSidoConsultado==false) {
+			numGpsIniciales=this.findAll().size();
+			haSidoConsultado=true;
+		}
+		return numGpsIniciales;
+	}
+
+	
 }

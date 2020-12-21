@@ -13,7 +13,9 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.BDCarrera;
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.FormRellenarBD;
+import org.springframework.samples.petclinic.model.GranPremio;
 import org.springframework.samples.petclinic.model.Team;
+import org.springframework.samples.petclinic.service.GranPremioService;
 import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.PilotService;
 import org.springframework.samples.petclinic.service.UserService;
@@ -39,16 +41,18 @@ public class PoblarBaseDeDatosController {
 	LeagueService leagueService;
 	PanelDeControlController PController;
 	UserService userService;
-
+	GranPremioService GPService;
 	PilotService pilotService;
 	
 	@Autowired
-	public PoblarBaseDeDatosController(LeagueService leagueService, UserService userService,PilotService pilotService,LeagueController leagueController,PanelDeControlController PController) {
+	public PoblarBaseDeDatosController(LeagueService leagueService, UserService userService,PilotService pilotService
+			,LeagueController leagueController,PanelDeControlController PController,GranPremioService GPService) {
 		this.leagueService = leagueService;
 		this.userService = userService;
 		this.pilotService = pilotService;
 		this.leagueController=leagueController;
 		this.PController=PController;
+		this.GPService=GPService;
 	}
 
 
@@ -162,7 +166,12 @@ public class PoblarBaseDeDatosController {
 		
 	}
 	
-	
+	@GetMapping(path="/BD/carrerasBD/{date}/{code}/{id}")
+	public String actualizarTablaGPs(@PathVariable("date") String date,@PathVariable("code") String code,@PathVariable("id") String id,ModelMap model) throws JSONException, IOException {
+		GranPremio gp = this.GPService.findGPById(Integer.parseInt(id)).get();
+		gp.setHasBeenRun(true);		
+		return PoblarBDCarreras(date, code, model);
+	}
 	@GetMapping(path="/BD/carrerasBD/{date}/{code}")
 	public String PoblarBDCarreras(@PathVariable("date") String date,@PathVariable("code") String code,ModelMap model) throws JSONException, IOException {
 		BDCarrera form = new BDCarrera();

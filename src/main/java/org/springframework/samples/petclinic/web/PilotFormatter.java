@@ -26,7 +26,7 @@ public class PilotFormatter implements Formatter<Pilot> {
 	public String print(Pilot pilot, Locale locale) {
 		return pilot.getName() + " " + pilot.getLastName();
 	}
-
+	
 	@Override
 	public Pilot parse(String text, Locale locale) throws ParseException {
 		List<Pilot> findPilots = StreamSupport.stream(this.pilotService.findAll().spliterator(), false).collect(Collectors.toList());

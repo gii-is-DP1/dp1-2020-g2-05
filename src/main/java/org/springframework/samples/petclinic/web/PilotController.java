@@ -240,7 +240,7 @@ public class PilotController {
 		}else {
 			model.addAttribute("message", "Rider not found!");
 		}
-		return "redirect:/pilots";
+		return "redirect:/pilotsPaged";
 	}
 	
 	@GetMapping(path="pilots/edit/{pilotId}")

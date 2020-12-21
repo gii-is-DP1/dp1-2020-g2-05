@@ -123,6 +123,7 @@ INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run) VALUES (4,'G
 INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run) VALUES (5,'Grand Prix Of Austria','2020-08-16','Red Bull Ring','AUT',false);
 INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run) VALUES (6,'Grand Prix Of Estiria','2020-08-23','Red Bull Ring','AUT',false);
 INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run) VALUES (7,'Grand Prix San Marino','2020-09-13','Misano','SMR',false);
+INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run) VALUES (8,'NoDebeDeSeleccionarse','2015-09-13','NoDebeDeSeleccionarse','NDS',false);
 
 
 INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (1,1,true,false,1,1);

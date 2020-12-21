@@ -22,11 +22,14 @@
 			 <td><c:out value="${res.circuit}"  /> </td>
 			 <td><c:out value="${res.date0}"  /> </td>
 			 <td>
-			 <spring:url value="/granPremios" var="leagueUrl">
+			 <spring:url value="/results/MOTOGP/{raceCode}" var="leagueUrl">
+			<spring:param name="raceCode" value="${res.raceCode}" />
 			</spring:url> <a href="${fn:escapeXml(leagueUrl)}"> MotoGP</a>
-			<spring:url value="/granPremios" var="leagueUrl">
+			<spring:url value="/results/MOTO2/{raceCode}" var="leagueUrl">
+			<spring:param name="raceCode" value="${res.raceCode}" />
 			</spring:url> <a href="${fn:escapeXml(leagueUrl)}"> Moto2</a>
-			<spring:url value="/granPremios" var="leagueUrl">
+			<spring:url value="/results/MOTO3/{raceCode}" var="leagueUrl">
+			<spring:param name="raceCode" value="${res.raceCode}" />
 			</spring:url> <a href="${fn:escapeXml(leagueUrl)}"> Moto3</a>
 			</td>
 			
