@@ -17,11 +17,7 @@ package org.springframework.samples.petclinic.web;
 
 
 import java.util.Collection;
-
-						
-
-
-
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -47,6 +43,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 
@@ -62,31 +59,37 @@ public class MessageController {
 
 
 
-	@Autowired
 	MessageService messageService;
 	
-	@Autowired
 
 	UserService userService;
 	
 
 
-	
+
+	@Autowired
+	public MessageController(MessageService messageService, UserService userService) {
+		
+		this.messageService = messageService;
+		this.userService = userService;
+	}
+
 	@GetMapping("/messages")
 	public String listadoMensajes(ModelMap modelMap) {
-		System.out.println(userService.getUserSession().getUsername());
-		modelMap.addAttribute("resultados", messageService.findAllUsernameReceive(userService.getUserSession().getUsername()));
+		User user =userService.getUserSession();
+		List<Message> probando =  messageService.findAllUsernameReceive(user.getUsername());
+		modelMap.addAttribute("resultados", probando);
 		return "messages/messagesList";
 	}
 	
 	@GetMapping(path="messages/delete/{messageId}")
-	public String borrarMensaje(@PathVariable("messageId") int messageId, ModelMap model) {
+	public String borrarMensaje(@PathVariable("messageId") int messageId, ModelMap model,RedirectAttributes ra) {
 		Optional<Message> message = messageService.findMessageById(messageId);
 		if(message.isPresent()) {
 			messageService.delete(message.get());
-			model.addAttribute("message", "message successfully deleted!");
+			ra.addAttribute("message", "message successfully deleted!");
 		}else {
-			model.addAttribute("message", "message not found!");
+			ra.addAttribute("message", "message not found!");
 		}
 		return "redirect:/messages";
 	}
@@ -105,8 +108,9 @@ public class MessageController {
 	@GetMapping(path="/messages/new/{username}")
 	public String crearMensajePredefinido(@PathVariable("username") String username,ModelMap model) {
 		Message message = new Message();
+		Optional<User> usuariorecibe = userService.findUser(username);
 		message.setUsernamesend(userService.getUserSession());
-		message.setUsernamereceive(userService.findUser(username).get());
+		message.setUsernamereceive(usuariorecibe.get());
 		message.setVisto(0);
 		model.put("messagee", message);		
 		return "messages/messagesEdit";
@@ -157,11 +161,11 @@ public class MessageController {
 		Optional<Message> message = messageService.findMessageById(messageId);
 		if(message.isPresent()) {
 			model.addAttribute("messagee", message.get());
+			message.get().setVisto(1);
 		}else {
 			model.addAttribute("encontrado", false);
 		}
-		message.get().setVisto(1);
-		System.out.println("El id del mensaje es: " + this.messageService.findMessageById(messageId).get());
+		
 		return "messages/messageDetails";
 	}
 	
