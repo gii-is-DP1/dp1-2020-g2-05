@@ -7,10 +7,13 @@ import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.model.Category;
+import org.springframework.samples.petclinic.model.GranPremio;
 import org.springframework.samples.petclinic.model.Lineup;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.Pilot;
+import org.springframework.samples.petclinic.service.GranPremioService;
 import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.LineupService;
 import org.springframework.samples.petclinic.service.RecruitService;
@@ -62,13 +65,16 @@ public class LineupController {
 	LineupService lineupService;
 	LeagueService leagueService;
 	RecruitService recruitService;
+	GranPremioService granPremioService;
 	
 	@Autowired
-	public LineupController(LeagueService leagueService, LineupService lineupService,TablaConsultasService TCService, RecruitService recruitService) {
+	public LineupController(LeagueService leagueService, LineupService lineupService,TablaConsultasService TCService,
+			RecruitService recruitService, 	GranPremioService granPremioService) {
 		this.lineupService = lineupService;
 		this.leagueService = leagueService;
 		this.TCService = TCService;
 		this.recruitService = recruitService;
+		this.granPremioService = granPremioService;
 	}
 	
 	@ModelAttribute("recruitsSelection")
@@ -95,7 +101,17 @@ public class LineupController {
 
 	@GetMapping(path="/newLineup")
 	public String crearAlineacionGet(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, ModelMap model) {
-		model.put("lineup", new Lineup());
+		
+		Lineup lineup = new Lineup();
+		Category currentCategory = this.TCService.getTabla().get().getCurrentCategory();
+		lineup.setCategory(currentCategory);
+	
+		//Esto debe dar el ID del próximo GP que se va a disputar
+		Integer currentGPId = this.TCService.getTabla().get().getActualRace();
+		GranPremio currentGP = this.granPremioService.findGPById(currentGPId).get();
+		lineup.setGp(currentGP);
+		model.put("lineup", lineup);
+//		model.put("currentGP", currentGP);
 		model.addAttribute("leagueCategory", this.TCService.getTabla().get().getCurrentCategory());
 		return "lineups/lineupsEdit";
 	}
@@ -121,7 +137,6 @@ public class LineupController {
 		model.addAttribute("leagueCategory", this.TCService.getTabla().get().getCurrentCategory());
 		if(lineup.isPresent()) {
 			view = "lineups/lineupsEdit";
-
 		}else {
 			model.addAttribute("message", "Lineup not found!");
 		}
@@ -136,8 +151,9 @@ public class LineupController {
 		}
 		else {
 			Lineup lineupToUpdate = this.lineupService.findLineup(lineup.getId()).get();
-			System.out.println("el ID es: " + lineup.getId() + lineupToUpdate.getId());
+//			System.out.println("el ID es: " + lineup.getId() + lineupToUpdate.getId()); Hacer esto con un log
 			BeanUtils.copyProperties(lineup, lineupToUpdate);
+			System.out.println("Probando: " + lineupToUpdate);
 			this.lineupService.saveLineup(lineupToUpdate);
 			model.addAttribute("message", "Lineup successfully saved!");
 			return "redirect:/leagues/{leagueId}/teams/{teamId}/details";

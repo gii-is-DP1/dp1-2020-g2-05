@@ -88,7 +88,7 @@
 				<tr>
 					<td>${lineup.category}</td>
 					<td><c:out
-							value="${lineup.gp.site}, ${lineup.gp.circuit}, ${lineup.gp.date0} " /></td>
+							value="${lineup.gp.date0}, ${lineup.gp.site}, ${lineup.gp.circuit}" /></td>
 					<td><c:out
 							value="${lineup.recruit1.pilot.name} ${lineup.recruit1.pilot.lastName}" /></td>
 					<td><c:out
