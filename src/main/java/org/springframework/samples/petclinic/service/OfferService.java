@@ -45,7 +45,7 @@ public class OfferService {
 	
 	@Transactional
 	public Team findTeamByUsernameLeague(int leagueId) throws DataAccessException {
-		return leagueService.findTeamByUsernameAndLeagueId(userService.getUserSession().getUsername(), leagueId);
+		return leagueService.findTeamByUsernameAndLeagueId(userService.getUserSession().getUsername(), leagueId).get();
 	}
 	
 	@Transactional
