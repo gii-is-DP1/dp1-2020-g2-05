@@ -136,12 +136,12 @@ public class TeamController {
 		}else {
 		
 		team.setUser(this.userService.getUserSession());
-		List<Team> tem = this.leagueService.findTeamByUsernameAndLeagueId(team.getUser().getUsername(), leagueId);
+		Optional<Team> tem = this.leagueService.findTeamByUsernameAndLeagueId(team.getUser().getUsername(), leagueId);
 			League liga = this.leagueService.findLeague(leagueId).get();
 			team.setLeague(liga);
 			
 			
-		 if(tem.size()>= 1){
+		 if(tem.isPresent()){
 			model.addAttribute("message", "Sorry, you cannot have more teams in this league!");
 			EquipoNo=true;
 		//	return "redirect:/leagues/{leagueId}/teams";

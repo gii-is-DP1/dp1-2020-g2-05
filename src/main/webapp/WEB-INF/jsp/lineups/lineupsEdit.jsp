@@ -18,7 +18,9 @@
             <input type="hidden" name="category" value="${leagueCategory}"/>
             <input type="hidden" name="league" value="${leagueId}"/>
             <input type="hidden" name="team" value="${teamId}"/>
-            <petclinic:inputField label="GP" name="gp.id"/>
+            <input type="hidden" name="gp.id" value="${lineup.gp.id}"/>
+<%--             <petclinic:inputField label="GP" name="gp.id"/> --%>
+            <h4>Date: ${lineup.gp.date0} </h4><h4> Place: ${lineup.gp.site} </h4><h4>Circuit: ${lineup.gp.circuit}</h4>
 <%--             <petclinic:inputField label="Recruit1" name="recruit1.id"/> --%>
 <%--             <petclinic:inputField label="Recruit2" name="recruit2.id"/> --%>
             
