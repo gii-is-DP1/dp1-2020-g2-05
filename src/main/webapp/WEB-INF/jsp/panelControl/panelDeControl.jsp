@@ -8,7 +8,7 @@
 <%@ page import="org.springframework.samples.petclinic.model.Category" %>
 
 
-<petclinic:layout pageName="leagues">
+<petclinic:layout pageName="CP">
 <c:if test="${message!=null}"><c:out value="${message}"/></c:if>	
 <c:if test="${messageMoto2NotFound!=null}"><c:out value="${messageMoto2NotFound}"/><br></c:if>	
 <c:if test="${messageMotogpNotFound!=null}"><c:out value="${messageMotogpNotFound}"/><br></c:if>	
@@ -22,19 +22,19 @@
         </div>
 	<div>
 	<c:forEach items="${listaGP}" var="res">
-			 			 <c:if test="${res.hasBeenRun==false}">
 		
 			 <h5>
 			 <c:out value="${res.circuit}"  />  
 			 <c:out value=" ${res.date0}"  /> 
-			<spring:url value="/BD/carrerasBD/{date}/{code}" var="leagueUrl">
+			<spring:url value="/BD/carrerasBD/{date}/{code}/{id}" var="leagueUrl">
 			<spring:param name="date" value="${res.date0}" />
 			<spring:param name="code" value="${res.raceCode}" />
-			<spring:param name="code" value="${res.id}" />
-			</spring:url> <a href="${fn:escapeXml(leagueUrl)}"> Poblar</a>
+			<spring:param name="id" value="${res.id}" />
+			</spring:url> 			 			 <c:if test="${res.hasBeenRun==false}">
+			<a href="${fn:escapeXml(leagueUrl)}"> Poblar</a></c:if>
 			
 			 </h5>
-			</c:if>	 
+			
 				
 		</c:forEach>
 	</div>

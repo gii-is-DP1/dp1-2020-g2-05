@@ -87,7 +87,7 @@ public class GranPremioController {
 //		List<GranPremio> motogp = gps_calificados.get(0);
 //		List<GranPremio> moto2 = gps_calificados.get(1);
 //		List<GranPremio> moto3 = gps_calificados.get(2);
-		List<GranPremio> gps = GPService.findAllActualYear(2021).stream().collect(Collectors.toSet()).stream().collect(Collectors.toList());
+		List<GranPremio> gps = GPService.findAllActualYear(2020).stream().collect(Collectors.toSet()).stream().collect(Collectors.toList());
 		model.addAttribute("listaGP",gps.stream().sorted(Comparator.comparing(GranPremio::getId)).collect(Collectors.toList()));
 		return "/gp/gpList";
 		 
