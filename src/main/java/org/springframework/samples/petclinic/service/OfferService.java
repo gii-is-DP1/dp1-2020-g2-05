@@ -1,6 +1,7 @@
 package org.springframework.samples.petclinic.service;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,13 +39,13 @@ public class OfferService {
 	}
 	
 	@Transactional
-	public Collection<Offer> findOffersByLeague(int leagueId) throws DataAccessException {
+	public List<Offer> findOffersByLeague(int leagueId) throws DataAccessException {
 		return offerRepository.findOffersByLeague(leagueId);
 	}
 	
 	@Transactional
-	public Optional<Team> findTeamByUsernameLeague(int leagueId) throws DataAccessException {
-		return offerRepository.findTeamByUsernameLeague(leagueId, userService.getUserSession().getUsername());
+	public Team findTeamByUsernameLeague(int leagueId) throws DataAccessException {
+		return leagueService.findTeamByUsernameAndLeagueId(userService.getUserSession().getUsername(), leagueId);
 	}
 	
 	@Transactional

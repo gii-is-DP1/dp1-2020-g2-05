@@ -2,6 +2,8 @@ package org.springframework.samples.petclinic.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -19,6 +21,7 @@ public class Offer extends BaseEntity{
 	@Min(0)
 	private Integer price;
 	
+	@Enumerated(EnumType.ORDINAL)
 	@Column(name = "status")
 	private Status status;
 	

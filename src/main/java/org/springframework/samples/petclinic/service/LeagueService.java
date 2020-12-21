@@ -279,7 +279,7 @@ public class LeagueService {
 		return teamRepository.findTeamByUsername(username );
 	}
 	
-	public List<Team> findTeamByUsernameAndLeagueId(String username, Integer id){
+	public Team findTeamByUsernameAndLeagueId(String username, Integer id){
 		return teamRepository.findTeamByUsernameAndLeagueId(username, id);
 	}
 	
