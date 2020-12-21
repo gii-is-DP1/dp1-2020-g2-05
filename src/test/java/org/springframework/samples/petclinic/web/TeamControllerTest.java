@@ -52,7 +52,7 @@ import static org.hamcrest.Matchers.is;
 
 public class TeamControllerTest {
 	
-	private static final int TEST_LEAGUE_ID = 1;
+	private static final Integer TEST_LEAGUE_ID = 1;
 
 	private static final int TEST_TEAM_ID = 1;
 	
@@ -196,9 +196,9 @@ public class TeamControllerTest {
 							.param("points", team.getPoints())
 							.param("money", team.getMoney())
 							.param("user" , user.getUsername())
-							.param("league", liga.toString()))
-							.andExpect(status().isOk())
-							.andExpect(view().name("/leagues/TeamsEdit"));
+							.param("league", TEST_LEAGUE_ID.toString()))
+							.andExpect(status().is3xxRedirection())
+							.andExpect(view().name("redirect:/leagues/" + TEST_LEAGUE_ID + "/teams"	));
 				
 	}
 //	  @WithMockUser(value = "spring")
