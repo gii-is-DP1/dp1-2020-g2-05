@@ -152,19 +152,12 @@ INSERT INTO team(id,name,points,money,league_id, username) VALUES (5,'Miguesnow'
 INSERT INTO team(id,name,points,money,league_id, username) VALUES (6,'MigueSnOw',577,686,1, 'martorsan13');
 INSERT INTO team(id,name,points,money,league_id, username) VALUES (7,'Miguelito',2757,4686,1, 'aleruijur');
 
-INSERT INTO offer(id,price,status,pilot_id,team_id) VALUES (1,2000,2,1,8);
-INSERT INTO offer(id,price,status,pilot_id,team_id) VALUES (2,3000,2,2,8);
-INSERT INTO offer(id,price,status,pilot_id,team_id) VALUES (3,1500,2,3,8);
-INSERT INTO offer(id,price,status,pilot_id,team_id) VALUES (4,1800.5,2,4,8);
-INSERT INTO offer(id,price,status,pilot_id,team_id) VALUES (5,2000,2,5,8);
-INSERT INTO offer(id,price,status,pilot_id,team_id) VALUES (6,2100,2,6,8);
-INSERT INTO offer(id,price,status,pilot_id,team_id) VALUES (7,1500,2,3,9);
-INSERT INTO offer(id,price,status,pilot_id,team_id) VALUES (8,1800,2,4,9);
-INSERT INTO offer(id,price,status,pilot_id,team_id) VALUES (9,2000,2,5,9);
-INSERT INTO offer(id,price,status,pilot_id,team_id) VALUES (10,2100,2,6,9);
-
 INSERT INTO recruit(id,pilot_id,team_id) VALUES (1,1,1);
 INSERT INTO recruit(id,pilot_id,team_id) VALUES (2,2,1);
+
+INSERT INTO offer(id,price,status,recruit_id) VALUES (1,2000,2,1);
+INSERT INTO offer(id,price,status,recruit_id) VALUES (2,3000,2,2);
+
 
 
 INSERT INTO lineup(id,category,gp_id,recruit1_id,recruit2_id,team_id) VALUES (1,1,1,2,2,1); 

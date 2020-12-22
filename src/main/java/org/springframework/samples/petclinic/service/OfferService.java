@@ -40,6 +40,7 @@ public class OfferService {
 	
 	@Transactional
 	public List<Offer> findOffersByLeague(int leagueId) throws DataAccessException {
+		System.out.println(offerRepository.findOffersByLeague(leagueId));
 		return offerRepository.findOffersByLeague(leagueId);
 	}
 	
@@ -58,8 +59,6 @@ public class OfferService {
 	public void putOnSale(Recruit recruit, Integer price) throws DataAccessException {
 		Offer offer = new Offer();
 		offer.setRecruit(recruit);
-		offer.setPilot(recruit.getPilot());
-		offer.setTeam(recruit.getTeam());
 		offer.setStatus(Status.Outstanding);
 		offer.setPrice(price);
 		saveOffer(offer);

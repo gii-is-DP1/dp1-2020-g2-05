@@ -1,6 +1,5 @@
 package org.springframework.samples.petclinic.model;
 
-import java.text.Collator;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -41,9 +40,6 @@ public class Pilot extends BaseEntity implements Comparable<Pilot> {
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pilot")
 	private Set<Result> results;
-
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pilot")
-	private Set<Offer> offers;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pilot")
 	private Set<Recruit> recruit;

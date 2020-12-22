@@ -259,16 +259,19 @@ public class LeagueService {
 		sysTeam.setUser(userService.findUser("admin1").get());
 		teamRepository.save(sysTeam);
 		
-		//Fichamos a todos los pilotos con la escudería sistema
+		//Fichamos y ofertamos a todos los pilotos con la escudería sistema
+		recruitAndOfferAll(sysTeam);
+	}
+	@Transactional
+	public void recruitAndOfferAll(Team t) {
 		Iterable<Pilot> pilots = pilotService.findAll();
 		List<Pilot> listPilots = new ArrayList<Pilot>();
 		pilots.forEach(listPilots::add);
 		for (int i=0;i<listPilots.size();i++) {
-			recruitService.saveRecruit(listPilots.get(i),sysTeam);
+			recruitService.saveRecruit(listPilots.get(i),t);
+			Pilot p = listPilots.get(i);
+//			offerService.putOnSale(recruitService.getRecruitByPilotId(p.getId()), p.getValorBase());
 		}
-		
-		//Ponemos en oferta a todos los pilotos de la categoría actual con la escudería sistema(Por hacer)
-		//(Por hacer)
 	}
 
 	public void delete(Team team) {

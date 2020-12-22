@@ -29,10 +29,6 @@ public class Offer extends BaseEntity{
 	@JoinColumn(name = "team_id")
 	private Team team;
 	
-	@ManyToOne
-	@JoinColumn(name = "pilot_id")
-	private Pilot pilot;
-	
 	@ManyToOne()
 	@JoinColumn(name = "recruit_id")
 	private Recruit recruit;
@@ -43,14 +39,6 @@ public class Offer extends BaseEntity{
 
 	public void setTeam(Team team) {
 		this.team = team;
-	}
-
-	public Pilot getPilot() {
-		return pilot;
-	}
-
-	public void setPilot(Pilot pilot) {
-		this.pilot = pilot;
 	}
 
 	public Integer getPrice() {
