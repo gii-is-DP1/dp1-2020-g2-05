@@ -104,9 +104,9 @@ public class GranPremioController {
 	
 	@PostMapping(path="/granPremios/new")
 	public String nuevoGranPremio(GranPremio gp,ModelMap model) {	
-		
+		gp.setCalendar(true);
+		gp.setHasBeenRun(false);
 		this.GPService.saveGP(gp);
-		
 		model.addAttribute("message","Gran Premio loaded succesfully!");
 
 		return "/panelControl/panelDeControl";

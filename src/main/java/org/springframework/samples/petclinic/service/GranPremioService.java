@@ -15,8 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class GranPremioService {
-	private static Integer numGpsIniciales=0;
-	private static  Boolean haSidoConsultado =false;
+
 	
 	@Autowired
 	private GranPremioRepository GPRepository;
@@ -52,9 +51,16 @@ public class GranPremioService {
 	public List<GranPremio> findAllActualYear(Integer year) {
 //		Calendar cal= Calendar.getInstance();
 //		int year= cal.get(Calendar.YEAR);
-		Integer GPsIniciales = this.getNumeroGpsIniciales();
-		String queryString = year+"-01-01";  // xxxx-01-01 , hago un select con todos los gps que sean >= a esa fecha
-		return GPRepository.findAllActualYear(queryString,GPsIniciales);
+		String date = year+"-01-01";  // xxxx-01-01 , hago un select con todos los gps que sean >= a esa fecha
+		List<GranPremio> GPsIniciales = this.findAllActualYear(date);
+
+		//		for(int i=0;i<GPsIniciales.size();i++) {
+//			GranPremio gpObtained = this.findAllActualYear(date,GPsIniciales.get(i).getId()).get();
+//			if(!(GPsIniciales.contains(gpObtained))) {
+//				GPsIniciales.add(gpObtained);
+//			}
+//		}
+		return GPsIniciales;
 	}
 
 	public static List<List<GranPremio>> granPremiosPorCategoria(List<GranPremio> lista){
@@ -80,7 +86,6 @@ public class GranPremioService {
 	}
 	public void delete(GranPremio gp) {
 		GPRepository.delete(gp);
-
 	}
 
 	
@@ -102,13 +107,22 @@ public class GranPremioService {
 	}
 	
 	@Transactional
-	public Integer getNumeroGpsIniciales() {
-		if(haSidoConsultado==false) {
-			numGpsIniciales=this.findAll().size();
-			haSidoConsultado=true;
-		}
-		return numGpsIniciales;
+	public List<GranPremio> findAllActualYear(String date) throws DataAccessException {
+		 return GPRepository.findAllActualYear(date);
 	}
+	
+//	@Transactional
+//	public List<GranPremio> getNumeroGpsIniciales() {
+//		if(haSidoConsultado==false) {
+//			numGpsIniciales=this.findAll();
+//			haSidoConsultado=true;
+//		}
+//		return numGpsIniciales;
+//	}
+	
+//	public void addGranPremioToCalendar(GranPremio gp) {
+//		this.numGpsIniciales.add(gp);
+//	}
 
 	
 }

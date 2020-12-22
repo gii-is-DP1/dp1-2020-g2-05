@@ -116,14 +116,14 @@ INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (5,'Alvar
 INSERT INTO pilot(id,name,lastname,nationality,dorsal,category) VALUES (6,'Alejandro','Rojas','Espanola',83,2);
 
 
-INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run) VALUES (1,'Grand Prix Of Qatar','2020-03-08','Losail','QAT',false);
-INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run) VALUES (2,'GP Spain','2020-07-19','Jerez','ESP',false);
-INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run) VALUES (3,'GP Andalusia','2020-07-26','Jerez','ESP',false);
-INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run) VALUES (4,'Grand Czech Republic','2020-08-09','BRNO','CZE',false);
-INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run) VALUES (5,'Grand Prix Of Austria','2020-08-16','Red Bull Ring','AUT',false);
-INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run) VALUES (6,'Grand Prix Of Estiria','2020-08-23','Red Bull Ring','AUT',false);
-INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run) VALUES (7,'Grand Prix San Marino','2020-09-13','Misano','SMR',false);
-INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run) VALUES (8,'NoDebeDeSeleccionarse','2015-09-13','NoDebeDeSeleccionarse','NDS',false);
+INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run,calendar) VALUES (1,'Grand Prix Of Qatar','2020-03-08','Losail','QAT',false,true);
+INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run,calendar) VALUES (2,'GP Spain','2020-07-19','Jerez','ESP',false,true);
+INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run,calendar) VALUES (3,'GP Andalusia','2020-07-26','Jerez','ESP',false,true);
+INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run,calendar) VALUES (4,'Grand Czech Republic','2020-08-09','BRNO','CZE',false,true);
+INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run,calendar) VALUES (5,'Grand Prix Of Austria','2020-08-16','Red Bull Ring','AUT',false,true);
+INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run,calendar) VALUES (6,'Grand Prix Of Estiria','2020-08-23','Red Bull Ring','AUT',false,true);
+INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run,calendar) VALUES (7,'Grand Prix San Marino','2020-09-13','Misano','SMR',false,true);
+INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run,calendar) VALUES (8,'NoDebeDeSeleccionarse','2015-09-13','NoDebeDeSeleccionarse','NDS',false,true);
 
 
 INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (1,1,true,false,1,1);
