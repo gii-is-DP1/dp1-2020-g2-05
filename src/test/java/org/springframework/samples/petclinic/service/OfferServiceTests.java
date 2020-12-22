@@ -114,7 +114,6 @@ class OfferServiceTests {
 		offer.setPrice(1400);
 		offer.setStatus(Status.Outstanding);
 		Pilot pilot = pilotService.findPilotById(2).get();//Piloto Antonio
-		offer.setPilot(pilot);
 		Team team = leagueService.findTeamById(9).get();//Escuderia sistema de la liga 2
 		offer.setTeam(team);
 		
@@ -123,7 +122,6 @@ class OfferServiceTests {
 		Integer actualOffersNum =  offerService.findAllOffers().size();
 		assertThat(actualOffersNum).isEqualTo(initialOffersNum + 1);
 		assertThat(offer.getId()).isNotNull();
-		assertThat(offer.getPilot().getName()).isEqualTo(pilot.getName());
 		assertThat(offer.getTeam().getName()).isEqualTo(team.getName());
 	}
 	
