@@ -11,6 +11,6 @@ import org.springframework.samples.petclinic.model.Team;
 
 public interface OfferRepository extends CrudRepository<Offer,Integer>{
 	
-	@Query(value = "SELECT offer.* FROM team inner join offer where team.id = offer.team_id and league_id LIKE :leagueId%", nativeQuery = true)
+	@Query(value = "SELECT offer.* FROM OFFER join team join recruit where team.league_id = :leagueId and recruit.id = offer.recruit_id and team.id = recruit.team_id", nativeQuery = true)
 	public List<Offer> findOffersByLeague(@Param("leagueId") int leagueId);
 }
