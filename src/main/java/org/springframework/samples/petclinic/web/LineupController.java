@@ -10,57 +10,42 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.GranPremio;
 import org.springframework.samples.petclinic.model.Lineup;
-import org.springframework.samples.petclinic.model.Owner;
-import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.service.GranPremioService;
 import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.LineupService;
 import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
-import org.springframework.samples.petclinic.service.UserService;
-import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 @RequestMapping("/leagues/{leagueId}/teams/{teamId}")
 public class LineupController {
 
 
-	//private static final String VIEWS_RESULT_CREATE_OR_UPDATE_FORM = "result/createOrUpdateResultForm";
-
-	//private final TeamService lineupService;
-
-	//	@Autowired
-	//	UserService userService;
-
-	//	public LeagueController(LeagueService leagueService, UserService userService) {
-	//		this.leagueService = leagueService;
-	//		this.userService = userService;
-	//	}
-
-	//	@InitBinder("league")
-	//	public void initLineupBinder(WebDataBinder dataBinder) {
-	//		dataBinder.setDisallowedFields("id");
-	//	}
+	@InitBinder("lineup")
+	public void initLineupBinder(WebDataBinder dataBinder) {
+		dataBinder.setValidator(new LineupValidator());
+	}
 	
-//	private final LineupService lineupService;
-//	private final LeagueService leagueService;
-//	
-//	@Autowired
-//	public LeagueController(LeagueService leagueService, LineupService lineupService) {
-//		this.leagueService = leagueService;
-//		this.lineupService = lineupService;
+//	@InitBinder
+//	public void setAllowedFields(WebDataBinder dataBinder) {
+//	dataBinder.setDisallowedFields("id");
 //	}
-
+	
 	TablaConsultasService TCService;
 	LineupService lineupService;
 	LeagueService leagueService;
@@ -91,9 +76,9 @@ public class LineupController {
 	@GetMapping(path="/lineups/{lineupId}")
 	public String muestraAlineacionPorId(@PathVariable("lineupId") int lineupId, ModelMap model) {
 		Optional<Lineup> lineup = lineupService.findLineup(lineupId);
-		if(lineup.isPresent()) {
+		if (lineup.isPresent()) {
 			model.addAttribute("lineup", lineup.get());
-		}else {
+		} else {
 			model.addAttribute("encontrado", false);
 		}
 		return "lineups/lineupDetails";
@@ -105,20 +90,21 @@ public class LineupController {
 		Lineup lineup = new Lineup();
 		Category currentCategory = this.TCService.getTabla().get().getCurrentCategory();
 		lineup.setCategory(currentCategory);
-	
-		//Esto debe dar el ID del próximo GP que se va a disputar
 		Integer currentGPId = this.TCService.getTabla().get().getActualRace();
 		GranPremio currentGP = this.granPremioService.findGPById(currentGPId).get();
 		lineup.setGp(currentGP);
 		model.put("lineup", lineup);
-//		model.put("currentGP", currentGP);
 		model.addAttribute("leagueCategory", this.TCService.getTabla().get().getCurrentCategory());
 		return "lineups/lineupsEdit";
 	}
 
 	@PostMapping(value = "/newLineup")
-	public String crearAlineacionPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, Lineup lineup, BindingResult result, ModelMap model) {		
+	public String crearAlineacionPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, @Valid Lineup lineup, BindingResult result, ModelMap model) {		
 		if (result.hasErrors()) {
+			log.debug("The lineup creation form has errors!");
+			Integer currentGPId = this.TCService.getTabla().get().getActualRace();
+			GranPremio currentGP = this.granPremioService.findGPById(currentGPId).get();
+			lineup.setGp(currentGP);
 			model.put("lineup", lineup);
 			return "lineups/lineupsEdit";
 		}
@@ -129,32 +115,38 @@ public class LineupController {
 	}
 
 	@GetMapping(path="/editLineup/{lineupId}")
-	public String editarLineupGet(@RequestHeader(name = "Referer") String referer, @PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
-			@PathVariable("lineupId") int lineupId, ModelMap model) {
-		Optional<Lineup> lineup = this.lineupService.findLineup(lineupId);
+	public String editarLineupGet(@RequestHeader(name = "Referer") String referer, @PathVariable("leagueId") int leagueId, 
+			@PathVariable("teamId") int teamId, @PathVariable("lineupId") int lineupId, ModelMap model) {
+		
 		String view = "redirect:/leagues/{leagueId}/teams/{teamId}/details";
-		model.addAttribute(lineup.get());
-		model.addAttribute("leagueCategory", this.TCService.getTabla().get().getCurrentCategory());
-		if(lineup.isPresent()) {
+		Optional<Lineup> lineup = this.lineupService.findLineup(lineupId);
+
+		if (lineup.isPresent()) {
 			view = "lineups/lineupsEdit";
-		}else {
+			log.info("Editing lineup with ID: " + lineupId + "\nLineup info: " + lineup.get());
+			model.addAttribute("lineup", lineup.get());
+		} else {
 			model.addAttribute("message", "Lineup not found!");
+			log.info("The lineup was not found!");
 		}
+
 		return view;
 	}
 
 	@PostMapping(value = "/editLineup/{lineupId}")
-	public String editarLineupPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, Lineup lineup, BindingResult result, ModelMap model) {
+	public String editarLineupPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, @Valid Lineup lineup, BindingResult result, ModelMap model) {
 		if (result.hasErrors()) {
+			log.info("The lineup edit form has errors!");
+			GranPremio currentGP = this.lineupService.findLineup(lineup.getId()).get().getGp();
+			lineup.setGp(currentGP);
 			model.put("lineup", lineup);
 			return "lineups/lineupsEdit";
-		}
-		else {
+		} else {
 			Lineup lineupToUpdate = this.lineupService.findLineup(lineup.getId()).get();
-//			System.out.println("el ID es: " + lineup.getId() + lineupToUpdate.getId()); Hacer esto con un log
+			log.info("Updating lineup with ID: " + lineup.getId());
 			BeanUtils.copyProperties(lineup, lineupToUpdate);
-			System.out.println("Probando: " + lineupToUpdate);
 			this.lineupService.saveLineup(lineupToUpdate);
+			log.info("Guardando lineup editado: " + lineupToUpdate);
 			model.addAttribute("message", "Lineup successfully saved!");
 			return "redirect:/leagues/{leagueId}/teams/{teamId}/details";
 		}
@@ -163,10 +155,10 @@ public class LineupController {
 	@GetMapping(path="/delete/{lineupId}")
 	public String borrarLineup(@RequestHeader(name = "Referer") String referer, @PathVariable("lineupId") int lineupId, ModelMap model) {
 		Optional<Lineup> lineup = lineupService.findLineup(lineupId);
-		if(lineup.isPresent()) {
+		if (lineup.isPresent()) {
 			lineupService.delete(lineup.get());
 			model.addAttribute("message", "Lineup successfully deleted!");
-		}else {
+		} else {
 			model.addAttribute("message", "Lineup not found!");
 		}
 

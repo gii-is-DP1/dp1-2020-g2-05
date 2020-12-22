@@ -103,7 +103,7 @@ public class Lineup extends BaseEntity {
 
 	@Override
 	public String toString() {
-		return "Lineup [ , recruit1=" + recruit1 + ", recruit2=" + recruit2 + ", team=" + team
+		return "Lineup [recruit1=" + recruit1 + ", recruit2=" + recruit2 + ", team=" + team
 				+ /*", league=" + league + */", gp=" + gp + "]";
 	}
 }
