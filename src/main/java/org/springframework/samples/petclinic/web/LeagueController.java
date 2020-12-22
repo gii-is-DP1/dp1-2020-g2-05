@@ -99,7 +99,7 @@ public class LeagueController{
 		User user = this.userService.getUserSession();
 		AUTHORITY = this.leagueService.findAuthoritiesByUsername(user.getUsername());
 
-		TablaConsultas tabla = this.TCService.getTabla().get();
+		Optional<TablaConsultas> tabla = this.TCService.getTabla();
 		
 		List<League> result = leagueService.convertirIterableLista(leagueService.findAll());
 	  
@@ -114,8 +114,8 @@ public class LeagueController{
 	    }
 	 
 		modelMap.addAttribute("ligas", result);
-		modelMap.addAttribute("categoriaActual", tabla.getCurrentCategory());
-		modelMap.addAttribute("carrerasCompletadas",tabla.getRacesCompleted());
+		modelMap.addAttribute("categoriaActual", tabla.get().getCurrentCategory());
+		modelMap.addAttribute("carrerasCompletadas",tabla.get().getRacesCompleted());
 		return "leagues/leagueList";
 	}
 	
@@ -174,7 +174,7 @@ public class LeagueController{
 		
 		TCService.actualizarTabla(category);
 		
-//		this.leagueService.updateGPsFromLeagueWithCategory(categoria);
+//		this.leagueService.updateGPsFromLeagueWithCategory();
 		
 		return "redirect:/leagues";
 	}

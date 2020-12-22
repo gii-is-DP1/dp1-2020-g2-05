@@ -12,6 +12,6 @@ import org.springframework.samples.petclinic.model.League;
 public interface GranPremioRepository  extends  CrudRepository<GranPremio, Integer>{
 
 	
-	@Query("SELECT gp FROM GranPremio gp WHERE gp.date0 >= :year AND gp.id <= :maxId")
-	public List<GranPremio> findAllActualYear(@Param("year") String year,@Param("maxId") Integer maxId);
+	@Query("SELECT gp FROM GranPremio gp WHERE gp.date0 >= :year AND gp.calendar = true")
+	public List<GranPremio> findAllActualYear(@Param("year") String year);
 }

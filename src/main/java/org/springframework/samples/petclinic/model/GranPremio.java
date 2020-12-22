@@ -37,6 +37,18 @@ public class GranPremio extends BaseEntity {
 	@Column(name = "has_been_run")
 	private Boolean hasBeenRun;
 	
+	@Column(name = "calendar")
+	private Boolean calendar;
+	
+	
+	public Boolean getCalendar() {
+		return calendar;
+	}
+
+	public void setCalendar(Boolean calendar) {
+		this.calendar = calendar;
+	}
+
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="gp")
 	private Set<Result> results;
 	

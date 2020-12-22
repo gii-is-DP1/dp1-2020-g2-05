@@ -144,9 +144,15 @@ public class LeagueControllerTest {
 	void testShowLeagues() throws Exception {
 		given(this.leagueService.convertirIterableLista(leagueService.findAll())).willReturn(lista);
 		given(this.leagueService.findAuthoritiesByUsername(user.getUsername())).willReturn("admin");
+		given( this.TCService.getTabla()).willReturn(Optional.of(this.TCConsulta));
+//		given( this.TCService.getTabla().get().getCurrentCategory()).willReturn(Category.MOTO2);
+//		given( this.TCService.getTabla().get().getRacesCompleted()).willReturn(0);
+		
 		mockMvc.perform(get("/leagues")).andExpect(status().isOk())
-			.andExpect(view().name("/leagues/leagueList"))
+			.andExpect(view().name("leagues/leagueList"))
 			.andExpect(model().attribute("admin", is(true)))
+			.andExpect(model().attribute("categoriaActual", is(Category.MOTO3)))
+			.andExpect(model().attribute("carrerasCompletadas", is(0)))
 			.andExpect(model().attribute("ligas", Matchers.hasItem(Matchers.<League> hasProperty("leagueCode", is(liga.getLeagueCode())))));
 					       		
 	}
@@ -156,8 +162,10 @@ public class LeagueControllerTest {
 	void testLimitedShowLeagues() throws Exception {
 		given(this.leagueService.convertirIterableLista(leagueService.findAll())).willReturn(lista);
 		given(this.leagueService.findAuthoritiesByUsername(user.getUsername())).willReturn("user");
+		given(this.TCService.getTabla()).willReturn(Optional.of(TCConsulta));
+		
 		mockMvc.perform(get("/leagues")).andExpect(status().isOk())
-			.andExpect(view().name("/leagues/leagueList"))
+			.andExpect(view().name("leagues/leagueList"))
 			.andExpect(model().attribute("user", is(true)))
 			.andExpect(model().attribute("ligas", Matchers.hasItem(Matchers.<League> hasProperty("leagueCode", is(liga.getLeagueCode())))));
 					       		
@@ -203,12 +211,8 @@ public class LeagueControllerTest {
 	@WithMockUser(value = "spring")
 	@Test
 	void testIncreaseGPsInLeague() throws Exception {
-		given(this.leagueService.findAuthoritiesByUsername(user.getUsername())).willReturn("admin");
-		given(leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
-		given(leagueService.convertirIterableLista(leagueService.findAll())).willReturn(lista);
-		mockMvc.perform(get("/leagues/{leagueId}/increase" , TEST_LEAGUE_ID))
+		mockMvc.perform(get("/leagues//increase" , TEST_LEAGUE_ID).flashAttr("category", "MOTO3"))
 		.andExpect(status().is3xxRedirection())
-//Comentar lo del null por la redireccion		.andExpect(model().attribute("ligas", Matchers.hasItem(Matchers.<League> hasProperty("leagueCode", is(liga.getLeagueCode())))))
 		.andExpect(view().name("redirect:/leagues"));
 
 	}
@@ -219,7 +223,7 @@ public class LeagueControllerTest {
 		given(leagueService.findLeaguesByUsername(user.getUsername())).willReturn(1);
 		given(leagueService.convertirIterableLista(leagueService.findAll())).willReturn(lista);
 		mockMvc.perform(get("/leagues/new")).andExpect(status().isOk())
-		.andExpect(model().attribute("league",hasProperty("id", is(liga.getId()+1))))
+		.andExpect(model().attribute("league",hasProperty("leagueDate", is(liga.getLeagueDate()))))
 		.andExpect(view().name("/leagues/createLeagueName"));
 		
 	}
@@ -258,13 +262,10 @@ public class LeagueControllerTest {
 				.param("id", liga.getId().toString())
 				.param("name", "prueba!!!")
 				.param("leagueCode", "1231as")
-				.param("leagueDate", liga.getLeagueDate())
-				.param("racesCompleted", "sad")
-				.param("activeCategory", TCConsulta.getCurrentCategory().toString()))
+				.param("leagueDate", liga.getLeagueDate()))
 				.andExpect(status().isOk())
 				.andExpect(model().attributeHasErrors("league"))
 				.andExpect(model().attributeHasFieldErrors("league", "name"))
-				.andExpect(model().attributeHasFieldErrors("league", "racesCompleted"))
 				.andExpect(model().attributeHasFieldErrors("league", "leagueCode"))
 				.andExpect(view().name("/leagues/createLeagueName"));
 	}
@@ -277,8 +278,6 @@ public class LeagueControllerTest {
 		.andExpect(model().attribute("league", hasProperty("name", Matchers.nullValue()))) 
 		.andExpect(model().attribute("league", hasProperty("leagueCode", Matchers.nullValue()))) 
 		.andExpect(model().attribute("league", hasProperty("leagueDate", Matchers.nullValue()))) 
-		.andExpect(model().attribute("league", hasProperty("activeCategory", Matchers.nullValue()))) 
-		.andExpect(model().attribute("league", hasProperty("racesCompleted", Matchers.nullValue()))) 
 		.andExpect(view().name("/leagues/createLeague"));
 		
 	}
