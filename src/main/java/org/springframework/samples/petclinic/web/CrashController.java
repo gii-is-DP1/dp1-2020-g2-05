@@ -29,10 +29,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class CrashController {
 
-	@GetMapping(value = "/oups")
+	@GetMapping(value = "/oups/runtime")
 	public String triggerException() {
-		throw new RuntimeException(
-				"Expected: controller used to showcase what " + "happens when an exception is thrown");
+		throw new RuntimeException("Expected: controller used to showcase what happens when an exception is thrown");
+	}
+	
+	@GetMapping("/oups/arithmetic")
+	public Integer triggerArithmeticException() {
+		return 5/0;
+//	    throw new ArithmeticException("test exception");
 	}
 
 }
