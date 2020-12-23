@@ -15,13 +15,18 @@ import org.jsoup.nodes.Element;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.samples.petclinic.model.Category;
+import org.springframework.samples.petclinic.web.LeagueController;
 
 import motogpAPI.model2.Detail;
 import motogpAPI.model2.Example2;
 import motogpAPI.model.Example;
 import motogpAPI.model.InfoCarrera;
 
+@Slf4j
 public class PeticionesGet {
 	private static final String URL = "https://results.motorsportstats.com/";
 	private static final String URL_JSON_SESSIONS = "https://mssproxy.motorsportstats.com/web/3.0.0/sessions/";
@@ -241,7 +246,7 @@ public class PeticionesGet {
 			result = new JSONObject(JsonReader.readJsonFromUrl(url, baseURL, URL_JSON_SESSIONS));
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.warn("La api no ha podido encontrar ningun resultado con los parámetros "+ category + ", " + year + ", " + session );
 		}
 
 		return result;

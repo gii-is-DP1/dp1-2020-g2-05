@@ -37,7 +37,7 @@ public class TablaConsultas extends BaseEntity{
 	private Integer actualRace;
 
 	@Column(name = "races_completed")        
-	@Min(1)
+	@Min(0)
 	@Max(20)
 	@NotNull
 	private Integer racesCompleted;
