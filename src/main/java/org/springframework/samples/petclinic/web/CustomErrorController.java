@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 //	public String getErrorPath() {
 //		return "error";
 //	}
-
+//
 //	@RequestMapping("/errorTest")
 //	public void handleRequest() {
 //	    throw new RuntimeException("test exception");
