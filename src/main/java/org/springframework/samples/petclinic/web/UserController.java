@@ -16,6 +16,7 @@
  */
 package org.springframework.samples.petclinic.web;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.model.Message;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
@@ -35,8 +37,10 @@ import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * @author Juergen Hoeller
@@ -59,6 +63,8 @@ public class UserController {
 	@InitBinder
 	public void setAllowedFields(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
+		dataBinder.setValidator(new UserValidator());
+		
 	}
 
 	@GetMapping(value = "/users/new")
@@ -82,15 +88,27 @@ public class UserController {
 	
 	@GetMapping("/friends")
 	public String listadoAmigos(ModelMap modelMap) {
-		System.out.println(userService.getUserSession().getUsername());
+		User user = new User();
+		user.setEmail("userfalso@falso.com");
+		user.setPassword("falso");
 		modelMap.addAttribute("resultados", userService.findFriendByUser(userService.getUserSession().getUsername()));
-		modelMap.addAttribute("user",new User());
+		modelMap.addAttribute("user",user);
 		return "friends/friendsList";
 	}
 	
 	@PostMapping("/friends")
-	public String processAddFollower(User user) {
-	
+	public String processAddFollower(@Valid User user,BindingResult result, ModelMap model) {
+		if(result.hasErrors()) {
+			List<ObjectError> errores = result.getAllErrors();
+			List<String> erroresstring = new ArrayList<String>();
+			for(int i=0;i<errores.size();i++) {
+				erroresstring.add(errores.get(i).getDefaultMessage());
+			}
+			model.put("message",erroresstring );	
+			model.put("user", user);
+			
+			return "friends/friendsList";
+		}else {
 			List <User> friends1 =  userService.getUserSession().getFriends();
 			
 			friends1.add(userService.findUser(user.getUsername()).get());
@@ -100,7 +118,20 @@ public class UserController {
 			userService.saveUser(userService.getUserSession());
 
 			return "redirect:/friends";
+		}
+	}
 	
+	@GetMapping(path="friends/remove/{username}")
+	public String borrarMensaje(@PathVariable("username") User user, ModelMap model,RedirectAttributes ra) {
+		List <User> friends1 =  userService.getUserSession().getFriends();
+		
+		friends1.removeIf(x -> x.getUsername().equals(user.getUsername()));
+
+		userService.getUserSession().setFriends(friends1);
+		
+		userService.saveUser(userService.getUserSession());
+
+		return "redirect:/friends";
 	}
 
 }

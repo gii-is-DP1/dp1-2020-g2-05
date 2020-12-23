@@ -30,9 +30,9 @@
 						<spring:url value="/messages/new/{username}" var="messageUrl">
 							<spring:param name="username" value="${friend.username}" />
 						</spring:url> <a href="${fn:escapeXml(messageUrl)}">Enviar mensaje</a>
-						<spring:url value="/messages/delete/{messageId}" var="messageUrl">
-							<spring:param name="messageId" value="${message.id}" />
-						</spring:url> <a href="${fn:escapeXml(messageUrl)}">Ver perfil(nohecho)</a>
+						<spring:url value="/friends/remove/{username}" var="messageUrl">
+							<spring:param name="username" value="${friend.username}" />
+						</spring:url> <a href="${fn:escapeXml(messageUrl)}">Dejar de seguir</a>
 					</td>
 				</tr>
 				
@@ -42,6 +42,8 @@
 	</table>
 		<form:form modelAttribute="user" class="form-horizontal" id="add-friend-form">
         <div class="form-group has-feedback">
+           <form:hidden path="email"/>
+           <form:hidden path="password"/>
             <petclinic:inputField label="Username" name="username"/>
              <button class="btn btn-default" type="submit">Follow</button>
            
