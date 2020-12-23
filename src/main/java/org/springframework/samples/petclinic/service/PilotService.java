@@ -190,26 +190,36 @@ public class PilotService {
 	}
 	
 //	2016, RaceCode.AUT, Session.RACE
-	public void poblarBDCarreraACarrera(BDCarrera form) throws JSONException, IOException {
+	public void poblarBDCarreraACarrera(BDCarrera form,GranPremio gp,Boolean GpEstaEnCalendario) throws JSONException, IOException {
 
-
-				GranPremio gp = new GranPremio(); //entidad de una carrera
+		//EL GP QUE SE PASA COMO PARAMETRO, O ESTA VACIO, O ESTA EN EL CALENDARIO
+//				GranPremio gp = new GranPremio(); //entidad de una carrera
 				List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceCodeCampu(form.getCategory(), form.getYear(), form.getRacecode(), form.getSession());
 				if(todosLosResultadosDeUnaCarrera.size()==0) {
 					
 				}else {
-					gp.setSite(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
-					gp.setCircuit(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
-					gp.setDate0(todosLosResultadosDeUnaCarrera.get(0).getFecha());
-					gp.setRaceCode(todosLosResultadosDeUnaCarrera.get(0).getRaceCode());
-					gp.setHasBeenRun(true);
-					gp.setCalendar(false);
-					this.gpService.saveGP(gp);
-					 
+					if(GpEstaEnCalendario==false) {
+						gp.setSite(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
+						gp.setCircuit(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
+						gp.setDate0(todosLosResultadosDeUnaCarrera.get(0).getFecha());
+						gp.setRaceCode(todosLosResultadosDeUnaCarrera.get(0).getRaceCode());
+						gp.setHasBeenRun(true);
+						gp.setHasBeenRun(true);
+						gp.setCalendar(true);
+						this.gpService.saveGP(gp);	
+					}
+						
+				
+
+				
+
 					for(int k=0;k<todosLosResultadosDeUnaCarrera.size();k++) {
 						InfoCarrera resultado_k = todosLosResultadosDeUnaCarrera.get(k);
+											if(GpEstaEnCalendario==false) {
+
 						gp.setCircuit(resultado_k.getLugar());
 						gp.setSite(resultado_k.getNombreEvento());
+											}
 						
 						Pilot pilot = new Pilot();
 						pilot.setName(resultado_k.getPiloto().split(" ")[0]);

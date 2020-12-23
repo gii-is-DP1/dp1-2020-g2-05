@@ -8,9 +8,13 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.TablaConsultas;
 import org.springframework.samples.petclinic.repository.TablaConsultasRepository;
+import org.springframework.samples.petclinic.web.LeagueController;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class TablaConsultasService {
 
@@ -49,11 +53,12 @@ public class TablaConsultasService {
 			tabla.setRacesCompleted(20);
 			tabla.setActualRace(20);
 			}	
+		log.info("TABLA CONSULTA ACTUALIZADA CORRECTAMENTE");
+
 		}
 		
 		this.saveTabla(tabla);
 
-		System.out.println("TABLA CONSULTA ACTUALIZADA CORRECTAMENTE");
 	}
 	
 	

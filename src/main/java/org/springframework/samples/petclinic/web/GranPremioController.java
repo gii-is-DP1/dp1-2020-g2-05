@@ -36,6 +36,7 @@ import org.springframework.samples.petclinic.service.GranPremioService;
 import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.PilotService;
 import org.springframework.samples.petclinic.service.ResultService;
+import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -61,12 +62,13 @@ import motogpAPI.model.InfoCarrera;
 public class GranPremioController {
 	
 	GranPremioService GPService;
-
+	TablaConsultasService TCService;
 
 	
 	@Autowired
-	public GranPremioController(GranPremioService GPService) {
+	public GranPremioController(GranPremioService GPService,TablaConsultasService TCService) {
 		this.GPService = GPService;
+		this.TCService=TCService;
 	}
 
 
@@ -89,6 +91,7 @@ public class GranPremioController {
 //		List<GranPremio> moto3 = gps_calificados.get(2);
 		List<GranPremio> gps = GPService.findAllActualYear(2020).stream().collect(Collectors.toSet()).stream().collect(Collectors.toList());
 		model.addAttribute("listaGP",gps.stream().sorted(Comparator.comparing(GranPremio::getId)).collect(Collectors.toList()));
+		model.addAttribute("racesCompleted",this.TCService.getTabla().get().getRacesCompleted());
 		return "/gp/gpList";
 		 
 	}

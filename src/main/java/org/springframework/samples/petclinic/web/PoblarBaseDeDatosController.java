@@ -14,10 +14,12 @@ import org.springframework.samples.petclinic.model.BDCarrera;
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.FormRellenarBD;
 import org.springframework.samples.petclinic.model.GranPremio;
+import org.springframework.samples.petclinic.model.TablaConsultas;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.service.GranPremioService;
 import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.PilotService;
+import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -34,7 +36,6 @@ import motogpAPI.Session;
 @Controller
 public class PoblarBaseDeDatosController {
 	
-	private String AUTHORITY;
 
 	
 	LeagueController leagueController;
@@ -43,16 +44,17 @@ public class PoblarBaseDeDatosController {
 	UserService userService;
 	GranPremioService GPService;
 	PilotService pilotService;
-	
+	TablaConsultasService TCService;
 	@Autowired
 	public PoblarBaseDeDatosController(LeagueService leagueService, UserService userService,PilotService pilotService
-			,LeagueController leagueController,PanelDeControlController PController,GranPremioService GPService) {
+			,LeagueController leagueController,PanelDeControlController PController,GranPremioService GPService,TablaConsultasService TCService) {
 		this.leagueService = leagueService;
 		this.userService = userService;
 		this.pilotService = pilotService;
 		this.leagueController=leagueController;
 		this.PController=PController;
 		this.GPService=GPService;
+		this.TCService=TCService;
 	}
 
 
@@ -152,7 +154,7 @@ public class PoblarBaseDeDatosController {
 			return "/BD/BD";
 		}else {
 			try {
-				this.pilotService.poblarBDCarreraACarrera(form);
+				this.pilotService.poblarBDCarreraACarrera(form,new GranPremio(),false);
 			}catch (NullPointerException e) {
 				messageNullPointerException=true;
 				formError=form;
@@ -170,35 +172,37 @@ public class PoblarBaseDeDatosController {
 	public String actualizarTablaGPs(@PathVariable("date") String date,@PathVariable("code") String code,@PathVariable("id") String id,ModelMap model) throws JSONException, IOException {
 		GranPremio gp = this.GPService.findGPById(Integer.parseInt(id)).get();
 		gp.setHasBeenRun(true);		
-		return PoblarBDCarreras(date, code, model);
+		return PoblarBDCarreras(date, code, model,gp);
 	}
 	@GetMapping(path="/BD/carrerasBD/{date}/{code}")
-	public String PoblarBDCarreras(@PathVariable("date") String date,@PathVariable("code") String code,ModelMap model) throws JSONException, IOException {
+	public String PoblarBDCarreras(@PathVariable("date") String date,@PathVariable("code") String code,ModelMap model,GranPremio gp) throws JSONException, IOException {
 		BDCarrera form = new BDCarrera();
 		form.setCategory(Category.MOTO3);
 		form.setRacecode(RaceCode.valueOf(code));
 		form.setSession(Session.RACE);
 		form.setYear(Integer.parseInt((date.split("-")[0])));
 		try {
-			this.pilotService.poblarBDCarreraACarrera(form);
+			this.pilotService.poblarBDCarreraACarrera(form,gp,true);
 		}catch (Exception e) {
 			model.addAttribute("messageMoto3NotFound","API has not found any result to date " + date +" and code "+code+" for moto3 ");
 		}
 		
 		try {
 			form.setCategory(Category.MOTO2);
-			this.pilotService.poblarBDCarreraACarrera(form);
+			this.pilotService.poblarBDCarreraACarrera(form,gp,true);
 		}catch (Exception e) {
 			model.addAttribute("messageMoto2NotFound","API has not found any result to date " + date +" and code "+code+" for moto2");
 		}
 		
 		try {
 			form.setCategory(Category.MOTOGP);
-			this.pilotService.poblarBDCarreraACarrera(form);
+			this.pilotService.poblarBDCarreraACarrera(form,gp,true);
 		}catch (Exception e) {
 			model.addAttribute("messageMotogpNotFound","API has not found any result to date " + date +" and code "+code+" for motogp");
 		}
-		
+		this.TCService.actualizarTabla(Category.MOTO2);
+		this.TCService.actualizarTabla(Category.MOTO3);
+		this.TCService.actualizarTabla(Category.MOTOGP);
 	  return PController.muestraPanel(model);
 	}
 	
