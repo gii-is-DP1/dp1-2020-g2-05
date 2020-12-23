@@ -16,6 +16,7 @@
 package org.springframework.samples.petclinic.web;
 
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -40,10 +41,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javassist.expr.NewArray;
 
 
 
@@ -65,7 +69,10 @@ public class MessageController {
 	UserService userService;
 	
 
-
+	@InitBinder("message")
+	public void initMessageBinder(WebDataBinder dataBinder) {
+		dataBinder.setValidator(new MessageValidator());
+	}
 
 	@Autowired
 	public MessageController(MessageService messageService, UserService userService) {
@@ -122,6 +129,12 @@ public class MessageController {
 	public String processCreationForm(@Valid Message message, BindingResult result,ModelMap model) {
 		
 		if (result.hasErrors()) {
+			List<ObjectError> errores = result.getAllErrors();
+			List<String> erroresstring = new ArrayList<String>();
+			for(int i=0;i<errores.size();i++) {
+				erroresstring.add(errores.get(i).getDefaultMessage());
+			}
+			model.put("message",erroresstring );	
 			model.put("messagee", message);		
 			model.put("usersend", userService.getUserSession());		
 
@@ -141,6 +154,12 @@ public class MessageController {
 	public String processCreationFormPredefinido(@Valid Message message, BindingResult result,ModelMap model) {
 		
 		if (result.hasErrors()) {
+			List<ObjectError> errores = result.getAllErrors();
+			List<String> erroresstring = new ArrayList<String>();
+			for(int i=0;i<errores.size();i++) {
+				erroresstring.add(errores.get(i).getDefaultMessage());
+			}
+			model.put("message",erroresstring );	
 			model.put("messagee", message);		
 			model.put("usersend", userService.getUserSession());		
 
