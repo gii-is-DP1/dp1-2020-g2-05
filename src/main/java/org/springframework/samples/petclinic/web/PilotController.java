@@ -48,6 +48,8 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import lombok.extern.slf4j.Slf4j;
+
 
 
 /**
@@ -57,6 +59,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @author Michael Isvy
  */
 @Controller
+@Slf4j
 public class PilotController {
 
 //	private static final String VIEWS_PILOT_CREATE_OR_UPDATE_FORM = "pilots/createOrUpdatePilotForm";
@@ -163,28 +166,51 @@ public class PilotController {
 	@Autowired
 	PilotService pilotService;
 	
-	@GetMapping("/pilots")
-	public String listadoPilotos(ModelMap modelMap) {
-		List<Pilot> pilotos = StreamSupport.stream(pilotService.findAll().spliterator(), false).collect(Collectors.toList());
-//		Collections.sort(pilotos);//.sort(Comparator.naturalOrder());
-		modelMap.addAttribute("resultados", pilotos);
-		return "pilots/pilotsList";
-	}
+//	@GetMapping("/pilots")
+//	public String listadoPilotos(ModelMap modelMap) {
+//		List<Pilot> pilotos = StreamSupport.stream(pilotService.findAll().spliterator(), false).collect(Collectors.toList());
+////		Collections.sort(pilotos);//.sort(Comparator.naturalOrder());
+//		modelMap.addAttribute("resultados", pilotos);
+//		return "pilots/pilotsList";
+//	}
 	
-	@GetMapping("/pilotsPaged")
-	public String listadoPilotosPaginado(@RequestParam(name = "pageNumber", required = false, defaultValue = "0") Integer pageNumber, 
-			@RequestParam(name = "pageSize", required = false, defaultValue = "5") Integer pageSize, ModelMap modelMap) {
+	@GetMapping(path={"/pilots", "/pilotsPaged"})
+	public String listadoPilotosPaginado(@RequestParam(name = "pageNumber", required = false, defaultValue = "0") String pageNumberString, 
+			@RequestParam(name = "pageSize", required = false, defaultValue = "5") String pageSizeString, ModelMap modelMap) {
+
+		Integer pageNumber;
+		Integer pageSize;
 		
-        if (pageNumber == null || pageNumber < 1) pageNumber = 1;
-        if (pageSize == null || pageSize < 1) pageSize = 1;
-        
+		try {  
+			pageNumber = Integer.parseInt(pageNumberString);  
+			pageSize = Integer.parseInt(pageSizeString);
+		} catch (NumberFormatException e) {
+			log.warn("Se ha intentado paginar con parametros que no son Integer: " + e);//\nCausa: " + e.getCause() + "\nMensaje: " + e.getMessage());
+			pageNumber = 0;  
+			pageSize = 5;
+		} 
+
+		log.info("Paginando pilotos. Parametros de entrada: pageSize = " + pageSize + ", pageNumber = " + pageNumber);
+
+		if (pageNumber == null || pageNumber < 1) pageNumber = 1;
+		if (pageSize == null || pageSize < 1) pageSize = 1;
+
 		Pageable pageable = PageRequest.of(pageNumber-1, pageSize, Sort.by(Order.asc("category"), Order.asc("name"), Order.desc("lastName")));
 		Page<Pilot> paginaPilotos = this.pilotService.findAllPage(pageable);
 		Integer maxPageNumber = (int) Math.ceil((double) paginaPilotos.getTotalElements()/paginaPilotos.getSize());
-		
+
+		if (pageNumber > maxPageNumber) {
+			pageNumber = maxPageNumber;
+			pageable = PageRequest.of(pageNumber-1, pageSize, Sort.by(Order.asc("category"), Order.asc("name"), Order.desc("lastName")));
+			paginaPilotos = this.pilotService.findAllPage(pageable);
+			maxPageNumber = (int) Math.ceil((double) paginaPilotos.getTotalElements()/paginaPilotos.getSize());
+		}
+
+		log.info("Paginando pilotos. Parametros procesados: pageSize = " + pageSize + ", pageNumber = " + pageNumber);
+
 		modelMap.addAttribute("pageNumber", pageNumber-1);
-        modelMap.addAttribute("pageSize", pageSize);
-        modelMap.addAttribute("maxPageNumber", maxPageNumber);
+		modelMap.addAttribute("pageSize", pageSize);
+		modelMap.addAttribute("maxPageNumber", maxPageNumber);
 		modelMap.addAttribute("resultadosPaginados", paginaPilotos.getContent());
 
 		return "pilots/pilotsListPaged";
@@ -219,7 +245,7 @@ public class PilotController {
 	 
 	@PostMapping(path="pilots/save")
 	public String guardarPiloto(@Valid Pilot pilot, BindingResult result, ModelMap model) {
-		String view = "pilots/pilotsList";
+		String view = "pilots/pilotsListPaged";
 		if(result.hasErrors()) {
 			model.addAttribute("pilot", pilot);
 			return "pilots/pilotsEdit";
@@ -246,14 +272,13 @@ public class PilotController {
 	@GetMapping(path="pilots/edit/{pilotId}")
 	public String editarPiloto(@PathVariable("pilotId") int pilotId, ModelMap model) {
 		Optional<Pilot> pilot = this.pilotService.findPilotById(pilotId);
-		String view = "pilots/pilotsList";
+		String view = "pilots/pilotsListPaged";
 		model.addAttribute(pilot.get());
 		if(pilot.isPresent()) {
 			view = "pilots/pilotsEdit";
-			
 		}else {
 			model.addAttribute("message", "Rider not found!");
-			view=listadoPilotos(model);
+//			view=listadoPilotosPaginado(model);
 		}
 		return view;
 	}

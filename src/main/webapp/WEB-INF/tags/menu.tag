@@ -23,7 +23,7 @@
 			<ul class="nav navbar-nav">
 
 				
-				<petclinic:menuItem active="${name eq 'pilots'}" url="/pilots"
+				<petclinic:menuItem active="${name eq 'pilots'}" url="/pilotsPaged"
 					title="leads to /pilots">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Pilots</span>
