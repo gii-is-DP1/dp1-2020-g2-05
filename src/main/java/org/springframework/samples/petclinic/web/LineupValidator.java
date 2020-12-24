@@ -32,6 +32,4 @@ public class LineupValidator implements Validator {
 	public boolean supports(Class<?> clazz) {
 		return Lineup.class.isAssignableFrom(clazz);
 	}
-
-
 }
