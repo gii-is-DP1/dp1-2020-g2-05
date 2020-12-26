@@ -213,6 +213,7 @@ public class PilotController {
 		modelMap.addAttribute("maxPageNumber", maxPageNumber);
 		modelMap.addAttribute("resultadosPaginados", paginaPilotos.getContent());
 
+		log.info("Resultados: " + paginaPilotos.getContent());
 		return "pilots/pilotsListPaged";
 	}
 	
@@ -223,10 +224,12 @@ public class PilotController {
 		if(pilot.isPresent()) {
 			model.addAttribute("pilot", pilot.get());
 			model.addAttribute("results",pilotService.obtenerResultsFormatted(pilot.get().getResults()));
+			log.info("Piloto con id (" + pilotId + ") encontrado: " + pilot.get());
 		}else {
 			model.addAttribute("encontrado", false);
+			log.info("Piloto con id (" + pilotId + ") NO encontrado: " + pilot.get());
 		}
-		System.out.println("El id del piloto es: " + this.pilotService.findPilotById(pilotId).get());
+		log.info("El id del piloto es: " + this.pilotService.findPilotById(pilotId).get());
 		return "pilots/pilotDetails";
 	}
 	
@@ -239,7 +242,9 @@ public class PilotController {
 	
 	@GetMapping(path="/pilots/new")
 	public String crearPiloto(ModelMap model) {
+		log.info("Creating a new rider.");
 		model.addAttribute("pilot", new Pilot());
+		log.info("Leading to creation form...");
 		return "pilots/pilotsEdit";
 	}
 	 
