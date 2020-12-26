@@ -70,15 +70,19 @@ public class LineupController {
 	@GetMapping("/lineups")
 	public String listadoAlineaciones(ModelMap modelMap) {
 		modelMap.addAttribute("resultados", lineupService.findAll());
+		log.info("Showing all lineups in database");
 		return "lineups/lineupsList";
 	}
 
 	@GetMapping(path="/lineups/{lineupId}")
 	public String muestraAlineacionPorId(@PathVariable("lineupId") int lineupId, ModelMap model) {
-		Optional<Lineup> lineup = lineupService.findLineup(lineupId);
-		if (lineup.isPresent()) {
-			model.addAttribute("lineup", lineup.get());
+		Optional<Lineup> lineupOptional = lineupService.findLineup(lineupId);
+		if (lineupOptional.isPresent()) {
+			Lineup lineup = lineupOptional.get();
+			log.info("Lineup con id (" + lineupId + ") encontrado: " + lineup);
+			model.addAttribute("lineup", lineup);
 		} else {
+			log.warn("Lineup con id (" + lineupId + ") NO encontrado.");
 			model.addAttribute("encontrado", false);
 		}
 		return "lineups/lineupDetails";
@@ -87,6 +91,7 @@ public class LineupController {
 	@GetMapping(path="/newLineup")
 	public String crearAlineacionGet(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, ModelMap model) {
 		
+		log.info("Creating a lineup for the team with id: " + teamId);
 		Lineup lineup = new Lineup();
 		Category currentCategory = this.TCService.getTabla().get().getCurrentCategory();
 		lineup.setCategory(currentCategory);
@@ -95,13 +100,14 @@ public class LineupController {
 		lineup.setGp(currentGP);
 		model.put("lineup", lineup);
 		model.addAttribute("leagueCategory", this.TCService.getTabla().get().getCurrentCategory());
+		log.info("Leading to creation form...");
 		return "lineups/lineupsEdit";
 	}
 
 	@PostMapping(value = "/newLineup")
 	public String crearAlineacionPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, @Valid Lineup lineup, BindingResult result, ModelMap model) {		
 		if (result.hasErrors()) {
-			log.debug("The lineup creation form has errors!");
+			log.warn("The lineup creation form has errors!");
 			Integer currentGPId = this.TCService.getTabla().get().getActualRace();
 			GranPremio currentGP = this.granPremioService.findGPById(currentGPId).get();
 			lineup.setGp(currentGP);
@@ -110,6 +116,7 @@ public class LineupController {
 		}
 		else {
 			this.lineupService.saveLineup(lineup);
+			log.info("Lineup succesfully created!");
 			return "redirect:/leagues/{leagueId}/teams/{teamId}/details";
 		}
 	}
@@ -145,8 +152,10 @@ public class LineupController {
 			Lineup lineupToUpdate = this.lineupService.findLineup(lineup.getId()).get();
 			log.info("Updating lineup with ID: " + lineup.getId());
 			BeanUtils.copyProperties(lineup, lineupToUpdate);
+			lineupToUpdate.setGp(this.granPremioService.findGPById(lineupToUpdate.getGp().getId()).get());
 			this.lineupService.saveLineup(lineupToUpdate);
-			log.info("Guardando lineup editado: " + lineupToUpdate);
+			log.info("Saving edited lineup: " + lineupToUpdate);
+//			log.info("El gp asociado es: " + lineupToUpdate.getGp().getId());
 			model.addAttribute("message", "Lineup successfully saved!");
 			return "redirect:/leagues/{leagueId}/teams/{teamId}/details";
 		}
@@ -155,11 +164,13 @@ public class LineupController {
 	@GetMapping(path="/delete/{lineupId}")
 	public String borrarLineup(@RequestHeader(name = "Referer") String referer, @PathVariable("lineupId") int lineupId, ModelMap model) {
 		Optional<Lineup> lineup = lineupService.findLineup(lineupId);
+		log.info("Deleting lineup with id: (" + lineupId + "): " + lineup.get());
 		if (lineup.isPresent()) {
 			lineupService.delete(lineup.get());
 			model.addAttribute("message", "Lineup successfully deleted!");
 		} else {
 			model.addAttribute("message", "Lineup not found!");
+			log.warn("The lineup with id (" + lineupId + ") was not found!");
 		}
 
 		return "redirect:" + referer;
