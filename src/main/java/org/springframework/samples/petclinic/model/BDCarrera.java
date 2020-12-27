@@ -9,8 +9,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
-import com.sun.istack.NotNull;
 
 import org.springframework.samples.petclinic.model.Category;
 import motogpAPI.RaceCode;
@@ -23,22 +23,19 @@ public class BDCarrera {
 	Calendar fecha = new GregorianCalendar();
 
 	@Min(2015)
-	
 	@NotNull
 	private Integer year;
 	
-	
 	@NotNull
 	private RaceCode racecode;
-	
 
 	@NotNull
 	private Category Category;
 	
-	
 	@NotNull
 	private Session session;
 
+	
 	public Integer getYear() {
 		return year;
 	}
@@ -70,6 +67,7 @@ public class BDCarrera {
 	public void setSession(Session session) {
 		this.session = session;
 	}
+	
 	
 	@Override
 	public String toString() {

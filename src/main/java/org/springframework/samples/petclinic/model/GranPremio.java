@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.model;
 
+import java.io.IOException;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -11,7 +12,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+import motogpAPI.Pais;
 import motogpAPI.RaceCode;
+import motogpAPI.Record;
 
 @Entity
 @Table(name = "granpremio")
@@ -107,6 +110,48 @@ public class GranPremio extends BaseEntity {
 	public void setLineups(Set<Lineup> lineups) {
 		this.lineups = lineups;
 	}
+
+
+//	public Pais parseRaceCodeToPais(RaceCode raceCode) {
+//		Pais pais = Pais.NOTFOUND;
+//
+//		switch (raceCode) {
+//		case ESP:
+//			pais = Pais.SPA;
+//			break;
+//		case DEU:
+//			pais = Pais.GER;
+//			break;
+//		case IND:
+//			pais = Pais.INP;
+//			break;
+//		case PRT:
+//			pais = Pais.POR;
+//			break;
+//		case SMR:
+//			pais = Pais.RSM;
+//			break;
+//		default:
+//			try {
+//				pais = Pais.valueOf(raceCode.toString());
+//			} catch (Exception e) {
+//				System.out.println(raceCode.toString() + " code not found in the list of country codes!");
+//			}
+//			break;
+//		}
+//
+//		return pais;
+//	}
+//
+//	
+//	public static Record obtieneRecords(Integer anyo, Pais pais, Category categoria) throws IOException {
+//		Record res = new Record();
+//		if (!pais.equals(Pais.NOTFOUND) && anyo > 2004 && anyo < 2021) {
+//			String urlBuilder = "https://www.motogp.com/es/ajax/results/parse/" + anyo + "/" + pais + "/" + categoria + "/";
+//			res = new Record(urlBuilder);
+//		}
+//		return res;
+//	}
 
 	@Override
 	public String toString() {

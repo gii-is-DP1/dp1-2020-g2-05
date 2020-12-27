@@ -1,40 +1,37 @@
 package motogpAPI;
 
 public enum Pais {
-	QAT,
-	SPA,
-	CZE,
-	AUT,
-	CAT,
-	FRA,
-	ARA,
-	VAL,
-	GBR,
 	AME,
-	JPN,
-	ITA,
-	GER,
+	ANC, // No esta en RaceCode, es Andalucia, solo esta para 2020
+	ARA,
 	ARG,
 	AUS,
-	MAL,
-	THA,
-	POR,
-	ANC,
-	RSM,
-	TER,
-	EMI,
-	NED,
-	SWE,
-	FIN,
+	AUT,
 	BEL,
-	INP,
-	USA,
+	CAT,
 	CHN,
+	CZE,
+	EMI, // No esta en RaceCode, es Emillia Romana, solo esta para 2020
+	FIN, // Está pero no hay resultados entre 2005 y 2020
+	FRA,
+	GBR,
+	GER,
+	INP,
+	ITA,
+	JPN,
+	MAD, // Está pero no hay resultados entre 2005 y 2020
+	MAL, // No esta en raceCode
+	NED, // No esta en raceCode
+	PAC, // Está pero no hay resultados entre 2005 y 2020
+	POR,
+	QAT,
+	RSM,
+	SPA,
+	SWE, // Está pero no hay resultados entre 2005 y 2020
+	TER, // No esta en RaceCode, es Teruel, solo esta para 2020
+	THA,
 	TUR,
-	RSA,
-	RIO,
-	PAC,
-	IMO,
-	MAD,
-	INA
+	USA,
+	VAL,
+	NOTFOUND,
 }
