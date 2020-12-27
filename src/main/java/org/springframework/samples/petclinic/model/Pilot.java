@@ -9,8 +9,10 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
-import motogpAPI.Category;
+import org.springframework.samples.petclinic.model.Category;
+
 
 @Entity
 @Table(name = "pilot")
@@ -33,14 +35,11 @@ public class Pilot extends BaseEntity implements Comparable<Pilot> {
 	private String dorsal;
 
 	@Column(name = "category")
-	@NotEmpty
-	private String category;
+	@NotNull
+	private Category category;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pilot")
 	private Set<Result> results;
-
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pilot")
-	private Set<Offer> offers;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pilot")
 	private Set<Recruit> recruit;
@@ -77,11 +76,11 @@ public class Pilot extends BaseEntity implements Comparable<Pilot> {
 		this.dorsal = dorsal;
 	}
 
-	public String getCategory() {
+	public Category getCategory() {
 		return category;
 	}
 
-	public void setCategory(String category) {
+	public void setCategory(Category category) {
 		this.category = category;
 	}
 
@@ -106,20 +105,33 @@ public class Pilot extends BaseEntity implements Comparable<Pilot> {
 	
 	
 
+//	@Override
+//	public String toString() {
+//		return "Pilot [name=" + name + ", lastName=" + lastName + ", nationality=" + nationality + ", dorsal=" + dorsal
+//				+ ", category=" + category + ", results=" + results + "]";
+//	}
+
 	@Override
 	public String toString() {
-		return "Pilot [name=" + name + ", lastName=" + lastName + ", nationality=" + nationality + ", dorsal=" + dorsal
-				+ ", category=" + category + ", results=" + results + "]";
+		return name + " " + lastName;
 	}
 
 	@Override
 	public int compareTo(Pilot o) {
-		if (!this.category.equalsIgnoreCase(o.category))
+		
+//		 final Collator sinAcentos = Collator.getInstance();
+//		 sinAcentos.setStrength(Collator.PRIMARY); //Comparador para ignorar acentos
+		    
+		if (!this.category.equals(o.category))
 			return this.category.compareTo(o.category);
 		if (!this.name.equalsIgnoreCase(o.name))
 			return this.name.compareTo(o.name);
+//		if (sinAcentos.compare(this.name, o.name)!=0)
+//			return sinAcentos.compare(this.name, o.name);
 		if (!this.lastName.equalsIgnoreCase(o.lastName))
 			return this.lastName.compareTo(o.lastName);
+//		if (sinAcentos.compare(this.lastName, o.lastName)!=0)
+//			return sinAcentos.compare(this.lastName, o.lastName);
 		if (!this.dorsal.equalsIgnoreCase(o.dorsal))
 			return this.dorsal.compareTo(o.dorsal);
 		return this.nationality.compareTo(o.nationality);

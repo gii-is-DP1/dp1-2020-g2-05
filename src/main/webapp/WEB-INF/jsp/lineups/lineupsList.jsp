@@ -13,20 +13,23 @@
 			<tr>
 				<th>Category</th>
 				<th>GP</th>
-				<th>League</th>
 				<th>Recruit1</th>
 				<th>Recruit2</th>
 				<th>Team</th>
+				<th>Actions</th>
 			</tr>
 		</thead>
 		<tbody>
 			<c:forEach items="${resultados}" var="lineup">
 				<tr>
 					<td>${lineup.category}</td>
-					<td>${lineup.gp}</td>
-					<td>${lineup.league}</td>
-					<td>${lineup.recruit1}</td>
-					<td>${lineup.recruit2}</td>
+<%-- 					<td><spring:eval expression="XXXX"/></td> Se escribe asi cuando queremos que el formatter haga print --%>
+					<td><spring:eval expression="lineup.gp"/></td>
+					<td><spring:eval expression="lineup.recruit1"/></td>
+					<td><spring:eval expression="lineup.recruit2"/></td>
+<%-- 					<td>${lineup.gp}</td> --%>
+<%-- 					<td>${lineup.recruit1}</td> --%>
+<%-- 					<td>${lineup.recruit2}</td> --%>
 					<td>${lineup.team}</td>
 					
 					<td>

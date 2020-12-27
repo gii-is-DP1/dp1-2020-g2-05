@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.samples.petclinic.model.Authorities;
+import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Team;
@@ -70,7 +72,7 @@ public class LeagueService {
 		return leagueRepository.findLeagueByLeagueCode(leagueCode);
 	}
 	
-	public Collection<Integer> findTeamsByUsername(String username) throws DataAccessException {
+	public List<Integer> findTeamsByUsername(String username) throws DataAccessException {
 		return leagueRepository.findTeamsByUsername(username);
 	}
 	
@@ -90,24 +92,28 @@ public class LeagueService {
 		return leagueRepository.findLeaguesByUsername(username);
 	}
 	
-	@Modifying
-	@Transactional
-	public void activeMoto3(Integer leagueId) throws DataAccessException {
-		leagueRepository.activeMoto3(leagueId);
-	}
+//	@Modifying
+//	@Transactional
+//	public void activeCategory(Integer id, Category idCategory) {
+//		 leagueRepository.activeCategory(id, idCategory);
+//	}
 	
-	@Modifying
-	@Transactional
-	public void activeMoto2(Integer leagueId) throws DataAccessException {
-		leagueRepository.activeMoto2(leagueId);
-	}
+
+//	public List<League> findAllLeaguesByCategory(Category idCategory) {
+//		 return leagueRepository.findAllLeaguesByCategory(idCategory);
+//	}
 	
-	@Modifying
-	@Transactional
-	public void activeMotogp(Integer leagueId) throws DataAccessException {
-		leagueRepository.activeMotogp(leagueId);
-	}
-//	public void activeMoto2(Integer leagueId) throws DataAccessException {
+//	public void updateGPsFromLeagueWithCategory(Category category) throws DataAccessException, duplicatedLeagueNameException{
+//		List<League> listaCategorias= leagueRepository.findAllLeaguesByCategory(category);
+//		List<League> listaCategoriasActualizada = new ArrayList<League>();
+//		for(League league:listaCategorias) {
+//			Integer racesCompleted =league.getRacesCompleted()+1;
+//			listaCategoriasActualizada.add(league);
+//			this.leagueRepository.increaseRacesCompleted(league.getId(), racesCompleted);
+//		}
+//	}
+	//	public void activeMoto2(Integer leagueId) throws DataAccessException {
+
 //		leagueRepository.activeMoto2(leagueId);
 //	}
 //	public void activeMotogp(Integer leagueId) throws DataAccessException {
@@ -119,7 +125,82 @@ public class LeagueService {
 //	}
 //	
 	
+	public String randomString(int longitud) {
+		 String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+		 String sb="";
+		 Random random = new Random();
+		 
+	    for(int i = 0; i < longitud; i++) {
+
+	      int index = random.nextInt(alphabet.length());
+
+	      char randomChar = alphabet.charAt(index);
+
+	      sb+=(randomChar);
+	    }
+	    return sb;
+	}
+	
+	public <E> List<E> convertirIterableLista(Iterable<E> leagues){
+		List<E> result = new ArrayList<E>();
+	    leagues.forEach(result::add);
+	    return result;
+	}
+	
+	public boolean comprobarLigaVacia(List<League> result) {
+		   for(League league:result) {
+
+				if(league.getTeam().size()==1) {
+					this.deleteLeague(league);
+					return true;
+				}
+				if(league.getTeam().size()==0) {
+					this.deleteLeague(league);
+					return true;
+				}
+				
+		    }
+		   return false;
+	}
+	
+//	public List<Integer> GPsPorCategoria(List<League> result) {
+//	   			Integer moto2=0;
+//	   			Integer moto3=0;
+//	   			Integer motogp=0;
+//			for(League league:result) {
+//		    	if(league.getActiveCategory().equals(Category.MOTO2)) {
+//		    		moto2=league.getRacesCompleted();
+//		    	}else if(league.getActiveCategory().equals(Category.MOTO3)) {
+//		    		moto3=league.getRacesCompleted();
+//		    	}else if(league.getActiveCategory().equals(Category.MOTOGP)) {
+//		    		motogp=league.getRacesCompleted();
+//		    	}
+//		    }
+//			List<Integer> lista=new ArrayList<Integer>();
+//			lista.add(moto2);
+//			lista.add(moto3);
+//			lista.add(motogp);
+//			return lista;
+//	}
+
+	public List<League> obtenerLigasPorUsuario(Collection<Integer> collect){
+	
+//		List<Integer> idLeague = new ArrayList<Integer>();
+//		
+//		collect.forEach(idLeague::add);
+	    
+		List<League> myLeaguesList = collect.stream().map(x->this.findLeague(x).get()).collect(Collectors.toList());
+
+	    
+//		for(Integer i:idLeague) {
+//			League league_i = this.findLeague(i).get();
+//			myLeaguesList.add(league_i);
+//		}
+		return myLeaguesList;
+	}
+	
+	
 	@Transactional
 	public Iterable<League> findAll(){
 		return leagueRepository.findAll();
@@ -141,7 +222,6 @@ public class LeagueService {
 	}
 	
 	public Optional<Team> findTeamById(Integer teamId) {
-		
 		return teamRepository.findById(teamId);
 	}
 
@@ -179,16 +259,19 @@ public class LeagueService {
 		sysTeam.setUser(userService.findUser("admin1").get());
 		teamRepository.save(sysTeam);
 		
-		//Fichamos a todos los pilotos con la escudería sistema
+		//Fichamos y ofertamos a todos los pilotos con la escudería sistema
+		recruitAndOfferAll(sysTeam);
+	}
+	@Transactional
+	public void recruitAndOfferAll(Team t) {
 		Iterable<Pilot> pilots = pilotService.findAll();
 		List<Pilot> listPilots = new ArrayList<Pilot>();
 		pilots.forEach(listPilots::add);
 		for (int i=0;i<listPilots.size();i++) {
-			recruitService.saveRecruit(listPilots.get(i),sysTeam);
+			recruitService.saveRecruit(listPilots.get(i),t);
+			Pilot p = listPilots.get(i);
+//			offerService.putOnSale(recruitService.getRecruitByPilotId(p.getId()), p.getValorBase());
 		}
-		
-		//Ponemos en oferta a todos los pilotos de la categoría actual con la escudería sistema(Por hacer)
-		//(Por hacer)
 	}
 
 	public void delete(Team team) {
@@ -197,5 +280,13 @@ public class LeagueService {
 
 	public List<Team> findTeamByUsername(String username){
 		return teamRepository.findTeamByUsername(username );
+	}
+	
+	public Optional<Team> findTeamByUsernameAndLeagueId(String username, Integer id){
+		return teamRepository.findTeamByUsernameAndLeagueId(username, id);
+	}
+	
+	public List<Team> findTeamByLeagueId(Integer id){
+		return teamRepository.findTeamByLeagueId(id);
 	}
 }

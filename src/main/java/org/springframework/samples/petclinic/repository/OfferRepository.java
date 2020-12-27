@@ -1,6 +1,6 @@
 package org.springframework.samples.petclinic.repository;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
@@ -11,9 +11,6 @@ import org.springframework.samples.petclinic.model.Team;
 
 public interface OfferRepository extends CrudRepository<Offer,Integer>{
 	
-	@Query(value = "SELECT offer.* FROM team inner join offer where team.id = offer.team_id and league_id LIKE :leagueId%", nativeQuery = true)
-	public Collection<Offer> findOffersByLeague(@Param("leagueId") int leagueId);
-	
-	@Query("SELECT team FROM Team team where league_id = ?1 and username = ?2")
-	public Optional<Team> findTeamByUsernameLeague(@Param("leagueId") int leagueId, @Param("username") String username);
+	@Query(value = "SELECT offer.* FROM OFFER join team join recruit where team.league_id = :leagueId and recruit.id = offer.recruit_id and team.id = recruit.team_id", nativeQuery = true)
+	public List<Offer> findOffersByLeague(@Param("leagueId") int leagueId);
 }

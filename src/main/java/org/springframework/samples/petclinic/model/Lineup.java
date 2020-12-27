@@ -7,28 +7,36 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
-import com.sun.istack.NotNull;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
+import org.springframework.samples.petclinic.model.Category;
 
+@Audited //SELECT * FROM LINEUP_AUD, USER_REV_ENTITY WHERE LINEUP_AUD.REV=USER_REV_ENTITY.ID
 @Entity
 @Table(name = "lineup")
 public class Lineup extends BaseEntity {
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
 	@Column(name = "category")
 	@NotNull
 	private Category category;
 
+    @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 	@ManyToOne
 	@JoinColumn(name = "recruit1_id")
 	@NotNull
 	private Recruit recruit1;
 
+    @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 	@ManyToOne
 	@JoinColumn(name = "recruit2_id")
 	@NotNull
 	private Recruit recruit2;
 	
+	@NotAudited
 	@ManyToOne
 	@JoinColumn(name = "team_id")
 	@NotNull
@@ -39,13 +47,14 @@ public class Lineup extends BaseEntity {
 //	@NotNull
 //	private League league;
 	
+	@NotAudited
 	@ManyToOne
 	@JoinColumn(name = "gp_id")
 	@NotNull
 	private GranPremio gp;
 
 	public Category getCategory() {
-		return category;
+		return (Category) category;
 	} 
 
 	public void setCategory(Category category) {
@@ -102,7 +111,7 @@ public class Lineup extends BaseEntity {
 
 	@Override
 	public String toString() {
-		return "Lineup [category=" + category + ", recruit1=" + recruit1 + ", recruit2=" + recruit2 + ", team=" + team
+		return "Lineup [recruit1=" + recruit1 + ", recruit2=" + recruit2 + ", team=" + team
 				+ /*", league=" + league + */", gp=" + gp + "]";
 	}
 }

@@ -45,7 +45,13 @@ public class Record {
 		this.recordDelCircuito = recordDelCircuito;
 		this.mejorVuelta = mejorVuelta;
 	}
-
+ 
+	public Record() {
+		this.vueltaDePole = null;
+		this.vueltaRapida = null;
+		this.recordDelCircuito = null;
+		this.mejorVuelta = null;
+	}
 
 	public RecordPole getVueltaDePole() {
 		return vueltaDePole;

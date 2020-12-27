@@ -18,11 +18,11 @@ import lombok.Data;
 @Table(name = "messages")
 public class Message extends BaseEntity{
 	
-	@NotNull
+	@NotEmpty
 	@Column(name = "asunto")        
 	String asunto;
 	
-	@NotNull
+	@NotEmpty
 	@Column(name = "cuerpo")        
 	String cuerpo;
 	

@@ -1,41 +1,41 @@
 package org.springframework.samples.petclinic.model;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
-import com.sun.istack.NotNull;
 
-import motogpAPI.Category;
+import org.springframework.samples.petclinic.model.Category;
 import motogpAPI.RaceCode;
 import motogpAPI.Session;
 
-@Entity
-@Table(name = "BDCarrera")
 
-public class BDCarrera extends BaseEntity{
 
-	@Column(name = "year")
-	@NotEmpty
+public class BDCarrera {
+	
+	Calendar fecha = new GregorianCalendar();
+
+	@Min(2015)
 	@NotNull
 	private Integer year;
 	
-	@Column(name = "racecode")
-	@NotEmpty
 	@NotNull
 	private RaceCode racecode;
-	
-	@Column(name = "Category")
-	@NotEmpty
+
 	@NotNull
 	private Category Category;
 	
-	@Column(name = "session")
-	@NotEmpty
 	@NotNull
 	private Session session;
 
+	
 	public Integer getYear() {
 		return year;
 	}
@@ -67,6 +67,7 @@ public class BDCarrera extends BaseEntity{
 	public void setSession(Session session) {
 		this.session = session;
 	}
+	
 	
 	@Override
 	public String toString() {

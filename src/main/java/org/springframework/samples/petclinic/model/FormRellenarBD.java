@@ -3,31 +3,31 @@ package org.springframework.samples.petclinic.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 
 import com.sun.istack.NotNull;
 
-import motogpAPI.Category;
+import org.springframework.samples.petclinic.model.Category;
 
 
-@Entity
-@Table(name = "FormRellenarBD")
 
-public class FormRellenarBD extends BaseEntity {
+
+public class FormRellenarBD {
 	
 	
-	@Column(name = "anyoInicial")
-	@NotEmpty
+	@Min(2015)
+	@Max(2019)
 	@NotNull
 	private Integer anyoInicial;
 	
-	@Column(name = "anyoFinal")
-	@NotEmpty
+	@Min(2016)
+	@Max(2019)
 	@NotNull
 	private Integer anyoFinal;
 	
-	@Column(name = "Category")
-	@NotEmpty
+
 	@NotNull
 	private Category Category;
 
@@ -51,7 +51,7 @@ public class FormRellenarBD extends BaseEntity {
 		return Category;
 	}
 
-	public void setCategory(motogpAPI.Category categoria) {
+	public void setCategory(Category categoria) {
 		Category = categoria;
 	}
 	

@@ -13,24 +13,38 @@
 		<thead>
 			<tr>
 				<th style="width: 150px;">Pilot</th>
-				<th style="width: 900px;">Price</th>
-				<th>Recruit</th>
+				<th>Price</th>
+				<th style="width: 150px;">Recruit</th>
 			</tr>
 		</thead>
 		<tbody>
 			<c:forEach items="${offers}" var="offer">
 			<c:if test="${offer.status == Status.Outstanding}">
 				<tr>
-					<td><c:out value="${offer.pilot.name}" /></td>
+					<td><c:out value="${offer.recruit.pilot.name}" /></td>
 					<td><c:out value="${offer.price} " /></td>
-					<td>
-					<spring:url value="/leagues/{leagueId}/market/{offerId}" var="offerUrl">
-							<spring:param name="offerId" value="${offer.id}" />
-							<spring:param name="leagueId" value="${leagueId}" />
-						</spring:url> <a href="${fn:escapeXml(offerUrl)}">
-							<span class="glyphicon glyphicon-euro" aria-hidden="true"></span>
-						</a>
-					</td>
+					<c:choose>
+					<c:when test="${offer.recruit.team == userTeam}">
+						<td>
+						<spring:url value="/leagues/{leagueId}/market/{offerId}" var="offerUrl">
+								<spring:param name="offerId" value="${offer.id}" />
+								<spring:param name="leagueId" value="${leagueId}" />
+							</spring:url> <a href="${fn:escapeXml(offerUrl)}">
+								<span aria-hidden="true">Cancelar venta</span>
+							</a>
+						</td>
+					</c:when>
+					<c:otherwise>
+						<td>
+						<spring:url value="/leagues/{leagueId}/market/{offerId}" var="offerUrl">
+								<spring:param name="offerId" value="${offer.id}" />
+								<spring:param name="leagueId" value="${leagueId}" />
+							</spring:url> <a href="${fn:escapeXml(offerUrl)}">
+								<span class="glyphicon glyphicon-euro" aria-hidden="true"></span>
+							</a>
+						</td>
+					</c:otherwise>
+					</c:choose>
 				</tr>
 			</c:if>
 			</c:forEach>

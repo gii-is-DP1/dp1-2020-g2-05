@@ -23,7 +23,7 @@
 			<ul class="nav navbar-nav">
 
 				
-				<petclinic:menuItem active="${name eq 'pilots'}" url="/pilots"
+				<petclinic:menuItem active="${name eq 'pilots'}" url="/pilotsPaged"
 					title="leads to /pilots">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Pilots</span>
@@ -46,6 +46,11 @@
 					title="leads to /BD">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Settle DB</span>
+				</petclinic:menuItem>
+				<petclinic:menuItem active="${name eq 'CP'}" url="/controlPanel"
+					title="leads to /controlPanel">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					<span>Control Panel<span>
 				</petclinic:menuItem>
 
 			</ul>

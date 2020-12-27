@@ -54,12 +54,12 @@ public class LeagueValidator implements Validator {
 		}
 		
 		//races completed validation
-		if(league.getRacesCompleted()==null) {
-			 errors.rejectValue("racesCompleted", REQUIRED, "races completed cant be null");
-		}
+//		if(league.getRacesCompleted()==null || league.getRacesCompleted()<0 || league.getRacesCompleted()>20) {
+//			 errors.rejectValue("racesCompleted", REQUIRED, "races completed cant be null");
+//		}
 		
 		//league code validation
-		if(league.getLeagueCode()==null) {
+		if(league.getLeagueCode()==null || league.getLeagueCode().length()>10 || league.getLeagueCode().length()<10) {
 			 errors.rejectValue("leagueCode", REQUIRED, "league code cant be null");
 		}
 		

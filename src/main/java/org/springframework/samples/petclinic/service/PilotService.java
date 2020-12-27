@@ -16,10 +16,14 @@ UserRepository.java * Copyright 2002-2013 the original author or authors.
 package org.springframework.samples.petclinic.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Formatter;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -27,6 +31,8 @@ import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.BDCarrera;
 import org.springframework.samples.petclinic.model.FormRellenarBD;
@@ -44,11 +50,11 @@ import org.springframework.samples.petclinic.repository.PilotRepository;
 import org.springframework.samples.petclinic.repository.VetRepository;
 import org.springframework.samples.petclinic.repository.VisitRepository;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
+import org.springframework.samples.petclinic.web.ResultFormatter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
-import motogpAPI.Category;
+import org.springframework.samples.petclinic.model.Category;
 import motogpAPI.PeticionesGet;
 import motogpAPI.RaceCode;
 import motogpAPI.Session;
@@ -62,7 +68,9 @@ import motogpAPI.model.InfoCarrera;
  */
 @Service
 public class PilotService {
-
+	
+	public static final Integer MAXIMO_CARRERAS=18;
+	
 	@Autowired
 	private PilotRepository pilotRepository;
 
@@ -109,12 +117,21 @@ public class PilotService {
 //		form.setCategory(Category.Moto3);
 //		
 //	}
-
+	
+	public List<String> obtenerResultsFormatted(Set<Result> result){
+		ResultFormatter formatter = new ResultFormatter(resultService);
+		List<String> res = new ArrayList<String>();
+		for(Result r:result) {
+			res.add(formatter.print(r, Locale.ENGLISH));
+		}
+		return res;
+	}
+	
 	public void poblarBD(FormRellenarBD form) throws JSONException, IOException {
 
 		for(int i=form.getAnyoInicial();i<form.getAnyoFinal();i++) {
 
-			for(int j=0;j<18;j++) {
+			for(int j=0;j<MAXIMO_CARRERAS;j++) {
 				GranPremio gp = new GranPremio(); //entidad de una carrera
 				List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceNumberCampu(form.getCategory(), i, j, Session.RACE);
 				if(todosLosResultadosDeUnaCarrera.size()==0) {
@@ -124,6 +141,7 @@ public class PilotService {
 					gp.setCircuit(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
 					gp.setDate0(todosLosResultadosDeUnaCarrera.get(0).getFecha());
 					gp.setRaceCode(todosLosResultadosDeUnaCarrera.get(0).getRaceCode());
+					gp.setCalendar(false);
 					this.gpService.saveGP(gp);
 					 
 					for(int k=0;k<todosLosResultadosDeUnaCarrera.size();k++) {
@@ -145,7 +163,7 @@ public class PilotService {
 						}
 					
 						
-						pilot.setCategory(form.getCategory().toString());
+						pilot.setCategory((form.getCategory()));
 						Result result = new Result();
 						
 						if(this.countByName(pilot.getLastName(), pilot.getName())!=0) {
@@ -172,24 +190,36 @@ public class PilotService {
 	}
 	
 //	2016, RaceCode.AUT, Session.RACE
-	public void poblarBDCarreraACarrera(BDCarrera form) throws JSONException, IOException {
+	public void poblarBDCarreraACarrera(BDCarrera form,GranPremio gp,Boolean GpEstaEnCalendario) throws JSONException, IOException {
 
-
-				GranPremio gp = new GranPremio(); //entidad de una carrera
+		//EL GP QUE SE PASA COMO PARAMETRO, O ESTA VACIO, O ESTA EN EL CALENDARIO
+//				GranPremio gp = new GranPremio(); //entidad de una carrera
 				List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceCodeCampu(form.getCategory(), form.getYear(), form.getRacecode(), form.getSession());
 				if(todosLosResultadosDeUnaCarrera.size()==0) {
 					
 				}else {
-					gp.setSite(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
-					gp.setCircuit(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
-					gp.setDate0(todosLosResultadosDeUnaCarrera.get(0).getFecha());
-					gp.setRaceCode(todosLosResultadosDeUnaCarrera.get(0).getRaceCode());
-					this.gpService.saveGP(gp);
-					 
+					if(GpEstaEnCalendario==false) {
+						gp.setSite(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
+						gp.setCircuit(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
+						gp.setDate0(todosLosResultadosDeUnaCarrera.get(0).getFecha());
+						gp.setRaceCode(todosLosResultadosDeUnaCarrera.get(0).getRaceCode());
+						gp.setHasBeenRun(true);
+						gp.setHasBeenRun(true);
+						gp.setCalendar(true);
+						this.gpService.saveGP(gp);	
+					}
+						
+				
+
+				
+
 					for(int k=0;k<todosLosResultadosDeUnaCarrera.size();k++) {
 						InfoCarrera resultado_k = todosLosResultadosDeUnaCarrera.get(k);
+											if(GpEstaEnCalendario==false) {
+
 						gp.setCircuit(resultado_k.getLugar());
 						gp.setSite(resultado_k.getNombreEvento());
+											}
 						
 						Pilot pilot = new Pilot();
 						pilot.setName(resultado_k.getPiloto().split(" ")[0]);
@@ -205,7 +235,7 @@ public class PilotService {
 						}
 					
 						
-						pilot.setCategory(resultado_k.getCategory().toString());
+						pilot.setCategory(resultado_k.getCategory());
 						Result result = new Result();
 						
 						if(this.countByName(pilot.getLastName(), pilot.getName())!=0) {
@@ -273,11 +303,11 @@ public class PilotService {
 	
 	
 	
-//	
-//	@Transactional(readOnly = true)	
-//	public Collection<Pilot> findPilots() throws DataAccessException {
-//		return pilotRepository.findAll();
-//	}	
+	
+	@Transactional(readOnly = true)	
+	public Page<Pilot> findAllPage(Pageable pageable) throws DataAccessException {
+		return pilotRepository.findAllPage(pageable);
+	}	
 
 	public List<Pilot> getRecruits() throws DataAccessException {
 		return this.pilotRepository.findAllRecruits();

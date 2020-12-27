@@ -2,6 +2,8 @@ package org.springframework.samples.petclinic.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -19,17 +21,13 @@ public class Offer extends BaseEntity{
 	@Min(0)
 	private Integer price;
 	
+	@Enumerated(EnumType.ORDINAL)
 	@Column(name = "status")
-	@NotNull
 	private Status status;
 	
 	@ManyToOne
 	@JoinColumn(name = "team_id")
 	private Team team;
-	
-	@ManyToOne
-	@JoinColumn(name = "pilot_id")
-	private Pilot pilot;
 	
 	@ManyToOne()
 	@JoinColumn(name = "recruit_id")
@@ -41,14 +39,6 @@ public class Offer extends BaseEntity{
 
 	public void setTeam(Team team) {
 		this.team = team;
-	}
-
-	public Pilot getPilot() {
-		return pilot;
-	}
-
-	public void setPilot(Pilot pilot) {
-		this.pilot = pilot;
 	}
 
 	public Integer getPrice() {
@@ -65,6 +55,14 @@ public class Offer extends BaseEntity{
 
 	public void setStatus(Status status) {
 		this.status = status;
+	}
+	
+	public Recruit getRecruit() {
+		return recruit;
+	}
+
+	public void setRecruit(Recruit recruit) {
+		this.recruit = recruit;
 	}
 	
 }

@@ -16,11 +16,17 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.samples.petclinic.model.Category;
+import org.springframework.samples.petclinic.web.LeagueController;
+
 import motogpAPI.model2.Detail;
 import motogpAPI.model2.Example2;
 import motogpAPI.model.Example;
 import motogpAPI.model.InfoCarrera;
 
+@Slf4j
 public class PeticionesGet {
 	private static final String URL = "https://results.motorsportstats.com/";
 	private static final String URL_JSON_SESSIONS = "https://mssproxy.motorsportstats.com/web/3.0.0/sessions/";
@@ -29,10 +35,14 @@ public class PeticionesGet {
 	private static RaceCode raceCode= null;
 	private static int raceNumber = -1;
 	
-	// Poner con JPA que anyo debe tener un @range de 2002 a 2020
-	public static Record obtieneRecords(String anyo, Pais pais, Category categoria) throws IOException {
-		String urlBuilder = "https://www.motogp.com/es/ajax/results/parse/" + anyo + "/" + pais + "/" + categoria + "/";
-		return new Record(urlBuilder);
+	// Poner con JPA que anyo debe tener un @range de 2005 a 2020
+	public static Record obtieneRecords(Integer anyo, Pais pais, Category categoria) throws IOException {
+		Record res = new Record();
+		if (!pais.equals(Pais.NOTFOUND) && anyo > 2004 && anyo < 2021) {
+			String urlBuilder = "https://www.motogp.com/es/ajax/results/parse/" + anyo + "/" + pais + "/" + categoria + "/";
+			res = new Record(urlBuilder);
+		}
+		return res;
 	}
 	
 	public static List<InfoCarrera> getResultsByRaceNumberCampu(Category category, int year, int raceNumber,Session session) throws JSONException, IOException {
@@ -43,7 +53,7 @@ public class PeticionesGet {
 
 		try {
 			String url;
-			if (category == Category.MotoGP)
+			if (category == Category.MOTOGP)
 				url = URL_JSON_SEASONS + year + "-" + category.toString().toLowerCase() + "/standings/drivers";
 			else
 				url = URL_JSON_SEASONS + category.toString().toLowerCase() + "-" + year + "/standings/drivers";
@@ -159,7 +169,7 @@ public class PeticionesGet {
 			raceCode = code;
 			JSONObject jsonObject = getJsonObjectResults(category, year, session);
 
-	
+			System.out.println(jsonObject);
 			raceCode = null;
 			raceNumber = -1;
 			Example2 example2 = new ObjectMapper().readValue(jsonObject.toString(),Example2.class);
@@ -168,14 +178,10 @@ public class PeticionesGet {
 
 			String nombreEvento = example2.getEvent().getName();
 			String raceCode = example2.getEvent().getCode();
-			String urlPeticionFecha = "https://www.motogp.com/es/ajax/results/parse/"+ year + "/"+raceCode+ "/"+category.toString()+"/";
-			String html = Jsoup.connect(urlPeticionFecha).get().text();
+			System.out.println(nombreEvento);
 
-			String fecha_lugar = html.split("Pos.")[0].split("Clasificación de Carrera")[1].substring(5);
-// example Phillip Island, Sunday, October 23, 2016 
 			String fecha_exacta = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
                     .format(new Date(example2.getDate() * 1000L)).split(" ")[0];
-			String lugar= fecha_lugar.split(", ")[0];
 			for(int i=0;i<example2.getDetails().size();i++) {
 
 				Integer posicion = example2.getDetails().get(i).getFinishPosition();
@@ -193,7 +199,7 @@ public class PeticionesGet {
 				Double kmh = example2.getDetails().get(i).getAvgLapSpeed();
 				Integer vueltaMasRapidaPole =example2.getDetails().get(i).getBestLap().getTime();
 				InfoCarrera n = new InfoCarrera(nombreEvento, posicion,calculaPuntos(posicion), numero, 
-						piloto, pais, equipo, kmh, vueltaMasRapidaPole,raceCode,category,lugar,fecha_exacta);
+						piloto, pais, equipo, kmh, vueltaMasRapidaPole,raceCode,category,nombreEvento,fecha_exacta);
 				listaCarrera.add(n);
 				}
 
@@ -244,7 +250,7 @@ public class PeticionesGet {
 			result = new JSONObject(JsonReader.readJsonFromUrl(url, baseURL, URL_JSON_SESSIONS));
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.warn("La api no ha podido encontrar ningun resultado con los parámetros "+ category + ", " + year + ", " + session );
 		}
 
 		return result;
@@ -287,7 +293,7 @@ public class PeticionesGet {
 		String grandprix = "";
 
 		String urlRequest;
-		if (category == Category.MotoGP)
+		if (category == Category.MOTOGP)
 			urlRequest = URL_JSON_SEASONS + year + "-" + category.toString().toLowerCase() + "/races";
 		else
 			 urlRequest = URL_JSON_SEASONS + category.toString().toLowerCase() + "-" + year + "/races";
@@ -334,8 +340,36 @@ public class PeticionesGet {
 	}
 	
 	
-	
-	
+	public Pais parseRaceCodeToPais(RaceCode raceCode) {
+		Pais pais = Pais.NOTFOUND;
+
+		switch (raceCode) {
+		case ESP:
+			pais = Pais.SPA;
+			break;
+		case DEU:
+			pais = Pais.GER;
+			break;
+		case IND:
+			pais = Pais.INP;
+			break;
+		case PRT:
+			pais = Pais.POR;
+			break;
+		case SMR:
+			pais = Pais.RSM;
+			break;
+		default:
+			try {
+				pais = Pais.valueOf(raceCode.toString());
+			} catch (Exception e) {
+				System.out.println(raceCode.toString() + " code not found in the list of country codes!");
+			}
+			break;
+		}
+
+		return pais;
+	}
 	
 	public static Integer calculaPuntos(Integer pos) {
 		switch (pos) {

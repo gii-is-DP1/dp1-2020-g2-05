@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.Repository;
@@ -73,7 +75,11 @@ public interface PilotRepository extends CrudRepository<Pilot, Integer> {
 //	@Query("SELECT pilot FROM Pilot pilot left join fetch pilot.results WHERE pilot.id =:id")
 
 //	public Pilot findById(@Param("id")int id);
-
+	
+	@Override
+	@Query(value="SELECT * FROM PILOT order by category, name, lastname, dorsal, nationality", nativeQuery=true)
+	public List<Pilot> findAll();
+	
 	@Query("SELECT COUNT(pilot) FROM Pilot pilot WHERE pilot.name LIKE :name AND pilot.lastName LIKE :lastName")
 	public Integer countByName(@Param("lastName")String lastName,@Param("name")String name);
 	
@@ -112,4 +118,7 @@ public interface PilotRepository extends CrudRepository<Pilot, Integer> {
 	
 	@Query(value="SELECT p.* FROM RECRUIT AS r, PILOT as p WHERE r.team_id = ?1 AND  r.pilot_id = p.id", nativeQuery = true)
 	List<Pilot> findAllRecruits(int teamID);
+	
+	@Query(value="SELECT * FROM PILOT", nativeQuery = true)
+	Page<Pilot> findAllPage(Pageable pageable); 
 }

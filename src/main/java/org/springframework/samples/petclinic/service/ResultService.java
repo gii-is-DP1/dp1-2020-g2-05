@@ -1,16 +1,20 @@
 package org.springframework.samples.petclinic.service;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.Result;
 import org.springframework.samples.petclinic.model.Visit;
 import org.springframework.samples.petclinic.repository.ResultRepository;
 import org.springframework.samples.petclinic.repository.VisitRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import motogpAPI.RaceCode;
 
 @Service
 public class ResultService {
@@ -51,8 +55,13 @@ public class ResultService {
 //            }else
 //                petRepository.save(pet);                
 //	}
-
-
+	@Transactional
+	public List<Result> findResultsByCategoryAndId(String raceCode,Category category) throws DataAccessException {
+		System.out.println("dentro bro");
+		return resultRepository.findResultsByCategoryAndId(raceCode,category);
+	}
+	
+	
 	public Collection<Visit> findVisitsByPetId(int petId) {
 		return visitRepository.findByPetId(petId);
 	}

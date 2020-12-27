@@ -17,6 +17,7 @@ import org.springframework.samples.petclinic.model.Result;
 import org.springframework.samples.petclinic.service.PilotService;
 
 import motogpAPI.model.InfoCarrera;
+import org.springframework.samples.petclinic.model.Category;
 
 
 public class Tests {
@@ -29,7 +30,8 @@ public class Tests {
 		MotoGPData data = new MotoGPData();
 //
 //		List<RiderOnlineData> resultado = data.getResultsByRaceNumber(Category.MotoGP, 2016, 1, Session.RACE);
-//		List<RiderOnlineData> resultado2 = data.getResultsByRaceCode(Category.MotoGP, 2016, RaceCode.AUT, Session.RACE);
+//		List<RiderOnlineData> resultado2 = data.getResultsByRaceCode(motogpAPI.Category.Moto3, 2020, RaceCode.SMR, Session.RACE);
+//		List<InfoCarrera> resultado3 = PeticionesGet.getResultsByRaceCodeCampu(Category.MOTO3, 2020, RaceCode.SMR, Session.RACE);
 //		List<RiderStandingsData> resultado3 = data.getChampionshipStandings(Category.MotoGP, 2016);
 //
 //		System.out.println("\n Get Result By Race Number \n");
@@ -44,16 +46,27 @@ public class Tests {
 //		for (int i=0; i < resultado3.size(); i++) {
 //			System.out.println(resultado3.get(i));
 //		}
-		List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceNumberCampu(Category.Moto2, 2012, 4, Session.RACE);
+//		List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceNumberCampu(Category.MOTO2, 2021, 1, Session.RACE);
+		
+//		System.out.println(todosLosResultadosDeUnaCarrera);
+//		for(int i=0;i<20;i++) {
+//			List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceNumberCampu(Category.MOTOGP, 2020, i, Session.RACE);
+//			System.out.println(todosLosResultadosDeUnaCarrera);
+//		}
 //		
-//		
-//
-//			Record prueba = PeticionesGet.obtieneRecords("2012", Pais.SPA, Category.Moto2);
-//
-//			System.out.println(resultado2);
-//			System.out.println(todosLosResultadosDeUnaCarrera.get(0));
-//			
-		System.out.println(PeticionesGet.getResultsByRaceCodeCampu(Category.MotoGP, 2016, RaceCode.AUT, Session.RACE));
+
+			Record prueba = PeticionesGet.obtieneRecords(2004, Pais.SPA, Category.MOTO2);
+			System.out.println(prueba);
+
+//		for (Pais p:Pais.values()) {
+//			System.out.println("Pais: " + p);
+//			for (int i=2005; i < 2021; i++) {
+//				System.out.println("Año: " + i);
+//				System.out.println(PeticionesGet.obtieneRecords(i, p, Category.MOTOGP));
+//			}
+//		}
+					
+//		System.out.println(PeticionesGet.getResultsByRaceCodeCampu(Category.MotoGP, 2016, RaceCode.AUT, Session.RACE));
 //			TreeSet<Pilot> pilotos = new TreeSet<Pilot>();
 //			TreeSet<Result> results = new TreeSet<Result>();
 //			
@@ -89,9 +102,10 @@ public class Tests {
 //			for (Pilot p:pilotos) System.out.println(p);
 //			for (Result r:results) System.out.println(r);
 
+//			RaceCode[] yourEnums = RaceCode.values();		
 			
 			
-
+		
 //			for(int i=0;i<infoCarrera.size();i++) {
 //				System.out.println(infoCarrera.get(i));
 //			}
@@ -122,11 +136,10 @@ public class Tests {
 //			gp.setResults(setResult);
 			
 			
-//		System.out.println(prueba.getMejorVuelta());
-//		System.out.println(prueba.getRecordDelCircuito());
 //		System.out.println(prueba.getVueltaDePole());
 //		System.out.println(prueba.getVueltaRapida());
-		
+//		System.out.println(prueba.getRecordDelCircuito());
+//		System.out.println(prueba.getMejorVuelta());
 	}
 	
 }
