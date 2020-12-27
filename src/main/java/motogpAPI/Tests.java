@@ -31,7 +31,7 @@ public class Tests {
 //
 //		List<RiderOnlineData> resultado = data.getResultsByRaceNumber(Category.MotoGP, 2016, 1, Session.RACE);
 //		List<RiderOnlineData> resultado2 = data.getResultsByRaceCode(motogpAPI.Category.Moto3, 2020, RaceCode.SMR, Session.RACE);
-		List<InfoCarrera> resultado3 = PeticionesGet.getResultsByRaceCodeCampu(Category.MOTO3, 2020, RaceCode.SMR, Session.RACE);
+//		List<InfoCarrera> resultado3 = PeticionesGet.getResultsByRaceCodeCampu(Category.MOTO3, 2020, RaceCode.SMR, Session.RACE);
 //		List<RiderStandingsData> resultado3 = data.getChampionshipStandings(Category.MotoGP, 2016);
 //
 //		System.out.println("\n Get Result By Race Number \n");
@@ -55,9 +55,17 @@ public class Tests {
 //		}
 //		
 
-//			Record prueba = PeticionesGet.obtieneRecords("2012", Pais.SPA, Category.MOTO2);
-//			System.out.println(prueba);
-//			
+			Record prueba = PeticionesGet.obtieneRecords(2004, Pais.SPA, Category.MOTO2);
+			System.out.println(prueba);
+
+//		for (Pais p:Pais.values()) {
+//			System.out.println("Pais: " + p);
+//			for (int i=2005; i < 2021; i++) {
+//				System.out.println("Año: " + i);
+//				System.out.println(PeticionesGet.obtieneRecords(i, p, Category.MOTOGP));
+//			}
+//		}
+					
 //		System.out.println(PeticionesGet.getResultsByRaceCodeCampu(Category.MotoGP, 2016, RaceCode.AUT, Session.RACE));
 //			TreeSet<Pilot> pilotos = new TreeSet<Pilot>();
 //			TreeSet<Result> results = new TreeSet<Result>();

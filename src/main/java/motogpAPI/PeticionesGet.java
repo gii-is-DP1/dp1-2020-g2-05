@@ -35,10 +35,14 @@ public class PeticionesGet {
 	private static RaceCode raceCode= null;
 	private static int raceNumber = -1;
 	
-	// Poner con JPA que anyo debe tener un @range de 2002 a 2020
-	public static Record obtieneRecords(String anyo, Pais pais, Category categoria) throws IOException {
-		String urlBuilder = "https://www.motogp.com/es/ajax/results/parse/" + anyo + "/" + pais + "/" + categoria + "/";
-		return new Record(urlBuilder);
+	// Poner con JPA que anyo debe tener un @range de 2005 a 2020
+	public static Record obtieneRecords(Integer anyo, Pais pais, Category categoria) throws IOException {
+		Record res = new Record();
+		if (!pais.equals(Pais.NOTFOUND) && anyo > 2004 && anyo < 2021) {
+			String urlBuilder = "https://www.motogp.com/es/ajax/results/parse/" + anyo + "/" + pais + "/" + categoria + "/";
+			res = new Record(urlBuilder);
+		}
+		return res;
 	}
 	
 	public static List<InfoCarrera> getResultsByRaceNumberCampu(Category category, int year, int raceNumber,Session session) throws JSONException, IOException {
@@ -336,8 +340,36 @@ public class PeticionesGet {
 	}
 	
 	
-	
-	
+	public Pais parseRaceCodeToPais(RaceCode raceCode) {
+		Pais pais = Pais.NOTFOUND;
+
+		switch (raceCode) {
+		case ESP:
+			pais = Pais.SPA;
+			break;
+		case DEU:
+			pais = Pais.GER;
+			break;
+		case IND:
+			pais = Pais.INP;
+			break;
+		case PRT:
+			pais = Pais.POR;
+			break;
+		case SMR:
+			pais = Pais.RSM;
+			break;
+		default:
+			try {
+				pais = Pais.valueOf(raceCode.toString());
+			} catch (Exception e) {
+				System.out.println(raceCode.toString() + " code not found in the list of country codes!");
+			}
+			break;
+		}
+
+		return pais;
+	}
 	
 	public static Integer calculaPuntos(Integer pos) {
 		switch (pos) {
