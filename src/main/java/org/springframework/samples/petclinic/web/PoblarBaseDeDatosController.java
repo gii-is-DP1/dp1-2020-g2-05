@@ -1,6 +1,7 @@
 package org.springframework.samples.petclinic.web;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -87,7 +88,7 @@ public class PoblarBaseDeDatosController {
 	}
 	
 	@PostMapping(path = "/BD/pilotsBD")	
-	public String Poblar( @Valid FormRellenarBD form, BindingResult result, ModelMap model) throws JSONException, IOException {
+	public String Poblar( @Valid FormRellenarBD form, BindingResult result, ModelMap model) throws JSONException, IOException, ParseException {
 		System.out.println(result);
 
 		if(result.hasErrors()) {
@@ -145,7 +146,7 @@ public class PoblarBaseDeDatosController {
 	}
 	
 	@PostMapping(path = "/BD/carrerasBD")	
-	public String PoblarBDcarrera(@Valid BDCarrera form, BindingResult result, ModelMap model) throws JSONException, IOException, DataAccessException, duplicatedLeagueNameException {
+	public String PoblarBDcarrera(@Valid BDCarrera form, BindingResult result, ModelMap model) throws JSONException, IOException, DataAccessException, duplicatedLeagueNameException, ParseException {
 
 		if(result.hasErrors()) {
 			System.out.println(result);
@@ -169,13 +170,13 @@ public class PoblarBaseDeDatosController {
 	}
 	
 	@GetMapping(path="/BD/carrerasBD/{date}/{code}/{id}")
-	public String actualizarTablaGPs(@PathVariable("date") String date,@PathVariable("code") String code,@PathVariable("id") String id,ModelMap model) throws JSONException, IOException {
+	public String actualizarTablaGPs(@PathVariable("date") String date,@PathVariable("code") String code,@PathVariable("id") String id,ModelMap model) throws JSONException, IOException, ParseException {
 		GranPremio gp = this.GPService.findGPById(Integer.parseInt(id)).get();
 		gp.setHasBeenRun(true);		
 		return PoblarBDCarreras(date, code, model,gp);
 	}
 	@GetMapping(path="/BD/carrerasBD/{date}/{code}")
-	public String PoblarBDCarreras(@PathVariable("date") String date,@PathVariable("code") String code,ModelMap model,GranPremio gp) throws JSONException, IOException {
+	public String PoblarBDCarreras(@PathVariable("date") String date,@PathVariable("code") String code,ModelMap model,GranPremio gp) throws JSONException, IOException, ParseException {
 		BDCarrera form = new BDCarrera();
 		form.setCategory(Category.MOTO3);
 		form.setRacecode(RaceCode.valueOf(code));

@@ -16,8 +16,13 @@ UserRepository.java * Copyright 2002-2013 the original author or authors.
 package org.springframework.samples.petclinic.service;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Formatter;
 import java.util.HashSet;
 import java.util.List;
@@ -127,8 +132,8 @@ public class PilotService {
 		return res;
 	}
 	
-	public void poblarBD(FormRellenarBD form) throws JSONException, IOException {
-
+	public void poblarBD(FormRellenarBD form) throws JSONException, IOException, ParseException {
+//		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MMM-dd");		
 		for(int i=form.getAnyoInicial();i<form.getAnyoFinal();i++) {
 
 			for(int j=0;j<MAXIMO_CARRERAS;j++) {
@@ -137,9 +142,11 @@ public class PilotService {
 				if(todosLosResultadosDeUnaCarrera.size()==0) {
 					
 				}else {
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+					LocalDate date = LocalDate.parse(todosLosResultadosDeUnaCarrera.get(0).getFecha(), formatter);				
 					gp.setSite(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
 					gp.setCircuit(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
-					gp.setDate0(todosLosResultadosDeUnaCarrera.get(0).getFecha());
+					gp.setDate0(date);
 					gp.setRaceCode(todosLosResultadosDeUnaCarrera.get(0).getRaceCode());
 					gp.setCalendar(false);
 					this.gpService.saveGP(gp);
@@ -190,18 +197,22 @@ public class PilotService {
 	}
 	
 //	2016, RaceCode.AUT, Session.RACE
-	public void poblarBDCarreraACarrera(BDCarrera form,GranPremio gp,Boolean GpEstaEnCalendario) throws JSONException, IOException {
+	public void poblarBDCarreraACarrera(BDCarrera form,GranPremio gp,Boolean GpEstaEnCalendario) throws JSONException, IOException, ParseException {
 
 		//EL GP QUE SE PASA COMO PARAMETRO, O ESTA VACIO, O ESTA EN EL CALENDARIO
 //				GranPremio gp = new GranPremio(); //entidad de una carrera
 				List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceCodeCampu(form.getCategory(), form.getYear(), form.getRacecode(), form.getSession());
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
 				if(todosLosResultadosDeUnaCarrera.size()==0) {
 					
 				}else {
 					if(GpEstaEnCalendario==false) {
+						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+						LocalDate date = LocalDate.parse(todosLosResultadosDeUnaCarrera.get(0).getFecha(), formatter);			
 						gp.setSite(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
 						gp.setCircuit(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
-						gp.setDate0(todosLosResultadosDeUnaCarrera.get(0).getFecha());
+						gp.setDate0(date);
 						gp.setRaceCode(todosLosResultadosDeUnaCarrera.get(0).getRaceCode());
 						gp.setHasBeenRun(true);
 						gp.setHasBeenRun(true);

@@ -1,6 +1,11 @@
 package org.springframework.samples.petclinic.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -48,11 +53,15 @@ public class GranPremioService {
 	}
 
 	@Transactional
-	public List<GranPremio> findAllActualYear(Integer year) {
+	public List<GranPremio> findAllActualYear(Integer year) throws ParseException {
 //		Calendar cal= Calendar.getInstance();
 //		int year= cal.get(Calendar.YEAR);
 		String date = year+"-01-01";  // xxxx-01-01 , hago un select con todos los gps que sean >= a esa fecha
-		List<GranPremio> GPsIniciales = this.findAllActualYear(date);
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate dateF = LocalDate.parse(date, formatter);			
+		
+		List<GranPremio> GPsIniciales = this.findAllActualYear(dateF);
 
 		//		for(int i=0;i<GPsIniciales.size();i++) {
 //			GranPremio gpObtained = this.findAllActualYear(date,GPsIniciales.get(i).getId()).get();
@@ -107,7 +116,7 @@ public class GranPremioService {
 	}
 	
 	@Transactional
-	public List<GranPremio> findAllActualYear(String date) throws DataAccessException {
+	public List<GranPremio> findAllActualYear(LocalDate date) throws DataAccessException {
 		 return GPRepository.findAllActualYear(date);
 	}
 	
