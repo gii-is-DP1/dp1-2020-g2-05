@@ -83,8 +83,8 @@ public class Result extends BaseEntity implements Comparable<Result> {
 
 	@Override
 	public int compareTo(Result o) {
-		if (!(gp==null) && !(gp.getDate0()==null) && !this.gp.getDate0().equalsIgnoreCase(o.gp.getDate0()))
-			return this.gp.getDate0().compareTo(o.gp.getDate0());
+//		if (!(gp==null) && !(gp.getDate0()==null) && !this.gp.getDate0().equalsIgnoreCase(o.gp.getDate0()))
+//			return this.gp.getDate0().compareTo(o.gp.getDate0());
 		if (!(gp==null) && !(gp.getSite()==null) && !this.gp.getSite().equalsIgnoreCase(o.gp.getSite()))
 			return this.gp.getSite().compareTo(o.gp.getSite());
 		if (!this.position.equals(o.position))
