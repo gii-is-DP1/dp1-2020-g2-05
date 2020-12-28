@@ -42,6 +42,10 @@ public final class GenericIdToEntityConverter implements ConditionalGenericConve
     }
 
     public Object convert(Object source, TypeDescriptor sourceType, TypeDescriptor targetType) {
+    	System.out.println(source);
+    	System.out.println(sourceType);
+    	System.out.println(targetType);
+    	System.out.println(entityManager);
         if (source == null || entityManager==null) {
             return null;
         }

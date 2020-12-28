@@ -60,20 +60,18 @@ public class TeamController {
 	RecruitService recruitService;
 	
 
-	@Autowired
 	OfferService offerService;
-
-	@Autowired
 
 	LineupService lineupService;
 	
 	
 	@Autowired
-	public TeamController(LeagueService leagueService, UserService userService,RecruitService recruitService, LineupService lineupService) {
+	public TeamController(LeagueService leagueService, UserService userService,RecruitService recruitService, LineupService lineupService, OfferService offerService) {
 		this.leagueService = leagueService;
 		this.userService = userService;
 		this.recruitService = recruitService;
 		this.lineupService = lineupService;	
+		this.offerService = offerService;
 	}
 	
 
@@ -124,8 +122,8 @@ public class TeamController {
 	
 	@PostMapping(value = "/leagues/{leagueId}/teams/new")
 	public String saveNewTeam(@PathVariable("leagueId") int leagueId, @Valid Team team, BindingResult result, ModelMap model) {
-		Optional<League> league = this.leagueService.findLeague(leagueId);
-//		System.out.println(league.get().getId().equals(team.getLeague().getId()));
+		League league = this.leagueService.findLeague(leagueId).get();
+		team.setLeague(league);
 		System.out.println(team.getLeague());
 		System.out.println(team.getUser());
 		System.out.println(result.getAllErrors());
@@ -137,23 +135,19 @@ public class TeamController {
 		
 		team.setUser(this.userService.getUserSession());
 		Optional<Team> tem = this.leagueService.findTeamByUsernameAndLeagueId(team.getUser().getUsername(), leagueId);
-			League liga = this.leagueService.findLeague(leagueId).get();
-			team.setLeague(liga);
 			
 			
 		 if(tem.isPresent()){
 			model.addAttribute("message", "Sorry, you cannot have more teams in this league!");
 			EquipoNo=true;
-		//	return "redirect:/leagues/{leagueId}/teams";
-			return "leagues/TeamsEdit";
+			return "redirect:/leagues/{leagueId}/teams";
 			
 		}
 			else {
 			this.leagueService.saveTeam(team);
 			EquipoSi=true;
-			return "leagues/TeamsEdit";
 
-			//return "redirect:/leagues/{leagueId}/teams";
+			return "redirect:/leagues/{leagueId}/teams";
 			}
 		}
 

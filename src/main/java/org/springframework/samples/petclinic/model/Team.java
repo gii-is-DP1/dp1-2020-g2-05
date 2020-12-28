@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.model;
 
+import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -87,8 +88,8 @@ public class Team extends BaseEntity implements Comparable<Team> {
 		return league;
 	}
 
-	public void setLeague(League league) {
-		this.league = league;
+	public void setLeague(League league2) {
+		this.league = league2;
 	}
 	
 	@Override

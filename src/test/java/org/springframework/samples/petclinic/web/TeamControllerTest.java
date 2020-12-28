@@ -27,7 +27,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.configuration.GenericIdToEntityConverter;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
 
 import org.springframework.samples.petclinic.model.Authorities;
@@ -71,6 +74,9 @@ public class TeamControllerTest {
 	 @MockBean
 	 @Autowired
 	 private UserService userService;
+	 
+	
+	 private GenericIdToEntityConverter converter;
 	 
 	 @MockBean
 	 @Autowired
@@ -159,6 +165,7 @@ public class TeamControllerTest {
 		given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
 		given(this.leagueService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
 		given(this.userService.findUser(user.getUsername())).willReturn(Optional.of(user));
+		given(this.converter.convert(Team.class, (TypeDescriptor.class) , TypeDescriptor.class)).willReturn(Optional.of(liga));
 
 	}
 	
@@ -195,6 +202,7 @@ public class TeamControllerTest {
 		 given(this.userService.getUserSession())
 		  .willReturn(user);
 		 given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
+	given(this.converter.convert(team.getLeague().getId(), TypeDescriptor.forObject(team.getLeague().getId()) , TypeDescriptor.forObject(liga))).willReturn(Optional.of(liga));
 
 
 		mockMvc.perform(post("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID)
