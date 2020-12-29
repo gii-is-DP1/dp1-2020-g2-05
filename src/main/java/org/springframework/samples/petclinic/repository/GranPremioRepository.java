@@ -1,5 +1,7 @@
 package org.springframework.samples.petclinic.repository;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,5 +15,5 @@ public interface GranPremioRepository  extends  CrudRepository<GranPremio, Integ
 
 	
 	@Query("SELECT gp FROM GranPremio gp WHERE gp.date0 >= :year AND gp.calendar = true")
-	public List<GranPremio> findAllActualYear(@Param("year") String year);
+	public List<GranPremio> findAllActualYear(@Param("year") LocalDate year);
 }
