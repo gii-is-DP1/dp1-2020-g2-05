@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.model.Offer;
-import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.util.Status;
 import org.springframework.stereotype.Service;
@@ -26,9 +25,6 @@ class OfferServiceTests {
 
 	@Autowired
 	protected OfferService offerService;
-	
-	@Autowired
-	protected PilotService pilotService;
 	
 	@Autowired
 	protected LeagueService leagueService;
@@ -51,8 +47,8 @@ class OfferServiceTests {
 	
 	@Test
 	void shouldFindOffersByLeague() {
-		Collection<Offer> offers = offerService.findOffersByLeague(1);
-		assertThat(offers.size()).isEqualTo(6);
+		Collection<Offer> offers = offerService.findOffersByLeague(2);
+		assertThat(offers.size()).isEqualTo(2);
 		
 		Collection<Offer> offersFail = offerService.findOffersByLeague(0);
 		assertThat(offersFail).isEmpty();
@@ -80,13 +76,13 @@ class OfferServiceTests {
 	@Test
 	@Transactional
 	void shouldSaveOffer() {
-		Offer offer = offerService.findOfferById(3).get();
+		Offer offer = offerService.findOfferById(1).get();
 		offer.setPrice(1000);
 		offer.setStatus(Status.Accepted);
 		
 		offerService.saveOffer(offer);
 		
-		Offer editOffer = offerService.findOfferById(3).get();
+		Offer editOffer = offerService.findOfferById(1).get();
 		assertThat(editOffer.getPrice()).isEqualTo(1000);
 		assertThat(editOffer.getStatus()).isEqualTo(Status.Accepted);
 	}
@@ -94,7 +90,7 @@ class OfferServiceTests {
 	@Test
 	@Transactional
 	void shouldNotValidateWhenPriceNegative() {
-		Offer offer = offerService.findOfferById(3).get();
+		Offer offer = offerService.findOfferById(1).get();
 		offer.setPrice(-1000);
 		
 		Validator validator = createValidator();
@@ -113,7 +109,6 @@ class OfferServiceTests {
 		Offer offer = new Offer();
 		offer.setPrice(1400);
 		offer.setStatus(Status.Outstanding);
-		Pilot pilot = pilotService.findPilotById(2).get();//Piloto Antonio
 		Team team = leagueService.findTeamById(9).get();//Escuderia sistema de la liga 2
 		offer.setTeam(team);
 		
@@ -129,13 +124,13 @@ class OfferServiceTests {
 	@Transactional
 	void shouldDeleteOffer() {
 		Integer initialOffersNum =  offerService.findAllOffers().size();
-		Offer offer = offerService.findOfferById(3).get();
+		Offer offer = offerService.findOfferById(1).get();
 		
 		offerService.deleteOffer(offer);
 		
 		Integer actualOffersNum =  offerService.findAllOffers().size();
 		assertThat(actualOffersNum).isEqualTo(initialOffersNum - 1);
-		Optional<Offer> offerFail = offerService.findOfferById(3);
+		Optional<Offer> offerFail = offerService.findOfferById(1);
 		assertThat(offerFail).isNotPresent();
 	}
 }
