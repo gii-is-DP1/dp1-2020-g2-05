@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Offer;
 import org.springframework.samples.petclinic.model.Recruit;
-import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.repository.OfferRepository;
 import org.springframework.samples.petclinic.util.Status;
 import org.springframework.stereotype.Service;
@@ -18,14 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class OfferService {
 	
 	private OfferRepository offerRepository;
-	private UserService userService;
-	private LeagueService leagueService;
 
 	@Autowired
-	public OfferService(OfferRepository offerRepository, UserService userService, LeagueService leagueService) {
+	public OfferService(OfferRepository offerRepository) {
 		this.offerRepository = offerRepository;
-		this.userService = userService;
-		this.leagueService = leagueService;
 	}
 	
 	@Transactional
@@ -42,17 +37,6 @@ public class OfferService {
 	public List<Offer> findOffersByLeague(int leagueId) throws DataAccessException {
 		System.out.println(offerRepository.findOffersByLeague(leagueId));
 		return offerRepository.findOffersByLeague(leagueId);
-	}
-	
-	@Transactional
-	public Optional<Team> findTeamByUsernameLeague(int leagueId) throws DataAccessException {
-		return leagueService.findTeamByUsernameAndLeagueId(userService.getUserSession().getUsername(), leagueId);
-	}
-	
-	@Transactional
-	public void saveTeamMoney(Team team, Integer price) throws DataAccessException {
-		team.setMoney(String.valueOf(Integer.parseInt(team.getMoney()) + price));
-		leagueService.saveTeam(team);		
 	}
 	
 	@Transactional
