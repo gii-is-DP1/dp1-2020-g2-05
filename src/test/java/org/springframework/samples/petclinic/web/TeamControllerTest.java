@@ -165,7 +165,7 @@ public class TeamControllerTest {
 		given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
 		given(this.leagueService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
 		given(this.userService.findUser(user.getUsername())).willReturn(Optional.of(user));
-		given(this.converter.convert(Team.class, (TypeDescriptor.class) , TypeDescriptor.class)).willReturn(Optional.of(liga));
+//		given(this.converter.convert((any(Team.class)), any(TypeDescriptor.class) , TypeDescriptor.class)).willReturn(Optional.of(liga));
 
 	}
 	
@@ -196,13 +196,14 @@ public class TeamControllerTest {
 //				.andExpect(view().name("/leagues/TeamsEdit"));
 //	}
 
+//		// ESTE ES EL METODO PROFESOR////
 	@WithMockUser(value = "spring")
     @Test
 	void testProcessCreationFormHasSuccess() throws Exception {
 		 given(this.userService.getUserSession())
 		  .willReturn(user);
 		 given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
-	given(this.converter.convert(team.getLeague().getId(), TypeDescriptor.forObject(team.getLeague().getId()) , TypeDescriptor.forObject(liga))).willReturn(Optional.of(liga));
+//	given(this.converter.convert(team.getLeague().getId(), TypeDescriptor.forObject(team.getLeague().getId()) , TypeDescriptor.forObject(liga))).willReturn(Optional.of(liga));
 
 
 		mockMvc.perform(post("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID)
