@@ -14,43 +14,50 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class RecruitService {
-	
-	
+
 	private RecruitRepository recruitRepository;
-	
+
 	private PilotService pilotService;
-	
 
 	@Autowired
 	public RecruitService(RecruitRepository recruitRepository, PilotService pilotService) {
 		this.recruitRepository = recruitRepository;
 		this.pilotService = pilotService;
 	}
-	
-	public Optional<Recruit> findRecruit(Integer recruitId) {
+
+	public Optional<Recruit> findRecruit(Integer recruitId) { // Encuentra un fichaje en base a su ID de fichaje
 		return recruitRepository.findById(recruitId);
 	}
-	
-	public List<Pilot> getRecruits() throws DataAccessException {
+
+	public List<Pilot> getRecruits() throws DataAccessException { // Nos da todos los pilotos correspondientes a los
+																	// fichajes que existen en el sistema
 		return this.pilotService.getRecruits();
 	}
-	
-	public List<Pilot> getRecruits(int teamID) throws DataAccessException {
+
+	public List<Pilot> getPilotsByTeam(int teamID) throws DataAccessException { // Nos da todos los pilotos que posee un
+		// equipo concreto ahora mismo
 		return this.pilotService.getRecruits(teamID);
 	}
-	
+
+	public List<Recruit> getRecruitsByTeam(int teamID) throws DataAccessException { // Muestra todos los fichajes de un
+																					// mismo equipo
+		return this.recruitRepository.findAllRecruits(teamID);
+	}
+
 	@Transactional
-	public void saveRecruit(Pilot pilot, Team team) throws DataAccessException {
+	public void saveRecruit(Pilot pilot, Team team) throws DataAccessException { // Para guardar nuevos fichajes en la
+																					// base de datos
 		Recruit recruit = createRecruit(pilot, team);
 		this.recruitRepository.save(recruit);
 	}
-	
+
 	@Transactional
-	public void deleteRecruit(Pilot pilot, Team team) throws DataAccessException {
+	public void deleteRecruit(Pilot pilot, Team team) throws DataAccessException { // Para borrar fichajes de la BBDD
+																					// por ejemplo cuando los vendo
 		Recruit recruit = createRecruit(pilot, team);
 		this.recruitRepository.delete(recruit);
 	}
-	
+
 	private Recruit createRecruit(Pilot pilot, Team team) {
 		Recruit recruit = new Recruit();
 		recruit.setPilot(pilot);
@@ -61,12 +68,8 @@ public class RecruitService {
 	public Optional<Recruit> getRecruitByPilotId(int pilotId) throws DataAccessException {
 		return this.recruitRepository.findRecruitByPilotId(pilotId);
 	}
-	
-	public List<Recruit> getRecruitsByTeam(int teamID) throws DataAccessException {
-		return this.recruitRepository.findAllRecruits(teamID);
-	}
-	
-	public Iterable<Recruit> findAll(){
+
+	public Iterable<Recruit> findAll() {
 		return this.recruitRepository.findAll();
 	}
 }
