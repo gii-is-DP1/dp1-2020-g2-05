@@ -1,12 +1,11 @@
 package org.springframework.samples.petclinic.web;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Offer;
-import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Team;
+import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.OfferService;
 import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.UserService;
@@ -27,22 +26,34 @@ public class OfferController {
 	private final OfferService offerService;
 
 	private final RecruitService recruitService;
+	
+	private final UserService userService;
+	
+	private final LeagueService leagueService;
 
 	@Autowired
-	public OfferController(OfferService offerService, RecruitService recruitService, UserService userService) {
+	public OfferController(OfferService offerService, RecruitService recruitService,
+			UserService userService, LeagueService leagueService) {
 		this.offerService = offerService;
 		this.recruitService = recruitService;
+		this.userService = userService;
+		this.leagueService = leagueService;
 	}
 
 	@ModelAttribute("userTeam")
 	public Team getUserTeam(@PathVariable("leagueId") int leagueId) {
-		return offerService.findTeamByUsernameLeague(leagueId);
+		Optional<Team> userTeam = leagueService.findTeamByUsernameAndLeagueId(
+				userService.getUserSession().getUsername(), leagueId);
+		if(userTeam.isPresent()) {
+			return userTeam.get();
+		}else {
+			return null;//Terminar redirecionando diciendo que no tienes equipo en esta liga
+		}
 	}
 	
 	@GetMapping
 	public String getOffers(@PathVariable("leagueId") int leagueId, ModelMap modelMap) {
 		modelMap.addAttribute("offers", offerService.findOffersByLeague(leagueId));
-		System.out.println(offerService.findOffersByLeague(leagueId));
 		return VIEW_OFFERS;
 	}
 
@@ -56,12 +67,13 @@ public class OfferController {
 			Integer price = offer.getPrice();
 			if (!offer.getStatus().equals(Status.Outstanding)) {
 				modelMap.addAttribute("message", "This pilot isn't on sale");
-			}else if(team.getId() == offer.getRecruit().getTeam().getId()){
+			}else if(team.getId() == offer.getRecruit().getTeam().getId()){// Si la escudería es la misma que ofrecio el piloto, se cancela la oferta
 				offer.setStatus(Status.Denied);
 				offerService.saveOffer(offer);
+				modelMap.addAttribute("message", "Offer cancelled!");
 			} else if (Integer.parseInt(team.getMoney()) >= price) {
-				offerService.saveTeamMoney(team, -price);// Restar dinero al comprador
-				offerService.saveTeamMoney(offer.getRecruit().getTeam(), price);// Dar dinero al vendedor
+				leagueService.saveTeamMoney(team, -price);// Restar dinero al comprador
+				leagueService.saveTeamMoney(offer.getRecruit().getTeam(), price);// Dar dinero al vendedor
 				offer.setTeam(team);
 				offer.setStatus(Status.Accepted);
 				offerService.saveOffer(offer);

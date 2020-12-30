@@ -3,6 +3,7 @@ package org.springframework.samples.petclinic.model;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -15,9 +16,16 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Pattern;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import org.hibernate.annotations.Columns;
 import org.hibernate.annotations.TypeDef;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import motogpAPI.Pais;
 import motogpAPI.RaceCode;
@@ -31,8 +39,9 @@ public class GranPremio extends BaseEntity {
 	private String site;
 	
 	@Column(name = "date0")
-	@NotEmpty
-	private String date0; // formato de la fecha dd-MM-yyyy
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@Past
+	private LocalDate date0;
 	
 	@Column(name = "circuit")
 	@NotEmpty
@@ -83,11 +92,11 @@ public class GranPremio extends BaseEntity {
 		return hasBeenRun;
 	}
 	
-	public String getDate0() {
+	public LocalDate getDate0() {
 		return date0;
 	}
 
-	public void setDate0(String date0) {
+	public void setDate0(LocalDate date0) {
 		this.date0 = date0;
 	}
 

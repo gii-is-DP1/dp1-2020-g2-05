@@ -1,6 +1,7 @@
 package org.springframework.samples.petclinic.web;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -72,14 +73,14 @@ public class GranPremioController {
 	}
 	
 	
-//	@InitBinder("league")
-//	public void initPetBinder(WebDataBinder dataBinder) {
-//		dataBinder.setValidator(new LeagueValidator());
+//	@InitBinder("granpremio")
+//	public void initGPBinder(WebDataBinder dataBinder) {
+//		dataBinder.setValidator(new GranPremioValidator());
 //	}
-	
+
 
 	@GetMapping(path="/granPremios")
-	public String detallesLiga(ModelMap model) {	
+	public String detallesLiga(ModelMap model) throws ParseException {	
 //		List<GranPremio> gps = GPService.convertirIterableLista(GPService.findAllActualYear(2019));
 //		List<List<GranPremio>> gps_calificados = GranPremioService.granPremiosPorCategoria(gps);
 //		List<GranPremio> motogp = gps_calificados.get(0);
@@ -99,13 +100,21 @@ public class GranPremioController {
 	}
 	
 	@PostMapping(path="/granPremios/new")
-	public String nuevoGranPremio(GranPremio gp,ModelMap model) {	
-		gp.setCalendar(true);
-		gp.setHasBeenRun(false);
-		this.GPService.saveGP(gp);
-		model.addAttribute("message","Gran Premio loaded succesfully!");
+	public String nuevoGranPremio(@Valid GranPremio granpremio,BindingResult results,ModelMap model) {	
+		
+		if(results.hasErrors()) {
+			model.addAttribute("errors",results.getAllErrors());
+			return nuevoGranPremio(model);
+		}else {
+			granpremio.setCalendar(true);
+			granpremio.setHasBeenRun(false);
+			this.GPService.saveGP(granpremio);
+			model.addAttribute("message","Gran Premio loaded succesfully!");
+		}
+		
+		
 
-		return "/panelControl/panelDeControl";
+		return "redirect:/controlPanel";
 	}
 	
 	@RequestMapping(path="/granPremios/setRecords/{gpId}")
