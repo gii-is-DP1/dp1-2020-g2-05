@@ -1,4 +1,4 @@
-package motogpAPI;
+package org.springframework.samples.petclinic.model;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -17,12 +17,16 @@ public class RecordCircuito extends BaseEntity {
 	private String nombrePiloto;
 	private Integer tiempo;
 	private Double kmh;
-//    @JoinColumn(name = "gp_id")
-    @OneToOne(mappedBy = "recordDelCircuito")
-    private GranPremio gp;
+	
+	@OneToOne(cascade = CascadeType.ALL, mappedBy="recordDelCircuito")
+    private Record record;
+	
+	public RecordCircuito() {
+		super();
+	}
 
 	public RecordCircuito(String entrada) {
-		super();
+//		super();
 		String atributos = entrada.split(":")[1].trim();
 		String[] split = atributos.split(" ");
 		Integer x = split.length;

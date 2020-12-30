@@ -70,10 +70,6 @@ public class GranPremioController {
 		this.GPService = GPService;
 		this.TCService=TCService;
 	}
-
-
-	
-	
 	
 	
 //	@InitBinder("league")
@@ -98,11 +94,8 @@ public class GranPremioController {
 	
 	@GetMapping(path="/granPremios/new")
 	public String nuevoGranPremio(ModelMap model) {	
-
 		model.addAttribute("GranPremio",new GranPremio());
-
 		return "/gp/nuevoGP";
-		 
 	}
 	
 	@PostMapping(path="/granPremios/new")
@@ -113,6 +106,14 @@ public class GranPremioController {
 		model.addAttribute("message","Gran Premio loaded succesfully!");
 
 		return "/panelControl/panelDeControl";
-		 
 	}
+	
+	@RequestMapping(path="/granPremios/setRecords/{gpId}")
+	public String populateRecords(@PathVariable("gpId") int gpId, ModelMap model) throws IOException {
+		GranPremio gp = this.GPService.findGPById(gpId).get();
+		this.GPService.populateRecord(gp);
+		this.GPService.saveGP(gp);
+		return "gp/gpList";
+	}
+	
 }

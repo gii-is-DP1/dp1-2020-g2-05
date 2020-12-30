@@ -55,7 +55,7 @@ public class Tests {
 //		}
 //		
 
-			Record prueba = PeticionesGet.obtieneRecords(2004, Pais.SPA, Category.MOTO2);
+			Record prueba = PeticionesGet.obtieneRecords(2018, Pais.SPA, Category.MOTOGP);
 			System.out.println(prueba);
 
 //		for (Pais p:Pais.values()) {
