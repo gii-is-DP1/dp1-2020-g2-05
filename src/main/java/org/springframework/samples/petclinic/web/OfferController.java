@@ -46,11 +46,11 @@ public class OfferController {
 				userService.getUserSession().getUsername(), leagueId);
 		if(userTeam.isPresent()) {
 			return userTeam.get();
-		}else {
-			return null;//Terminar redirecionando diciendo que no tienes equipo en esta liga
+		} else {
+			return null;// Terminar redirecionando diciendo que no tienes equipo en esta liga
 		}
 	}
-	
+
 	@GetMapping
 	public String getOffers(@PathVariable("leagueId") int leagueId, ModelMap modelMap) {
 		modelMap.addAttribute("offers", offerService.findOffersByLeague(leagueId));
@@ -66,21 +66,24 @@ public class OfferController {
 			Team team = getUserTeam(leagueId);// Esdudería que va a comprar un piloto
 			Integer price = offer.getPrice();
 			if (!offer.getStatus().equals(Status.Outstanding)) {
-				modelMap.addAttribute("message", "This pilot isn't on sale");
-			}else if(team.getId() == offer.getRecruit().getTeam().getId()){// Si la escudería es la misma que ofrecio el piloto, se cancela la oferta
+				modelMap.addAttribute("message", "This pilot isn't on sale anymore");
+			} else if (team.getId() == offer.getRecruit().getTeam().getId()) {// Si la escudería es la misma que ofrecio
+																				// el piloto, se cancela la oferta
 				offer.setStatus(Status.Denied);
 				offerService.saveOffer(offer);
 				modelMap.addAttribute("message", "Offer cancelled!");
-			} else if (Integer.parseInt(team.getMoney()) >= price) {
+			} else if (Integer.parseInt(team.getMoney()) >= price
+					&& recruitService.getRecruitsByTeam(team.getId()).size() == 4) { // RN-07: Máximo de fichajes
 				leagueService.saveTeamMoney(team, -price);// Restar dinero al comprador
 				leagueService.saveTeamMoney(offer.getRecruit().getTeam(), price);// Dar dinero al vendedor
 				offer.setTeam(team);
 				offer.setStatus(Status.Accepted);
 				offerService.saveOffer(offer);
 				recruitService.saveRecruit(offer.getRecruit().getPilot(), team);
-				modelMap.addAttribute("message", "Pilot recruit!");
+				modelMap.addAttribute("message", "Pilot recruited!");
 			} else {
-				modelMap.addAttribute("message", "Not enought money to recruit this pilot");
+				modelMap.addAttribute("message",
+						"Not enought money to recruit this pilot or you already own 4 riders on this league");
 			}
 		} else {
 			modelMap.addAttribute("message", "Offer not found!");

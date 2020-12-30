@@ -72,7 +72,6 @@ public class GranPremioController {
 		this.TCService=TCService;
 	}
 	
-	
 //	@InitBinder("granpremio")
 //	public void initGPBinder(WebDataBinder dataBinder) {
 //		dataBinder.setValidator(new GranPremioValidator());
