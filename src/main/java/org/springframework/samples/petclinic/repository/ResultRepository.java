@@ -32,8 +32,11 @@ import motogpAPI.RaceCode;
 public interface ResultRepository extends CrudRepository<Result, Integer> {
 
 
-	@Query("SELECT r FROM Result r WHERE r.gp.raceCode = :raceCode AND r.pilot.category = :category")
-	List<Result> findResultsByCategoryAndId(@Param("raceCode") String raceCode,@Param("category") Category category) throws DataAccessException;
+//	@Query("SELECT r FROM Result r WHERE r.gp.raceCode = :raceCode AND r.pilot.category = :category")
+//	List<Result> findResultsByCategoryAndId(@Param("raceCode") String raceCode,@Param("category") Category category) throws DataAccessException;
+
+	@Query("SELECT r FROM Result r WHERE r.gp.id = :gpId AND r.gp.raceCode = :raceCode AND r.pilot.category = :category")
+	List<Result> findResultsByCategoryAndId(Integer gpId, String raceCode, Category category) throws DataAccessException;
 
 
 }

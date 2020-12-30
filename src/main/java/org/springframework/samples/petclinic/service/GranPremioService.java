@@ -2,11 +2,9 @@ package org.springframework.samples.petclinic.service;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,9 +25,9 @@ import motogpAPI.RaceCode;
 public class GranPremioService {
 
 	
-	@Autowired
 	private GranPremioRepository GPRepository;
 	private TablaConsultasService TCService;
+	
 	@Autowired
 	public GranPremioService(GranPremioRepository GPRepository,TablaConsultasService TCService) {
 		this.GPRepository = GPRepository;		

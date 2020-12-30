@@ -2,12 +2,8 @@ package org.springframework.samples.petclinic.model;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import org.springframework.samples.petclinic.model.BaseEntity;
-import org.springframework.samples.petclinic.model.GranPremio;
 
 @Entity
 @Table(name = "recordCircuito")
@@ -26,7 +22,6 @@ public class RecordCircuito extends BaseEntity {
 	}
 
 	public RecordCircuito(String entrada) {
-//		super();
 		String atributos = entrada.split(":")[1].trim();
 		String[] split = atributos.split(" ");
 		Integer x = split.length;
@@ -36,15 +31,21 @@ public class RecordCircuito extends BaseEntity {
 			this.kmh = null;
 			this.anyo= null;
 		} else {
-			this.nombrePiloto = split[1];
-			for (int i=2; i < x-2; i++) {
-				this.nombrePiloto += " " + split[i];
-			}
-			String[] tiempoSplit = split[x-2].split("'");
-			this.tiempo = (int) ((Integer.parseInt(tiempoSplit[0]) * 60 + Double.parseDouble(tiempoSplit[1]) + 1e-14) * 1000);
-			this.kmh = Double.parseDouble(split[x-1]);
+			try {
+				this.anyo = Integer.parseInt(split[0]);
+				this.nombrePiloto = split[1];
+				this.kmh = Double.parseDouble(split[x-1]);
+				
+				for (int i=2; i < x-2; i++) {
+					this.nombrePiloto += " " + split[i];
+				}
+				
+				String[] tiempoSplit = split[x-2].split("'");
+				this.tiempo = (int) ((Integer.parseInt(tiempoSplit[0]) * 60 + Double.parseDouble(tiempoSplit[1]) + 1e-14) * 1000);
 
-			this.anyo = Integer.parseInt(split[0]);
+			} catch (Exception e) {
+
+			}
 		}
 	}
 
