@@ -45,6 +45,125 @@ public class PeticionesGet {
 		return res;
 	}
 	
+//	public static Record parseRecord(String entrada) throws IOException {
+//		Record res = new Record();
+//		String html = Jsoup.connect(entrada).get().text();
+//		if (!html.contains("Récords: ") ) {
+//			res.vueltaDePole = null;
+//			res.vueltaRapida = null;
+//			res.recordDelCircuito = null;
+//			res.mejorVuelta = null;
+//		} else {
+//			String records = html.split("Récords: ")[1];
+//			String[] prueba = records.split("Km/h");
+//			List<String> listaRecords = new ArrayList<String>();
+//			for (int i=0; i < prueba.length; i++) {
+//				listaRecords.add(prueba[i].trim());
+//			}
+//
+//			res.vueltaDePole = parseRecordPole(prueba[0]);
+//			res.vueltaRapida = parseRecordVueltaRapida(prueba[1]);
+//			res.recordDelCircuito = parseRecordCircuito(prueba[2]);
+//			res.mejorVuelta = parseRecordMejorVuelta(prueba[3]);
+//		}
+//		return res;
+//	}
+	
+//	public static RecordMejorVuelta parseRecordMejorVuelta(String entrada) {
+//		RecordMejorVuelta res = new RecordMejorVuelta();
+//		
+//		String atributos = entrada.split(":")[1].trim();
+//		String[] split = atributos.split(" ");
+//		Integer x = split.length;
+//		if (x < 4) {
+//			res.nombrePiloto = null;
+//			res.tiempo = null;
+//			res.kmh = null;
+//			res.anyo= null;
+//		} else { 
+//			res.nombrePiloto = split[1];
+//			for (int i=2; i < x-2; i++) {
+//				res.nombrePiloto += " " + split[i];
+//			}
+//			String[] tiempoSplit = split[x-2].split("'");
+//			res.tiempo = (int) ((Integer.parseInt(tiempoSplit[0]) * 60 + Double.parseDouble(tiempoSplit[1]) + 1e-14) * 1000);
+//			res.kmh = Double.parseDouble(split[x-1]);
+//			res.anyo = Integer.parseInt(split[0]);
+//		}
+//		return res;
+//	}
+
+//	public static RecordVueltaRapida parseRecordVueltaRapida(String entrada) {
+//		RecordVueltaRapida res = new RecordVueltaRapida();
+//		
+//		String atributos = entrada.split(":")[2].trim();
+//		String[] split = atributos.split(" ");
+//		Integer x = split.length;
+//		if (x < 4) {
+//			res.nombrePiloto = null;
+//			res.tiempo = null;
+//			res.kmh = null;
+//			res.vuelta = null;
+//		} else {
+//			res.nombrePiloto = split[1];
+//			for (int i=2; i < x-2; i++) {
+//				res.nombrePiloto += " " + split[i];
+//			}
+//			String[] tiempoSplit = split[x-2].split("'");
+//			res.tiempo = (int) ((Integer.parseInt(tiempoSplit[0]) * 60 + Double.parseDouble(tiempoSplit[1]) + 1e-14) * 1000);
+//			res.kmh = Double.parseDouble(split[x-1]);
+//			res.vuelta = Integer.parseInt(split[0]);
+//		}
+//		return res;
+//	}
+
+//	public static RecordPole parseRecordPole(String entrada) {
+//		RecordPole res = new RecordPole();
+//		String atributos = entrada.split(":")[1].trim();
+//		String[] split = atributos.split(" ");
+//		Integer x = split.length;
+//		if (x < 4) {
+//			res.nombrePiloto = null;
+//			res.tiempo = null;
+//			res.kmh = null;
+//		} else {
+//			res.nombrePiloto = split[0];
+//			for (int i=1; i < x-2; i++) {
+//				res.nombrePiloto += " " + split[i];
+//			}
+//			String[] tiempoSplit = split[x-2].split("'");
+//			res.tiempo = (int) ((Integer.parseInt(tiempoSplit[0]) * 60 + Double.parseDouble(tiempoSplit[1]) + 1e-14) * 1000);
+//			res.kmh = Double.parseDouble(split[x-1]);
+//		}
+//		return res;
+//	}
+
+//	public static RecordCircuito parseRecordCircuito(String entrada) throws IOException {
+//		RecordCircuito res = new RecordCircuito();
+//		
+//		String atributos = entrada.split(":")[1].trim();
+//		String[] split = atributos.split(" ");
+//		Integer x = split.length;
+//		if (x < 4) {
+//			res.setNombrePiloto(null);
+//			res.setTiempo(null);
+//			res.setKmh(null);
+//			res.setAnyo(null);
+//		} else {
+//			res.setNombrePiloto(split[1]);
+//			for (int i=2; i < x-2; i++) {
+//				res.setNombrePiloto(res.getNombrePiloto() + " " + split[i]);
+//			}
+//			String[] tiempoSplit = split[x-2].split("'");
+//			res.setTiempo((int) ((Integer.parseInt(tiempoSplit[0]) * 60 + Double.parseDouble(tiempoSplit[1]) + 1e-14) * 1000));
+//			res.setKmh(Double.parseDouble(split[x-1]));
+//
+//			res.setAnyo(Integer.parseInt(split[0]));
+//		}
+//		
+//		return res;
+//	}
+	
 	public static List<InfoCarrera> getResultsByRaceNumberCampu(Category category, int year, int raceNumber,Session session) throws JSONException, IOException {
 		JSONObject result = new JSONObject();
 		JSONObject result2= new JSONObject();

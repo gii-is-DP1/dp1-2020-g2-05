@@ -1,27 +1,28 @@
-package motogpAPI;
+package org.springframework.samples.petclinic.model;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.springframework.samples.petclinic.model.BaseEntity;
-import org.springframework.samples.petclinic.model.GranPremio;
-
 @Entity
-@Table(name = "recordCircuito")
-public class RecordCircuito extends BaseEntity {
+@Table(name = "recordMejorVuelta")
+public class RecordMejorVuelta extends BaseEntity {
 
-	private Integer anyo;
-	private String nombrePiloto;
-	private Integer tiempo;
-	private Double kmh;
-//    @JoinColumn(name = "gp_id")
-    @OneToOne(mappedBy = "recordDelCircuito")
-    private GranPremio gp;
+	public Integer anyo;
+	public String nombrePiloto;
+	public Integer tiempo;
+	public Double kmh;
+	
+	@OneToOne(cascade = CascadeType.ALL, mappedBy="mejorVuelta")
+    private Record record;
+	
 
-	public RecordCircuito(String entrada) {
+	public RecordMejorVuelta() {
+		super();
+	}
+	
+	public RecordMejorVuelta(String entrada) {
 		super();
 		String atributos = entrada.split(":")[1].trim();
 		String[] split = atributos.split(" ");
@@ -31,7 +32,7 @@ public class RecordCircuito extends BaseEntity {
 			this.tiempo = null;
 			this.kmh = null;
 			this.anyo= null;
-		} else {
+		} else { 
 			this.nombrePiloto = split[1];
 			for (int i=2; i < x-2; i++) {
 				this.nombrePiloto += " " + split[i];
@@ -44,7 +45,7 @@ public class RecordCircuito extends BaseEntity {
 		}
 	}
 
-	public RecordCircuito(Integer anyo, String nombrePiloto, Integer tiempo, Double kmh) {
+	public RecordMejorVuelta(Integer anyo, String nombrePiloto, Integer tiempo, Double kmh) {
 		super();
 		this.anyo = anyo;
 		this.nombrePiloto = nombrePiloto;
@@ -103,7 +104,7 @@ public class RecordCircuito extends BaseEntity {
 //			return false;
 //		if (getClass() != obj.getClass())
 //			return false;
-//		RecordCircuito other = (RecordCircuito) obj;
+//		RecordMejorVuelta other = (RecordMejorVuelta) obj;
 //		if (anyo == null) {
 //			if (other.anyo != null)
 //				return false;
@@ -129,8 +130,8 @@ public class RecordCircuito extends BaseEntity {
 
 	@Override
 	public String toString() {
-		return "RecordCircuito [anyo=" + anyo + ", nombrePiloto=" + nombrePiloto + ", tiempo=" + tiempo + ", kmh=" + kmh
-				+ "]";
+		return "RecordMejorVuelta [anyo=" + anyo + ", nombrePiloto=" + nombrePiloto + ", tiempo=" + tiempo + ", kmh="
+				+ kmh + "]";
 	}
 
 }

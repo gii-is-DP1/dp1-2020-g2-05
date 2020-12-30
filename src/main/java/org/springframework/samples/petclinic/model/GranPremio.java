@@ -2,6 +2,7 @@ package org.springframework.samples.petclinic.model;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Set;
 
@@ -9,8 +10,10 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Past;
@@ -19,11 +22,13 @@ import javax.validation.constraints.Pattern;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import org.hibernate.annotations.Columns;
+import org.hibernate.annotations.TypeDef;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import motogpAPI.Pais;
 import motogpAPI.RaceCode;
-import motogpAPI.Record;
 
 @Entity
 @Table(name = "granpremio")
@@ -37,7 +42,6 @@ public class GranPremio extends BaseEntity {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Past
 	private LocalDate date0;
-
 	
 	@Column(name = "circuit")
 	@NotEmpty
@@ -47,12 +51,15 @@ public class GranPremio extends BaseEntity {
 	@NotEmpty
 	private String raceCode;
 	
-	
 	@Column(name = "has_been_run")
 	private Boolean hasBeenRun;
 	
 	@Column(name = "calendar")
 	private Boolean calendar;
+	
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "record_id")
+	private Record record;
 	
 	
 	public Boolean getCalendar() {
@@ -76,12 +83,15 @@ public class GranPremio extends BaseEntity {
 	public void setSite(String site) {
 		this.site = site;
 	}
+	
 	public void setHasBeenRun(Boolean hasBeenRun) {
 		this.hasBeenRun = hasBeenRun;
 	}
+	
 	public Boolean getHasBeenRun() {
 		return hasBeenRun;
 	}
+	
 	public LocalDate getDate0() {
 		return date0;
 	}
@@ -122,47 +132,14 @@ public class GranPremio extends BaseEntity {
 		this.lineups = lineups;
 	}
 
+	public Record getRecord() {
+		return record;
+	}
 
-//	public Pais parseRaceCodeToPais(RaceCode raceCode) {
-//		Pais pais = Pais.NOTFOUND;
-//
-//		switch (raceCode) {
-//		case ESP:
-//			pais = Pais.SPA;
-//			break;
-//		case DEU:
-//			pais = Pais.GER;
-//			break;
-//		case IND:
-//			pais = Pais.INP;
-//			break;
-//		case PRT:
-//			pais = Pais.POR;
-//			break;
-//		case SMR:
-//			pais = Pais.RSM;
-//			break;
-//		default:
-//			try {
-//				pais = Pais.valueOf(raceCode.toString());
-//			} catch (Exception e) {
-//				System.out.println(raceCode.toString() + " code not found in the list of country codes!");
-//			}
-//			break;
-//		}
-//
-//		return pais;
-//	}
-//
-//	
-//	public static Record obtieneRecords(Integer anyo, Pais pais, Category categoria) throws IOException {
-//		Record res = new Record();
-//		if (!pais.equals(Pais.NOTFOUND) && anyo > 2004 && anyo < 2021) {
-//			String urlBuilder = "https://www.motogp.com/es/ajax/results/parse/" + anyo + "/" + pais + "/" + categoria + "/";
-//			res = new Record(urlBuilder);
-//		}
-//		return res;
-//	}
+	public void setRecord(Record record) {
+		this.record = record;
+	}
+
 
 	@Override
 	public String toString() {
