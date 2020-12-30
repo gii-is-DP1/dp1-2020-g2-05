@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -37,6 +38,11 @@ public class Pilot extends BaseEntity implements Comparable<Pilot> {
 	@Column(name = "category")
 	@NotNull
 	private Category category;
+	
+	@Column(name = "base_value")
+	@NotNull
+	@Min(0)
+	private Integer baseValue;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pilot")
 	private Set<Result> results;
@@ -82,6 +88,14 @@ public class Pilot extends BaseEntity implements Comparable<Pilot> {
 
 	public void setCategory(Category category) {
 		this.category = category;
+	}
+	
+	public Integer getBaseValue() {
+		return baseValue;
+	}
+
+	public void setBaseValue(Integer baseValue) {
+		this.baseValue = baseValue;
 	}
 
 	public Set<Result> getResults() {

@@ -60,18 +60,18 @@ class OfferServiceTests {
 //		Team team = offerService.findTeamByUsernameLeague(1).get();
 //		assertThat(team.getName()).startsWith("Miguelito");
 //	}
-	
-	@Test
-	@Transactional
-	void shouldSaveTeamMoney() {
-		Team team = leagueService.findTeamById(9).get();
-		Double initialMoney = Double.parseDouble(team.getMoney());
-		
-		offerService.saveTeamMoney(team, 200);
-		
-		Double actualMoney = Double.parseDouble(team.getMoney());
-		assertThat(actualMoney).isEqualTo(initialMoney + 200);
-	}
+//	
+//	@Test
+//	@Transactional
+//	void shouldSaveTeamMoney() {
+//		Team team = leagueService.findTeamById(9).get();
+//		Double initialMoney = Double.parseDouble(team.getMoney());
+//		
+//		offerService.saveTeamMoney(team, 200);
+//		
+//		Double actualMoney = Double.parseDouble(team.getMoney());
+//		assertThat(actualMoney).isEqualTo(initialMoney + 200);
+//	}
 	
 	@Test
 	@Transactional
