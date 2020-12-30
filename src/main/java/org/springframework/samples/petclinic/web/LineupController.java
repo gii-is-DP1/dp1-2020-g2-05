@@ -35,36 +35,35 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/leagues/{leagueId}/teams/{teamId}")
 public class LineupController {
 
-
 	@InitBinder("lineup")
 	public void initLineupBinder(WebDataBinder dataBinder) {
 		dataBinder.setValidator(new LineupValidator());
 	}
-	
+
 //	@InitBinder
 //	public void setAllowedFields(WebDataBinder dataBinder) {
 //	dataBinder.setDisallowedFields("id");
 //	}
-	
+
 	TablaConsultasService TCService;
 	LineupService lineupService;
 	LeagueService leagueService;
 	RecruitService recruitService;
 	GranPremioService granPremioService;
-	
+
 	@Autowired
-	public LineupController(LeagueService leagueService, LineupService lineupService,TablaConsultasService TCService,
-			RecruitService recruitService, 	GranPremioService granPremioService) {
+	public LineupController(LeagueService leagueService, LineupService lineupService, TablaConsultasService TCService,
+			RecruitService recruitService, GranPremioService granPremioService) {
 		this.lineupService = lineupService;
 		this.leagueService = leagueService;
 		this.TCService = TCService;
 		this.recruitService = recruitService;
 		this.granPremioService = granPremioService;
 	}
-	
+
 	@ModelAttribute("recruitsSelection")
 	public List<Pilot> getAllRecruits(@PathVariable("teamId") int teamId) {
-		return this.recruitService.getRecruits(teamId);
+		return this.recruitService.getPilotsByTeam(teamId);
 	}
 
 	@GetMapping("/lineups")
@@ -74,7 +73,7 @@ public class LineupController {
 		return "lineups/lineupsList";
 	}
 
-	@GetMapping(path="/lineups/{lineupId}")
+	@GetMapping(path = "/lineups/{lineupId}")
 	public String muestraAlineacionPorId(@PathVariable("lineupId") int lineupId, ModelMap model) {
 		Optional<Lineup> lineupOptional = lineupService.findLineup(lineupId);
 		if (lineupOptional.isPresent()) {
@@ -88,9 +87,10 @@ public class LineupController {
 		return "lineups/lineupDetails";
 	}
 
-	@GetMapping(path="/newLineup")
-	public String crearAlineacionGet(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, ModelMap model) {
-		
+	@GetMapping(path = "/newLineup")
+	public String crearAlineacionGet(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
+			ModelMap model) {
+
 		log.info("Creating a lineup for the team with id: " + teamId);
 		Lineup lineup = new Lineup();
 		Category currentCategory = this.TCService.getTabla().get().getCurrentCategory();
@@ -105,7 +105,8 @@ public class LineupController {
 	}
 
 	@PostMapping(value = "/newLineup")
-	public String crearAlineacionPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, @Valid Lineup lineup, BindingResult result, ModelMap model) {		
+	public String crearAlineacionPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
+			@Valid Lineup lineup, BindingResult result, ModelMap model) {
 		if (result.hasErrors()) {
 			log.warn("The lineup creation form has errors!");
 			Integer currentGPId = this.TCService.getTabla().get().getActualRace();
@@ -113,18 +114,18 @@ public class LineupController {
 			lineup.setGp(currentGP);
 			model.put("lineup", lineup);
 			return "lineups/lineupsEdit";
-		}
-		else {
+		} else {
 			this.lineupService.saveLineup(lineup);
 			log.info("Lineup succesfully created!");
 			return "redirect:/leagues/{leagueId}/teams/{teamId}/details";
 		}
 	}
 
-	@GetMapping(path="/editLineup/{lineupId}")
-	public String editarLineupGet(@RequestHeader(name = "Referer") String referer, @PathVariable("leagueId") int leagueId, 
-			@PathVariable("teamId") int teamId, @PathVariable("lineupId") int lineupId, ModelMap model) {
-		
+	@GetMapping(path = "/editLineup/{lineupId}")
+	public String editarLineupGet(@RequestHeader(name = "Referer") String referer,
+			@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
+			@PathVariable("lineupId") int lineupId, ModelMap model) {
+
 		String view = "redirect:/leagues/{leagueId}/teams/{teamId}/details";
 		Optional<Lineup> lineup = this.lineupService.findLineup(lineupId);
 
@@ -141,7 +142,8 @@ public class LineupController {
 	}
 
 	@PostMapping(value = "/editLineup/{lineupId}")
-	public String editarLineupPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, @Valid Lineup lineup, BindingResult result, ModelMap model) {
+	public String editarLineupPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
+			@Valid Lineup lineup, BindingResult result, ModelMap model) {
 		if (result.hasErrors()) {
 			log.info("The lineup edit form has errors!");
 			GranPremio currentGP = this.lineupService.findLineup(lineup.getId()).get().getGp();
@@ -161,8 +163,9 @@ public class LineupController {
 		}
 	}
 
-	@GetMapping(path="/delete/{lineupId}")
-	public String borrarLineup(@RequestHeader(name = "Referer") String referer, @PathVariable("lineupId") int lineupId, ModelMap model) {
+	@GetMapping(path = "/delete/{lineupId}")
+	public String borrarLineup(@RequestHeader(name = "Referer") String referer, @PathVariable("lineupId") int lineupId,
+			ModelMap model) {
 		Optional<Lineup> lineup = lineupService.findLineup(lineupId);
 		log.info("Deleting lineup with id: (" + lineupId + "): " + lineup.get());
 		if (lineup.isPresent()) {

@@ -31,16 +31,11 @@ public class GranPremioController {
 		this.GPService = GPService;
 		this.TCService=TCService;
 	}
-
-
 	
-	
-	
-	
-	@InitBinder("granpremio")
-	public void initGPBinder(WebDataBinder dataBinder) {
-		dataBinder.setValidator(new GranPremioValidator());
-	}
+//	@InitBinder("granpremio")
+//	public void initGPBinder(WebDataBinder dataBinder) {
+//		dataBinder.setValidator(new GranPremioValidator());
+//	}
 
 
 	@GetMapping(path="/granPremios")
