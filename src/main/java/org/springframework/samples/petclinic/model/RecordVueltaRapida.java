@@ -32,15 +32,20 @@ public class RecordVueltaRapida extends BaseEntity {
 			this.kmh = null;
 			this.vuelta = null;
 		} else {
-			this.nombrePiloto = split[1];
-			for (int i=2; i < x-2; i++) {
-				this.nombrePiloto += " " + split[i];
-			}
-			String[] tiempoSplit = split[x-2].split("'");
-			this.tiempo = (int) ((Integer.parseInt(tiempoSplit[0]) * 60 + Double.parseDouble(tiempoSplit[1]) + 1e-14) * 1000);
-			this.kmh = Double.parseDouble(split[x-1]);
+			try {
+				this.vuelta = Integer.parseInt(split[0]);
+				this.nombrePiloto = split[1];
+				this.kmh = Double.parseDouble(split[x-1]);
+				
+				for (int i=2; i < x-2; i++) {
+					this.nombrePiloto += " " + split[i];
+				}
+				
+				String[] tiempoSplit = split[x-2].split("'");
+				this.tiempo = (int) ((Integer.parseInt(tiempoSplit[0]) * 60 + Double.parseDouble(tiempoSplit[1]) + 1e-14) * 1000);
+			} catch (Exception e) {
 
-			this.vuelta = Integer.parseInt(split[0]);
+			}
 		}
 	}
 

@@ -23,7 +23,6 @@ public class RecordMejorVuelta extends BaseEntity {
 	}
 	
 	public RecordMejorVuelta(String entrada) {
-		super();
 		String atributos = entrada.split(":")[1].trim();
 		String[] split = atributos.split(" ");
 		Integer x = split.length;
@@ -33,15 +32,21 @@ public class RecordMejorVuelta extends BaseEntity {
 			this.kmh = null;
 			this.anyo= null;
 		} else { 
-			this.nombrePiloto = split[1];
-			for (int i=2; i < x-2; i++) {
-				this.nombrePiloto += " " + split[i];
-			}
-			String[] tiempoSplit = split[x-2].split("'");
-			this.tiempo = (int) ((Integer.parseInt(tiempoSplit[0]) * 60 + Double.parseDouble(tiempoSplit[1]) + 1e-14) * 1000);
-			this.kmh = Double.parseDouble(split[x-1]);
+			try {
+				this.anyo = Integer.parseInt(split[0]);
+				this.nombrePiloto = split[1];
+				this.kmh = Double.parseDouble(split[x-1]);
 
-			this.anyo = Integer.parseInt(split[0]);
+				for (int i=2; i < x-2; i++) {
+					this.nombrePiloto += " " + split[i];
+				}
+				
+				String[] tiempoSplit = split[x-2].split("'");
+				this.tiempo = (int) ((Integer.parseInt(tiempoSplit[0]) * 60 + Double.parseDouble(tiempoSplit[1]) + 1e-14) * 1000);
+
+			} catch (Exception e) {
+				
+			}
 		}
 	}
 

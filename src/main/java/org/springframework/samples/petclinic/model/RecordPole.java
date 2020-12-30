@@ -21,7 +21,6 @@ public class RecordPole extends BaseEntity {
 	}
 	
 	public RecordPole(String entrada) {
-//		super();
 		String atributos = entrada.split(":")[1].trim();
 		String[] split = atributos.split(" ");
 		Integer x = split.length;
@@ -30,13 +29,19 @@ public class RecordPole extends BaseEntity {
 			this.tiempo = null;
 			this.kmh = null;
 		} else {
-			this.nombrePiloto = split[0];
-			for (int i=1; i < x-2; i++) {
-				this.nombrePiloto += " " + split[i];
+			try {
+				this.nombrePiloto = split[0];
+				this.kmh = Double.parseDouble(split[x-1]);
+				
+				for (int i=1; i < x-2; i++) {
+					this.nombrePiloto += " " + split[i];
+				}
+				
+				String[] tiempoSplit = split[x-2].split("'");
+				this.tiempo = (int) ((Integer.parseInt(tiempoSplit[0]) * 60 + Double.parseDouble(tiempoSplit[1]) + 1e-14) * 1000);
+			} catch (Exception e) {
+
 			}
-			String[] tiempoSplit = split[x-2].split("'");
-			this.tiempo = (int) ((Integer.parseInt(tiempoSplit[0]) * 60 + Double.parseDouble(tiempoSplit[1]) + 1e-14) * 1000);
-			this.kmh = Double.parseDouble(split[x-1]);
 		}
 	}
 
