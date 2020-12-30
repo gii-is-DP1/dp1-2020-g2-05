@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Set;
 
 import org.json.JSONException;
@@ -150,6 +151,10 @@ public class PilotService {
 						}
 
 						pilot.setCategory((form.getCategory()));
+						
+						Random random = new Random();
+						pilot.setBaseValue(random.nextInt(3000) + 1000);//Valores arbitrarios, pueden cambiar
+						
 						Result result = new Result();
 
 						if (this.countByName(pilot.getLastName(), pilot.getName()) != 0) {
@@ -216,8 +221,18 @@ public class PilotService {
 				if (resultado_k.getPais().isEmpty()) {
 					pilot.setNationality("Andorra");
 
-				} else {
-					pilot.setNationality(resultado_k.getPais());
+						}
+					
+						
+						pilot.setCategory(resultado_k.getCategory());
+						
+						Random random = new Random();
+						pilot.setBaseValue(random.nextInt(3000) + 1000);//Valores arbitrarios, pueden cambiar
+						
+						Result result = new Result();
+						
+						if(this.countByName(pilot.getLastName(), pilot.getName())!=0) {
+							result.setPilot(this.pilotRepository.findByName(pilot.getLastName(), pilot.getName()).get());
 
 				}
 
