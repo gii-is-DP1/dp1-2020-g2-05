@@ -33,6 +33,11 @@
 			</spring:url> 			 			 <c:if test="${res.hasBeenRun==false}">
 			<a href="${fn:escapeXml(leagueUrl)}"> Poblar</a></c:if>
 			
+			<spring:url value="/granPremios/{id}/delete" var="deleteGranPremioUrl">
+			<spring:param name="id" value="${res.id}" />
+			</spring:url> 			 			 
+			<a href="${fn:escapeXml(deleteGranPremioUrl)}"> Delete</a>
+			
 			 </h5>
 			
 				
