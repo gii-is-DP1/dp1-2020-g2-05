@@ -80,9 +80,9 @@ public class LeagueService {
 		return leagueRepository.findTeamsByLeagueId(id);
 	}
 	
-	public Optional<User> findUserByUsername(String username) throws DataAccessException {
-		return leagueRepository.findUserByUsername(username);
-	}
+//	public Optional<User> findUserByUsername(String username) throws DataAccessException {
+//		return leagueRepository.findUserByUsername(username);
+//	}
 	
 	public String findAuthoritiesByUsername(String username) throws DataAccessException {
 		return leagueRepository.findAuthoritiesByUsername(username);
@@ -149,19 +149,24 @@ public class LeagueService {
 	}
 	
 	public boolean comprobarLigaVacia(List<League> result) {
-		   for(League league:result) {
-
-				if(league.getTeam().size()==1) {
-					this.deleteLeague(league);
-					return true;
-				}
-				if(league.getTeam().size()==0) {
-					this.deleteLeague(league);
-					return true;
-				}
+		Boolean ret = false;   
+		
+		for(League league:result) {
+			Set<Team> equipos = league.getTeam();
 				
+			if(equipos.size()==1) {
+				if(equipos.stream().collect(Collectors.toList()).get(0).getName()=="Sistema") {
+					this.deleteLeague(league);
+					ret =  true;
+				}
+			}
+			if(equipos.size()==0) {
+				this.deleteLeague(league);
+				ret =  true;
+			}
+			
 		    }
-		   return false;
+		   return ret;
 	}
 	
 //	public List<Integer> GPsPorCategoria(List<League> result) {
@@ -225,9 +230,7 @@ public class LeagueService {
 		return teamRepository.findById(teamId);
 	}
 
-//	public League increaseLeagueRaces(Integer leagueId){
-//		return leagueRepository.incrementarCarrerasLiga(leagueId);
-//	}
+
 	@Transactional(rollbackFor =  DuplicatedTeamNameException.class)
 	public void saveTeam(Team team) {
 		boolean igual =  false;

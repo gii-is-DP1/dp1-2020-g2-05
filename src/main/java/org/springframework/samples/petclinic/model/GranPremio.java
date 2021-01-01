@@ -12,10 +12,13 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -31,6 +34,7 @@ public class GranPremio extends BaseEntity {
 
 	@Column(name = "site")
 	@NotEmpty
+    @Size(min = 3, max = 50)
 	private String site;
 	
 	@Column(name = "date0")
@@ -41,10 +45,12 @@ public class GranPremio extends BaseEntity {
 	
 	@Column(name = "circuit")
 	@NotEmpty
+    @Size(min = 3, max = 50)
 	private String circuit;
 	
 	@Column(name = "racecode")
 	@NotEmpty
+    @Size(min = 3, max = 3)
 	private String raceCode;
 	
 	

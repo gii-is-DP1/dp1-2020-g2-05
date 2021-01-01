@@ -17,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -37,10 +38,10 @@ public class GranPremioController {
 	
 	
 	
-	@InitBinder("granpremio")
-	public void initGPBinder(WebDataBinder dataBinder) {
-		dataBinder.setValidator(new GranPremioValidator());
-	}
+//	@InitBinder("granpremio")
+//	public void initGPBinder(WebDataBinder dataBinder) {
+//		dataBinder.setValidator(new GranPremioValidator());
+//	}
 
 
 	@GetMapping(path="/granPremios")
@@ -68,9 +69,10 @@ public class GranPremioController {
 	
 	@PostMapping(path="/granPremios/new")
 	public String nuevoGranPremio(@Valid GranPremio granpremio,BindingResult results,ModelMap model) {	
-		
+
 		if(results.hasErrors()) {
 			model.addAttribute("errors",results.getAllErrors());
+			
 			return nuevoGranPremio(model);
 		}else {
 			granpremio.setCalendar(true);
@@ -81,6 +83,13 @@ public class GranPremioController {
 		
 		
 
+		return "redirect:/controlPanel";
+		 
+	}
+	
+	@GetMapping(path="/granPremios/{id}/delete")
+	public String eliminarGranPremio(@PathVariable("id") String id,ModelMap model) {	
+		this.GPService.delete(this.GPService.findGPById(Integer.parseInt(id)).get());
 		return "redirect:/controlPanel";
 		 
 	}
