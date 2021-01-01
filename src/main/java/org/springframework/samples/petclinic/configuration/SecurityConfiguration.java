@@ -60,6 +60,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/logging/**").permitAll()
 				.antMatchers("/manage/**").permitAll()
 				.antMatchers("/granPremios/{id}/delete").hasAnyAuthority("admin")
+				.antMatchers("/granPremios/{id}/results/**").permitAll()
 				.antMatchers("/granPremios/new").hasAnyAuthority("admin")
 				.anyRequest().denyAll()
 				.and()
