@@ -1,11 +1,10 @@
 package org.springframework.samples.petclinic.service;
 
+import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -14,21 +13,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.GranPremio;
+import org.springframework.samples.petclinic.model.Record;
 import org.springframework.samples.petclinic.repository.GranPremioRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import motogpAPI.Pais;
+import motogpAPI.RaceCode;
 
 @Service
 public class GranPremioService {
 
 	
-	@Autowired
 	private GranPremioRepository GPRepository;
-//	private TablaConsultasService TCService;
+	private TablaConsultasService TCService;
+	
 	@Autowired
 	public GranPremioService(GranPremioRepository GPRepository,TablaConsultasService TCService) {
 		this.GPRepository = GPRepository;		
-//		this.TCService=TCService;
+		this.TCService=TCService;
 	}
 	
 	
@@ -133,5 +136,51 @@ public class GranPremioService {
 //		this.numGpsIniciales.add(gp);
 //	}
 
+	public static Pais parseRaceCodeToPais(RaceCode raceCode) {
+		Pais pais = Pais.NOTFOUND;
+
+		switch (raceCode) {
+		case ESP:
+			pais = Pais.SPA;
+			break;
+		case DEU:
+			pais = Pais.GER;
+			break;
+		case IND:
+			pais = Pais.INP;
+			break;
+		case PRT:
+			pais = Pais.POR;
+			break;
+		case SMR:
+			pais = Pais.RSM;
+			break;
+		default:
+			try {
+				pais = Pais.valueOf(raceCode.toString());
+			} catch (Exception e) {
+				System.out.println(raceCode.toString() + " code not found in the list of country codes!");
+			}
+			break;
+		}
+
+		return pais;
+	}
+	
+	public void populateRecord(GranPremio gp) throws IOException {
+		Category categoria = this.TCService.getTabla().get().getCurrentCategory();
+		Integer anyo = gp.getDate0().getYear();
+		Pais pais = parseRaceCodeToPais(RaceCode.valueOf(gp.getRaceCode()));
+		System.out.println("Categoria: " + categoria);
+		System.out.println("Anyo: " + anyo);
+		System.out.println("Pais: " + pais);
+		if (!pais.equals(Pais.NOTFOUND) && anyo > 2004 && anyo < 2021) {
+			String urlBuilder = "https://www.motogp.com/es/ajax/results/parse/" + anyo + "/" + pais + "/" + categoria + "/";
+			System.out.println("URL: " + urlBuilder);
+			gp.setRecord(new Record(urlBuilder));
+//			this.GPRepository.save(gp);
+			System.out.println("Gp_Record: " + gp.getRecord());
+		}
+	}
 	
 }

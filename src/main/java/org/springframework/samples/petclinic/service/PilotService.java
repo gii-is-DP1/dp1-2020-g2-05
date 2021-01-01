@@ -28,6 +28,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -171,6 +172,10 @@ public class PilotService {
 					
 						
 						pilot.setCategory((form.getCategory()));
+						
+						Random random = new Random();
+						pilot.setBaseValue(random.nextInt(3000) + 1000);//Valores arbitrarios, pueden cambiar
+						
 						Result result = new Result();
 						
 						if(this.countByName(pilot.getLastName(), pilot.getName())!=0) {
@@ -196,82 +201,72 @@ public class PilotService {
 		}
 	}
 	
-//	2016, RaceCode.AUT, Session.RACE
+	//	2016, RaceCode.AUT, Session.RACE
 	public void poblarBDCarreraACarrera(BDCarrera form,GranPremio gp,Boolean GpEstaEnCalendario) throws JSONException, IOException, ParseException {
 
 		//EL GP QUE SE PASA COMO PARAMETRO, O ESTA VACIO, O ESTA EN EL CALENDARIO
-//				GranPremio gp = new GranPremio(); //entidad de una carrera
-				List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceCodeCampu(form.getCategory(), form.getYear(), form.getRacecode(), form.getSession());
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		//				GranPremio gp = new GranPremio(); //entidad de una carrera
+		List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceCodeCampu(form.getCategory(), form.getYear(), form.getRacecode(), form.getSession());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-				if(todosLosResultadosDeUnaCarrera.size()==0) {
-					
-				}else {
-					if(GpEstaEnCalendario==false) {
-						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-						LocalDate date = LocalDate.parse(todosLosResultadosDeUnaCarrera.get(0).getFecha(), formatter);			
-						gp.setSite(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
-						gp.setCircuit(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
-						gp.setDate0(date);
-						gp.setRaceCode(todosLosResultadosDeUnaCarrera.get(0).getRaceCode());
-						gp.setHasBeenRun(true);
-						gp.setHasBeenRun(true);
-						gp.setCalendar(true);
-						this.gpService.saveGP(gp);	
-					}
-						
-				
+		if (todosLosResultadosDeUnaCarrera.size()==0) {
 
-				
+		} else {
+			
+			if (GpEstaEnCalendario==false) {
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+				LocalDate date = LocalDate.parse(todosLosResultadosDeUnaCarrera.get(0).getFecha(), formatter);			
+				gp.setSite(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
+				gp.setCircuit(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
+				gp.setDate0(date);
+				gp.setRaceCode(todosLosResultadosDeUnaCarrera.get(0).getRaceCode());
+				gp.setHasBeenRun(true);
+				gp.setHasBeenRun(true);
+				gp.setCalendar(true);
+				this.gpService.saveGP(gp);	
+			}
 
-					for(int k=0;k<todosLosResultadosDeUnaCarrera.size();k++) {
-						InfoCarrera resultado_k = todosLosResultadosDeUnaCarrera.get(k);
-											if(GpEstaEnCalendario==false) {
+			for (int k=0;k<todosLosResultadosDeUnaCarrera.size();k++) {
+				InfoCarrera resultado_k = todosLosResultadosDeUnaCarrera.get(k);
+				if (GpEstaEnCalendario==false) {
+					gp.setCircuit(resultado_k.getLugar());
+					gp.setSite(resultado_k.getNombreEvento());
+				}
 
-						gp.setCircuit(resultado_k.getLugar());
-						gp.setSite(resultado_k.getNombreEvento());
-											}
-						
-						Pilot pilot = new Pilot();
-						pilot.setName(resultado_k.getPiloto().split(" ")[0]);
-						pilot.setLastName(resultado_k.getPiloto().split(" ")[1]);
-						pilot.setDorsal(resultado_k.getNumeros().toString());
+				Pilot pilot = new Pilot();
+				pilot.setName(resultado_k.getPiloto().split(" ")[0]);
+				pilot.setLastName(resultado_k.getPiloto().split(" ")[1]);
+				pilot.setDorsal(resultado_k.getNumeros().toString());
 
-						if(resultado_k.getPais().isEmpty()) {
-							pilot.setNationality("Andorra");
+				if (resultado_k.getPais().isEmpty()) {
+					pilot.setNationality("Andorra");
+				} else {
+					pilot.setNationality(resultado_k.getPais());
+				}
 
-						}else {
-							pilot.setNationality(resultado_k.getPais());
+				pilot.setCategory(resultado_k.getCategory());
 
-						}
-					
-						
-						pilot.setCategory(resultado_k.getCategory());
-						Result result = new Result();
-						
-						if(this.countByName(pilot.getLastName(), pilot.getName())!=0) {
-							result.setPilot(this.pilotRepository.findByName(pilot.getLastName(), pilot.getName()).get());
+				Random random = new Random();
+				pilot.setBaseValue(random.nextInt(3000) + 1000);//Valores arbitrarios, pueden cambiar
 
-						}else {
-							result.setPilot(pilot);
+				Result result = new Result();
 
-						}
-						result.setPosition(resultado_k.getPosicion());
-						result.setGp(gp);
-						result.setLap(false);
-						result.setPole(false);
-						this.resultService.saveResult(result);
-						this.savePilot(pilot);
-					}
-					
+				if (this.countByName(pilot.getLastName(), pilot.getName())!=0) {
+					result.setPilot(this.pilotRepository.findByName(pilot.getLastName(), pilot.getName()).get());
+				} else {
+					result.setPilot(pilot);
 				}
 				
-				
-				
-			}			
+				result.setPosition(resultado_k.getPosicion());
+				result.setGp(gp);
+				result.setLap(false);
+				result.setPole(false);
+				this.resultService.saveResult(result);
+				this.savePilot(pilot);
+			}
+		}
+	}			
 		
-	
-	
 //	@Autowired
 //	private UserService userService;
 //	
@@ -282,7 +277,7 @@ public class PilotService {
 //	public PilotService(PilotRepository pilotRepository) {
 //		this.pilotRepository = pilotRepository;
 //	}	
-//
+
 	@Transactional
 	public Optional<Pilot> findPilotById(int pilotId) {
 		return pilotRepository.findById(pilotId);
@@ -292,15 +287,13 @@ public class PilotService {
 //	public Collection<Pilot> findPilotByLastName(String lastName) throws DataAccessException {
 //		return pilotRepository.findByLastName(lastName);
 //	}
-//
+
 	@Transactional
 	public void savePilot(Pilot pilot) throws DataAccessException {
 		if(this.countByName(pilot.getLastName(), pilot.getName())==0) {
 			pilotRepository.save(pilot);
 		}
-		
 	}
-	
 	
 	public Optional<Pilot> findByName(String lastName,String name) {
 		return this.pilotRepository.findByName(lastName, name);
@@ -310,11 +303,6 @@ public class PilotService {
 		return this.pilotRepository.countByName(lastName, name);
 	}
 
-
-	
-	
-	
-	
 	@Transactional(readOnly = true)	
 	public Page<Pilot> findAllPage(Pageable pageable) throws DataAccessException {
 		return pilotRepository.findAllPage(pageable);

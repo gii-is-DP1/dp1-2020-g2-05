@@ -37,15 +37,20 @@ public class LeagueService {
 	private UserService userService;
 	private PilotService pilotService;
 	private RecruitService recruitService;
+	private TablaConsultasService TCService;
+	private OfferService offerService;
 
 	@Autowired
 	public LeagueService(LeagueRepository leagueRepository, TeamRepository teamRepository,
-			UserService userService, PilotService pilotService, RecruitService recruitService) {
+			UserService userService, PilotService pilotService, RecruitService recruitService,
+			TablaConsultasService TCService, OfferService offerService) {
 		this.leagueRepository = leagueRepository;
 		this.teamRepository = teamRepository;
 		this.userService = userService;
 		this.pilotService = pilotService;
 		this.recruitService = recruitService;
+		this.TCService = TCService;
+		this.offerService = offerService;
 	}
 	
 //	@Autowired
@@ -251,6 +256,12 @@ public class LeagueService {
 		}
 		
 	}
+	
+	@Transactional
+	public void saveTeamMoney(Team team, Integer price) throws DataAccessException {
+		team.setMoney(String.valueOf(Integer.parseInt(team.getMoney()) + price));
+		saveTeam(team);
+	}
 
 	@Transactional
 	public void saveSystemTeam(League league) {
@@ -262,18 +273,20 @@ public class LeagueService {
 		sysTeam.setUser(userService.findUser("admin1").get());
 		teamRepository.save(sysTeam);
 		
-		//Fichamos y ofertamos a todos los pilotos con la escudería sistema
-		recruitAndOfferAll(sysTeam);
+		//Fichamos y ofertamos a todos los pilotos con la escudería sistema que estén en la categoría actual
+		recruitAndOfferAll(sysTeam,TCService.getTabla().get().getCurrentCategory());
 	}
 	@Transactional
-	public void recruitAndOfferAll(Team t) {
+	public void recruitAndOfferAll(Team t,Category cat) {
 		Iterable<Pilot> pilots = pilotService.findAll();
 		List<Pilot> listPilots = new ArrayList<Pilot>();
 		pilots.forEach(listPilots::add);
 		for (int i=0;i<listPilots.size();i++) {
-			recruitService.saveRecruit(listPilots.get(i),t);
-			Pilot p = listPilots.get(i);
-//			offerService.putOnSale(recruitService.getRecruitByPilotId(p.getId()), p.getValorBase());
+			if(listPilots.get(i).getCategory().equals(cat)) {
+				recruitService.saveRecruit(listPilots.get(i),t);
+				Pilot p = listPilots.get(i);
+				offerService.putOnSale(recruitService.getRecruitByPilotId(p.getId()).get(), p.getBaseValue());
+			}
 		}
 	}
 
@@ -282,7 +295,7 @@ public class LeagueService {
 	}
 
 	public List<Team> findTeamByUsername(String username){
-		return teamRepository.findTeamByUsername(username );
+		return teamRepository.findTeamByUsername(username);
 	}
 	
 	public Optional<Team> findTeamByUsernameAndLeagueId(String username, Integer id){
