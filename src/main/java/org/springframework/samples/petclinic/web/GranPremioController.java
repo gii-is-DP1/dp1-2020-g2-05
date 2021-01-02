@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,9 +33,9 @@ public class GranPremioController {
 	@Autowired
 	public GranPremioController(GranPremioService GPService,TablaConsultasService TCService) {
 		this.GPService = GPService;
-		this.TCService=TCService;
+		this.TCService = TCService;
 	}
-	
+
 //	@InitBinder("granpremio")
 //	public void initGPBinder(WebDataBinder dataBinder) {
 //		dataBinder.setValidator(new GranPremioValidator());
@@ -62,9 +63,8 @@ public class GranPremioController {
 	
 	@PostMapping(path="/granPremios/new")
 	public String nuevoGranPremio(@Valid GranPremio granpremio, BindingResult results, ModelMap model) {	
-		
 		if (results.hasErrors()) {
-			model.addAttribute("errors",results.getAllErrors());
+			model.addAttribute("errors", results.getAllErrors());
 			return nuevoGranPremio(model);
 		} else {
 			granpremio.setCalendar(true);
@@ -78,6 +78,12 @@ public class GranPremioController {
 			model.addAttribute("message","Gran Premio loaded succesfully!");
 		}
 		
+		return "redirect:/controlPanel";
+	}
+	
+	@GetMapping(path="/granPremios/{id}/delete")
+	public String eliminarGranPremio(@PathVariable("id") String id,ModelMap model) {	
+		this.GPService.delete(this.GPService.findGPById(Integer.parseInt(id)).get());
 		return "redirect:/controlPanel";
 	}
 	
