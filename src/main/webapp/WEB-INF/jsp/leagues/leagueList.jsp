@@ -5,60 +5,61 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
 
+
+<head>
+<link rel="stylesheet" href="/resources/styles/league.css">
+ 	
+</head>
 <petclinic:layout pageName="leagues">
+
 	<h2>Leagues</h2>
 	
-	<table id="leaguesTable" class="table table-striped">
-		<thead>
-			<tr>
-				<th>Name</th>
-			<c:if test="${admin==true}"><th>Code</th></c:if>	
-				<th>Date</th>
-<!-- 				<th>Category</th> -->
-				<th>Teams</th>
-			</tr>
-		</thead>
-		<tbody>
+	<div id="divLeagueTable">
+<!-- 	<table> -->
+<!-- 		<thead> -->
+<!-- 			<tr> -->
+<!-- 				<th>Name</th> -->
+<%-- 			<c:if test="${admin==true}"><th>Code</th></c:if>	 --%>
+<!-- 				<th>Date</th> -->
+<!-- 				<th>Teams</th> -->
+<!-- 			</tr> -->
+<!-- 		</thead> -->
+<!-- 		<tbody>	 -->
 			<c:forEach items="${ligas}" var="league">
-					<tr>	<!--  onclick="window.location='/leagues/${league.id}/details'"  -->
-					<td><c:out value="${league.name} " /></td>
-					<c:if test="${admin==true}"><td><c:out value="${league.leagueCode} " /></td></c:if>
-					<td><c:out value="${league.leagueDate}" /></td>
-<%-- 					<c:if test="${league.racesCompleted<10}">   --%>
-<!-- 					<td>Moto 3 </td>					 -->
-<%-- 					</c:if> --%>
-<%-- 					<c:if test="${league.racesCompleted>=10 && league.racesCompleted<15}">   --%>
-<!-- 					<td>Moto 2 </td>					 -->
-<%-- 					</c:if> --%>
-<%-- 					<c:if test="${league.racesCompleted>=15}">   --%>
-<!-- 					<td>Moto GP </td>					 -->
-<%-- 					</c:if>   --%>
-					<td>
-					<spring:url value="/leagues/{leagueId}/teams" var="leagueUrl">
+
+					<div class="columns">
+						<ul class="price">
+							<li class="header"><c:out value="${league.name} " /></li>
+							<c:if test="${admin==true}"><li class="grey"><c:out value="${league.leagueCode} " /></li></c:if>
+							<li><c:out value="${league.leagueDate}" /></li>
+							<li class="grey"> <spring:url value="/leagues/{leagueId}/teams" var="leagueUrl">
 							<spring:param name="leagueId" value="${league.id}" />
-						</spring:url> <a href="${fn:escapeXml(leagueUrl)}">Teams</a>
-					</td>
+						</spring:url> <a class="button" href="${fn:escapeXml(leagueUrl)}">Teams</a> </li>
+							
+						</ul>
+					</div>
+
+<!-- 					<tr>	 onclick="window.location='/leagues/${league.id}/details'"  -->
+<%-- 					<td><c:out value="${league.name} " /></td> --%>
+<%-- 					<c:if test="${admin==true}"><td><c:out value="${league.leagueCode} " /></td></c:if> --%>
+<%-- 					<td><c:out value="${league.leagueDate}" /></td> --%>
+<!-- 					<td> -->
+<%-- 					<spring:url value="/leagues/{leagueId}/teams" var="leagueUrl"> --%>
+<%-- 							<spring:param name="leagueId" value="${league.id}" /> --%>
+<%-- 						</spring:url> <a href="${fn:escapeXml(leagueUrl)}">Teams</a> --%>
+<!-- 					</td> -->
 					
-				</tr>
+<!-- 				</tr> -->
 			</c:forEach>
-		</tbody>
-	</table>
-					<spring:url value="/BD/carrerasBD" var="leagueUrl">
-						</spring:url> <a href="${fn:escapeXml(leagueUrl)}"><img src="resources/images/meta.png" style="height:15px;weight:15px;border:none;"/></a>
-<%-- 					<input id="button${league.id}"  type="submit" name="button" onclick="window.location.href='/leagues'" value="enter"/> --%>
-<%-- 		<c:if test="${league.racesCompleted<10}">   --%>
-<!-- 					<h2>Moto 3 </h2>					 -->
-<%-- 					</c:if> --%>
-<%-- 					<c:if test="${league.racesCompleted>=10 && league.racesCompleted<15}">   --%>
-<!-- 					<h2>Moto 2 </h2>				 -->
-<%-- 					</c:if> --%>
-<%-- 					<c:if test="${league.racesCompleted>=15}">   --%>
-<!-- 					<h2>Moto GP </h2>					 -->
-<%-- 					</c:if>   --%>
-	<spring:url value="/granPremios" var="leagueUrl">
-	</spring:url> <a href="${fn:escapeXml(leagueUrl)}">Gran Premios</a>
+<!-- 		</tbody> -->
+<!-- 	</table> -->
+	</div>
+	
+				<div>
 				<h4>Current Category : <c:out value="${categoriaActual}" /></h4>
 				<h4>Races Completed : <c:out value="${carrerasCompletadas}" /></h4>
-<%-- 				<h4>Races Completed(MOTO2) : <c:out value="${rcc2}" /></h4> --%>
-<%-- 				<h4>Races Completed(MOTOgp) : <c:out value="${rccgp}" /></h4> --%>
+				
+  </div>
+    
+
 </petclinic:layout>
