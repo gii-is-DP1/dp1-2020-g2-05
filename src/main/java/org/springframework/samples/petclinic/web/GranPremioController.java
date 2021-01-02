@@ -20,12 +20,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 public class GranPremioController {
 	
 	GranPremioService GPService;
 	TablaConsultasService TCService;
-
 	
 	@Autowired
 	public GranPremioController(GranPremioService GPService,TablaConsultasService TCService) {
@@ -50,7 +52,6 @@ public class GranPremioController {
 		model.addAttribute("listaGP",gps.stream().sorted(Comparator.comparing(GranPremio::getId)).collect(Collectors.toList()));
 		model.addAttribute("racesCompleted",this.TCService.getTabla().get().getRacesCompleted());
 		return "/gp/gpList";
-		 
 	}
 	
 	@GetMapping(path="/granPremios/new")
@@ -60,20 +61,23 @@ public class GranPremioController {
 	}
 	
 	@PostMapping(path="/granPremios/new")
-	public String nuevoGranPremio(@Valid GranPremio granpremio,BindingResult results,ModelMap model) {	
+	public String nuevoGranPremio(@Valid GranPremio granpremio, BindingResult results, ModelMap model) {	
 		
-		if(results.hasErrors()) {
+		if (results.hasErrors()) {
 			model.addAttribute("errors",results.getAllErrors());
 			return nuevoGranPremio(model);
-		}else {
+		} else {
 			granpremio.setCalendar(true);
 			granpremio.setHasBeenRun(false);
+			try {
+				this.GPService.populateRecord(granpremio);
+			} catch (Exception e) {
+				log.warn("Sorry, records are unavailable for this GP!"); // Provisional
+			}
 			this.GPService.saveGP(granpremio);
 			model.addAttribute("message","Gran Premio loaded succesfully!");
 		}
 		
-		
-
 		return "redirect:/controlPanel";
 	}
 	
