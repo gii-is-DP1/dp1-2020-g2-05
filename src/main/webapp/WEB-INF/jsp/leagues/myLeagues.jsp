@@ -11,7 +11,7 @@
 	<c:if test="${yaTienesEquipo}"><h2>You already have a team in this League :( ! </h2></c:if> 
 	<c:if test="${yaTieneMaxLigas}"><h2>This league already have 5 teams !/h2></c:if>
 	<c:if test="${yaTieneMaxLigas}"><h2>You have no Leagues!</h2></c:if>
-	<c:if test="${yaTieneMaxTeams}"><h2>You already participate in 5 leagues!</h2></c:if>
+	<c:if test="${yaTieneMaxTeams}"><h2>This league already have 5 teams! :(</h2></c:if>
 	<c:if test="${noTengoLigas==false}"><table id="leaguesTable" class="table table-striped">
 		<thead>
 			<tr>

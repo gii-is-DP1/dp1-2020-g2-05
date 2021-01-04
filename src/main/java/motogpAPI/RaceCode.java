@@ -7,29 +7,29 @@ public enum RaceCode {
 	AUS, // Philip Island
 	AUT, // Austria
 	BEL, // Belgium
-	BRA, // Brazil              // No esta en Pais
+//	BRA, // Brazil              // No esta en Pais
 	CAT, // Catalunya
-	CHE, // Switzerland         // No esta en Pais
+//	CHE, // Switzerland         // No esta en Pais
 	CHN, // China
 	CZE, // Brno
 	DEU, // Sachsenring      
 	ESP, // Jerez
-	EUR, // Europe			    // No esta en Pais (creo)
+//	EUR, // Europe			    
 	FIN, // Finland
 	FRA, // Le Mans
-	FRG, // West Germany	    // No esta en Pais
+//	FRG, // West Germany	    // No esta en Pais
 	GBR, // Silverstone
-	GDR, // East Germany	    // No esta en Pais
+//	GDR, // East Germany	    // No esta en Pais
 	HUN, // Hungary
 	IDN, // Indonesian
 	IND, // Indianapolis
-	IOM, // Isle of Man		    // No esta en Pais
+//	IOM, // Isle of Man		    // No esta en Pais
 	ITA, // Mugello
 	JPN, // Motegi from 2004, Suzuka until 2003
 	MAD, // Madrid
-	MYL, // Sepang              // No esta en Pais
-	NAT, // Nations			    // No esta en Pais
-	NLD, // Assen		        // No esta en Pais
+//	MYL, // Sepang              // No esta en Pais
+//	NAT, // Nations			    // No esta en Pais
+//	NLD, // Assen		        // No esta en Pais
 	PAC, // Motegi until 2003
 	PRT, // Estoril
 	QAT, // Qatar
@@ -37,10 +37,10 @@ public enum RaceCode {
 	SWE, // Sweden
 	THA, // Thailand
 	TUR, // Turkey
-	ULS, // Ulster				// No esta en Pais
+//	ULS, // Ulster				// No esta en Pais
 	USA, // Austin 2016-2017, Laguna Seca
 	VAL, // Valencia
-	VEN, // Venezuela			// No esta en Pais
-	YUG, // Yugoslavia			// No esta en Pais
-	ZAF, // Africas				// No esta en Pais
+//	VEN, // Venezuela			// No esta en Pais
+//	YUG, // Yugoslavia			// No esta en Pais
+//	ZAF, // Africas				// No esta en Pais
 }

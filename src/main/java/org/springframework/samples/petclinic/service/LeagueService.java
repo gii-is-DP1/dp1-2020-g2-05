@@ -37,15 +37,20 @@ public class LeagueService {
 	private UserService userService;
 	private PilotService pilotService;
 	private RecruitService recruitService;
+	private TablaConsultasService TCService;
+	private OfferService offerService;
 
 	@Autowired
 	public LeagueService(LeagueRepository leagueRepository, TeamRepository teamRepository,
-			UserService userService, PilotService pilotService, RecruitService recruitService) {
+			UserService userService, PilotService pilotService, RecruitService recruitService,
+			TablaConsultasService TCService, OfferService offerService) {
 		this.leagueRepository = leagueRepository;
 		this.teamRepository = teamRepository;
 		this.userService = userService;
 		this.pilotService = pilotService;
 		this.recruitService = recruitService;
+		this.TCService = TCService;
+		this.offerService = offerService;
 	}
 	
 //	@Autowired
@@ -72,9 +77,11 @@ public class LeagueService {
 		return leagueRepository.findLeagueByLeagueCode(leagueCode);
 	}
 	
+
 	public Optional<User> findUserByUsername(String username) throws DataAccessException {
 		return leagueRepository.findUserByUsername(username);
 	}
+
 	
 	public String findAuthoritiesByUsername(String username) throws DataAccessException {
 		return leagueRepository.findAuthoritiesByUsername(username);
@@ -141,19 +148,24 @@ public class LeagueService {
 	}
 	
 	public boolean comprobarLigaVacia(List<League> result) {
-		   for(League league:result) {
-
-				if(league.getTeam().size()==1) {
-					this.deleteLeague(league);
-					return true;
-				}
-				if(league.getTeam().size()==0) {
-					this.deleteLeague(league);
-					return true;
-				}
+		Boolean ret = false;   
+		
+		for(League league:result) {
+			Set<Team> equipos = league.getTeam();
 				
+			if(equipos.size()==1) {
+				if(equipos.stream().collect(Collectors.toList()).get(0).getName()=="Sistema") {
+					this.deleteLeague(league);
+					ret =  true;
+				}
+			}
+			if(equipos.size()==0) {
+				this.deleteLeague(league);
+				ret =  true;
+			}
+			
 		    }
-		   return false;
+		   return ret;
 	}
 	
 //	public List<Integer> GPsPorCategoria(List<League> result) {
@@ -199,64 +211,13 @@ public class LeagueService {
 	}
 	
 	
-//	@Transactional
-//	public void saveTeam(Team team) throws DataAccessException {
-//		leagueRepository.save(team);
-//	}
-	
+
 	
 	public Optional<League> findLeague(Integer leagueId) {
 		return leagueRepository.findById(leagueId);
 	}
 	
 
-//	public League increaseLeagueRaces(Integer leagueId){
-//		return leagueRepository.incrementarCarrerasLiga(leagueId);
-//	}
-	@Transactional(rollbackFor =  DuplicatedTeamNameException.class)
-	public void saveTeam(Team team) {
-		boolean igual =  false;
-		Optional<League> league = findLeague(team.getLeague().getId());
-		List<Team> list = league.get().getTeam().stream().collect(Collectors.toList());
-		for(int i = 0; i<list.size(); i++) {
-			Team t = list.get(i);
-			if(t.getName().equals(team.getName())) {
-				igual = true;
-			}
-		}
-		
-		if(!igual) {
-			teamRepository.save(team);
 
-		}else {
-			System.out.println("hhhh");
-		}
-		
-	}
-
-	@Transactional
-	public void saveSystemTeam(League league) {
-		Team sysTeam = new Team();
-		sysTeam.setName("Sistema");
-		sysTeam.setLeague(league);
-		sysTeam.setMoney(0);
-		sysTeam.setPoints(0);
-		sysTeam.setUser(userService.findUser("admin1").get());
-		teamRepository.save(sysTeam);
-		
-		//Fichamos y ofertamos a todos los pilotos con la escudería sistema
-		recruitAndOfferAll(sysTeam);
-	}
-	@Transactional
-	public void recruitAndOfferAll(Team t) {
-		Iterable<Pilot> pilots = pilotService.findAll();
-		List<Pilot> listPilots = new ArrayList<Pilot>();
-		pilots.forEach(listPilots::add);
-		for (int i=0;i<listPilots.size();i++) {
-			recruitService.saveRecruit(listPilots.get(i),t);
-			Pilot p = listPilots.get(i);
-//			offerService.putOnSale(recruitService.getRecruitByPilotId(p.getId()), p.getValorBase());
-		}
-	}
 
 }
