@@ -27,7 +27,13 @@ public class TradeService {
 	}
 
 	public void saveTrade(Integer price, TransactionType transactionType, String concept, Team team, Offer offer) {
-		Trade trade = new Trade(LocalDate.now(), price, transactionType, concept, team, offer);
+		Trade trade = new Trade();
+		trade.setDate(LocalDate.now());
+		trade.setPrice(price);
+		trade.setTransactionType(transactionType);
+		trade.setConcept(concept);
+		trade.setTeam(team);
+		trade.setOffer(offer);
 		tradeRepository.save(trade);
 	}
 

@@ -23,7 +23,7 @@ public class TradeController {
 
 	@GetMapping("/leagues/{leagueID}/teams/{teamID}/trades")
 	public ModelAndView getTrades(@PathVariable("leagueID") int leagueID, @PathVariable("teamID") int teamID) {
-		ModelAndView mav = new ModelAndView("");
+		ModelAndView mav = new ModelAndView("leagues/tradesList");
 		List<Trade> trades = tradeService.getTeamTrades(teamID);
 		mav.addObject("trades", trades);
 		return mav;

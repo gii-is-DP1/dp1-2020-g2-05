@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -22,6 +24,7 @@ public class Trade extends BaseEntity {
 	@NotNull
 	private Integer price;
 
+	@Enumerated(EnumType.STRING)
 	@Column(name = "transactionType")
 	@NotNull
 	private TransactionType transactionType;
@@ -36,16 +39,16 @@ public class Trade extends BaseEntity {
 	@OneToOne()
 	private Offer offer;
 
-	public Trade(@NotNull LocalDate date, @NotNull Integer price, @NotNull TransactionType transactionType,
-			@NotBlank String concept, Team team, Offer offer) {
-		super();
-		this.date = date;
-		this.price = price;
-		this.transactionType = transactionType;
-		this.concept = concept;
-		this.team = team;
-		this.offer = offer;
-	}
+//	public Trade(@NotNull LocalDate date, @NotNull Integer price, @NotNull TransactionType transactionType,
+//			@NotBlank String concept, Team team, Offer offer) {
+//		super();
+//		this.date = date;
+//		this.price = price;
+//		this.transactionType = transactionType;
+//		this.concept = concept;
+//		this.team = team;
+//		this.offer = offer;
+//	}
 
 	public LocalDate getDate() {
 		return date;
@@ -63,11 +66,11 @@ public class Trade extends BaseEntity {
 		this.price = price;
 	}
 
-	public TransactionType getTipoTransaccion() {
+	public TransactionType getTransactionType() {
 		return transactionType;
 	}
 
-	public void setTipoTransaccion(TransactionType transactionType) {
+	public void setTransactionType(TransactionType transactionType) {
 		this.transactionType = transactionType;
 	}
 
@@ -77,6 +80,22 @@ public class Trade extends BaseEntity {
 
 	public void setConcept(String concept) {
 		this.concept = concept;
+	}
+
+	public Team getTeam() {
+		return team;
+	}
+
+	public void setTeam(Team team) {
+		this.team = team;
+	}
+
+	public Offer getOffer() {
+		return offer;
+	}
+
+	public void setOffer(Offer offer) {
+		this.offer = offer;
 	}
 
 }

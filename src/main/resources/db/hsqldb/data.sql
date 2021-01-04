@@ -151,6 +151,7 @@ INSERT INTO team(id,name,points,money,league_id, username) VALUES (4,'sergio',51
 INSERT INTO team(id,name,points,money,league_id, username) VALUES (5,'Miguesnow',7572,846,2, 'migniearj');
 INSERT INTO team(id,name,points,money,league_id, username) VALUES (6,'MigueSnOw',577,686,1, 'martorsan13');
 INSERT INTO team(id,name,points,money,league_id, username) VALUES (7,'Miguelito',2757,4686,1, 'aleruijur');
+INSERT INTO team(id,name,points,money,league_id, username) VALUES (11,'polloRebozado',120,40000,2,'alvcorcas');
 
 INSERT INTO recruit(id,pilot_id,team_id) VALUES (1,1,1);
 INSERT INTO recruit(id,pilot_id,team_id) VALUES (2,2,1);

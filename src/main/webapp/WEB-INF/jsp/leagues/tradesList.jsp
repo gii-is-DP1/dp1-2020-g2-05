@@ -3,6 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
+<%@ page import="org.springframework.samples.petclinic.model.TransactionType" %>
 
 <petclinic:layout pageName="trades">
 	<h2>Trades</h2>
@@ -12,15 +13,15 @@
 			<tr>
 				<th>Date</th>
 				<th>Price</th>
-				<th>Concept></th>
+				<th>Concept</th>
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${trades.trades}" var="trade">
+			<c:forEach items="${trades}" var="trade">
 				<tr>
 					<td><c:out value="${trade.date}" /></td>
 
-					<c:if ${trade.transactionType == TransactionType.BUY}>
+					<c:if test = "${trade.transactionType == TransactionType.SELL}">
 						<td>
 							<p style="color: green;">
 								+
@@ -32,7 +33,7 @@
 						</td>
 					</c:if>
 
-					<c:if ${trade.transactionType == TransactionType.BUY}>
+					<c:if test = "${trade.transactionType == TransactionType.BUY}">
 						<td>
 							<p style="color: red;">
 								+
@@ -46,9 +47,8 @@
 							</p>
 						</td>
 					</c:if>
-
-
 				</tr>
+<%-- 				<tr> <c:out value="${trade.transactionType}"/>  </tr> --%>
 			</c:forEach>
 		</tbody>
 	</table>
