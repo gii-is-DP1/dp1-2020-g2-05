@@ -37,7 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 public class TeamController {
 
 	UserService userService;
-	
+
 	TeamService teamService;
 
 	LeagueService leagueService;
@@ -55,7 +55,13 @@ public class TeamController {
 		this.teamService = teamService;
 		this.userService = userService;
 		this.recruitService = recruitService;
+
 		this.lineupService = lineupService;	
+
+
+		this.lineupService = lineupService;
+		this.offerService = offerService;
+
 		this.lineupService = lineupService;
 	}
 
@@ -64,7 +70,6 @@ public class TeamController {
 		dataBinder.setValidator(new TeamValidator());
 	}
 
-
 	private String authority;
 
 	private Boolean EquipoSi = false;
@@ -72,7 +77,6 @@ public class TeamController {
 	private Boolean Error = false;
 	private Boolean Editar = false;
 	private Boolean BorrarDesdeMyTeams = false;
-
 
 	public User getUserSession() {
 		User usuario = new User();
@@ -107,16 +111,15 @@ public class TeamController {
 		return "/leagues/TeamsEdit";
 	}
 
-	
-	
 	//// ESTE ES EL METODO PROFESOR////// ---------->
-	
 
 	@PostMapping(value = "/leagues/{leagueId}/teams/new")
-	public String saveNewTeam(@PathVariable("leagueId") int leagueId, @Valid Team team, BindingResult result, ModelMap model) {
-		log.debug("Creando el equipo " + team);
-
+	public String saveNewTeam(@PathVariable("leagueId") int leagueId, @Valid Team team, BindingResult result,
+			ModelMap model) {
 		League league = this.leagueService.findLeague(leagueId).get();
+		team.setLeague(league);
+
+
 		log.debug("Asignandole la liga " + league);
 		team.setLeague(league);
 		
@@ -129,6 +132,7 @@ public class TeamController {
 			model.put("team", team);
 			model.put("message", result.getAllErrors());
 			return "/leagues/TeamsEdit";
+
 
 		}else {
 		
@@ -153,8 +157,7 @@ public class TeamController {
 			log.info("Equipo " + team + " guardado correctamente.");
 			EquipoSi=true;
 
-			return "redirect:/leagues/{leagueId}/teams";
-			
+				return "redirect:/leagues/{leagueId}/teams";
 
 			}
 		}
@@ -202,7 +205,7 @@ public class TeamController {
 			return setPrice(leagueId, teamId, recruitId, modelMap);
 		} else {
 			Optional<Recruit> opRecruit = recruitService.findRecruit(recruitId);
-			if (opRecruit.isPresent() && recruitService.getRecruitsByTeam(teamId).size() == 2) {// RN:08 Mínimo de
+			if (opRecruit.isPresent() && recruitService.getRecruitsByTeam(teamId).size() >= 2) {// RN:08 Mínimo de
 																								// fichajes
 				offerService.putOnSale(opRecruit.get(), offer.getPrice());
 				return "redirect:/leagues/{leagueId}/market";
@@ -247,14 +250,12 @@ public class TeamController {
 
 		authority = this.leagueService.findAuthoritiesByUsername(team.get().getUser().getUsername());
 
-
 		model.put("Editar", true);
-		if(authority.equals("admin")) {
+		if (authority.equals("admin")) {
 			model.put("admin", true);
-		}else {
+		} else {
 			model.put("usuario", true);
 		}
-
 
 		Editar = true;
 
@@ -287,11 +288,11 @@ public class TeamController {
 			log.info("Equipo " + team + " guardado editado correctamente");
 
 			model.addAttribute("message", "Team successfully Updated!");
-			
-			if(BorrarDesdeMyTeams != true) {
-			return "redirect:/leagues/{leagueId}/teams";
-			}else {
-				BorrarDesdeMyTeams =  false;
+
+			if (BorrarDesdeMyTeams != true) {
+				return "redirect:/leagues/{leagueId}/teams";
+			} else {
+				BorrarDesdeMyTeams = false;
 				return "redirect:/myTeams";
 
 			}
