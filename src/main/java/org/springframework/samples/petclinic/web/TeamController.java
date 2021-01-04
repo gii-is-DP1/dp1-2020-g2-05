@@ -31,6 +31,8 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @Controller
 public class TeamController {
 
@@ -53,9 +55,7 @@ public class TeamController {
 		this.teamService = teamService;
 		this.userService = userService;
 		this.recruitService = recruitService;
-
 		this.lineupService = lineupService;	
-		this.offerService = offerService;
 		this.lineupService = lineupService;
 	}
 
@@ -96,6 +96,7 @@ public class TeamController {
 
 	@GetMapping(path = "/leagues/{leagueId}/teams/new")
 	public String crearEquipo(@PathVariable("leagueId") int leagueId, ModelMap model) {
+		log.info("Abriendo el formulario para crear un equipo");
 		Team team = new Team();
 		League liga = this.leagueService.findLeague(leagueId).get();
 		team.setLeague(liga);
@@ -113,9 +114,13 @@ public class TeamController {
 
 	@PostMapping(value = "/leagues/{leagueId}/teams/new")
 	public String saveNewTeam(@PathVariable("leagueId") int leagueId, @Valid Team team, BindingResult result, ModelMap model) {
-		League league = this.leagueService.findLeague(leagueId).get();
-		team.setLeague(league);
+		log.debug("Creando el equipo " + team);
 
+		League league = this.leagueService.findLeague(leagueId).get();
+		log.debug("Asignandole la liga " + league);
+		team.setLeague(league);
+		
+		log.info("La liga " + league + " ha sido asignada correctamente");
 //		System.out.println(league.get().getId().equals(team.getLeague().getId()));
 		System.out.println(team.getLeague());
 		System.out.println(team.getUser());
@@ -127,11 +132,14 @@ public class TeamController {
 
 		}else {
 		
+			log.debug("Asignandole el usuario actual al equipo");
 		team.setUser(this.userService.getUserSession());
+		log.info("Usuario " + this.userService.getUserSession() + "asignado correctamente");
 		Optional<Team> tem = this.teamService.findTeamByUsernameAndLeagueId(team.getUser().getUsername(), leagueId);
 			
 			
 		 if(tem.isPresent()){
+			 log.warn("El equipo " + team + " no se ha podido crear");
 			model.addAttribute("message", "Sorry, you cannot have more teams in this league!");
 			EquipoNo=true;
 			return "redirect:/leagues/{leagueId}/teams";
@@ -140,7 +148,9 @@ public class TeamController {
 			else {
 			team.setMoney(2000);
 			team.setPoints(0);
+			log.debug("Guardando el equipo " + team + " en la base de datos.");
 			this.teamService.saveTeam(team);
+			log.info("Equipo " + team + " guardado correctamente.");
 			EquipoSi=true;
 
 			return "redirect:/leagues/{leagueId}/teams";
@@ -206,11 +216,17 @@ public class TeamController {
 	@GetMapping(path = "/leagues/{leagueId}/teams/{teamId}/delete")
 	public String borrarEscuderia(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
 			ModelMap model) {
+		
 		Optional<Team> team = this.teamService.findTeamById(teamId);
+		log.info("Preparandose para borrar el equipo " + team );
+		
 		if (team.isPresent()) {
+			log.debug("Borrando el equipo " + team );
 			teamService.delete(team.get());
+			log.info("Equipo " + team + "borrado correctamente");
 			model.addAttribute("message", "Team successfully deleted!");
 		} else {
+			log.info("El equipo " + team + "no se ha podido borrar correctamente" );
 			model.addAttribute("message", "Team not found!");
 		}
 		if (BorrarDesdeMyTeams) {
@@ -226,6 +242,7 @@ public class TeamController {
 	public String editarPiloto(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
 			ModelMap model) {
 		Optional<Team> team = this.teamService.findTeamById(teamId);
+		log.info("Preparandose para editar el equipo " + team );
 		model.put("team", team.get());
 
 		authority = this.leagueService.findAuthoritiesByUsername(team.get().getUser().getUsername());
@@ -250,19 +267,25 @@ public class TeamController {
 	@PostMapping(value = "/leagues/{leagueId}/teams/{teamId}/edit")
 	public String editarPilotoPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
 			@Valid Team team, ModelMap model, BindingResult result) {
-		System.out.println(result);
 		if (result.hasErrors()) {
+			log.warn("El equipo " + team + " no ha podido ser editado correctamente");
 			model.put("team", team);
 
 			return "leagues/TeamsEdit";
 		} else {
+			log.info("Equipo " + team + " editado correctamente");
 			User usuario = this.userService.getUserSession();
-
 			Team teamToUpdate = this.teamService.findTeamById(team.getId()).get();
 			BeanUtils.copyProperties(team, teamToUpdate);
 			model.put("team", team);
 			teamToUpdate.setUser(usuario);
+			
+			log.debug("Guardando el equipo " + team + " editado correctamente");
+
 			this.teamService.saveTeam(teamToUpdate);
+			
+			log.info("Equipo " + team + " guardado editado correctamente");
+
 			model.addAttribute("message", "Team successfully Updated!");
 			
 			if(BorrarDesdeMyTeams != true) {
@@ -278,7 +301,12 @@ public class TeamController {
 	@GetMapping("/myTeams")
 	public String myTeams(ModelMap modelMap) {
 		User user = this.userService.getUserSession();
+		log.debug("Obteniendo los equipos de un usuario");
+
 		List<Team> team = this.teamService.findTeamByUsername(user.getUsername());
+		
+		log.info("Equipos encontrados correctamente");
+
 		modelMap.addAttribute("teams", team);
 		BorrarDesdeMyTeams = true;
 		return "leagues/myTeams";
@@ -287,9 +315,18 @@ public class TeamController {
 	@GetMapping(value = "/leagues/{leagueId}/teams")
 	public String showTeams(@PathVariable int leagueId, Map<String, Object> model) {
 		User usuario = this.userService.getUserSession();
+		
+		log.debug("Obteniendo equipos de la liga" + this.leagueService.findLeague(leagueId).get());
+
 		List<Team> tem = this.teamService.findTeamByLeagueId(leagueId);
+		
+		log.info("Equipos obtenindos correctamente");
+		log.debug("Ordenando los equipos");
+		
 		tem = tem.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
-		System.out.println(tem);
+		
+		log.info("Equipos ordenados correctamente");
+
 		model.put("teams", tem);
 		model.put("league", this.leagueService.findLeague(leagueId).get());
 		model.put("user", usuario);
