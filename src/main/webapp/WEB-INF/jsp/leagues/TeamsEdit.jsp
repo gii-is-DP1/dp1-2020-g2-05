@@ -19,8 +19,8 @@
         	<input type="hidden" name="id" value="${team.id}"/>
             <input type="hidden"  name="league" value="${leagueId}"/>	
             <petclinic:inputField label="Name" name="name"/>
-            <petclinic:inputField label="points" name="points"/>
-            <petclinic:inputField label="money" name="money"/>
+    		<input type="hidden"  name="points" value="0"/>
+            <input type="hidden"  name="money" value="2000"/>
             <input type="hidden"  name="league" value="${team.league}"/>	
              <input type="hidden"  name="user" value="${team.user.username}"/>	 
         </div>
