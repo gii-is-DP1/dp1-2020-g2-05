@@ -8,6 +8,7 @@ import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.OfferService;
 import org.springframework.samples.petclinic.service.RecruitService;
+import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.util.Status;
 import org.springframework.stereotype.Controller;
@@ -27,22 +28,25 @@ public class OfferController {
 
 	private final RecruitService recruitService;
 	
+	private final TeamService teamService;
+	
 	private final UserService userService;
 	
 	private final LeagueService leagueService;
 
 	@Autowired
 	public OfferController(OfferService offerService, RecruitService recruitService,
-			UserService userService, LeagueService leagueService) {
+			UserService userService, LeagueService leagueService, TeamService teamService) {
 		this.offerService = offerService;
 		this.recruitService = recruitService;
 		this.userService = userService;
 		this.leagueService = leagueService;
+		this.teamService = teamService;
 	}
 
 	@ModelAttribute("userTeam")
 	public Team getUserTeam(@PathVariable("leagueId") int leagueId) {
-		Optional<Team> userTeam = leagueService.findTeamByUsernameAndLeagueId(
+		Optional<Team> userTeam = teamService.findTeamByUsernameAndLeagueId(
 				userService.getUserSession().getUsername(), leagueId);
 		if(userTeam.isPresent()) {
 			return userTeam.get();
@@ -71,11 +75,17 @@ public class OfferController {
 																				// el piloto, se cancela la oferta
 				offer.setStatus(Status.Denied);
 				offerService.saveOffer(offer);
+
+			} else if (team.getMoney() >= price) {
+				teamService.saveTeamMoney(team, -price);// Restar dinero al comprador
+				teamService.saveTeamMoney(offer.getRecruit().getTeam(), price);// Dar dinero al vendedor
+
 				modelMap.addAttribute("message", "Offer cancelled!");
-			} else if (Integer.parseInt(team.getMoney()) >= price
+			} else if (team.getMoney() >= price
 					&& recruitService.getRecruitsByTeam(team.getId()).size() == 4) { // RN-07: Máximo de fichajes
-				leagueService.saveTeamMoney(team, -price);// Restar dinero al comprador
-				leagueService.saveTeamMoney(offer.getRecruit().getTeam(), price);// Dar dinero al vendedor
+				teamService.saveTeamMoney(team, -price);// Restar dinero al comprador
+				teamService.saveTeamMoney(offer.getRecruit().getTeam(), price);// Dar dinero al vendedor
+
 				offer.setTeam(team);
 				offer.setStatus(Status.Accepted);
 				offerService.saveOffer(offer);

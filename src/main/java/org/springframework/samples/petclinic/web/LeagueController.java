@@ -18,6 +18,7 @@ import org.springframework.samples.petclinic.model.TablaConsultas;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
+import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -37,6 +38,7 @@ public class LeagueController{
 	private String AUTHORITY;
 
 	TablaConsultasService TCService;
+	TeamService teamService;
 	LeagueService leagueService;
 	UserService userService;
 	
@@ -92,7 +94,7 @@ public class LeagueController{
 		List<League> myLeaguesList = new ArrayList<League>();
 
 		if(Optional.of(user).isPresent()) {
-			 myLeaguesList = leagueService.obtenerLigasPorUsuario(leagueService.findTeamsByUsername(user.getUsername())); //obtengo las ligas por usuario
+			 myLeaguesList = leagueService.obtenerLigasPorUsuario(teamService.findTeamsByUsername(user.getUsername())); //obtengo las ligas por usuario
 		}
 		
 	    
@@ -195,7 +197,7 @@ public class LeagueController{
 	                    return "/leagues/createLeagueName";
 					}
 				 
-				 leagueService.saveSystemTeam(league);
+				 teamService.saveSystemTeam(league);
 			  
 
 				 return "redirect:/leagues/"+league.getId()+"/teams/new";	
@@ -240,7 +242,7 @@ public class LeagueController{
 		
 //		List<Integer> collect = leagueService.findTeamsByUsername(user.getUsername());
 		
-		List<Integer> idLeague = this.leagueService.findTeamsByUsername(user.getUsername());
+		List<Integer> idLeague = this.teamService.findTeamsByUsername(user.getUsername());
 			
 		Optional<League> liga = this.leagueService.findLeagueByLeagueCode(league.getLeagueCode().trim());
 				
@@ -250,7 +252,7 @@ public class LeagueController{
 			return unirseLiga(model);
 		}
 		
-		Integer numTeamsLeague = this.leagueService.findTeamsByLeagueId(liga.get().getId());
+		Integer numTeamsLeague = this.teamService.findTeamsByLeagueId(liga.get().getId());
 		
 		if(idLeague.contains(liga.get().getId())) {
 			model.addAttribute("yaTienesEquipo",true);

@@ -20,18 +20,16 @@ public class Team extends BaseEntity implements Comparable<Team> {
 	
 	@Column(name = "name")
 	@NotEmpty
-	@NotNull
 	private String name;
 	
+	
 	@Column(name = "points")
-	@NotEmpty
 	@NotNull
-	private String points;
+	private Integer points;
 	
 	@Column(name = "money")
-	@NotEmpty
 	@NotNull
-	private String money;
+	private Integer money;
 	
 	@ManyToOne()
 	@JoinColumn(name = "league_id")
@@ -51,11 +49,11 @@ public class Team extends BaseEntity implements Comparable<Team> {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "team")
 	private Set<Recruit> recruit;
 	
-	public String getPoints() {
+	public Integer getPoints() {
 		return points;
 	}
 
-	public void setPoints(String points) {
+	public void setPoints(Integer points) {
 		this.points = points;
 	}
 	
@@ -76,11 +74,11 @@ public class Team extends BaseEntity implements Comparable<Team> {
 	}
 
 
-	public String getMoney() {
+	public Integer getMoney() {
 		return money;
 	}
 
-	public void setMoney(String money) {
+	public void setMoney(Integer money) {
 		this.money = money;
 	}
 

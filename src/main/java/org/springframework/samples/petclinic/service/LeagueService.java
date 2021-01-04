@@ -77,17 +77,11 @@ public class LeagueService {
 		return leagueRepository.findLeagueByLeagueCode(leagueCode);
 	}
 	
-	public List<Integer> findTeamsByUsername(String username) throws DataAccessException {
-		return leagueRepository.findTeamsByUsername(username);
+
+	public Optional<User> findUserByUsername(String username) throws DataAccessException {
+		return leagueRepository.findUserByUsername(username);
 	}
-	
-	public Integer findTeamsByLeagueId(Integer id) throws DataAccessException {
-		return leagueRepository.findTeamsByLeagueId(id);
-	}
-	
-//	public Optional<User> findUserByUsername(String username) throws DataAccessException {
-//		return leagueRepository.findUserByUsername(username);
-//	}
+
 	
 	public String findAuthoritiesByUsername(String username) throws DataAccessException {
 		return leagueRepository.findAuthoritiesByUsername(username);
@@ -216,93 +210,14 @@ public class LeagueService {
 		return leagueRepository.findAll();
 	}
 	
-	@Transactional
-	public Iterable<Team> findAllTeams(){
-		return teamRepository.findAll();
-	}
 	
-//	@Transactional
-//	public void saveTeam(Team team) throws DataAccessException {
-//		leagueRepository.save(team);
-//	}
-	
+
 	
 	public Optional<League> findLeague(Integer leagueId) {
 		return leagueRepository.findById(leagueId);
 	}
 	
-	public Optional<Team> findTeamById(Integer teamId) {
-		return teamRepository.findById(teamId);
-	}
 
 
-	@Transactional(rollbackFor =  DuplicatedTeamNameException.class)
-	public void saveTeam(Team team) {
-		boolean igual =  false;
-		Optional<League> league = findLeague(team.getLeague().getId());
-		List<Team> list = league.get().getTeam().stream().collect(Collectors.toList());
-		for(int i = 0; i<list.size(); i++) {
-			Team t = list.get(i);
-			if(t.getName().equals(team.getName())) {
-				igual = true;
-			}
-		}
-		
-		if(!igual) {
-			teamRepository.save(team);
 
-		}else {
-			System.out.println("hhhh");
-		}
-		
-	}
-	
-	@Transactional
-	public void saveTeamMoney(Team team, Integer price) throws DataAccessException {
-		team.setMoney(String.valueOf(Integer.parseInt(team.getMoney()) + price));
-		saveTeam(team);
-	}
-
-	@Transactional
-	public void saveSystemTeam(League league) {
-		Team sysTeam = new Team();
-		sysTeam.setName("Sistema");
-		sysTeam.setLeague(league);
-		sysTeam.setMoney("0");
-		sysTeam.setPoints("0");
-		sysTeam.setUser(userService.findUser("admin1").get());
-		teamRepository.save(sysTeam);
-		
-		//Fichamos y ofertamos a todos los pilotos con la escudería sistema que estén en la categoría actual
-		recruitAndOfferAll(sysTeam,TCService.getTabla().get().getCurrentCategory());
-	}
-	@Transactional
-	public void recruitAndOfferAll(Team t,Category cat) {
-		Iterable<Pilot> pilots = pilotService.findAll();
-		List<Pilot> listPilots = new ArrayList<Pilot>();
-		pilots.forEach(listPilots::add);
-		for (int i=0;i<listPilots.size();i++) {
-			if(listPilots.get(i).getCategory().equals(cat)) {
-				recruitService.saveRecruit(listPilots.get(i),t);
-				Pilot p = listPilots.get(i);
-				offerService.putOnSale(recruitService.getRecruitByPilotId(p.getId()).get(), p.getBaseValue());
-			}
-		}
-	}
-
-	public void delete(Team team) {
-		teamRepository.delete(team);
-	}
-
-	public List<Team> findTeamByUsername(String username){
-		return teamRepository.findTeamByUsername(username);
-	}
-	
-	public Optional<Team> findTeamByUsernameAndLeagueId(String username, Integer id){
-		return teamRepository.findTeamByUsernameAndLeagueId(username, id);
-	}
-	
-	public List<Team> findTeamByLeagueId(Integer id){
-		return teamRepository.findTeamByLeagueId(id);
-	}
 }
