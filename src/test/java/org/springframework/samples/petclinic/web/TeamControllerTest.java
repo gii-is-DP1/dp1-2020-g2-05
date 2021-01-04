@@ -43,6 +43,7 @@ import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.LineupService;
 import org.springframework.samples.petclinic.service.OfferService;
 import org.springframework.samples.petclinic.service.RecruitService;
+import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -90,6 +91,9 @@ public class TeamControllerTest {
 	 @Autowired
 	 private OfferService offerService;
 	 
+	 @MockBean
+	 @Autowired
+	 private TeamService teamService;
 	 
 	@MockBean
 	private LeagueService leagueService;
@@ -141,8 +145,8 @@ public class TeamControllerTest {
 		team.setId(TEST_TEAM_ID);
 		team.setName("Migue");
 		team.setLeague(liga);
-		team.setMoney("200");
-		team.setPoints("100");
+		team.setMoney(200);
+		team.setPoints(100);
 		team.setUser(user);
 		
 		
@@ -154,7 +158,7 @@ public class TeamControllerTest {
 		user.setTeam(teams);
 		
 		this.leagueService.saveLeague(liga);
-		this.leagueService.saveTeam(team);
+		this.teamService.saveTeam(team);
 		this.userService.saveUser(user);
 
         List<League> list = new ArrayList<League>();
@@ -163,7 +167,7 @@ public class TeamControllerTest {
 
 
 		given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
-		given(this.leagueService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
+		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
 		given(this.userService.findUser(user.getUsername())).willReturn(Optional.of(user));
 //		given(this.converter.convert((any(Team.class)), any(TypeDescriptor.class) , TypeDescriptor.class)).willReturn(Optional.of(liga));
 
@@ -209,8 +213,8 @@ public class TeamControllerTest {
 		mockMvc.perform(post("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID)
 							.with(csrf())
 							.param("name", team.getName())
-							.param("points", team.getPoints())
-							.param("money", team.getMoney())
+							.param("points", team.getPoints().toString())
+							.param("money", team.getMoney().toString())
 							.param("user" , user.getUsername())
 							.param("league", TEST_LEAGUE_ID.toString()))
 							.andExpect(status().is3xxRedirection())

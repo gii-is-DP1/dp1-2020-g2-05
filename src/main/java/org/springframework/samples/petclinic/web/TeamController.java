@@ -19,6 +19,7 @@ import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.LineupService;
 import org.springframework.samples.petclinic.service.OfferService;
 import org.springframework.samples.petclinic.service.RecruitService;
+import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -34,6 +35,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class TeamController {
 
 	UserService userService;
+	
+	TeamService teamService;
 
 	LeagueService leagueService;
 
@@ -45,8 +48,9 @@ public class TeamController {
 
 	@Autowired
 	public TeamController(LeagueService leagueService, UserService userService, RecruitService recruitService,
-			LineupService lineupService) {
+			LineupService lineupService, TeamService teamService) {
 		this.leagueService = leagueService;
+		this.teamService = teamService;
 		this.userService = userService;
 		this.recruitService = recruitService;
 
@@ -62,11 +66,6 @@ public class TeamController {
 
 
 	private String authority;
-	private Boolean EquipoSi = false;
-	private Boolean EquipoNo = false;
-	private Boolean Error = false;
-	private Boolean BorrarDesdeMyTeams = false;
-	private Boolean EditarDesdeMyTeams = false;
 
 	private Boolean EquipoSi = false;
 	private Boolean EquipoNo = false;
@@ -117,12 +116,6 @@ public class TeamController {
 		League league = this.leagueService.findLeague(leagueId).get();
 		team.setLeague(league);
 
-
-	@PostMapping(value = "/leagues/{leagueId}/teams/new")
-	public String saveNewTeam(@PathVariable("leagueId") int leagueId, @Valid Team team, BindingResult result,
-			ModelMap model) {
-		Optional<League> league = this.leagueService.findLeague(leagueId);
-
 //		System.out.println(league.get().getId().equals(team.getLeague().getId()));
 		System.out.println(team.getLeague());
 		System.out.println(team.getUser());
@@ -135,7 +128,7 @@ public class TeamController {
 		}else {
 		
 		team.setUser(this.userService.getUserSession());
-		Optional<Team> tem = this.leagueService.findTeamByUsernameAndLeagueId(team.getUser().getUsername(), leagueId);
+		Optional<Team> tem = this.teamService.findTeamByUsernameAndLeagueId(team.getUser().getUsername(), leagueId);
 			
 			
 		 if(tem.isPresent()){
@@ -145,32 +138,13 @@ public class TeamController {
 			
 		}
 			else {
-			this.leagueService.saveTeam(team);
+			team.setMoney(2000);
+			team.setPoints(0);
+			this.teamService.saveTeam(team);
 			EquipoSi=true;
 
 			return "redirect:/leagues/{leagueId}/teams";
 			
-
-		} else {
-
-			team.setUser(this.userService.getUserSession());
-			Optional<Team> tem = this.leagueService.findTeamByUsernameAndLeagueId(team.getUser().getUsername(),
-					leagueId);
-			League liga = this.leagueService.findLeague(leagueId).get();
-			team.setLeague(liga);
-
-			if (tem.isPresent()) {
-				model.addAttribute("message", "Sorry, you cannot have more teams in this league!");
-				EquipoNo = true;
-				// return "redirect:/leagues/{leagueId}/teams";
-				return "leagues/TeamsEdit";
-
-			} else {
-				this.leagueService.saveTeam(team);
-				EquipoSi = true;
-				return "leagues/TeamsEdit";
-
-				// return "redirect:/leagues/{leagueId}/teams";
 
 			}
 		}
@@ -180,7 +154,7 @@ public class TeamController {
 	@GetMapping(path = "/leagues/{leagueId}/teams/{teamId}/details")
 	public String mostrarDetallesEscuderia(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamID,
 			ModelMap model) {
-		Optional<Team> team = leagueService.findTeamById(teamID);
+		Optional<Team> team = this.teamService.findTeamById(teamID);
 		if (team.isPresent()) {
 			model.addAttribute("message", "Team found!");
 			model.addAttribute("team", team.get());
@@ -232,9 +206,9 @@ public class TeamController {
 	@GetMapping(path = "/leagues/{leagueId}/teams/{teamId}/delete")
 	public String borrarEscuderia(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
 			ModelMap model) {
-		Optional<Team> team = this.leagueService.findTeamById(teamId);
+		Optional<Team> team = this.teamService.findTeamById(teamId);
 		if (team.isPresent()) {
-			leagueService.delete(team.get());
+			teamService.delete(team.get());
 			model.addAttribute("message", "Team successfully deleted!");
 		} else {
 			model.addAttribute("message", "Team not found!");
@@ -251,7 +225,7 @@ public class TeamController {
 	@GetMapping(path = "/leagues/{leagueId}/teams/{teamId}/edit")
 	public String editarPiloto(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
 			ModelMap model) {
-		Optional<Team> team = this.leagueService.findTeamById(teamId);
+		Optional<Team> team = this.teamService.findTeamById(teamId);
 		model.put("team", team.get());
 
 		authority = this.leagueService.findAuthoritiesByUsername(team.get().getUser().getUsername());
@@ -284,11 +258,11 @@ public class TeamController {
 		} else {
 			User usuario = this.userService.getUserSession();
 
-			Team teamToUpdate = this.leagueService.findTeamById(team.getId()).get();
+			Team teamToUpdate = this.teamService.findTeamById(team.getId()).get();
 			BeanUtils.copyProperties(team, teamToUpdate);
 			model.put("team", team);
 			teamToUpdate.setUser(usuario);
-			this.leagueService.saveTeam(teamToUpdate);
+			this.teamService.saveTeam(teamToUpdate);
 			model.addAttribute("message", "Team successfully Updated!");
 			
 			if(BorrarDesdeMyTeams != true) {
@@ -304,7 +278,7 @@ public class TeamController {
 	@GetMapping("/myTeams")
 	public String myTeams(ModelMap modelMap) {
 		User user = this.userService.getUserSession();
-		List<Team> team = this.leagueService.findTeamByUsername(user.getUsername());
+		List<Team> team = this.teamService.findTeamByUsername(user.getUsername());
 		modelMap.addAttribute("teams", team);
 		BorrarDesdeMyTeams = true;
 		return "leagues/myTeams";
@@ -313,7 +287,7 @@ public class TeamController {
 	@GetMapping(value = "/leagues/{leagueId}/teams")
 	public String showTeams(@PathVariable int leagueId, Map<String, Object> model) {
 		User usuario = this.userService.getUserSession();
-		List<Team> tem = this.leagueService.findTeamByLeagueId(leagueId);
+		List<Team> tem = this.teamService.findTeamByLeagueId(leagueId);
 		tem = tem.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
 		System.out.println(tem);
 		model.put("teams", tem);
