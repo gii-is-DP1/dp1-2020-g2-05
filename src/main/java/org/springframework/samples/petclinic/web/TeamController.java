@@ -138,6 +138,8 @@ public class TeamController {
 			
 		}
 			else {
+			team.setMoney(2000);
+			team.setPoints(0);
 			this.teamService.saveTeam(team);
 			EquipoSi=true;
 

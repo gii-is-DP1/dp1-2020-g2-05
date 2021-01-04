@@ -2,6 +2,7 @@
 package org.springframework.samples.petclinic.service;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
 import java.util.Optional;
@@ -16,8 +17,11 @@ import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.repository.LeagueRepository;
 import org.springframework.samples.petclinic.repository.TeamRepository;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedTeamNameException;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+@Service
 public class TeamService {
 	
 	private LeagueRepository leagueRepository;
@@ -61,8 +65,9 @@ public class TeamService {
 	@Transactional(rollbackFor =  DuplicatedTeamNameException.class)
 	public void saveTeam(Team team) {
 		boolean igual =  false;
-		Optional<League> league = this.leagueService.findLeague(team.getLeague().getId());
-		List<Team> list = league.get().getTeam().stream().collect(Collectors.toList());
+	
+		League league = team.getLeague();
+		List<Team> list = league.getTeam().stream().collect(Collectors.toList());
 		for(int i = 0; i<list.size(); i++) {
 			Team t = list.get(i);
 			if(t.getName().equals(team.getName())) {

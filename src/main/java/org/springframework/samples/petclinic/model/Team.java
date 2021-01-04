@@ -20,16 +20,14 @@ public class Team extends BaseEntity implements Comparable<Team> {
 	
 	@Column(name = "name")
 	@NotEmpty
-	@NotNull
 	private String name;
 	
+	
 	@Column(name = "points")
-	@NotEmpty
 	@NotNull
 	private Integer points;
 	
 	@Column(name = "money")
-	@NotEmpty
 	@NotNull
 	private Integer money;
 	

@@ -30,6 +30,9 @@ public class LineupServiceTests {
 	protected RecruitService recruitService;
 	@Autowired
 	protected LeagueService leagueService;
+	
+	@Autowired
+	protected TeamService teamService;
 
 //	@BeforeAll
 //	League initLeague() {
@@ -84,7 +87,7 @@ public class LineupServiceTests {
 //		newLineup.setLeague(this.leagueService.findLeague(1).get());
 		newLineup.setRecruit1(this.recruitService.findRecruit(1).get());
 		newLineup.setRecruit2(this.recruitService.findRecruit(2).get());
-		newLineup.setTeam(this.leagueService.findTeamById(1).get());
+		newLineup.setTeam(this.teamService.findTeamById(1).get());
 
 		this.lineupService.saveLineup(newLineup);
 		assertThat(newLineup.getId()).isNotEqualTo(0);
@@ -109,7 +112,7 @@ public class LineupServiceTests {
 //		newLineup.setLeague(this.leagueService.findLeague(1).get());
 		newLineup.setRecruit1(this.recruitService.findRecruit(1).get());
 		newLineup.setRecruit2(this.recruitService.findRecruit(2).get());
-		newLineup.setTeam(this.leagueService.findTeamById(1).get());
+		newLineup.setTeam(this.teamService.findTeamById(1).get());
 
 		this.lineupService.saveLineup(newLineup);
 		this.lineupService.delete(newLineup);

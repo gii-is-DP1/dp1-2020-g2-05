@@ -35,6 +35,7 @@ import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.OfferService;
 import org.springframework.samples.petclinic.service.RecruitService;
+import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.util.Status;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
@@ -59,6 +60,9 @@ class OfferControllerTests {
 	
 	@MockBean
 	private RecruitService recruitService;
+	
+	@MockBean
+	private TeamService teamService;
 	
 	@MockBean
 	private UserService userService;
@@ -119,23 +123,23 @@ class OfferControllerTests {
 	    
 	    team1.setId(1);
 		team1.setLeague(league);
-		team1.setMoney("200");
+		team1.setMoney(200);
 		team1.setName("Team1");
-		team1.setPoints("2000");
+		team1.setPoints(2000);
 		team1.setUser(user1);
 		
 		team2.setId(2);
 		team2.setLeague(league);
-		team2.setMoney("3000");
+		team2.setMoney(3000);
 		team2.setName("Team2");
-		team2.setPoints("300");
+		team2.setPoints(300);
 		team2.setUser(user2);
 		
 		team3.setId(3);
 		team3.setLeague(league);
-		team3.setMoney("300");
+		team3.setMoney(300);
 		team3.setName("Team3");
-		team3.setPoints("3000");
+		team3.setPoints(3000);
 		team3.setUser(user3);
 		
 		recruit1.setPilot(pilot1);
@@ -178,7 +182,7 @@ class OfferControllerTests {
 	void testRecruitPilot() throws Exception {
 		given(offerService.findOffersByLeague(TEST_LEAGUE_ID)).willReturn(offersList);
 		given(userService.getUserSession()).willReturn(user2);
-		given(leagueService.findTeamByUsernameAndLeagueId(user2.getUsername(), TEST_LEAGUE_ID)).willReturn(Optional.of(team2));
+		given(teamService.findTeamByUsernameAndLeagueId(user2.getUsername(), TEST_LEAGUE_ID)).willReturn(Optional.of(team2));
 		given(offerService.findOfferById(TEST_OFFER1_ID)).willReturn(Optional.of(offer1));
 		
 		mockMvc.perform(get("/leagues/{leagueId}/market/{offerId}",TEST_LEAGUE_ID,TEST_OFFER1_ID)).andExpect(status().is2xxSuccessful())
@@ -198,7 +202,7 @@ class OfferControllerTests {
 	void testOfferCancel() throws Exception {
 		given(offerService.findOffersByLeague(TEST_LEAGUE_ID)).willReturn(offersList);
 		given(userService.getUserSession()).willReturn(user1);
-		given(leagueService.findTeamByUsernameAndLeagueId(user1.getUsername(), TEST_LEAGUE_ID)).willReturn(Optional.of(team1));//El mismo team que ha puesto la oferta
+		given(teamService.findTeamByUsernameAndLeagueId(user1.getUsername(), TEST_LEAGUE_ID)).willReturn(Optional.of(team1));//El mismo team que ha puesto la oferta
 		given(offerService.findOfferById(TEST_OFFER1_ID)).willReturn(Optional.of(offer1));
 		
 		mockMvc.perform(get("/leagues/{leagueId}/market/{offerId}",TEST_LEAGUE_ID,TEST_OFFER1_ID)).andExpect(status().is2xxSuccessful())
@@ -217,7 +221,7 @@ class OfferControllerTests {
 	void testRecruitWithoutMoney() throws Exception {
 		given(offerService.findOffersByLeague(TEST_LEAGUE_ID)).willReturn(offersList);
 		given(userService.getUserSession()).willReturn(user3);
-		given(leagueService.findTeamByUsernameAndLeagueId(user3.getUsername(), TEST_LEAGUE_ID)).willReturn(Optional.of(team3));
+		given(teamService.findTeamByUsernameAndLeagueId(user3.getUsername(), TEST_LEAGUE_ID)).willReturn(Optional.of(team3));
 		given(offerService.findOfferById(TEST_OFFER1_ID)).willReturn(Optional.of(offer1));
 		
 		mockMvc.perform(get("/leagues/{leagueId}/market/{offerId}",TEST_LEAGUE_ID,TEST_OFFER1_ID)).andExpect(status().is2xxSuccessful())
@@ -236,7 +240,7 @@ class OfferControllerTests {
 	void testTryToRecruitPilotIsNotInSale() throws Exception {
 		given(offerService.findOffersByLeague(TEST_LEAGUE_ID)).willReturn(offersList);
 		given(userService.getUserSession()).willReturn(user1);
-		given(leagueService.findTeamByUsernameAndLeagueId(user1.getUsername(), TEST_LEAGUE_ID)).willReturn(Optional.of(team1));
+		given(teamService.findTeamByUsernameAndLeagueId(user1.getUsername(), TEST_LEAGUE_ID)).willReturn(Optional.of(team1));
 		given(offerService.findOfferById(TEST_OFFER2_ID)).willReturn(Optional.of(offer2));
 		
 		mockMvc.perform(get("/leagues/{leagueId}/market/{offerId}",TEST_LEAGUE_ID,TEST_OFFER2_ID)).andExpect(status().is2xxSuccessful())
@@ -255,7 +259,7 @@ class OfferControllerTests {
 	void testTryToFindOffer() throws Exception {
 		given(offerService.findOffersByLeague(TEST_LEAGUE_ID)).willReturn(offersList);
 		given(userService.getUserSession()).willReturn(user2);
-		given(leagueService.findTeamByUsernameAndLeagueId(user2.getUsername(), TEST_LEAGUE_ID)).willReturn(Optional.of(team2));
+		given(teamService.findTeamByUsernameAndLeagueId(user2.getUsername(), TEST_LEAGUE_ID)).willReturn(Optional.of(team2));
 		given(offerService.findOfferById(TEST_OFFERFAIL_ID)).willReturn(Optional.empty());
 		
 		mockMvc.perform(get("/leagues/{leagueId}/market/{offerId}",TEST_LEAGUE_ID,TEST_OFFERFAIL_ID)).andExpect(status().is2xxSuccessful())

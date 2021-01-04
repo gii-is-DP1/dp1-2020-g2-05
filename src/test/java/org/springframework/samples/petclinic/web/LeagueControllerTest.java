@@ -54,6 +54,7 @@ import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.LineupService;
 import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
+import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -81,6 +82,10 @@ public class LeagueControllerTest {
 	@MockBean
 	@Autowired
 	UserService userService;
+	
+	@MockBean
+	@Autowired
+	TeamService teamService;
 	
 	@Autowired
 	private MockMvc mockMvc;
@@ -122,16 +127,16 @@ public class LeagueControllerTest {
 		Team team = new Team();
 		team.setId(TEST_TEAM_ID);
 		team.setLeague(liga);
-		team.setMoney("2");
+		team.setMoney(2);
 		team.setName("teamtest");
-		team.setPoints("132");
+		team.setPoints(132);
 		team.setUser(user);
 		teams.add(team);
 		user.setTeam(teams);
 		liga.setTeam(teams);
 		
 		this.leagueService.saveLeague(liga);
-		this.leagueService.saveTeam(team);
+		this.teamService.saveTeam(team);
 
 		lista.add(liga);
 		
@@ -174,7 +179,7 @@ public class LeagueControllerTest {
 	@WithMockUser(value = "spring")
 	@Test
 	void testShowMyLeagues() throws Exception {
-		given(leagueService.obtenerLigasPorUsuario(leagueService.findTeamsByUsername(user.getUsername()))).willReturn(lista);
+		given(leagueService.obtenerLigasPorUsuario(teamService.findTeamsByUsername(user.getUsername()))).willReturn(lista);
 		mockMvc.perform(get("/leagues/myLeagues")).andExpect(status().isOk())
 		.andExpect(model().attribute("noTengoLigas", is(false)))
 		.andExpect(model().attribute("misLigas", Matchers.hasItem(Matchers.<League> hasProperty("leagueCode", is(liga.getLeagueCode())))))
@@ -186,7 +191,7 @@ public class LeagueControllerTest {
 	@WithMockUser(value = "spring")
 	@Test
 	void testDontParticipatesInAnyLeagues() throws Exception {
-		given(leagueService.obtenerLigasPorUsuario(leagueService.findTeamsByUsername(user.getUsername()))).willReturn(new ArrayList<League>());
+		given(leagueService.obtenerLigasPorUsuario(teamService.findTeamsByUsername(user.getUsername()))).willReturn(new ArrayList<League>());
 		mockMvc.perform(get("/leagues/myLeagues")).andExpect(status().isOk())
 		.andExpect(model().attribute("noTengoLigas", is(true)))
 		.andExpect(view().name("leagues/myLeagues"));
@@ -196,7 +201,7 @@ public class LeagueControllerTest {
 	@WithMockUser(value = "spring")
 	@Test
 	void testAlreadyParticipatesInLeague() throws Exception {
-		given(leagueService.obtenerLigasPorUsuario(leagueService.findTeamsByUsername(user.getUsername()))).willReturn(lista);
+		given(leagueService.obtenerLigasPorUsuario(teamService.findTeamsByUsername(user.getUsername()))).willReturn(lista);
 		mockMvc.perform(get("/leagues/myLeagues").flashAttr("yaTienesEquipo", true).flashAttr("leagueYaEquipoId", 1))
 		.andExpect(status().isOk())
 		.andExpect(model().attribute("yaTienesEquipo", is(true)))
@@ -297,9 +302,9 @@ public class LeagueControllerTest {
 	void testJoinAlreadyTeamInLeaguePost() throws Exception {
 		List<Integer> lista = new ArrayList<Integer>();
 		lista.add(liga.getId());
-		given(this.leagueService.findTeamsByUsername(user.getUsername())).willReturn(lista);
+		given(this.teamService.findTeamsByUsername(user.getUsername())).willReturn(lista);
 		given(this.leagueService.findLeagueByLeagueCode(liga.getLeagueCode())).willReturn(Optional.of(liga));
-		given(this.leagueService.findTeamsByLeagueId(liga.getId())).willReturn(1);
+		given(this.teamService.findTeamsByLeagueId(liga.getId())).willReturn(1);
 		mockMvc.perform(post("/leagues/join")
 				.with(csrf())
 				.param("id", liga.getId().toString())
@@ -318,7 +323,7 @@ public class LeagueControllerTest {
 	@Test
 	void testJoinNoLeagueFoundPost() throws Exception {
 		List<Integer> lista = new ArrayList<Integer>();
-		given(this.leagueService.findTeamsByUsername(user.getUsername())).willReturn(lista);
+		given(this.teamService.findTeamsByUsername(user.getUsername())).willReturn(lista);
 		given(this.leagueService.findLeagueByLeagueCode(liga.getLeagueCode())).willReturn(Optional.empty());
 		mockMvc.perform(post("/leagues/join")
 				.with(csrf())
@@ -337,9 +342,9 @@ public class LeagueControllerTest {
 	@Test
 	void testJoinToFullLeaguePost() throws Exception {
 		List<Integer> lista = new ArrayList<Integer>();
-		given(this.leagueService.findTeamsByUsername(user.getUsername())).willReturn(lista);
+		given(this.teamService.findTeamsByUsername(user.getUsername())).willReturn(lista);
 		given(this.leagueService.findLeagueByLeagueCode(liga.getLeagueCode())).willReturn(Optional.of(liga));
-		given(this.leagueService.findTeamsByLeagueId(liga.getId())).willReturn(6);
+		given(this.teamService.findTeamsByLeagueId(liga.getId())).willReturn(6);
 		mockMvc.perform(post("/leagues/join")
 				.with(csrf())
 				.param("id", liga.getId().toString())
@@ -357,9 +362,9 @@ public class LeagueControllerTest {
 	@Test
 	void testJoinToLeaguePost() throws Exception {
 		List<Integer> lista = new ArrayList<Integer>();
-		given(this.leagueService.findTeamsByUsername(user.getUsername())).willReturn(lista);
+		given(this.teamService.findTeamsByUsername(user.getUsername())).willReturn(lista);
 		given(this.leagueService.findLeagueByLeagueCode(liga.getLeagueCode())).willReturn(Optional.of(liga));
-		given(this.leagueService.findTeamsByLeagueId(liga.getId())).willReturn(1);
+		given(this.teamService.findTeamsByLeagueId(liga.getId())).willReturn(1);
 		mockMvc.perform(post("/leagues/join")
 				.with(csrf())
 				.param("id", liga.getId().toString())

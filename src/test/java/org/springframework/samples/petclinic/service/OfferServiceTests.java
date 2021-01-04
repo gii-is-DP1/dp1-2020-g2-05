@@ -29,6 +29,9 @@ class OfferServiceTests {
 	@Autowired
 	protected LeagueService leagueService;
 	
+	@Autowired
+	protected TeamService teamService;
+	
 	private Validator createValidator() {
 		LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
 		localValidatorFactoryBean.afterPropertiesSet();
@@ -109,7 +112,7 @@ class OfferServiceTests {
 		Offer offer = new Offer();
 		offer.setPrice(1400);
 		offer.setStatus(Status.Outstanding);
-		Team team = leagueService.findTeamById(9).get();//Escuderia sistema de la liga 2
+		Team team = teamService.findTeamById(9).get();//Escuderia sistema de la liga 2
 		offer.setTeam(team);
 		
 		offerService.saveOffer(offer);
