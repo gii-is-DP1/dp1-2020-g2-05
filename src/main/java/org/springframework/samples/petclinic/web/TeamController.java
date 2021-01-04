@@ -62,11 +62,6 @@ public class TeamController {
 
 
 	private String authority;
-	private Boolean EquipoSi = false;
-	private Boolean EquipoNo = false;
-	private Boolean Error = false;
-	private Boolean BorrarDesdeMyTeams = false;
-	private Boolean EditarDesdeMyTeams = false;
 
 	private Boolean EquipoSi = false;
 	private Boolean EquipoNo = false;
@@ -117,12 +112,6 @@ public class TeamController {
 		League league = this.leagueService.findLeague(leagueId).get();
 		team.setLeague(league);
 
-
-	@PostMapping(value = "/leagues/{leagueId}/teams/new")
-	public String saveNewTeam(@PathVariable("leagueId") int leagueId, @Valid Team team, BindingResult result,
-			ModelMap model) {
-		Optional<League> league = this.leagueService.findLeague(leagueId);
-
 //		System.out.println(league.get().getId().equals(team.getLeague().getId()));
 		System.out.println(team.getLeague());
 		System.out.println(team.getUser());
@@ -150,27 +139,6 @@ public class TeamController {
 
 			return "redirect:/leagues/{leagueId}/teams";
 			
-
-		} else {
-
-			team.setUser(this.userService.getUserSession());
-			Optional<Team> tem = this.leagueService.findTeamByUsernameAndLeagueId(team.getUser().getUsername(),
-					leagueId);
-			League liga = this.leagueService.findLeague(leagueId).get();
-			team.setLeague(liga);
-
-			if (tem.isPresent()) {
-				model.addAttribute("message", "Sorry, you cannot have more teams in this league!");
-				EquipoNo = true;
-				// return "redirect:/leagues/{leagueId}/teams";
-				return "leagues/TeamsEdit";
-
-			} else {
-				this.leagueService.saveTeam(team);
-				EquipoSi = true;
-				return "leagues/TeamsEdit";
-
-				// return "redirect:/leagues/{leagueId}/teams";
 
 			}
 		}
