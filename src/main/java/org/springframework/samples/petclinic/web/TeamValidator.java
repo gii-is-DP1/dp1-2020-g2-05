@@ -30,7 +30,7 @@ public class TeamValidator implements Validator{
 		}
 		
 		//Points validation
-		if(team.getPoints()==null || !team.getPoints().matches("[0-9]*")) {
+		if(team.getPoints()==null) {
 			 errors.rejectValue("points", REQUIRED, "Team Id cannot be null");
 		}
 		
@@ -40,7 +40,7 @@ public class TeamValidator implements Validator{
 		}
 		
 		// Money validation
-		if (team.getMoney() == null || !team.getMoney().matches("[0-9]*")) {
+		if (team.getMoney() == null ) {
 			errors.rejectValue("money", REQUIRED,  REQUIRED);
 		}
 		

@@ -37,6 +37,7 @@ import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.PilotService;
 import org.springframework.samples.petclinic.service.ResultService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
+import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -74,6 +75,7 @@ public class LeagueController{
 	private String AUTHORITY;
 
 	TablaConsultasService TCService;
+	TeamService teamService;
 	LeagueService leagueService;
 	UserService userService;
 	
@@ -129,7 +131,7 @@ public class LeagueController{
 		List<League> myLeaguesList = new ArrayList<League>();
 
 		if(Optional.of(user).isPresent()) {
-			 myLeaguesList = leagueService.obtenerLigasPorUsuario(leagueService.findTeamsByUsername(user.getUsername())); //obtengo las ligas por usuario
+			 myLeaguesList = leagueService.obtenerLigasPorUsuario(teamService.findTeamsByUsername(user.getUsername())); //obtengo las ligas por usuario
 		}
 		
 	    
@@ -277,7 +279,7 @@ public class LeagueController{
 		
 //		List<Integer> collect = leagueService.findTeamsByUsername(user.getUsername());
 		
-		List<Integer> idLeague = this.leagueService.findTeamsByUsername(user.getUsername());
+		List<Integer> idLeague = this.teamService.findTeamsByUsername(user.getUsername());
 			
 		Optional<League> liga = this.leagueService.findLeagueByLeagueCode(league.getLeagueCode().trim());
 				
@@ -287,7 +289,7 @@ public class LeagueController{
 			return unirseLiga(model);
 		}
 		
-		Integer numTeamsLeague = this.leagueService.findTeamsByLeagueId(liga.get().getId());
+		Integer numTeamsLeague = this.teamService.findTeamsByLeagueId(liga.get().getId());
 		
 		if(idLeague.contains(liga.get().getId())) {
 			model.addAttribute("yaTienesEquipo",true);

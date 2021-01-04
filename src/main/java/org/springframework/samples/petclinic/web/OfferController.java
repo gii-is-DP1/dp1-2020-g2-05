@@ -59,7 +59,7 @@ public class OfferController {
 			}else if(team.getId() == offer.getRecruit().getTeam().getId()){
 				offer.setStatus(Status.Denied);
 				offerService.saveOffer(offer);
-			} else if (Integer.parseInt(team.getMoney()) >= price) {
+			} else if (team.getMoney() >= price) {
 				offerService.saveTeamMoney(team, -price);// Restar dinero al comprador
 				offerService.saveTeamMoney(offer.getRecruit().getTeam(), price);// Dar dinero al vendedor
 				offer.setTeam(team);

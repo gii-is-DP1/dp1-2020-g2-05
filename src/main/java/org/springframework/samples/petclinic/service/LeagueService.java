@@ -72,14 +72,6 @@ public class LeagueService {
 		return leagueRepository.findLeagueByLeagueCode(leagueCode);
 	}
 	
-	public List<Integer> findTeamsByUsername(String username) throws DataAccessException {
-		return leagueRepository.findTeamsByUsername(username);
-	}
-	
-	public Integer findTeamsByLeagueId(Integer id) throws DataAccessException {
-		return leagueRepository.findTeamsByLeagueId(id);
-	}
-	
 	public Optional<User> findUserByUsername(String username) throws DataAccessException {
 		return leagueRepository.findUserByUsername(username);
 	}
@@ -206,10 +198,6 @@ public class LeagueService {
 		return leagueRepository.findAll();
 	}
 	
-	@Transactional
-	public Iterable<Team> findAllTeams(){
-		return teamRepository.findAll();
-	}
 	
 //	@Transactional
 //	public void saveTeam(Team team) throws DataAccessException {
@@ -221,9 +209,6 @@ public class LeagueService {
 		return leagueRepository.findById(leagueId);
 	}
 	
-	public Optional<Team> findTeamById(Integer teamId) {
-		return teamRepository.findById(teamId);
-	}
 
 //	public League increaseLeagueRaces(Integer leagueId){
 //		return leagueRepository.incrementarCarrerasLiga(leagueId);
@@ -254,8 +239,8 @@ public class LeagueService {
 		Team sysTeam = new Team();
 		sysTeam.setName("Sistema");
 		sysTeam.setLeague(league);
-		sysTeam.setMoney("0");
-		sysTeam.setPoints("0");
+		sysTeam.setMoney(0);
+		sysTeam.setPoints(0);
 		sysTeam.setUser(userService.findUser("admin1").get());
 		teamRepository.save(sysTeam);
 		
@@ -274,19 +259,4 @@ public class LeagueService {
 		}
 	}
 
-	public void delete(Team team) {
-		teamRepository.delete(team);
-	}
-
-	public List<Team> findTeamByUsername(String username){
-		return teamRepository.findTeamByUsername(username );
-	}
-	
-	public Optional<Team> findTeamByUsernameAndLeagueId(String username, Integer id){
-		return teamRepository.findTeamByUsernameAndLeagueId(username, id);
-	}
-	
-	public List<Team> findTeamByLeagueId(Integer id){
-		return teamRepository.findTeamByLeagueId(id);
-	}
 }
