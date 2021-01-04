@@ -8,7 +8,6 @@
 <petclinic:layout pageName="myTeams">
 	<h2>Your Teams</h2>
 	
-	
 
 	<table id="TeamsTable" class="table table-striped">
 		<thead>
@@ -30,6 +29,11 @@
 					<td><c:out value="${team.money}" /></td>
 					<td><c:out value="${team.user.username}" /></td>
 					<td>
+					
+					<spring:url value="/leagues/{leagueId}/teams/{teamId}/edit" var="TeamUrl">
+							<spring:param name="teamId" value="${team.id}" />
+							<spring:param name="leagueId" value="${team.league.id}" />
+						</spring:url> <a href="${fn:escapeXml(TeamUrl)}">Edit</a>
 						
 						<spring:url value="/leagues/{leagueId}/teams/{teamId}/delete" var="TeamUrl">
 							<spring:param name="teamId" value="${team.id}" />
