@@ -7,6 +7,9 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
 <petclinic:layout pageName="GranPremio">
+ <c:forEach items="${errors}" var="mess">
+<h2><c:out value="${mess.getDefaultMessage()}"/></h2>
+</c:forEach>
      <form:form modelAttribute="GranPremio" class="form-horizontal" id="add-pilot-form" actions="/granPremios/new"  > 
         <div class="form-group has-feedback">
         

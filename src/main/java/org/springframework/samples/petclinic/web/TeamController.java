@@ -44,13 +44,12 @@ public class TeamController {
 	LineupService lineupService;
 
 	@Autowired
-
-
 	public TeamController(LeagueService leagueService, UserService userService, RecruitService recruitService,
 			LineupService lineupService) {
 		this.leagueService = leagueService;
 		this.userService = userService;
 		this.recruitService = recruitService;
+
 		this.lineupService = lineupService;	
 		this.offerService = offerService;
 		this.lineupService = lineupService;
@@ -61,12 +60,20 @@ public class TeamController {
 		dataBinder.setValidator(new TeamValidator());
 	}
 
+
 	private String authority;
 	private Boolean EquipoSi = false;
 	private Boolean EquipoNo = false;
 	private Boolean Error = false;
 	private Boolean BorrarDesdeMyTeams = false;
 	private Boolean EditarDesdeMyTeams = false;
+
+	private Boolean EquipoSi = false;
+	private Boolean EquipoNo = false;
+	private Boolean Error = false;
+	private Boolean Editar = false;
+	private Boolean BorrarDesdeMyTeams = false;
+
 
 	public User getUserSession() {
 		User usuario = new User();
@@ -99,6 +106,7 @@ public class TeamController {
 
 		return "/leagues/TeamsEdit";
 	}
+
 	
 	
 	//// ESTE ES EL METODO PROFESOR////// ---------->
@@ -108,6 +116,13 @@ public class TeamController {
 	public String saveNewTeam(@PathVariable("leagueId") int leagueId, @Valid Team team, BindingResult result, ModelMap model) {
 		League league = this.leagueService.findLeague(leagueId).get();
 		team.setLeague(league);
+
+
+	@PostMapping(value = "/leagues/{leagueId}/teams/new")
+	public String saveNewTeam(@PathVariable("leagueId") int leagueId, @Valid Team team, BindingResult result,
+			ModelMap model) {
+		Optional<League> league = this.leagueService.findLeague(leagueId);
+
 //		System.out.println(league.get().getId().equals(team.getLeague().getId()));
 		System.out.println(team.getLeague());
 		System.out.println(team.getUser());
@@ -116,6 +131,7 @@ public class TeamController {
 			model.put("team", team);
 			model.put("message", result.getAllErrors());
 			return "/leagues/TeamsEdit";
+
 		}else {
 		
 		team.setUser(this.userService.getUserSession());
@@ -134,6 +150,28 @@ public class TeamController {
 
 			return "redirect:/leagues/{leagueId}/teams";
 			
+
+		} else {
+
+			team.setUser(this.userService.getUserSession());
+			Optional<Team> tem = this.leagueService.findTeamByUsernameAndLeagueId(team.getUser().getUsername(),
+					leagueId);
+			League liga = this.leagueService.findLeague(leagueId).get();
+			team.setLeague(liga);
+
+			if (tem.isPresent()) {
+				model.addAttribute("message", "Sorry, you cannot have more teams in this league!");
+				EquipoNo = true;
+				// return "redirect:/leagues/{leagueId}/teams";
+				return "leagues/TeamsEdit";
+
+			} else {
+				this.leagueService.saveTeam(team);
+				EquipoSi = true;
+				return "leagues/TeamsEdit";
+
+				// return "redirect:/leagues/{leagueId}/teams";
+
 			}
 		}
 
@@ -215,6 +253,7 @@ public class TeamController {
 			ModelMap model) {
 		Optional<Team> team = this.leagueService.findTeamById(teamId);
 		model.put("team", team.get());
+
 		authority = this.leagueService.findAuthoritiesByUsername(team.get().getUser().getUsername());
 
 
@@ -224,6 +263,12 @@ public class TeamController {
 		}else {
 			model.put("usuario", true);
 		}
+
+
+		Editar = true;
+
+		model.put("Editar", Editar);
+
 		return "leagues/TeamsEdit";
 
 	}

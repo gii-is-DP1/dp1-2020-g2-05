@@ -56,9 +56,9 @@ public class ResultService {
 //                petRepository.save(pet);                
 //	}
 	@Transactional
-	public List<Result> findResultsByCategoryAndId(String raceCode,Category category) throws DataAccessException {
+	public List<Result> findResultsByCategoryAndId(Integer gpId, String raceCode,Category category) throws DataAccessException {
 		System.out.println("dentro bro");
-		return resultRepository.findResultsByCategoryAndId(raceCode,category);
+		return resultRepository.findResultsByCategoryAndId(gpId, raceCode,category);
 	}
 	
 	

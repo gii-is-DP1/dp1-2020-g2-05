@@ -1,6 +1,7 @@
 package org.springframework.samples.petclinic.web;
 
 import java.nio.file.Path;
+import java.text.ParseException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
@@ -32,7 +33,7 @@ public class PanelDeControlController {
 
 
 	@GetMapping(path="/controlPanel")
-	public String muestraPanel(ModelMap model) {	
+	public String muestraPanel(ModelMap model) throws ParseException {	
 		
 		List<GranPremio> gps = GPService.findAllActualYear(2020).stream().collect(Collectors.toSet()).stream().collect(Collectors.toList());
 		Set<GranPremio> sortedGps = gps.stream().collect(Collectors.toSet());

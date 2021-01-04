@@ -9,11 +9,14 @@ import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Category;
+import org.springframework.samples.petclinic.model.GranPremio;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
 import org.springframework.samples.petclinic.model.Pilot;
+import org.springframework.samples.petclinic.model.Record;
 import org.springframework.samples.petclinic.model.Result;
+import org.springframework.samples.petclinic.service.GranPremioService;
 import org.springframework.samples.petclinic.service.OwnerService;
 import org.springframework.samples.petclinic.service.PetService;
 import org.springframework.samples.petclinic.service.PilotService;
@@ -30,23 +33,27 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import lombok.extern.slf4j.Slf4j;
 import motogpAPI.RaceCode;
 
 
-
+@Slf4j
 @Controller
+@RequestMapping("/granPremios/{gpId}")
 public class ResultController {
 
 
 //	private static final String VIEWS_RESULT_CREATE_OR_UPDATE_FORM = "result/createOrUpdateResultForm";
 
 	private  ResultService resultService;
-	private  PilotService pilotService;
+	private GranPremioService GPService;
+//	private  PilotService pilotService;
 
 	@Autowired
-	public ResultController(ResultService resultService, PilotService pilotService) {
+	public ResultController(ResultService resultService, GranPremioService GPService) {//PilotService pilotService) {
 		this.resultService = resultService;
-		this.pilotService = pilotService;
+		this.GPService = GPService;
+//		this.pilotService = pilotService;
 	}
 
 	//		@ModelAttribute("types")
@@ -88,12 +95,18 @@ public class ResultController {
 //	}
 	
 	@GetMapping(value = "/results/{category}/{raceCode}")
-	public String showResults(@PathVariable("category") String category,@PathVariable("raceCode") String raceCode , ModelMap model) {
-		System.out.println(raceCode);
-
-		List<Result> listaResultados = this.resultService.findResultsByCategoryAndId(raceCode,Category.valueOf(category));
-
+	public String showResults(@PathVariable("category") String category, @PathVariable("raceCode") String raceCode,
+			@PathVariable("gpId") Integer gpId, ModelMap model) {
+		
+		log.info("Showing results for GP with id (" + gpId + ").");
+		GranPremio gp = this.GPService.findGPById(gpId).get();
+		List<Result> listaResultados = this.resultService.findResultsByCategoryAndId(gpId, raceCode, Category.valueOf(category));
+		Record record = gp.getRecord();
+		log.debug("Results: " + listaResultados);
+		log.debug("Records: " + record);
+		model.addAttribute("gp", gp);
 		model.addAttribute("resultados",listaResultados);
+		model.addAttribute("record", record);
 		return "results/resultsByCategory";
 	}
 	
@@ -122,16 +135,7 @@ public class ResultController {
 //		return VIEWS_RESULT_CREATE_OR_UPDATE_FORM;
 //	}
 //
-//	/**
-//	 *
-//	 * @param pet
-//	 * @param result
-//	 * @param petId
-//	 * @param model
-//	 * @param owner
-//	 * @param model
-//	 * @return
-//	 */
+//
 //	@PostMapping(value = "/result/{resultId}/edit")
 //	public String processUpdateForm(@Valid Result result0, BindingResult result, Pilot pilot,@PathVariable("resultId") int resultId, ModelMap model) {
 //		if (result.hasErrors()) {

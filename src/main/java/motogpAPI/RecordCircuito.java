@@ -1,11 +1,25 @@
 package motogpAPI;
 
-public class RecordCircuito {
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
-	public Integer anyo;
-	public String nombrePiloto;
-	public Integer tiempo;
-	public Double kmh;
+import org.springframework.samples.petclinic.model.BaseEntity;
+import org.springframework.samples.petclinic.model.GranPremio;
+
+@Entity
+@Table(name = "recordCircuito")
+public class RecordCircuito extends BaseEntity {
+
+	private Integer anyo;
+	private String nombrePiloto;
+	private Integer tiempo;
+	private Double kmh;
+//    @JoinColumn(name = "gp_id")
+    @OneToOne(mappedBy = "recordDelCircuito")
+    private GranPremio gp;
 
 	public RecordCircuito(String entrada) {
 		super();
@@ -70,48 +84,48 @@ public class RecordCircuito {
 		this.kmh = kmh;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((anyo == null) ? 0 : anyo.hashCode());
-		result = prime * result + ((kmh == null) ? 0 : kmh.hashCode());
-		result = prime * result + ((nombrePiloto == null) ? 0 : nombrePiloto.hashCode());
-		result = prime * result + ((tiempo == null) ? 0 : tiempo.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		RecordCircuito other = (RecordCircuito) obj;
-		if (anyo == null) {
-			if (other.anyo != null)
-				return false;
-		} else if (!anyo.equals(other.anyo))
-			return false;
-		if (kmh == null) {
-			if (other.kmh != null)
-				return false;
-		} else if (!kmh.equals(other.kmh))
-			return false;
-		if (nombrePiloto == null) {
-			if (other.nombrePiloto != null)
-				return false;
-		} else if (!nombrePiloto.equals(other.nombrePiloto))
-			return false;
-		if (tiempo == null) {
-			if (other.tiempo != null)
-				return false;
-		} else if (!tiempo.equals(other.tiempo))
-			return false;
-		return true;
-	}
+//	@Override
+//	public int hashCode() {
+//		final int prime = 31;
+//		int result = 1;
+//		result = prime * result + ((anyo == null) ? 0 : anyo.hashCode());
+//		result = prime * result + ((kmh == null) ? 0 : kmh.hashCode());
+//		result = prime * result + ((nombrePiloto == null) ? 0 : nombrePiloto.hashCode());
+//		result = prime * result + ((tiempo == null) ? 0 : tiempo.hashCode());
+//		return result;
+//	}
+//
+//	@Override
+//	public boolean equals(Object obj) {
+//		if (this == obj)
+//			return true;
+//		if (obj == null)
+//			return false;
+//		if (getClass() != obj.getClass())
+//			return false;
+//		RecordCircuito other = (RecordCircuito) obj;
+//		if (anyo == null) {
+//			if (other.anyo != null)
+//				return false;
+//		} else if (!anyo.equals(other.anyo))
+//			return false;
+//		if (kmh == null) {
+//			if (other.kmh != null)
+//				return false;
+//		} else if (!kmh.equals(other.kmh))
+//			return false;
+//		if (nombrePiloto == null) {
+//			if (other.nombrePiloto != null)
+//				return false;
+//		} else if (!nombrePiloto.equals(other.nombrePiloto))
+//			return false;
+//		if (tiempo == null) {
+//			if (other.tiempo != null)
+//				return false;
+//		} else if (!tiempo.equals(other.tiempo))
+//			return false;
+//		return true;
+//	}
 
 	@Override
 	public String toString() {
