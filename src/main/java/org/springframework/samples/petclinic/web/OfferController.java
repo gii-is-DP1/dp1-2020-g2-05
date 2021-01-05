@@ -11,7 +11,7 @@ import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.OfferService;
 import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.TeamService;
-import org.springframework.samples.petclinic.service.TradeService;
+import org.springframework.samples.petclinic.service.TransactionService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.util.Status;
 import org.springframework.stereotype.Controller;
@@ -37,17 +37,17 @@ public class OfferController {
 
 	private final LeagueService leagueService;
 
-	private final TradeService tradeService;
+	private final TransactionService transactionService;
 
 	@Autowired
 	public OfferController(OfferService offerService, RecruitService recruitService, UserService userService,
-			LeagueService leagueService, TeamService teamService, TradeService tradeService) {
+			LeagueService leagueService, TeamService teamService, TransactionService transactionService) {
 		this.offerService = offerService;
 		this.recruitService = recruitService;
 		this.userService = userService;
 		this.leagueService = leagueService;
 		this.teamService = teamService;
-		this.tradeService = tradeService;
+		this.transactionService = transactionService;
 	}
 
 	@ModelAttribute("userTeam")
@@ -96,9 +96,12 @@ public class OfferController {
 				Pilot pilot = offer.getRecruit().getPilot(); // Piloto sobre el que se hace la compraventa
 				String fullName = pilot.getName() + " " + pilot.getLastName();
 				recruitService.saveRecruit(pilot, team);
-				tradeService.saveTrade(price, TransactionType.BUY, fullName, team, offer); // Guardar transaccion en el
+				transactionService.saveTransaction(price, TransactionType.BUY, "Compra de " + fullName, team, offer); // Guardar
+				// transaccion
+				// en el
 				// registro del comprador
-				tradeService.saveTrade(price, TransactionType.SELL, fullName, offer.getRecruit().getTeam(), offer); // Guardar
+				transactionService.saveTransaction(price, TransactionType.SELL, "Venta de " + fullName,
+						offer.getRecruit().getTeam(), offer); // Guardar
 				// transaccion
 				// en el
 				// registro del

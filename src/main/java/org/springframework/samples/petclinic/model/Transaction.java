@@ -13,16 +13,16 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "Trade")
-public class Trade extends BaseEntity {
+@Table(name = "Transaction")
+public class Transaction extends BaseEntity {
 
 	@Column(name = "date")
 	@NotNull
 	private LocalDate date;
 
-	@Column(name = "price")
+	@Column(name = "amount")
 	@NotNull
-	private Integer price;
+	private Integer amount;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "transactionType")
@@ -39,7 +39,7 @@ public class Trade extends BaseEntity {
 	@OneToOne()
 	private Offer offer;
 
-//	public Trade(@NotNull LocalDate date, @NotNull Integer price, @NotNull TransactionType transactionType,
+//	public Transaction(@NotNull LocalDate date, @NotNull Integer price, @NotNull TransactionType transactionType,
 //			@NotBlank String concept, Team team, Offer offer) {
 //		super();
 //		this.date = date;
@@ -58,12 +58,12 @@ public class Trade extends BaseEntity {
 		this.date = date;
 	}
 
-	public Integer getPrice() {
-		return price;
+	public Integer getAmount() {
+		return amount;
 	}
 
-	public void setPrice(Integer price) {
-		this.price = price;
+	public void setAmount(Integer price) {
+		this.amount = price;
 	}
 
 	public TransactionType getTransactionType() {
