@@ -69,12 +69,17 @@ public class LeagueService {
 	
 	@Transactional
 	public void saveLeague(League league) throws DataAccessException,duplicatedLeagueNameException{
+		log.info("Intentando guardar liga : "+ league);
 		Iterable<League> ligas = leagueRepository.findAll();
 		List<League> listLigas = new ArrayList<League>();
 		ligas.forEach(listLigas::add);
 		for(int i=0;i<listLigas.size();i++) {
-			if(listLigas.get(i).getName().equals(league.getName())) throw new duplicatedLeagueNameException();
+			if(listLigas.get(i).getName().equals(league.getName())) {
+				log.warn("No se ha podido guardar la liga " + league);
+				throw new duplicatedLeagueNameException();
+			}
 		}
+		log.info("La liga '" + league +"' se ha guardado correctamente");
 		leagueRepository.save(league);
 	}
 	
@@ -107,6 +112,7 @@ public class LeagueService {
 	}
 	
 	public String randomString(int longitud) {
+		log.info("Autogenerando codigo para una liga");
 		 String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 		 String sb="";
