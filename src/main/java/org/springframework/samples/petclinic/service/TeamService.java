@@ -13,6 +13,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Pilot;
+import org.springframework.samples.petclinic.model.Recruit;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.repository.LeagueRepository;
 import org.springframework.samples.petclinic.repository.TeamRepository;
@@ -105,7 +106,7 @@ public class TeamService {
 	
 	@Transactional
 	public void saveTeamMoney(Team team, Integer price) throws DataAccessException {
-		team.setMoney((team.getMoney() + price));
+		team.setMoney(team.getMoney() + price);
 		saveTeam(team);
 	}
 	
@@ -118,9 +119,11 @@ public class TeamService {
 		sysTeam.setPoints(0);
 		sysTeam.setUser(userService.findUser("admin1").get());
 		teamRepository.save(sysTeam);
+		log.debug("Creada la escudería sisteama:" + sysTeam);
 		
-		//Fichamos y ofertamos a todos los pilotos con la escudería sistema que estén en la categoría actual
+		log.info("Procedemos a fichar y ofertar a todos los pilotos con la escudería sistema que estén en la categoría actual");
 		recruitAndOfferAll(sysTeam,TCService.getTabla().get().getCurrentCategory());
+		log.debug("Fichados los pilotos de la categoría actual con la escudería sistema");
 	}
 	@Transactional
 	public void recruitAndOfferAll(Team t,Category cat) {
@@ -131,7 +134,10 @@ public class TeamService {
 			if(listPilots.get(i).getCategory().equals(cat)) {
 				recruitService.saveRecruit(listPilots.get(i),t);
 				Pilot p = listPilots.get(i);
-				offerService.putOnSale(recruitService.getRecruitByPilotId(p.getId()).get(), p.getBaseValue());
+				System.out.println("fichado " + p);
+				Optional<Recruit> r = recruitService.getRecruitByPilotId(p.getId(), t.getLeague().getId());
+				offerService.putOnSale(r.get(), p.getBaseValue());
+				System.out.println("oferta" + i);
 			}
 		}
 	}

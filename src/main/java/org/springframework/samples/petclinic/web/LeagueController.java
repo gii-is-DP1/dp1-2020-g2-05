@@ -210,10 +210,9 @@ public class LeagueController {
 
 
 			
-//			log.debug("Creando el equipo sistema");
-//			teamService.saveSystemTeam(league);
-
-//			log.info("Equipo sistema creado correctamente");
+			log.debug("Creando el equipo sistema");
+			teamService.saveSystemTeam(league);
+			log.info("Equipo sistema creado correctamente");
 
 			 return "redirect:/leagues/myLeagues";	
 //			 return "redirect:/leagues/"+league.getId()+"/teams/new";	
