@@ -36,13 +36,28 @@
 					<c:if test = "${trade.transactionType == TransactionType.BUY}">
 						<td>
 							<p style="color: red;">
-								+
+								-
 								<c:out value="${trade.price}" />
 							</p>
 						</td>
 						<td>
 							<p>
 								Compra de
+								<c:out value="${trade.concept}" />
+							</p>
+						</td>
+					</c:if>
+					
+					<c:if test = "${trade.transactionType == TransactionType.REWARD}">
+						<td>
+							<p style="color: green;">
+								+
+								<c:out value="${trade.price}" />
+							</p>
+						</td>
+						<td>
+							<p>
+								Recompensa por buenos resultados en la carrera de
 								<c:out value="${trade.concept}" />
 							</p>
 						</td>
