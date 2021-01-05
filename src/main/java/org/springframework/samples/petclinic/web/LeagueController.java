@@ -38,7 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 public class LeagueController {
 
 	private String AUTHORITY;
-	
+
 	TeamController teamController;
 	TablaConsultasService TCService;
 	TeamService teamService;
@@ -47,12 +47,12 @@ public class LeagueController {
 
 	@Autowired
 	public LeagueController(LeagueService leagueService, UserService userService, TablaConsultasService TCService,
-			TeamService teamService,TeamController teamController) {
+			TeamService teamService, TeamController teamController) {
 		this.leagueService = leagueService;
 		this.userService = userService;
 		this.TCService = TCService;
 		this.teamService = teamService;
-		this.teamController=teamController;
+		this.teamController = teamController;
 	}
 
 	@InitBinder("league")
@@ -71,10 +71,10 @@ public class LeagueController {
 
 		log.debug("Intentando detectar si hay ligas sin equipos");
 		if (this.leagueService.comprobarLigaVacia(result)) { // si ha eliminado a una liga da true y refresco la pagina
-			log.info("Se ha detectado una liga sin equipos y se ha borrado");
+			log.info("Liga borrada");
 
 			return leagues(modelMap);
-		}else {
+		} else {
 			log.info("No se han detectado ligas sin equipos");
 
 		}
@@ -95,21 +95,15 @@ public class LeagueController {
 	public String myLeagues(ModelMap modelMap) {
 		User user = this.userService.getUserSession();
 
-		
-		
 		List<League> myLeaguesList = new ArrayList<League>();
 
 		if (Optional.of(user).isPresent()) {
 			myLeaguesList = leagueService.obtenerLigasPorUsuario(teamService.findTeamsByUsername(user.getUsername())); // obtengo
-																										// usuario
+			// usuario
 		}
-
+		log.info("Mostrando ligas del user '"+user.getUsername()+"'");
 		try {
-//	    	if(modelMap.getAttribute("vengoDeAbajo").equals(true)) {
-//		   		 modelMap.addAttribute("vengoDeAbajo",false);
-//		    	return myLeagues(modelMap);
-//		    	} //si es necesario se descomenta
-//	    	else {
+
 			if (modelMap.getAttribute("yaTienesEquipo").equals(true)) {
 				modelMap.addAttribute("leagueYaEquipoId", modelMap.getAttribute("leagueYaEquipoId"));
 
@@ -141,7 +135,6 @@ public class LeagueController {
 
 		TCService.actualizarTabla(category);
 
-//		this.leagueService.updateGPsFromLeagueWithCategory();
 
 		return "redirect:/leagues";
 	}
@@ -163,32 +156,21 @@ public class LeagueController {
 
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 		Date date = new Date();
-		
-		Set<Team> setTeams = new HashSet();
+
 		League newLeague = new League();
 		newLeague.setLeagueCode(leagueService.randomString(10));
 		newLeague.setLeagueDate(formatter.format(date));
-		
-		Team team = new Team();
-		team.setName(user.getUsername()+" Team");
-		team.setMoney(2000);
-		team.setPoints(0);
-		team.setUser(user);
-		team.setLeague(newLeague);
-		
-//		setTeams.add(team);
-		newLeague.setTeam(setTeams);
-		this.leagueService.saveLeague(newLeague);
-		this.teamService.saveTeam(team);
-		
-		log.debug("Liga dummy : " + newLeague + " Equipo creado : " + team);
-		
+
+		log.debug("Liga dummy : " + newLeague);
+
 		model.addAttribute("league", newLeague);
-		// borrar ligas sin equipos aqui para evitar que nos peten
+
 		return "/leagues/createLeagueName";
 	}
+
 	@PostMapping(path = "/leagues/new")
-	public String processCrearLiga(@Valid League league, BindingResult results, ModelMap model) throws DataAccessException, duplicatedLeagueNameException {
+	public String processCrearLiga(@Valid League league, BindingResult results, ModelMap model)
+			throws DataAccessException, duplicatedLeagueNameException {
 		log.debug("Obtenida la liga del form : " + league);
 		if (results.hasErrors()) {
 			model.put("league", league);
@@ -196,28 +178,40 @@ public class LeagueController {
 			return "/leagues/createLeagueName";
 		} else {
 
-//			try {
-				log.debug("Intentando guardar liga : " + league);
-				this.leagueService.updateLeagueName(league.getId(), league.getName());
-				log.info("Liga : " + league + " guardada correctamente");
-//			} catch (duplicatedLeagueNameException e) {
-//				log.warn("Fallo al intentar crear la nueva liga : " + league + ", el nombre '" + league.getName()
-//						+ "' ya esta asignado a una liga");
-//				results.rejectValue("name", "duplicate", "already exists a league with that name");
-//				model.put("message", results.getAllErrors());
-//				return "/leagues/createLeagueName";
-//			}
+			try {
 
+				User user = this.userService.getUserSession();
 
+				Set<Team> setTeams = new HashSet();
+
+				Team team = new Team();
+				team.setUser(this.userService.getUserSession());
+				team.setLeague(league);
+				team.setMoney(2000);
+				team.setPoints(0);
+				team.setName(user.getUsername() + " team");
+				league.setTeam(setTeams);
+
+				this.leagueService.saveLeague(league);
+
+				this.teamService.saveTeam(team);
+				log.info("Equipo " + team + " guardado correctamente.");
+
+			} catch (duplicatedLeagueNameException e) {
+				log.warn("Fallo al intentar crear la nueva liga : " + league + ", el nombre '" + league.getName()
+						+ "' ya esta asignado a una liga");
+				results.rejectValue("name", "duplicate", "already exists a league with that name");
+				model.put("message", results.getAllErrors());
+				return "/leagues/createLeagueName";
+			}
 			
 			log.debug("Creando el equipo sistema");
 			teamService.saveSystemTeam(league);
 			log.info("Equipo sistema creado correctamente");
 
-			 return "redirect:/leagues/myLeagues";	
-//			 return "redirect:/leagues/"+league.getId()+"/teams/new";	
+			log.info("Equipo sistema creado correctamente");
 
-
+			return "redirect:/leagues/myLeagues";
 		}
 
 	}
@@ -229,6 +223,7 @@ public class LeagueController {
 		if (!Optional.of(user).isPresent()) {
 			return "/leagues/leagueList";
 		}
+		log.debug("Intentando unir a " + user.getUsername() + " a una liga");
 
 		model.addAttribute("league", new League());
 
@@ -236,7 +231,6 @@ public class LeagueController {
 
 		if (num_leagues == 5) {
 			model.addAttribute("yaTieneMaxTeams", true);
-//			model.addAttribute("vengoDeAbajo",true);
 			return myLeagues(model);
 		}
 		try {
@@ -247,7 +241,6 @@ public class LeagueController {
 
 		}
 
-		// noLeagueFound=false;
 		return "/leagues/createLeague";
 	}
 
@@ -255,13 +248,13 @@ public class LeagueController {
 	public String unirseLigaCode(League league, ModelMap model) {
 		User user = this.userService.getUserSession();
 
-//		List<Integer> collect = leagueService.findTeamsByUsername(user.getUsername());
 
 		List<Integer> idLeague = this.teamService.findTeamsByUsername(user.getUsername());
 
 		Optional<League> liga = this.leagueService.findLeagueByLeagueCode(league.getLeagueCode().trim());
 
 		if (!liga.isPresent()) {
+			log.warn("No se han encontrado ligas con el codigo :'" + league.getLeagueCode()+"'");
 			model.addAttribute("noLeagueFound", true);
 			return unirseLiga(model);
 		}
@@ -269,18 +262,20 @@ public class LeagueController {
 		Integer numTeamsLeague = this.teamService.findTeamsByLeagueId(liga.get().getId());
 
 		if (idLeague.contains(liga.get().getId())) {
+			log.info("El user '"+user.getUsername()+ "' ya pertenece a la liga con codigo :'"+league.getLeagueCode()+"'");
+
 			model.addAttribute("yaTienesEquipo", true);
 			model.addAttribute("leagueYaEquipoId", liga.get().getId());
-//			model.addAttribute("vengoDeAbajo",true);
 			return myLeagues(model);
 		}
 
 		if (numTeamsLeague > 5) {
+			log.info("La liga con codigo :'"+league.getLeagueCode()+"' ya tiene el maximo de equipos");
+
 			model.addAttribute("yaTieneMaxTeams", true);
-//			model.addAttribute("vengoDeAbajo",true);
 			return myLeagues(model);
 		}
-
+		log.info("Redirigiendo a crear equipo para entrar en la liga con codigo :'"+league.getLeagueCode()+"'");
 		model.addAttribute("yaTienesEquipo", false);
 		return "redirect:/leagues/" + liga.get().getId() + "/teams/new";
 	}
