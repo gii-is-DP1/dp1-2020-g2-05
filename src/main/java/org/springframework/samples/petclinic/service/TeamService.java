@@ -20,7 +20,9 @@ import org.springframework.samples.petclinic.service.exceptions.DuplicatedTeamNa
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class TeamService {
 	
@@ -43,6 +45,7 @@ public class TeamService {
 		this.pilotService = pilotService;
 		this.recruitService = recruitService;
 		this.TCService = TCService;
+		this.offerService=offerService;
 	}
 	
 	public List<Integer> findTeamsByUsername(String username) throws DataAccessException {
@@ -79,7 +82,7 @@ public class TeamService {
 			teamRepository.save(team);
 
 		}else {
-			System.out.println("hhhh");
+			log.warn("No se ha podido guardar el equipo " + team);
 		}
 		
 	}

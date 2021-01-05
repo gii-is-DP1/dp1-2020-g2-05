@@ -24,7 +24,7 @@ public interface LeagueRepository extends CrudRepository<League, Integer>{
 //	@Modifying
 //	@Query("UPDATE League l SET l.racesCompleted = :racesCompleted WHERE l.id = :id")	
 //	public void increaseRacesCompleted(@Param("id") int id,@Param("racesCompleted") Integer racesCompleted);
-	
+
 //	@Transactional
 //	@Modifying
 //	@Query("UPDATE League l SET l.activeCategory = :idCategory WHERE l.id = :id")	
@@ -51,6 +51,11 @@ public interface LeagueRepository extends CrudRepository<League, Integer>{
 	
 	@Query("SELECT aut.authority FROM Authorities aut WHERE aut.user.username LIKE :username") //METER EN USER REPOSITORY
 	public String findAuthoritiesByUsername(@Param("username") String username);
+	
+	@Transactional
+	@Modifying
+	@Query("UPDATE League l SET l.name = :name WHERE l.id = :id")	
+	public void updateLeagueName(@Param("id") int id,@Param("name") String name);
 	
 	
 	
