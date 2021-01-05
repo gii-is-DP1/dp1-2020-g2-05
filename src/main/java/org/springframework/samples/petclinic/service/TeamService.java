@@ -13,7 +13,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Pilot;
-import org.springframework.samples.petclinic.model.Recruit;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.repository.LeagueRepository;
 import org.springframework.samples.petclinic.repository.TeamRepository;
@@ -34,8 +33,6 @@ public class TeamService {
 	private RecruitService recruitService;
 	private TablaConsultasService TCService;
 	private OfferService offerService;
-	
-	private LeagueService leagueService;
 	
 	@Autowired
 	public TeamService(LeagueRepository leagueRepository, TeamRepository teamRepository,
@@ -134,10 +131,8 @@ public class TeamService {
 			if(listPilots.get(i).getCategory().equals(cat)) {
 				recruitService.saveRecruit(listPilots.get(i),t);
 				Pilot p = listPilots.get(i);
-				System.out.println("fichado " + p);
-				Optional<Recruit> r = recruitService.getRecruitByPilotId(p.getId(), t.getLeague().getId());
-				offerService.putOnSale(r.get(), p.getBaseValue());
-				System.out.println("oferta" + i);
+				offerService.putOnSale(recruitService.getRecruitByPilotId(p.getId(),
+						t.getLeague().getId()).get(), p.getBaseValue());
 			}
 		}
 	}
