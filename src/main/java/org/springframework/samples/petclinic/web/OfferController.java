@@ -7,7 +7,6 @@ import org.springframework.samples.petclinic.model.Offer;
 import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.TransactionType;
-import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.OfferService;
 import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.TeamService;
