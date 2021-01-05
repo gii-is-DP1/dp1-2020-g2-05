@@ -154,7 +154,6 @@ public class LeagueController {
 			return "/leagues/leagueList";
 		}
 
-		Integer numero_de_ligas  =this.leagueService.convertirIterableLista(this.leagueService.findAll()).size();
 		Integer num_leagues = leagueService.findLeaguesByUsername(user.getUsername());
 
 		if (num_leagues >= 5) {
