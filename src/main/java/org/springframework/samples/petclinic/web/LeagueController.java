@@ -204,14 +204,14 @@ public class LeagueController {
 				model.put("message", results.getAllErrors());
 				return "/leagues/createLeagueName";
 			}
-
+			
 			log.debug("Creando el equipo sistema");
 			teamService.saveSystemTeam(league);
+			log.info("Equipo sistema creado correctamente");
 
 			log.info("Equipo sistema creado correctamente");
 
 			return "redirect:/leagues/myLeagues";
-
 		}
 
 	}

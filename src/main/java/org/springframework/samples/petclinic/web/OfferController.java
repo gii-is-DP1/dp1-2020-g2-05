@@ -35,17 +35,14 @@ public class OfferController {
 
 	private final UserService userService;
 
-	private final LeagueService leagueService;
-
 	private final TradeService tradeService;
 
 	@Autowired
-	public OfferController(OfferService offerService, RecruitService recruitService, UserService userService,
-			LeagueService leagueService, TeamService teamService, TradeService tradeService) {
+	public OfferController(OfferService offerService, RecruitService recruitService,
+			UserService userService, TeamService teamService, TradeService tradeService) {
 		this.offerService = offerService;
 		this.recruitService = recruitService;
 		this.userService = userService;
-		this.leagueService = leagueService;
 		this.teamService = teamService;
 		this.tradeService = tradeService;
 	}
