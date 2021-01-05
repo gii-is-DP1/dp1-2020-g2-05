@@ -7,13 +7,15 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+import java.time.LocalDate;
 
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.web.duplicatedLeagueNameException;
@@ -100,7 +102,26 @@ public class LeagueServiceTest {
 		assertThat(found.size()).isEqualTo(found1 + 1);
 	 }
 	 
-	 
+	  
+//		 @Test
+//		 @Transactional
+//		 @Modifying
+//		 void shouldUpdateLeague()  throws DataAccessException, duplicatedLeagueNameException {
+//		
+//			
+//			League newLeague = new League();
+//			newLeague.setLeagueCode("UDTQCSSOND");
+//			newLeague.setLeagueDate("22/12/2222");
+//			newLeague.setName("liga2222");
+//			
+//			this.leagueService.saveLeague(newLeague);
+//			
+//			this.leagueService.updateLeagueName(newLeague.getId(), "changuedName");
+//			League league2 = this.leagueService.findLeague(newLeague.getId()).get();
+//			assertThat(league2.getName()).isEqualTo("changuedName");
+//
+//		 }
+//	 
 	 @Test
 	 @Transactional
 	 void shouldNotInsertLeague()  throws DataAccessException, duplicatedLeagueNameException  {
@@ -174,6 +195,11 @@ public class LeagueServiceTest {
 			 team_new.setMoney(200);
 			 team_new.setName("TEST");
 			 team_new.setPoints(222);
+			 Team team_new2= new Team();
+			 team_new2.setMoney(200);
+			 team_new2.setName("Sistema");
+			 team_new2.setPoints(222);
+			 equipos.add(team_new2);
 			 equipos.add(team_new);
 			newLeague.setTeam(equipos);
 			leagues.add(newLeague);
