@@ -64,11 +64,7 @@ public class LeagueService {
 //		this.teamRepository = teamRepository;
 //	}
 	
-	@Transactional
-	@Modifying
-	public void updateLeagueName(int id,String name) {
-		this.leagueRepository.updateLeagueName(id, name);
-	}
+
 
 	
 	@Transactional
@@ -76,7 +72,6 @@ public class LeagueService {
 		Iterable<League> ligas = leagueRepository.findAll();
 		List<League> listLigas = new ArrayList<League>();
 		ligas.forEach(listLigas::add);
-		System.out.println(listLigas);
 		for(int i=0;i<listLigas.size();i++) {
 			if(listLigas.get(i).getName().equals(league.getName())) throw new duplicatedLeagueNameException();
 		}
@@ -111,39 +106,6 @@ public class LeagueService {
 		return leagueRepository.findLeaguesByUsername(username);
 	}
 	
-//	@Modifying
-//	@Transactional
-//	public void activeCategory(Integer id, Category idCategory) {
-//		 leagueRepository.activeCategory(id, idCategory);
-//	}
-	
-
-//	public List<League> findAllLeaguesByCategory(Category idCategory) {
-//		 return leagueRepository.findAllLeaguesByCategory(idCategory);
-//	}
-	
-//	public void updateGPsFromLeagueWithCategory(Category category) throws DataAccessException, duplicatedLeagueNameException{
-//		List<League> listaCategorias= leagueRepository.findAllLeaguesByCategory(category);
-//		List<League> listaCategoriasActualizada = new ArrayList<League>();
-//		for(League league:listaCategorias) {
-//			Integer racesCompleted =league.getRacesCompleted()+1;
-//			listaCategoriasActualizada.add(league);
-//			this.leagueRepository.increaseRacesCompleted(league.getId(), racesCompleted);
-//		}
-//	}
-	//	public void activeMoto2(Integer leagueId) throws DataAccessException {
-
-//		leagueRepository.activeMoto2(leagueId);
-//	}
-//	public void activeMotogp(Integer leagueId) throws DataAccessException {
-//		leagueRepository.activeMotogp(leagueId);
-//	}
-	
-//	public Optional<League> incrementarCarrerasLiga(Integer leagueId) throws DataAccessException {
-//		return leagueRepository.incrementarCarrerasLiga(leagueId);
-//	}
-//	
-	
 	public String randomString(int longitud) {
 		 String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -172,13 +134,13 @@ public class LeagueService {
 		
 		for(League league:result) {
 			Set<Team> equipos = league.getTeam();
-			if(equipos.size()<=1) {
-//				if(equipos.stream().collect(Collectors.toList()).get(0).getName()=="Sistema") {
+			if(equipos.size()<=1 ) {
+				if(equipos.stream().collect(Collectors.toList()).get(0).getName().equals("Sistema")) {
 					this.deleteLeague(league);
 					ret =  true;
 					log.warn("Se ha detectado una liga sin equipos : " + league);
 
-//				}
+				}
 			}
 			
 		    }

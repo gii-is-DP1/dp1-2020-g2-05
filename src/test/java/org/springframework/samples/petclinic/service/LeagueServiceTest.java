@@ -172,11 +172,17 @@ public class LeagueServiceTest {
 		void shouldBeALeagueWithNoTeams() {
 		 	Set<Team> equipos = new HashSet<Team>();
 		 	List<League> leagues = new ArrayList<League>();
+		 	Set<Team> conj = new HashSet<Team>();
 		 	League newLeague = new League();
 			newLeague.setLeagueCode("UDTQCSSOND");
 			newLeague.setLeagueDate("22/12/2222");
 			newLeague.setName("liga2222");
 			newLeague.setTeam(equipos);
+			Team team = new Team();
+			team.setName("Sistema");
+			team.setLeague(newLeague);
+			conj.add(team);
+			newLeague.setTeam(conj);
 			leagues.add(newLeague);
 			
 			Boolean noTeams = this.leagueService.comprobarLigaVacia(leagues);

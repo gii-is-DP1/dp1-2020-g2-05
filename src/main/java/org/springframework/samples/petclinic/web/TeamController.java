@@ -236,7 +236,7 @@ public class TeamController {
 			BorrarDesdeMyTeams = false;
 			return "redirect:/myTeams";
 		} else {
-			return "redirect:/leagues/{leagueId}/teams";
+			return "redirect:/leagues";
 		}
 
 	}
