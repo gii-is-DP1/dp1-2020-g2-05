@@ -71,7 +71,7 @@ public class LeagueController {
 
 		log.debug("Intentando detectar si hay ligas sin equipos");
 		if (this.leagueService.comprobarLigaVacia(result)) { // si ha eliminado a una liga da true y refresco la pagina
-			log.info("Se ha detectado una liga sin equipos y se ha borrado");
+			log.info("Liga borrada");
 
 			return leagues(modelMap);
 		} else {
@@ -101,7 +101,7 @@ public class LeagueController {
 			myLeaguesList = leagueService.obtenerLigasPorUsuario(teamService.findTeamsByUsername(user.getUsername())); // obtengo
 			// usuario
 		}
-
+		log.info("Mostrando ligas del user '"+user.getUsername()+"'");
 		try {
 
 			if (modelMap.getAttribute("yaTienesEquipo").equals(true)) {
@@ -182,7 +182,6 @@ public class LeagueController {
 
 				User user = this.userService.getUserSession();
 
-			
 				Set<Team> setTeams = new HashSet();
 
 				Team team = new Team();
@@ -193,9 +192,7 @@ public class LeagueController {
 				team.setName(user.getUsername() + " team");
 				league.setTeam(setTeams);
 
-				log.debug("Intentando guardar liga : " + league);
 				this.leagueService.saveLeague(league);
-				log.info("Liga : " + league + " guardada correctamente");
 
 				this.teamService.saveTeam(team);
 				log.info("Equipo " + team + " guardado correctamente.");
@@ -226,6 +223,7 @@ public class LeagueController {
 		if (!Optional.of(user).isPresent()) {
 			return "/leagues/leagueList";
 		}
+		log.debug("Intentando unir a " + user.getUsername() + " a una liga");
 
 		model.addAttribute("league", new League());
 
@@ -256,6 +254,7 @@ public class LeagueController {
 		Optional<League> liga = this.leagueService.findLeagueByLeagueCode(league.getLeagueCode().trim());
 
 		if (!liga.isPresent()) {
+			log.warn("No se han encontrado ligas con el codigo :'" + league.getLeagueCode()+"'");
 			model.addAttribute("noLeagueFound", true);
 			return unirseLiga(model);
 		}
@@ -263,16 +262,20 @@ public class LeagueController {
 		Integer numTeamsLeague = this.teamService.findTeamsByLeagueId(liga.get().getId());
 
 		if (idLeague.contains(liga.get().getId())) {
+			log.info("El user '"+user.getUsername()+ "' ya pertenece a la liga con codigo :'"+league.getLeagueCode()+"'");
+
 			model.addAttribute("yaTienesEquipo", true);
 			model.addAttribute("leagueYaEquipoId", liga.get().getId());
 			return myLeagues(model);
 		}
 
 		if (numTeamsLeague > 5) {
+			log.info("La liga con codigo :'"+league.getLeagueCode()+"' ya tiene el maximo de equipos");
+
 			model.addAttribute("yaTieneMaxTeams", true);
 			return myLeagues(model);
 		}
-
+		log.info("Redirigiendo a crear equipo para entrar en la liga con codigo :'"+league.getLeagueCode()+"'");
 		model.addAttribute("yaTienesEquipo", false);
 		return "redirect:/leagues/" + liga.get().getId() + "/teams/new";
 	}
