@@ -62,12 +62,6 @@ public class TeamControllerTest {
 
 	private static final int TEST_TEAM_ID = 1;
 	
-
-	
-
-//	@Autowired
-//	private TeamController teamController;
-//	
 	
 	 @Autowired
 	 private WebApplicationContext context;

@@ -13,6 +13,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.Authorities;
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.League;
@@ -25,10 +26,15 @@ import org.springframework.samples.petclinic.repository.UserRepository;
 import org.springframework.samples.petclinic.repository.VisitRepository;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedTeamNameException;
+import org.springframework.samples.petclinic.web.LeagueController;
 import org.springframework.samples.petclinic.web.duplicatedLeagueNameException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import jdk.internal.org.jline.utils.Log;
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 
 @Service
 public class LeagueService {
@@ -57,12 +63,20 @@ public class LeagueService {
 //	public TeamService(TeamRepository teamRepository) {
 //		this.teamRepository = teamRepository;
 //	}
+	
+	@Transactional
+	@Modifying
+	public void updateLeagueName(int id,String name) {
+		this.leagueRepository.updateLeagueName(id, name);
+	}
 
+	
 	@Transactional
 	public void saveLeague(League league) throws DataAccessException,duplicatedLeagueNameException{
 		Iterable<League> ligas = leagueRepository.findAll();
 		List<League> listLigas = new ArrayList<League>();
 		ligas.forEach(listLigas::add);
+		System.out.println(listLigas);
 		for(int i=0;i<listLigas.size();i++) {
 			if(listLigas.get(i).getName().equals(league.getName())) throw new duplicatedLeagueNameException();
 		}
@@ -77,11 +91,17 @@ public class LeagueService {
 		return leagueRepository.findLeagueByLeagueCode(leagueCode);
 	}
 	
-
-	public Optional<User> findUserByUsername(String username) throws DataAccessException {
-		return leagueRepository.findUserByUsername(username);
+	public List<Integer> findTeamsByUsername(String username) throws DataAccessException {
+		return leagueRepository.findTeamsByUsername(username);
 	}
-
+	
+	public Integer findTeamsByLeagueId(Integer id) throws DataAccessException {
+		return leagueRepository.findTeamsByLeagueId(id);
+	}
+	
+//	public Optional<User> findUserByUsername(String username) throws DataAccessException {
+//		return leagueRepository.findUserByUsername(username);
+//	}
 	
 	public String findAuthoritiesByUsername(String username) throws DataAccessException {
 		return leagueRepository.findAuthoritiesByUsername(username);
@@ -152,16 +172,13 @@ public class LeagueService {
 		
 		for(League league:result) {
 			Set<Team> equipos = league.getTeam();
-				
-			if(equipos.size()==1) {
-				if(equipos.stream().collect(Collectors.toList()).get(0).getName()=="Sistema") {
+			if(equipos.size()<=1) {
+//				if(equipos.stream().collect(Collectors.toList()).get(0).getName()=="Sistema") {
 					this.deleteLeague(league);
 					ret =  true;
-				}
-			}
-			if(equipos.size()==0) {
-				this.deleteLeague(league);
-				ret =  true;
+					log.warn("Se ha detectado una liga sin equipos : " + league);
+
+//				}
 			}
 			
 		    }
@@ -190,17 +207,10 @@ public class LeagueService {
 
 	public List<League> obtenerLigasPorUsuario(Collection<Integer> collect){
 	
-//		List<Integer> idLeague = new ArrayList<Integer>();
-//		
-//		collect.forEach(idLeague::add);
 	    
 		List<League> myLeaguesList = collect.stream().map(x->this.findLeague(x).get()).collect(Collectors.toList());
-
 	    
-//		for(Integer i:idLeague) {
-//			League league_i = this.findLeague(i).get();
-//			myLeaguesList.add(league_i);
-//		}
+
 		return myLeaguesList;
 	}
 	
@@ -209,15 +219,19 @@ public class LeagueService {
 	public Iterable<League> findAll(){
 		return leagueRepository.findAll();
 	}
-	
-	
+		
 
+	
 	
 	public Optional<League> findLeague(Integer leagueId) {
 		return leagueRepository.findById(leagueId);
 	}
 	
 
+
+
+	
+	
 
 
 }
