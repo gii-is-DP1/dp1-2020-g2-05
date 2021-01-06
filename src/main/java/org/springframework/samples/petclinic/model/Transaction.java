@@ -20,6 +20,10 @@ public class Transaction extends BaseEntity {
 	@NotNull
 	private LocalDate date;
 
+	@Column(name = "remainingMoney")
+	@NotNull
+	private Integer remainingMoney;
+
 	@Column(name = "amount")
 	@NotNull
 	private Integer amount;
@@ -56,6 +60,14 @@ public class Transaction extends BaseEntity {
 
 	public void setDate(LocalDate date) {
 		this.date = date;
+	}
+
+	public Integer getRemainingMoney() {
+		return remainingMoney;
+	}
+
+	public void setRemainingMoney(Integer remainingMoney) {
+		this.remainingMoney = remainingMoney;
 	}
 
 	public Integer getAmount() {

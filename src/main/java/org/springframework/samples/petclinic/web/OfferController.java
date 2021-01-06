@@ -76,10 +76,11 @@ public class OfferController {
 			Offer offer = opo.get();
 			Team team = getUserTeam(leagueId);// Esdudería que va a comprar un piloto
 			Integer price = offer.getPrice();
+			Team sellerTeam = offer.getRecruit().getTeam();
 			if (!offer.getStatus().equals(Status.Outstanding)) {
 				modelMap.addAttribute("message", "This pilot isn't on sale anymore");
-			} else if (team.getId() == offer.getRecruit().getTeam().getId()) {// Si la escudería es la misma que ofrecio
-																				// el piloto, se cancela la oferta
+			} else if (team.getId() == sellerTeam.getId()) {// Si la escudería es la misma que ofrecio
+															// el piloto, se cancela la oferta
 				offer.setStatus(Status.Denied);
 				offerService.saveOffer(offer);
 
@@ -96,12 +97,13 @@ public class OfferController {
 				Pilot pilot = offer.getRecruit().getPilot(); // Piloto sobre el que se hace la compraventa
 				String fullName = pilot.getName() + " " + pilot.getLastName();
 				recruitService.saveRecruit(pilot, team);
-				transactionService.saveTransaction(price, TransactionType.BUY, "Compra de " + fullName, team, offer); // Guardar
+				transactionService.saveTransaction(team.getMoney(), price, TransactionType.BUY, "Compra de " + fullName,
+						team, offer); // Guardar
 				// transaccion
 				// en el
 				// registro del comprador
-				transactionService.saveTransaction(price, TransactionType.SELL, "Venta de " + fullName,
-						offer.getRecruit().getTeam(), offer); // Guardar
+				transactionService.saveTransaction(sellerTeam.getMoney(), price, TransactionType.SELL,
+						"Venta de " + fullName, sellerTeam, offer); // Guardar
 				// transaccion
 				// en el
 				// registro del

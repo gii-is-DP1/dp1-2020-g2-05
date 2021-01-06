@@ -26,10 +26,11 @@ public class TransactionService {
 		return transactionRepository.findTradesByTeamId(teamID);
 	}
 
-	public void saveTransaction(Integer amount, TransactionType transactionType, String concept, Team team,
-			Offer offer) {
+	public void saveTransaction(Integer remainingMoney, Integer amount, TransactionType transactionType, String concept,
+			Team team, Offer offer) {
 		Transaction transaction = new Transaction();
 		transaction.setDate(LocalDate.now());
+		transaction.setRemainingMoney(remainingMoney);
 		transaction.setAmount(amount);
 		transaction.setTransactionType(transactionType);
 		transaction.setConcept(concept);

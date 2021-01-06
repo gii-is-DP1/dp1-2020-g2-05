@@ -15,8 +15,6 @@ import org.springframework.samples.petclinic.model.BDCarrera;
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.FormRellenarBD;
 import org.springframework.samples.petclinic.model.GranPremio;
-import org.springframework.samples.petclinic.model.TablaConsultas;
-import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.service.GranPremioService;
 import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.PilotService;
@@ -31,7 +29,6 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import jdk.internal.org.jline.utils.Log;
 import lombok.extern.slf4j.Slf4j;
 import motogpAPI.RaceCode;
 import motogpAPI.Session;
@@ -197,7 +194,6 @@ public class PoblarBaseDeDatosController {
 		}
 		log.info("Resultados obtenidos :" + gp);
 
-		
 		try {
 			form.setCategory(Category.MOTO2);
 			this.pilotService.poblarBDCarreraACarrera(form, gp, true);
@@ -205,7 +201,6 @@ public class PoblarBaseDeDatosController {
 			model.addAttribute("messageMoto2NotFound",
 					"API has not found any result to date " + date + " and code " + code + " for moto2");
 		}
-		
 
 		try {
 			form.setCategory(Category.MOTOGP);

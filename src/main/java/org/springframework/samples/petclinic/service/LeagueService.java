@@ -8,32 +8,19 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.repository.query.Param;
-import org.springframework.samples.petclinic.model.Authorities;
-import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.League;
-import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Team;
-import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.repository.LeagueRepository;
 import org.springframework.samples.petclinic.repository.TeamRepository;
-import org.springframework.samples.petclinic.repository.UserRepository;
-import org.springframework.samples.petclinic.repository.VisitRepository;
-import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
-import org.springframework.samples.petclinic.service.exceptions.DuplicatedTeamNameException;
-import org.springframework.samples.petclinic.web.LeagueController;
 import org.springframework.samples.petclinic.web.duplicatedLeagueNameException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import jdk.internal.org.jline.utils.Log;
 import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
 
 @Service
@@ -47,9 +34,9 @@ public class LeagueService {
 	private OfferService offerService;
 
 	@Autowired
-	public LeagueService(LeagueRepository leagueRepository, TeamRepository teamRepository,
-			UserService userService, PilotService pilotService, RecruitService recruitService,
-			TablaConsultasService TCService, OfferService offerService) {
+	public LeagueService(LeagueRepository leagueRepository, TeamRepository teamRepository, UserService userService,
+			PilotService pilotService, RecruitService recruitService, TablaConsultasService TCService,
+			OfferService offerService) {
 		this.leagueRepository = leagueRepository;
 		this.teamRepository = teamRepository;
 		this.userService = userService;
@@ -58,70 +45,69 @@ public class LeagueService {
 		this.TCService = TCService;
 		this.offerService = offerService;
 	}
-	
+
 //	@Autowired
 //	public TeamService(TeamRepository teamRepository) {
 //		this.teamRepository = teamRepository;
 //	}
-	
+
 	@Transactional
 	@Modifying
-	public void updateLeagueName(int id,String name) {
+	public void updateLeagueName(int id, String name) {
 		this.leagueRepository.updateLeagueName(id, name);
 	}
 
-	
 	@Transactional
-	public void saveLeague(League league) throws DataAccessException,duplicatedLeagueNameException{
+	public void saveLeague(League league) throws DataAccessException, duplicatedLeagueNameException {
 		Iterable<League> ligas = leagueRepository.findAll();
 		List<League> listLigas = new ArrayList<League>();
 		ligas.forEach(listLigas::add);
 		System.out.println(listLigas);
-		for(int i=0;i<listLigas.size();i++) {
-			if(listLigas.get(i).getName().equals(league.getName())) throw new duplicatedLeagueNameException();
+		for (int i = 0; i < listLigas.size(); i++) {
+			if (listLigas.get(i).getName().equals(league.getName()))
+				throw new duplicatedLeagueNameException();
 		}
 		leagueRepository.save(league);
 	}
-	
+
 	public void deleteLeague(League league) throws DataAccessException {
 		leagueRepository.delete(league);
 	}
-	
+
 	public Optional<League> findLeagueByLeagueCode(String leagueCode) throws DataAccessException {
 		return leagueRepository.findLeagueByLeagueCode(leagueCode);
 	}
-	
+
 	public List<Integer> findTeamsByUsername(String username) throws DataAccessException {
 		return leagueRepository.findTeamsByUsername(username);
 	}
-	
+
 	public Integer findTeamsByLeagueId(Integer id) throws DataAccessException {
 		return leagueRepository.findTeamsByLeagueId(id);
 	}
-	
+
 //	public Optional<User> findUserByUsername(String username) throws DataAccessException {
 //		return leagueRepository.findUserByUsername(username);
 //	}
-	
+
 	public String findAuthoritiesByUsername(String username) throws DataAccessException {
 		return leagueRepository.findAuthoritiesByUsername(username);
 	}
-	
+
 	public Integer findLeaguesByUsername(String username) throws DataAccessException {
 		return leagueRepository.findLeaguesByUsername(username);
 	}
-	
+
 //	@Modifying
 //	@Transactional
 //	public void activeCategory(Integer id, Category idCategory) {
 //		 leagueRepository.activeCategory(id, idCategory);
 //	}
-	
 
 //	public List<League> findAllLeaguesByCategory(Category idCategory) {
 //		 return leagueRepository.findAllLeaguesByCategory(idCategory);
 //	}
-	
+
 //	public void updateGPsFromLeagueWithCategory(Category category) throws DataAccessException, duplicatedLeagueNameException{
 //		List<League> listaCategorias= leagueRepository.findAllLeaguesByCategory(category);
 //		List<League> listaCategoriasActualizada = new ArrayList<League>();
@@ -131,60 +117,60 @@ public class LeagueService {
 //			this.leagueRepository.increaseRacesCompleted(league.getId(), racesCompleted);
 //		}
 //	}
-	//	public void activeMoto2(Integer leagueId) throws DataAccessException {
+	// public void activeMoto2(Integer leagueId) throws DataAccessException {
 
 //		leagueRepository.activeMoto2(leagueId);
 //	}
 //	public void activeMotogp(Integer leagueId) throws DataAccessException {
 //		leagueRepository.activeMotogp(leagueId);
 //	}
-	
+
 //	public Optional<League> incrementarCarrerasLiga(Integer leagueId) throws DataAccessException {
 //		return leagueRepository.incrementarCarrerasLiga(leagueId);
 //	}
 //	
-	
+
 	public String randomString(int longitud) {
-		 String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-		 String sb="";
-		 Random random = new Random();
-		 
-	    for(int i = 0; i < longitud; i++) {
+		String sb = "";
+		Random random = new Random();
 
-	      int index = random.nextInt(alphabet.length());
+		for (int i = 0; i < longitud; i++) {
 
-	      char randomChar = alphabet.charAt(index);
+			int index = random.nextInt(alphabet.length());
 
-	      sb+=(randomChar);
-	    }
-	    return sb;
+			char randomChar = alphabet.charAt(index);
+
+			sb += (randomChar);
+		}
+		return sb;
 	}
-	
-	public <E> List<E> convertirIterableLista(Iterable<E> leagues){
+
+	public <E> List<E> convertirIterableLista(Iterable<E> leagues) {
 		List<E> result = new ArrayList<E>();
-	    leagues.forEach(result::add);
-	    return result;
+		leagues.forEach(result::add);
+		return result;
 	}
-	
+
 	public boolean comprobarLigaVacia(List<League> result) {
-		Boolean ret = false;   
-		
-		for(League league:result) {
+		Boolean ret = false;
+
+		for (League league : result) {
 			Set<Team> equipos = league.getTeam();
-			if(equipos.size()<=1) {
+			if (equipos.size() <= 1) {
 //				if(equipos.stream().collect(Collectors.toList()).get(0).getName()=="Sistema") {
-					this.deleteLeague(league);
-					ret =  true;
-					log.warn("Se ha detectado una liga sin equipos : " + league);
+				this.deleteLeague(league);
+				ret = true;
+				log.warn("Se ha detectado una liga sin equipos : " + league);
 
 //				}
 			}
-			
-		    }
-		   return ret;
+
+		}
+		return ret;
 	}
-	
+
 //	public List<Integer> GPsPorCategoria(List<League> result) {
 //	   			Integer moto2=0;
 //	   			Integer moto3=0;
@@ -205,33 +191,20 @@ public class LeagueService {
 //			return lista;
 //	}
 
-	public List<League> obtenerLigasPorUsuario(Collection<Integer> collect){
-	
-	    
-		List<League> myLeaguesList = collect.stream().map(x->this.findLeague(x).get()).collect(Collectors.toList());
-	    
+	public List<League> obtenerLigasPorUsuario(Collection<Integer> collect) {
+
+		List<League> myLeaguesList = collect.stream().map(x -> this.findLeague(x).get()).collect(Collectors.toList());
 
 		return myLeaguesList;
 	}
-	
-	
+
 	@Transactional
-	public Iterable<League> findAll(){
+	public Iterable<League> findAll() {
 		return leagueRepository.findAll();
 	}
-		
 
-	
-	
 	public Optional<League> findLeague(Integer leagueId) {
 		return leagueRepository.findById(leagueId);
 	}
-	
-
-
-
-	
-	
-
 
 }

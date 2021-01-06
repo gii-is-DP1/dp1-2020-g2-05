@@ -11,6 +11,7 @@
 		<thead>
 			<tr>
 				<th>Date</th>
+				<th>Remaining money</th>
 				<th>Price</th>
 				<th>Concept</th>
 			</tr>
@@ -19,6 +20,7 @@
 			<c:forEach items="${transaction}" var="transaction">
 				<tr>
 					<td><c:out value="${transaction.date}" /></td>
+					<td><c:out value="${transaction.remainingMoney}" /></td>
 					<td>
 						<c:if test="${transactionrade.transactionType != TransactionType.BUY}">
 							<p style="color: green;">
