@@ -19,7 +19,7 @@ import motogpAPI.RaceCode;
 @Service
 public class ResultService {
 	
-	
+
 	private ResultRepository resultRepository;
 	
 	private VisitRepository visitRepository;
@@ -57,7 +57,6 @@ public class ResultService {
 //	}
 	@Transactional
 	public List<Result> findResultsByCategoryAndId(Integer gpId, String raceCode,Category category) throws DataAccessException {
-		System.out.println("dentro bro");
 		return resultRepository.findResultsByCategoryAndId(gpId, raceCode,category);
 	}
 	

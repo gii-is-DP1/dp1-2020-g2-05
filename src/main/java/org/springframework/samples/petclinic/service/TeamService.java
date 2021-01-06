@@ -20,7 +20,9 @@ import org.springframework.samples.petclinic.service.exceptions.DuplicatedTeamNa
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class TeamService {
 	
@@ -32,8 +34,6 @@ public class TeamService {
 	private TablaConsultasService TCService;
 	private OfferService offerService;
 	
-	private LeagueService leagueService;
-	
 	@Autowired
 	public TeamService(LeagueRepository leagueRepository, TeamRepository teamRepository,
 			UserService userService, PilotService pilotService, RecruitService recruitService, TablaConsultasService TCService, OfferService offerService) {
@@ -43,6 +43,7 @@ public class TeamService {
 		this.pilotService = pilotService;
 		this.recruitService = recruitService;
 		this.TCService = TCService;
+		this.offerService=offerService;
 	}
 	
 	public List<Integer> findTeamsByUsername(String username) throws DataAccessException {
@@ -79,7 +80,7 @@ public class TeamService {
 			teamRepository.save(team);
 
 		}else {
-			System.out.println("hhhh");
+			log.warn("No se ha podido guardar el equipo " + team);
 		}
 		
 	}
@@ -102,7 +103,7 @@ public class TeamService {
 	
 	@Transactional
 	public void saveTeamMoney(Team team, Integer price) throws DataAccessException {
-		team.setMoney((team.getMoney() + price));
+		team.setMoney(team.getMoney() + price);
 		saveTeam(team);
 	}
 	
@@ -115,9 +116,11 @@ public class TeamService {
 		sysTeam.setPoints(0);
 		sysTeam.setUser(userService.findUser("admin1").get());
 		teamRepository.save(sysTeam);
+		log.debug("Creada la escudería sisteama:" + sysTeam);
 		
-		//Fichamos y ofertamos a todos los pilotos con la escudería sistema que estén en la categoría actual
+		log.info("Procedemos a fichar y ofertar a todos los pilotos con la escudería sistema que estén en la categoría actual");
 		recruitAndOfferAll(sysTeam,TCService.getTabla().get().getCurrentCategory());
+		log.debug("Fichados los pilotos de la categoría actual con la escudería sistema");
 	}
 	@Transactional
 	public void recruitAndOfferAll(Team t,Category cat) {
@@ -128,7 +131,8 @@ public class TeamService {
 			if(listPilots.get(i).getCategory().equals(cat)) {
 				recruitService.saveRecruit(listPilots.get(i),t);
 				Pilot p = listPilots.get(i);
-				offerService.putOnSale(recruitService.getRecruitByPilotId(p.getId()).get(), p.getBaseValue());
+				offerService.putOnSale(recruitService.getRecruitByPilotId(p.getId(),
+						t.getLeague().getId()).get(), p.getBaseValue());
 			}
 		}
 	}

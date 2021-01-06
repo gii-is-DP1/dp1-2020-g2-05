@@ -21,7 +21,8 @@
 			<c:forEach items="${offers}" var="offer">
 			<c:if test="${offer.status == Status.Outstanding}">
 				<tr>
-					<td><c:out value="${offer.recruit.pilot.name}" /></td>
+					<td><c:out value="${offer.recruit.pilot.name} " /> 
+					<c:out value="${offer.recruit.pilot.lastName}" /></td>
 					<td><c:out value="${offer.price} " /></td>
 					<c:choose>
 					<c:when test="${offer.recruit.team == userTeam}">

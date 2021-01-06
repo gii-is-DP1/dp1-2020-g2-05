@@ -74,7 +74,12 @@ public class LeagueControllerTest {
 	@MockBean
 	@Autowired
 	TablaConsultasService TCService;
+	
+	@MockBean
+	@Autowired	
+	TeamController teamController;
 
+	
 	@MockBean
 	@Autowired	
 	LeagueService leagueService;
@@ -256,7 +261,7 @@ public class LeagueControllerTest {
 				.param("racesCompleted", TCConsulta.getRacesCompleted().toString())
 				.param("activeCategory", TCConsulta.getCurrentCategory().toString()))
 				.andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/leagues/"+liga.getId()+"/teams/new"));
+				.andExpect(view().name("redirect:/leagues/myLeagues"));
 	}
 
 	@WithMockUser(value = "spring")
