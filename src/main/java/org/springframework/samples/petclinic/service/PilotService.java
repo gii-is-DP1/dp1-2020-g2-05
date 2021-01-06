@@ -57,6 +57,7 @@ import org.springframework.samples.petclinic.repository.VetRepository;
 import org.springframework.samples.petclinic.repository.VisitRepository;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
 import org.springframework.samples.petclinic.web.ResultFormatter;
+import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -109,7 +110,10 @@ public class PilotService {
 	public Iterable<Pilot> findAll() {
 		return pilotRepository.findAll();
 	}
-
+	@Transactional
+	public List<Pilot> findAllList() {
+		return pilotRepository.findAll();
+	}
 	public void delete(Pilot pilotId) {
 		pilotRepository.delete(pilotId);
 
@@ -141,7 +145,7 @@ public class PilotService {
 				GranPremio gp = new GranPremio(); //entidad de una carrera
 				List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceNumberCampu(form.getCategory(), i, j, Session.RACE);
 				if(todosLosResultadosDeUnaCarrera.size()==0) {
-					
+					throw new NotFoundException("No se han encontrado carreras para los anyos dados");
 				}else {
 					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 					LocalDate date = LocalDate.parse(todosLosResultadosDeUnaCarrera.get(0).getFecha(), formatter);				
@@ -210,7 +214,7 @@ public class PilotService {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 		if (todosLosResultadosDeUnaCarrera.size()==0) {
-
+			throw new NotFoundException("No se han encontrado carreras para los parametros dados");
 		} else {
 			
 			if (GpEstaEnCalendario==false) {
