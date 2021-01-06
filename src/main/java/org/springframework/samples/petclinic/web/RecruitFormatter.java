@@ -34,8 +34,8 @@ public class RecruitFormatter implements Formatter<Recruit> {
 		for (Pilot pilot : findRecruits) {
 			String string = pilot.getName() + " " + pilot.getLastName();
 			if (string.equals(text)) {
-				Recruit recruit = this.recruitService.getRecruitByPilotId(pilot.getId()).get();
-				return recruit;
+//				Recruit recruit = this.recruitService.getRecruitByPilotId(pilot.getId()).get();
+//				return recruit;
 			}
 		}
 		throw new ParseException("Recruit not found: " + text, 0);
