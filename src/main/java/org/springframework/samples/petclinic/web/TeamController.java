@@ -105,6 +105,14 @@ public class TeamController {
 		League liga = this.leagueService.findLeague(leagueId).get();
 		team.setLeague(liga);
 		team.setUser(this.userService.getUserSession());
+		
+		Integer max = this.teamService.findTeamsByLeagueId(leagueId);
+		
+		if(max >= 5) {
+			model.addAttribute("message", "No se puede crear mas equipos en esta liga");
+			return "redirect:/leagues/{leagueId}/teams";
+		}
+		
 		System.out.println(team.getLeague());
 		model.addAttribute("team", team);
 
