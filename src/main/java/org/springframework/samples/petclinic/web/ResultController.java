@@ -105,7 +105,7 @@ public class ResultController {
 		model.addAttribute("gp", gp);
 		model.addAttribute("resultados",listaResultados);
 		model.addAttribute("record", record);
-		return "results/resultsByCategory";
+		return "results/resultsByCategory"; 
 	}
 	
 //	@PostMapping(value = "/result/new")

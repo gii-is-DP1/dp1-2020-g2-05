@@ -34,27 +34,6 @@ public class LineupServiceTests {
 	@Autowired
 	protected TeamService teamService;
 
-//	@BeforeAll
-//	League initLeague() {
-//		League newLeague = new League();
-//		newLeague.setName("initLeague");
-//		newLeague.setLeagueCode("TEST_CODE");
-//		newLeague.setLeagueDate("22/12/2222");
-//		newLeague.setMotogpActive(true);
-//		newLeague.setMoto2Active(false);
-//		newLeague.setMoto3Active(false);
-//		newLeague.setRacesCompleted(16);
-//		return newLeague;
-//	}
-//	
-//	@BeforeAll
-//	Recruit initRecruit1() {
-//		Recruit newRecruit = new Recruit();
-//		newRecruit.setPilot(pilot);
-//		newRecruit.setTeam(team);
-//		return newRecruit;
-//	}
-
 	@Test
 	void shouldFindLineupsById() {
 		Optional<Lineup> lineup = this.lineupService.findLineup(1);
@@ -84,7 +63,6 @@ public class LineupServiceTests {
 		Lineup newLineup = new Lineup();
 		newLineup.setCategory(Category.MOTOGP);
 		newLineup.setGp(this.lineupService.findLineup(1).get().getGp());
-//		newLineup.setLeague(this.leagueService.findLeague(1).get());
 		newLineup.setRecruit1(this.recruitService.findRecruit(1).get());
 		newLineup.setRecruit2(this.recruitService.findRecruit(2).get());
 		newLineup.setTeam(this.teamService.findTeamById(1).get());
@@ -109,7 +87,6 @@ public class LineupServiceTests {
 		Lineup newLineup = new Lineup();
 		newLineup.setCategory(Category.MOTOGP);
 		newLineup.setGp(this.lineupService.findLineup(1).get().getGp());
-//		newLineup.setLeague(this.leagueService.findLeague(1).get());
 		newLineup.setRecruit1(this.recruitService.findRecruit(1).get());
 		newLineup.setRecruit2(this.recruitService.findRecruit(2).get());
 		newLineup.setTeam(this.teamService.findTeamById(1).get());
