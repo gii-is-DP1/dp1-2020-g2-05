@@ -1506,3 +1506,8 @@ Database is already closed (to disable automatic closing at VM shutdown, add ";D
 2021-01-06 21:10:53,561 DEBUG org.springframework.samples.petclinic.web.TeamController [http-nio-8090-exec-5] Asignandole el usuario actual al equipo
 2021-01-06 21:10:53,561 INFO org.springframework.samples.petclinic.web.TeamController [http-nio-8090-exec-5] Usuario serrojjimasignado correctamente
 2021-01-06 21:10:53,569 DEBUG org.springframework.samples.petclinic.web.TeamController [http-nio-8090-exec-5] Guardando el equipo Team [name =TEAMVISTAEDITAR, points=0, money=2000 username =serrojjim] en la base de datos.
+2021-01-06 21:10:53,578 INFO org.springframework.samples.petclinic.web.TeamController [http-nio-8090-exec-5] Equipo Team [name =TEAMVISTAEDITAR, points=0, money=2000 username =serrojjim] guardado correctamente.
+2021-01-06 21:10:53,595 DEBUG org.springframework.samples.petclinic.web.TeamController [http-nio-8090-exec-6] Obteniendo equipos de la ligaLeague [name=Liga1, leagueDate=2019/06/12, leagueCode=OLIKJUHMNJ]
+2021-01-06 21:10:53,595 INFO org.springframework.samples.petclinic.web.TeamController [http-nio-8090-exec-6] Equipos obtenindos correctamente
+2021-01-06 21:10:53,595 DEBUG org.springframework.samples.petclinic.web.TeamController [http-nio-8090-exec-6] Ordenando los equipos
+2021-01-06 21:10:53,595 INFO org.springframework.samples.petclinic.web.TeamController [http-nio-8090-exec-6] Equipos ordenados correctamente
