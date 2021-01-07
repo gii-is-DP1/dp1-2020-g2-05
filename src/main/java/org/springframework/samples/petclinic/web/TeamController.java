@@ -97,7 +97,27 @@ public class TeamController {
 		}
 		return usuario;
 	}
-
+//	@GetMapping(path = "/leagues/{leagueId}/teams/{teamId}")
+//	public String security(@PathVariable("leagueId") int leagueId,@PathVariable("teamId") int teamId, ModelMap model) {
+//		System.out.println("hhhh");
+//		String view ="";
+//		Optional<Team> team = this.teamService.findTeamById(teamId);
+//		Boolean existeLiga = this.leagueService.findLeague(leagueId).isEmpty();
+//		if (existeLiga) {
+//			view= "redirect:/leagues";
+//		}
+//		try {
+//			Boolean contieneLigaAEquipo = this.leagueService.findLeague(leagueId).get().getTeam().contains(team.get());
+//			if (!contieneLigaAEquipo) {
+//				view= "redirect:/leagues/" + leagueId + "/teams";
+//			}
+//		} catch (Exception e) {
+//			view="redirect:/leagues";
+//		}
+//		return view;
+//	}
+//	
+	
 	@GetMapping(path = "/leagues/{leagueId}/teams/new")
 	public String crearEquipo(@PathVariable("leagueId") int leagueId, ModelMap model) {
 		log.info("Abriendo el formulario para crear un equipo");
@@ -181,19 +201,22 @@ public class TeamController {
 
 	}
 
+	
+	
+	
 	@GetMapping(path = "/leagues/{leagueId}/teams/{teamId}/details")
 	public String mostrarDetallesEscuderia(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamID,
 			ModelMap model) {
 		Optional<Team> team = this.teamService.findTeamById(teamID);
-		try {
-			Boolean contieneLigaAEquipo = this.leagueService.findLeague(leagueId).get().getTeam().contains(team.get());
-			if (!contieneLigaAEquipo) {
-				return "redirect:/leagues/" + leagueId + "/teams";
-			}
-		} catch (Exception e) {
-			return "redirect:/leagues";
-		}
-
+//		try {
+//			Boolean contieneLigaAEquipo = this.leagueService.findLeague(leagueId).get().getTeam().contains(team.get());
+//			if (!contieneLigaAEquipo) {
+//				return "redirect:/leagues/" + leagueId + "/teams";
+//			}
+//		} catch (Exception e) {
+//			return "redirect:/leagues";
+//		}
+System.out.println("dentro details");
 		if (team.isPresent()) {
 			model.addAttribute("message", "Team found!");
 			model.addAttribute("team", team.get());
