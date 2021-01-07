@@ -65,7 +65,7 @@ public class LineupController {
 	public List<Pilot> getAllRecruits(@PathVariable("teamId") int teamId) {
 		return this.recruitService.getPilotsByTeam(teamId);
 	}
-
+	
 	@GetMapping("/lineups")
 	public String listadoAlineaciones(ModelMap modelMap) {
 		modelMap.addAttribute("resultados", lineupService.findAll());
