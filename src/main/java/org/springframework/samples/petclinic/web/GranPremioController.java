@@ -36,19 +36,8 @@ public class GranPremioController {
 		this.TCService = TCService;
 	}
 
-//	@InitBinder("granpremio")
-//	public void initGPBinder(WebDataBinder dataBinder) {
-//		dataBinder.setValidator(new GranPremioValidator());
-//	}
-
-
 	@GetMapping(path="/granPremios")
 	public String detallesLiga(ModelMap model) throws ParseException {	
-//		List<GranPremio> gps = GPService.convertirIterableLista(GPService.findAllActualYear(2019));
-//		List<List<GranPremio>> gps_calificados = GranPremioService.granPremiosPorCategoria(gps);
-//		List<GranPremio> motogp = gps_calificados.get(0);
-//		List<GranPremio> moto2 = gps_calificados.get(1);
-//		List<GranPremio> moto3 = gps_calificados.get(2);
 		List<GranPremio> gps = GPService.findAllActualYear(2020).stream().collect(Collectors.toSet()).stream().collect(Collectors.toList());
 		model.addAttribute("listaGP",gps.stream().sorted(Comparator.comparing(GranPremio::getId)).collect(Collectors.toList()));
 		model.addAttribute("racesCompleted",this.TCService.getTabla().get().getRacesCompleted());

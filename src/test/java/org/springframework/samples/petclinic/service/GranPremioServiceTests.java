@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-public class LineupServiceTests {
+public class GranPremioServiceTests {
 
 	@Autowired
 	protected LineupService lineupService;

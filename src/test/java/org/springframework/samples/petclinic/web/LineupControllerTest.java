@@ -253,8 +253,7 @@ public class LineupControllerTest {
 	}
 	
 	
-//	Por ahora se pueden crear todos los lineups que uno quiera, pero en teoría solo se debería poder crear uno por GP e ir modificando ese
-//	lineup hasta que se corra el GP, entonces, ya no se podrá eliminar ni modificar.
+//	Una vez se corre un GP, entonces, ya no se podrá crear, editar o eliminar un lineup respecto a dicho GP.
 	
 //	@WithMockUser(value = "spring")
 //	@Test
