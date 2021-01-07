@@ -4,12 +4,14 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.GranPremio;
+import org.springframework.samples.petclinic.model.Lineup;
 import org.springframework.samples.petclinic.service.GranPremioService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import lombok.extern.slf4j.Slf4j;
@@ -70,9 +73,25 @@ public class GranPremioController {
 		return "redirect:/controlPanel";
 	}
 	
-	@GetMapping(path="/granPremios/{id}/delete")
-	public String eliminarGranPremio(@PathVariable("id") String id,ModelMap model) {	
-		this.GPService.delete(this.GPService.findGPById(Integer.parseInt(id)).get());
+//	@GetMapping(path="/granPremios/{id}/delete")
+//	public String eliminarGranPremio(@PathVariable("id") String id,ModelMap model) {	
+//		this.GPService.delete(this.GPService.findGPById(Integer.parseInt(id)).get());
+//		return "redirect:/controlPanel";
+//	}
+	
+	@GetMapping(path = "/granPremios/{id}/delete")
+	public String eliminarGranPremio(@PathVariable("id") int id, ModelMap model) {
+		Optional<GranPremio> gp = this.GPService.findGPById(id);
+		log.info("Deleting GP with id: (" + id + ")");
+		if (gp.isPresent()) {
+			log.info("GP: " + gp.get());
+			GPService.delete(gp.get());
+			model.addAttribute("message", "GP successfully deleted!");
+		} else {
+			model.addAttribute("message", "GP not found!");
+			log.warn("The GP with id (" + id + ") was not found!");
+		}
+
 		return "redirect:/controlPanel";
 	}
 	
