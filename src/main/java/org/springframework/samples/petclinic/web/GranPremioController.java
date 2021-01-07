@@ -41,21 +41,30 @@ public class GranPremioController {
 
 	@GetMapping(path="/granPremios")
 	public String detallesLiga(ModelMap model) throws ParseException {	
-		List<GranPremio> gps = GPService.findAllActualYear(2020).stream().collect(Collectors.toSet()).stream().collect(Collectors.toList());
-		model.addAttribute("listaGP",gps.stream().sorted(Comparator.comparing(GranPremio::getId)).collect(Collectors.toList()));
-		model.addAttribute("racesCompleted",this.TCService.getTabla().get().getRacesCompleted());
-		return "/gp/gpList";
+		// El sorted sería mejor meterlo en el repositorio con un ORDER BY
+		List<GranPremio> gps = GPService.findAllActualYear(2020).stream().distinct()
+								.sorted(Comparator.comparing(GranPremio::getId)).collect(Collectors.toList());
+		model.addAttribute("listaGP", gps);
+		model.addAttribute("racesCompleted", this.TCService.getTabla().get().getRacesCompleted());
+		log.info("Showing all GPs in database: " + gps);
+		return "gp/gpList";
 	}
 	
 	@GetMapping(path="/granPremios/new")
 	public String nuevoGranPremio(ModelMap model) {	
-		model.addAttribute("GranPremio",new GranPremio());
-		return "/gp/nuevoGP";
+		log.info("Creating a new GP.");
+		model.addAttribute("GranPremio", new GranPremio());
+		log.info("Leading to creation form...");
+		return "gp/nuevoGP";
 	}
 	
+	
+	//Cambiar model.addAttribute por ra.addatributte.
 	@PostMapping(path="/granPremios/new")
 	public String nuevoGranPremio(@Valid GranPremio granpremio, BindingResult results, ModelMap model) {	
 		if (results.hasErrors()) {
+			log.warn("The GP creation form has errors!");
+			log.warn("Errors: " + results);
 			model.addAttribute("errors", results.getAllErrors());
 			return nuevoGranPremio(model);
 		} else {
@@ -67,17 +76,12 @@ public class GranPremioController {
 				log.warn("Sorry, records are unavailable for this GP!"); // Provisional
 			}
 			this.GPService.saveGP(granpremio);
+			log.info("GP succesfully created!: " + granpremio);
 			model.addAttribute("message","Gran Premio loaded succesfully!");
 		}
 		
 		return "redirect:/controlPanel";
 	}
-	
-//	@GetMapping(path="/granPremios/{id}/delete")
-//	public String eliminarGranPremio(@PathVariable("id") String id,ModelMap model) {	
-//		this.GPService.delete(this.GPService.findGPById(Integer.parseInt(id)).get());
-//		return "redirect:/controlPanel";
-//	}
 	
 	@GetMapping(path = "/granPremios/{id}/delete")
 	public String eliminarGranPremio(@PathVariable("id") int id, ModelMap model) {
@@ -97,9 +101,18 @@ public class GranPremioController {
 	
 	@RequestMapping(path="/granPremios/setRecords/{gpId}")
 	public String populateRecords(@PathVariable("gpId") int gpId, ModelMap model) throws IOException {
-		GranPremio gp = this.GPService.findGPById(gpId).get();
-		this.GPService.populateRecord(gp);
-		this.GPService.saveGP(gp);
+		Optional<GranPremio> gp = this.GPService.findGPById(gpId);
+		log.info("Populating GP with id: (" + gpId + ")");
+		if (gp.isPresent()) {
+			log.info("GP: " + gp.get());
+			this.GPService.populateRecord(gp.get());
+			this.GPService.saveGP(gp.get());
+			model.addAttribute("message", "GP successfully populated!");
+		} else {
+			model.addAttribute("message", "GP not found!");
+			log.warn("The GP with id (" + gpId + ") was not found!");
+		}
+		
 		return "gp/gpList";
 	}
 	

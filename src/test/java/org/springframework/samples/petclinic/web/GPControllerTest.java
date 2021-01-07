@@ -24,12 +24,14 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
 import org.springframework.samples.petclinic.model.Authorities;
+import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.GranPremio;
 import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Message;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
+import org.springframework.samples.petclinic.model.TablaConsultas;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.repository.UserRepository;
@@ -62,28 +64,30 @@ excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classe
 excludeAutoConfiguration= SecurityConfiguration.class)
 
 public class GPControllerTest {
-	
+
 	private static final Integer TEST_GP_ID = 1;
 
 	@MockBean
 	@Autowired
 	private GranPremioService GPService;
-	
+
 	@MockBean
 	@Autowired
 	private TablaConsultasService TCService;
-	
+
 	@Autowired
 	private MockMvc mockMvc;
-	
-	
+
+
 
 	private GranPremio gp = new GranPremio();
+	private List<GranPremio> listagps = new ArrayList<GranPremio>();
+	private TablaConsultas TCConsulta = new TablaConsultas();
+	private User user = new User();
 
-	
 	@BeforeEach
 	void setup() {
-		
+
 		gp.setId(TEST_GP_ID);
 		gp.setCalendar(true);
 		gp.setCircuit("Losail");
@@ -91,79 +95,123 @@ public class GPControllerTest {
 		gp.setHasBeenRun(false);
 		gp.setRaceCode("QAT");
 		gp.setSite("Grand Prix Of Qatar");
+
+		TCConsulta.setCurrentCategory(Category.MOTO3);
+		TCConsulta.setRacesCompleted(0);
+		TCConsulta.setActualRace(1);
+		user.setUsername("antcammar4");
+		user.setEnabled(true);
+
+		Set<Authorities> auth = new HashSet<Authorities>();
+		Authorities autho = new Authorities();
+		user.setPassword("test");
+		autho.setAuthority("admin");
+		autho.setUser(user);
+		autho.setId(1);
+		auth.add(autho);
+
+		user.setAuthorities(auth);
+
+	}
+
+	@WithMockUser(value = "spring")
+	@Test
+	void testDetallesLiga() throws Exception {
+		given(this.TCService.getTabla()).willReturn(Optional.of(TCConsulta));
+		given(GPService.findAllActualYear(2020)).willReturn(listagps);
+
+		mockMvc.perform(get("/granPremios"))	
+		.andExpect(status().isOk())
+		.andExpect(model().attribute("racesCompleted", is(TCConsulta.getRacesCompleted())))
+		.andExpect(model().attribute("listaGP", is(listagps)))
+		.andExpect(view().name("gp/gpList"));
+	}	
+
+
+	@WithMockUser(value = "spring")
+	@Test
+	void testCrearGranPremio() throws Exception {
+
+		mockMvc.perform(get("/granPremios/new"))	
+		.andExpect(status().isOk())
+		.andExpect(model().attributeExists("GranPremio"))
+		.andExpect(view().name("gp/nuevoGP"));
+	}
+
+	@WithMockUser(value = "spring")
+	@Test
+	void testCrearGranPremio2SinErrores() throws Exception {
+		mockMvc.perform(post("/granPremios/new") 
+				.with(csrf())	
+				.param("site", gp.getSite())
+				.param("date0", gp.getDate0().toString())
+				.param("circuit", gp.getCircuit())
+				.param("raceCode", gp.getRaceCode())
+				.param("hasBeenRun", gp.getHasBeenRun().toString())
+				.param("calendar", gp.getCalendar().toString()))
+		.andExpect(status().is3xxRedirection())		
+		.andExpect(view().name("redirect:/controlPanel"));
+	}
+
+	@WithMockUser(value = "spring")
+	@Test
+	void testCrearGranPremio2ConErrores() throws Exception {
+		mockMvc.perform(post("/granPremios/new") 
+				.with(csrf())	
+				.param("site", gp.getSite())
+				.param("date0", gp.getDate0().toString())
+				.param("circuit", gp.getCircuit())
+				.param("hasBeenRun", gp.getHasBeenRun().toString())
+				.param("calendar", gp.getCalendar().toString()))
+		.andExpect(status().isOk())		
+		.andExpect(model().hasErrors()) // El error es que no se le pasa raceCode, por lo que es null y no puede ser.
+		.andExpect(view().name("gp/nuevoGP"));
+	}
+
+
+
+
+	@WithMockUser(value = "spring")
+	@Test
+	void testDeleteGP() throws Exception {
+		given(GPService.findGPById(TEST_GP_ID)).willReturn(Optional.of(gp));
+
+		mockMvc.perform(get("/granPremios/{id}/delete", TEST_GP_ID))
+		.andExpect(status().is3xxRedirection())
+//		.andExpect(model().attribute("message", is("GP successfully deleted!"))) --> Hace falta ponerlo como RedirectAttribute
+		.andExpect(view().name("redirect:/controlPanel"));
+	}
+
+	@WithMockUser(value = "spring")
+	@Test
+	void testDeleteNonExistingGP() throws Exception {
+		given(GPService.findGPById(TEST_GP_ID)).willReturn(Optional.empty());
+
+		mockMvc.perform(get("/granPremios/{id}/delete", TEST_GP_ID))
+		.andExpect(status().is3xxRedirection())
+//		.andExpect(model().attribute("message", is("GP not found!"))) --> Hace falta ponerlo como RedirectAttribute
+		.andExpect(view().name("redirect:/controlPanel"));
+	}
+
+	@WithMockUser(value = "spring")
+	@Test
+	void testPopulateGP() throws Exception {
+		given(GPService.findGPById(TEST_GP_ID)).willReturn(Optional.of(gp));
 		
+		mockMvc.perform(get("/granPremios/setRecords/{gpId}", TEST_GP_ID))
+		.andExpect(status().isOk())
+//		.andExpect(model().attribute("message", is("GP successfully populated!"))) --> Hace falta ponerlo como RedirectAttribute
+		.andExpect(view().name("gp/gpList"));
 	}
 	
-
-@WithMockUser(value = "spring")
-@Test
-void testCrearUser() throws Exception {
-	mockMvc.perform(get("/users/new"))	
-			.andExpect(status().isOk())
-			.andExpect(model().attribute("userr", is(new User())))
-			.andExpect(view().name("users/createUserForm"));
-}
-
-@WithMockUser(value = "spring")
-@Test
-void testCrearUser2SinErrores() throws Exception {
-	mockMvc.perform(post("/users/new") 
-			.with(csrf())	
-	
-			.param("enabled","True"))
-			.andExpect(status().is3xxRedirection())		
-			.andExpect(view().name("redirect:/"));
-}
-
-	
-@WithMockUser(value = "spring")
-@Test
-void testListadoAmigos() throws Exception {
-//	given( userService.findFriendByUser(user.getUsername())).willReturn(lista);
-	mockMvc.perform(get("/friends")).andExpect(status().isOk())	
-//	.andExpect(model().attribute("resultados", Matchers.hasItem(Matchers.<User> hasProperty("username", is(amigo1.getUsername())))))
-	.andExpect(view().name("friends/friendsList"));
-}
-
-
-
-
-
-
-//@RequestMapping(path="/granPremios/setRecords/{gpId}")
-//public String populateRecords(@PathVariable("gpId") int gpId, ModelMap model) throws IOException {
-//	GranPremio gp = this.GPService.findGPById(gpId).get();
-//	this.GPService.populateRecord(gp);
-//	this.GPService.saveGP(gp);
-//	return "gp/gpList";
-//}
-
-//@GetMapping(path="/granPremios/{id}/delete")
-//public String eliminarGranPremio(@PathVariable("id") String id,ModelMap model) {	
-//	this.GPService.delete(this.GPService.findGPById(Integer.parseInt(id)).get());
-//	return "redirect:/controlPanel";
-//}
-
-@WithMockUser(value = "spring")
-@Test
-void testDeleteGP() throws Exception {
-	given(GPService.findGPById(TEST_GP_ID)).willReturn(Optional.of(gp));
-	
-	mockMvc.perform(get("/granPremios/{id}/delete", TEST_GP_ID))
-			.andExpect(status().is3xxRedirection())
-//			.andExpect(model().attribute("message", is("Lineup successfully deleted!"))) --> Hace falta ponerlo como RedirectAttribute
-			.andExpect(view().name("redirect:/controlPanel"));
-}
-
-@WithMockUser(value = "spring")
-@Test
-void testDeleteNonExistingGP() throws Exception {
-	given(GPService.findGPById(TEST_GP_ID)).willReturn(Optional.empty());
-	
-	mockMvc.perform(get("/granPremios/{id}/delete", TEST_GP_ID))
-			.andExpect(status().is3xxRedirection())
-//			.andExpect(model().attribute("message", is("Lineup not found!"))) --> Hace falta ponerlo como RedirectAttribute
-			.andExpect(view().name("redirect:/controlPanel"));
-}
-
+	@WithMockUser(value = "spring")
+	@Test
+	void testCantPopulateGP() throws Exception {
+		given(GPService.findGPById(TEST_GP_ID)).willReturn(Optional.empty());
+		
+		mockMvc.perform(get("/granPremios/setRecords/{gpId}", TEST_GP_ID))
+		.andExpect(status().isOk())
+//		.andExpect(model().attribute("message", is("GP not found!"))) --> Hace falta ponerlo como RedirectAttribute
+		.andExpect(view().name("gp/gpList"));
+	}
 }
