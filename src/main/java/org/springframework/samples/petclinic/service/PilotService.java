@@ -110,10 +110,7 @@ public class PilotService {
 	public Iterable<Pilot> findAll() {
 		return pilotRepository.findAll();
 	}
-	@Transactional
-	public List<Pilot> findAllList() {
-		return pilotRepository.findAll();
-	}
+
 	public void delete(Pilot pilotId) {
 		pilotRepository.delete(pilotId);
 
