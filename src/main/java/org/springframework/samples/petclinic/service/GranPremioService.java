@@ -113,6 +113,7 @@ public class GranPremioService {
 //
 	@Transactional
 	public void saveGP(GranPremio gp) throws DataAccessException {
+		System.out.println(gp);
 		GPRepository.save(gp);
 		
 		
