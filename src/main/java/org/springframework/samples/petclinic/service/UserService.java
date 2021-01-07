@@ -16,10 +16,13 @@
 package org.springframework.samples.petclinic.service;
 
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Authorities;
 import org.springframework.samples.petclinic.model.Message;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.repository.UserRepository;
@@ -51,7 +54,10 @@ public class UserService {
 	@Transactional
 	public void saveUser(User user) throws DataAccessException {
 		user.setEnabled(true);
+		
 		userRepository.save(user);
+		
+
 	}
 	
 	public Optional<User> findUser(String username) {

@@ -39,7 +39,7 @@ import org.springframework.validation.Validator;
 public class UserValidator implements Validator {
 
 	private static final String REQUIRED = "required";
-
+	
 	@Override
 	public void validate(Object obj, Errors errors) {
 		
@@ -51,11 +51,8 @@ public class UserValidator implements Validator {
 		while (m.find()) {
            count++;
 		}
-//		// user validation
-//		if (user.equals(session)){
-//			errors.rejectValue("username", REQUIRED,"El usuario que quieres seguir no puedes ser tu mismo");
-//		}
-//		
+
+		
 //		//name validation
 		if(name==null || name.trim().isEmpty()==true) {
 			 errors.rejectValue("username", REQUIRED, "El nombre de usuario no puede ser null o estar vacio");
