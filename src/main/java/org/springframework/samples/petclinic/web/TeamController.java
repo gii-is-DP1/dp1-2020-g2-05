@@ -105,6 +105,12 @@ public class TeamController {
 		League liga = this.leagueService.findLeague(leagueId).get();
 		team.setLeague(liga);
 		team.setUser(this.userService.getUserSession());
+		Integer max = this.teamService.findTeamsByLeagueId(liga.getId());
+		
+		if(max >= 6) {
+			model.addAttribute("message", "No se puede crear mas equipos en esta liga");
+			return "redirect:/leagues/{leagueId}/teams";
+		}
 		System.out.println(team.getLeague());
 		model.addAttribute("team", team);
 
@@ -117,7 +123,6 @@ public class TeamController {
 	public String saveNewTeam(@PathVariable("leagueId") int leagueId, @Valid Team team, BindingResult result,
 			ModelMap model) {
 		League league = this.leagueService.findLeague(leagueId).get();
-		team.setLeague(league);
 
 
 		log.debug("Asignandole la liga " + league);
@@ -140,7 +145,17 @@ public class TeamController {
 		team.setUser(this.userService.getUserSession());
 		log.info("Usuario " + this.userService.getUserSession() + "asignado correctamente");
 		Optional<Team> tem = this.teamService.findTeamByUsernameAndLeagueId(team.getUser().getUsername(), leagueId);
-			
+		List<Team> equipos = this.teamService.findTeamByLeagueId(league.getId());	
+		
+		Integer igual = 0;
+		
+		for(int i = 0; i<equipos.size(); i++) {
+			if (igual == 0){
+				if(team.getName().equals(equipos.get(i).getName())) {
+					igual +=1;
+				}
+			}
+		}	
 			
 		 if(tem.isPresent()){
 			 log.warn("El equipo " + team + " no se ha podido crear");
@@ -148,8 +163,11 @@ public class TeamController {
 			EquipoNo=true;
 			return "redirect:/leagues/{leagueId}/teams";
 			
-		}
-			else {
+		}else if(igual != 0){
+			log.warn("El equipo " + team + " no se ha podido crear");
+			model.addAttribute("message", "Sorry, already exists a team with thsi name, try it with another team Name");
+			return "redirect:/leagues/{leagueId}/teams";
+		}else {
 			team.setMoney(2000);
 			team.setPoints(0);
 			log.debug("Guardando el equipo " + team + " en la base de datos.");

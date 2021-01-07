@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -61,7 +62,13 @@ public class ResultService {
 	}
 	
 	
-	public Collection<Visit> findVisitsByPetId(int petId) {
-		return visitRepository.findByPetId(petId);
+	public List<Result> findAll() {
+		List<Result> res = new ArrayList<Result>();
+		resultRepository.findAll().forEach(res::add);
+		return res;
 	}
+	
+	
+	
+	
 }
