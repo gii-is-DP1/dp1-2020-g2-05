@@ -59,82 +59,126 @@ import motogpAPI.Session;
 import motogpAPI.model.InfoCarrera;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-	 
+
 public class PilotServiceTest {
 	@Autowired
 	protected PilotService pilotService;
- 
+
 	@Autowired
 	protected ResultService resultService;
-	
-	 @Test
-		void shouldPopulatePilotsAndResultsYearly() {
-		 FormRellenarBD form = new FormRellenarBD();
-		 form.setCategory(Category.MOTOGP);
-		 form.setAnyoInicial(2018);
-		 form.setAnyoFinal(2019);
-		 Integer num_pilots = this.pilotService.findAllList().size();
-		 Integer num_results = this.resultService.findAll().size();
-		 try {
-			 this.pilotService.poblarBD(form);
 
-		 }catch(Exception e) {
-			 
-		 }
-		 Integer num_pilots_updated = this.pilotService.findAllList().size();
-		 Integer num_results_updated = this.resultService.findAll().size();
+	@Test
+	void shouldPopulatePilotsAndResultsYearly() {
+		FormRellenarBD form = new FormRellenarBD();
+		form.setCategory(Category.MOTOGP);
+		form.setAnyoInicial(2018);
+		form.setAnyoFinal(2019);
+		Integer num_pilots = this.pilotService.pilotCount();
+		Integer num_results = this.resultService.findAll().size();
+		try {
+			this.pilotService.poblarBD(form);
 
-			assertThat(num_pilots_updated).isGreaterThan(num_pilots);
-			assertThat(num_results_updated).isGreaterThan(num_results);
-	 }
-	 
-	 @Test
-		void shouldNotPopulatePilotsAndResults() throws JSONException, IOException, ParseException {
-		 FormRellenarBD form = new FormRellenarBD();
-		 form.setCategory(Category.MOTOGP);
-		 form.setAnyoInicial(2045);
-		 form.setAnyoFinal(2047);
-		 try {
-			 this.pilotService.poblarBD(form);
+		} catch (Exception e) {
 
-		 }catch(NotFoundException  e ) {
+		}
+		Integer num_pilots_updated = this.pilotService.pilotCount();
+		Integer num_results_updated = this.resultService.findAll().size();
+
+		assertThat(num_pilots_updated).isGreaterThan(num_pilots);
+		assertThat(num_results_updated).isGreaterThan(num_results);
+	}
+
+	@Test
+	void shouldNotPopulatePilotsAndResults() throws JSONException, IOException, ParseException {
+		FormRellenarBD form = new FormRellenarBD();
+		form.setCategory(Category.MOTOGP);
+		form.setAnyoInicial(2045);
+		form.setAnyoFinal(2047);
+		try {
+			this.pilotService.poblarBD(form);
+
+		} catch (NotFoundException e) {
 			assertThat(e.getMessage()).isEqualTo("No se han encontrado carreras para los anyos dados");
-		 }
+		}
 
-	 }
-	 
-	 @Test
-		void shouldPopulatePilotsAndResultsRaceByRace() throws JSONException, IOException, ParseException {
-		 BDCarrera form = new BDCarrera();
-		 form.setCategory(Category.MOTOGP);
-		 form.setRacecode(RaceCode.QAT);
-		 form.setSession(Session.RACE);
-		 form.setYear(2019);
-		 Integer num_pilots = this.pilotService.findAllList().size();
-		 Integer num_results = this.resultService.findAll().size();
-		 GranPremio granPremio = new GranPremio();
-		 this.pilotService.poblarBDCarreraACarrera(form, granPremio, false);
-		 Integer num_pilots_updated = this.pilotService.findAllList().size();
-		 Integer num_results_updated = this.resultService.findAll().size();
+	}
 
-			assertThat(num_pilots_updated).isGreaterThan(num_pilots);
-			assertThat(num_results_updated).isGreaterThan(num_results);
-			assertThat(granPremio.getHasBeenRun()).isTrue();
-	 }
+	@Test
+	void shouldPopulatePilotsAndResultsRaceByRace() throws JSONException, IOException, ParseException {
+		BDCarrera form = new BDCarrera();
+		form.setCategory(Category.MOTOGP);
+		form.setRacecode(RaceCode.QAT);
+		form.setSession(Session.RACE);
+		form.setYear(2019);
+		Integer num_pilots = this.pilotService.pilotCount();
+		Integer num_results = this.resultService.findAll().size();
+		GranPremio granPremio = new GranPremio();
+		this.pilotService.poblarBDCarreraACarrera(form, granPremio, false);
+		Integer num_pilots_updated = this.pilotService.pilotCount();
+		Integer num_results_updated = this.resultService.findAll().size();
 
-	 
-	 @Test
-		void shouldNotPopulatePilotsAndResultsRaceByRace() throws JSONException, IOException, ParseException {
-		 FormRellenarBD form = new FormRellenarBD();
-		 form.setCategory(Category.MOTOGP);
-		 form.setAnyoInicial(2045);
-		 form.setAnyoFinal(2047);
-		 try {
-			 this.pilotService.poblarBD(form);
+		assertThat(num_pilots_updated).isGreaterThan(num_pilots);
+		assertThat(num_results_updated).isGreaterThan(num_results);
+		assertThat(granPremio.getHasBeenRun()).isTrue();
+	}
 
-		 }catch(NotFoundException  e ) {
-			assertThat(e.getMessage()).isEqualTo("No se han encontrado carreras para los parametros dados");
-		 }
+	@Test
+	void shouldNotPopulatePilotsAndResultsRaceByRace() throws JSONException, IOException, ParseException {
+		FormRellenarBD form = new FormRellenarBD();
+		form.setCategory(Category.MOTOGP);
+		form.setAnyoInicial(2045);
+		form.setAnyoFinal(2047);
+		try {
+			this.pilotService.poblarBD(form);
 
-	 }
+		} catch (NotFoundException e) {
+			assertThat(e.getMessage()).isEqualTo("No se han encontrado carreras para los anyos dados");
+		}
+
+	}
+
+	@Test
+	void shouldSavePilotAndDelete() {
+		Pilot pilot = new Pilot();
+		pilot.setBaseValue(200);
+		pilot.setCategory(Category.MOTOGP);
+		pilot.setDorsal("27");
+		pilot.setName("Ale");
+		pilot.setLastName("Ruiz");
+		pilot.setNationality("Spain");
+
+		Integer numPilots = (Integer) this.pilotService.pilotCount();
+		this.pilotService.savePilot(pilot);
+		Pilot pilotSaved = this.pilotService.findPilotById(numPilots + 1).get();
+		Integer numPilotsUpdated =(Integer) this.pilotService.pilotCount();
+
+		assertThat(pilotSaved.getName()).isEqualTo("Ale");
+		assertThat(numPilotsUpdated).isEqualTo(numPilots + 1);
+
+		assertThat(pilotSaved.getName()).isEqualTo("Ale");
+		assertThat(numPilotsUpdated).isEqualTo(numPilots + 1);
+
+		this.pilotService.delete(pilotSaved);
+
+		numPilotsUpdated = this.pilotService.pilotCount();
+
+		assertThat(numPilots).isEqualTo(numPilotsUpdated);
+	}
+
+	
+	@Test
+	void shouldFindPilotById() {
+		Pilot pilotSaved = this.pilotService.findPilotById(1).get();
+		assertThat(pilotSaved.getName()).isEqualTo("Sergio");
+	
+	}
+	
+	@Test
+	void shouldNotFindPilotById() {
+		Optional<Pilot> pilotSaved = this.pilotService.findPilotById(this.pilotService.pilotCount()+5);
+		assertThat(pilotSaved.isPresent()).isFalse();
+	
+	}
+	
+	
 }
