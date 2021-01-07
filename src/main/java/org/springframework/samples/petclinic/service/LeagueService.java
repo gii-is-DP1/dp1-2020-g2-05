@@ -13,6 +13,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.Authorities;
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.League;
@@ -25,10 +26,14 @@ import org.springframework.samples.petclinic.repository.UserRepository;
 import org.springframework.samples.petclinic.repository.VisitRepository;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedTeamNameException;
+import org.springframework.samples.petclinic.web.LeagueController;
 import org.springframework.samples.petclinic.web.duplicatedLeagueNameException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 
 @Service
 public class LeagueService {
@@ -57,15 +62,23 @@ public class LeagueService {
 //	public TeamService(TeamRepository teamRepository) {
 //		this.teamRepository = teamRepository;
 //	}
+	
 
+
+	
 	@Transactional
 	public void saveLeague(League league) throws DataAccessException,duplicatedLeagueNameException{
+		log.info("Intentando guardar liga : "+ league);
 		Iterable<League> ligas = leagueRepository.findAll();
 		List<League> listLigas = new ArrayList<League>();
 		ligas.forEach(listLigas::add);
 		for(int i=0;i<listLigas.size();i++) {
-			if(listLigas.get(i).getName().equals(league.getName())) throw new duplicatedLeagueNameException();
+			if(listLigas.get(i).getName().equals(league.getName())) {
+				log.warn("No se ha podido guardar la liga " + league);
+				throw new duplicatedLeagueNameException();
+			}
 		}
+		log.info("La liga '" + league +"' se ha guardado correctamente");
 		leagueRepository.save(league);
 	}
 	
@@ -97,40 +110,8 @@ public class LeagueService {
 		return leagueRepository.findLeaguesByUsername(username);
 	}
 	
-//	@Modifying
-//	@Transactional
-//	public void activeCategory(Integer id, Category idCategory) {
-//		 leagueRepository.activeCategory(id, idCategory);
-//	}
-	
-
-//	public List<League> findAllLeaguesByCategory(Category idCategory) {
-//		 return leagueRepository.findAllLeaguesByCategory(idCategory);
-//	}
-	
-//	public void updateGPsFromLeagueWithCategory(Category category) throws DataAccessException, duplicatedLeagueNameException{
-//		List<League> listaCategorias= leagueRepository.findAllLeaguesByCategory(category);
-//		List<League> listaCategoriasActualizada = new ArrayList<League>();
-//		for(League league:listaCategorias) {
-//			Integer racesCompleted =league.getRacesCompleted()+1;
-//			listaCategoriasActualizada.add(league);
-//			this.leagueRepository.increaseRacesCompleted(league.getId(), racesCompleted);
-//		}
-//	}
-	//	public void activeMoto2(Integer leagueId) throws DataAccessException {
-
-//		leagueRepository.activeMoto2(leagueId);
-//	}
-//	public void activeMotogp(Integer leagueId) throws DataAccessException {
-//		leagueRepository.activeMotogp(leagueId);
-//	}
-	
-//	public Optional<League> incrementarCarrerasLiga(Integer leagueId) throws DataAccessException {
-//		return leagueRepository.incrementarCarrerasLiga(leagueId);
-//	}
-//	
-	
 	public String randomString(int longitud) {
+		log.info("Autogenerando codigo para una liga");
 		 String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 		 String sb="";
@@ -158,16 +139,13 @@ public class LeagueService {
 		
 		for(League league:result) {
 			Set<Team> equipos = league.getTeam();
-				
-			if(equipos.size()==1) {
-				if(equipos.stream().collect(Collectors.toList()).get(0).getName()=="Sistema") {
+			if(equipos.size()<=1 ) {
+				if(equipos.stream().collect(Collectors.toList()).get(0).getName().equals("Sistema")) {
 					this.deleteLeague(league);
 					ret =  true;
+					log.warn("Se ha detectado una liga sin equipos : " + league);
+
 				}
-			}
-			if(equipos.size()==0) {
-				this.deleteLeague(league);
-				ret =  true;
 			}
 			
 		    }
@@ -196,17 +174,10 @@ public class LeagueService {
 
 	public List<League> obtenerLigasPorUsuario(Collection<Integer> collect){
 	
-//		List<Integer> idLeague = new ArrayList<Integer>();
-//		
-//		collect.forEach(idLeague::add);
 	    
 		List<League> myLeaguesList = collect.stream().map(x->this.findLeague(x).get()).collect(Collectors.toList());
-
 	    
-//		for(Integer i:idLeague) {
-//			League league_i = this.findLeague(i).get();
-//			myLeaguesList.add(league_i);
-//		}
+
 		return myLeaguesList;
 	}
 	
@@ -215,94 +186,19 @@ public class LeagueService {
 	public Iterable<League> findAll(){
 		return leagueRepository.findAll();
 	}
-	
-	@Transactional
-	public Iterable<Team> findAllTeams(){
-		return teamRepository.findAll();
-	}
-	
-//	@Transactional
-//	public void saveTeam(Team team) throws DataAccessException {
-//		leagueRepository.save(team);
-//	}
+		
+
 	
 	
 	public Optional<League> findLeague(Integer leagueId) {
 		return leagueRepository.findById(leagueId);
 	}
 	
-	public Optional<Team> findTeamById(Integer teamId) {
-		return teamRepository.findById(teamId);
-	}
 
 
-	@Transactional(rollbackFor =  DuplicatedTeamNameException.class)
-	public void saveTeam(Team team) {
-		boolean igual =  false;
-		Optional<League> league = findLeague(team.getLeague().getId());
-		List<Team> list = league.get().getTeam().stream().collect(Collectors.toList());
-		for(int i = 0; i<list.size(); i++) {
-			Team t = list.get(i);
-			if(t.getName().equals(team.getName())) {
-				igual = true;
-			}
-		}
-		
-		if(!igual) {
-			teamRepository.save(team);
 
-		}else {
-			System.out.println("hhhh");
-		}
-		
-	}
 	
-	@Transactional
-	public void saveTeamMoney(Team team, Integer price) throws DataAccessException {
-		team.setMoney(String.valueOf(Integer.parseInt(team.getMoney()) + price));
-		saveTeam(team);
-	}
-
-	@Transactional
-	public void saveSystemTeam(League league) {
-		Team sysTeam = new Team();
-		sysTeam.setName("Sistema");
-		sysTeam.setLeague(league);
-		sysTeam.setMoney("0");
-		sysTeam.setPoints("0");
-		sysTeam.setUser(userService.findUser("admin1").get());
-		teamRepository.save(sysTeam);
-		
-		//Fichamos y ofertamos a todos los pilotos con la escudería sistema que estén en la categoría actual
-		recruitAndOfferAll(sysTeam,TCService.getTabla().get().getCurrentCategory());
-	}
-	@Transactional
-	public void recruitAndOfferAll(Team t,Category cat) {
-		Iterable<Pilot> pilots = pilotService.findAll();
-		List<Pilot> listPilots = new ArrayList<Pilot>();
-		pilots.forEach(listPilots::add);
-		for (int i=0;i<listPilots.size();i++) {
-			if(listPilots.get(i).getCategory().equals(cat)) {
-				recruitService.saveRecruit(listPilots.get(i),t);
-				Pilot p = listPilots.get(i);
-				offerService.putOnSale(recruitService.getRecruitByPilotId(p.getId()).get(), p.getBaseValue());
-			}
-		}
-	}
-
-	public void delete(Team team) {
-		teamRepository.delete(team);
-	}
-
-	public List<Team> findTeamByUsername(String username){
-		return teamRepository.findTeamByUsername(username);
-	}
 	
-	public Optional<Team> findTeamByUsernameAndLeagueId(String username, Integer id){
-		return teamRepository.findTeamByUsernameAndLeagueId(username, id);
-	}
-	
-	public List<Team> findTeamByLeagueId(Integer id){
-		return teamRepository.findTeamByLeagueId(id);
-	}
+
+
 }

@@ -7,13 +7,15 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+import java.time.LocalDate;
 
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.web.duplicatedLeagueNameException;
@@ -28,7 +30,7 @@ public class LeagueServiceTest {
 	 @Autowired
 	 	protected UserService userService;
 	 
-	 
+
 	 
 	 
 	 
@@ -75,23 +77,7 @@ public class LeagueServiceTest {
 			assertThat(league_fail.isPresent()).isFalse();
 		
 	 }
-	 
-	 @Test
-	 void shouldCountTeamsByLeagueId() {
-		Integer positive_test= this.leagueService.findTeamsByLeagueId(1);
-		assertThat(positive_test).isNotEqualTo(0);
-	
-		
-	 }
-		
-	 @Test
-	 void shouldBeZeroTeamsByLeagueId() {
-			Integer negative_test= this.leagueService.findTeamsByLeagueId(2323);
-			assertThat(negative_test).isEqualTo(0);
-		
-	 }
-	
-	 
+	  
 	 @Test
 	 @Transactional
 	 void shouldInsertLeague()  throws DataAccessException, duplicatedLeagueNameException {
@@ -116,7 +102,26 @@ public class LeagueServiceTest {
 		assertThat(found.size()).isEqualTo(found1 + 1);
 	 }
 	 
-	 
+	  
+//		 @Test
+//		 @Transactional
+//		 @Modifying
+//		 void shouldUpdateLeague()  throws DataAccessException, duplicatedLeagueNameException {
+//		
+//			
+//			League newLeague = new League();
+//			newLeague.setLeagueCode("UDTQCSSOND");
+//			newLeague.setLeagueDate("22/12/2222");
+//			newLeague.setName("liga2222");
+//			
+//			this.leagueService.saveLeague(newLeague);
+//			
+//			this.leagueService.updateLeagueName(newLeague.getId(), "changuedName");
+//			League league2 = this.leagueService.findLeague(newLeague.getId()).get();
+//			assertThat(league2.getName()).isEqualTo("changuedName");
+//
+//		 }
+//	 
 	 @Test
 	 @Transactional
 	 void shouldNotInsertLeague()  throws DataAccessException, duplicatedLeagueNameException  {
@@ -167,11 +172,17 @@ public class LeagueServiceTest {
 		void shouldBeALeagueWithNoTeams() {
 		 	Set<Team> equipos = new HashSet<Team>();
 		 	List<League> leagues = new ArrayList<League>();
+		 	Set<Team> conj = new HashSet<Team>();
 		 	League newLeague = new League();
 			newLeague.setLeagueCode("UDTQCSSOND");
 			newLeague.setLeagueDate("22/12/2222");
 			newLeague.setName("liga2222");
 			newLeague.setTeam(equipos);
+			Team team = new Team();
+			team.setName("Sistema");
+			team.setLeague(newLeague);
+			conj.add(team);
+			newLeague.setTeam(conj);
 			leagues.add(newLeague);
 			
 			Boolean noTeams = this.leagueService.comprobarLigaVacia(leagues);
@@ -187,9 +198,14 @@ public class LeagueServiceTest {
 			newLeague.setLeagueDate("22/12/2222");
 			newLeague.setName("liga2222");
 			 Team team_new = new Team();
-			 team_new.setMoney("200");
+			 team_new.setMoney(200);
 			 team_new.setName("TEST");
-			 team_new.setPoints("222");
+			 team_new.setPoints(222);
+			 Team team_new2= new Team();
+			 team_new2.setMoney(200);
+			 team_new2.setName("Sistema");
+			 team_new2.setPoints(222);
+			 equipos.add(team_new2);
 			 equipos.add(team_new);
 			newLeague.setTeam(equipos);
 			leagues.add(newLeague);
@@ -207,9 +223,9 @@ public class LeagueServiceTest {
 			newLeague.setLeagueDate("22/12/2222");
 			newLeague.setName("liga2222");
 			 Team team_new = new Team();
-			 team_new.setMoney("200");
+			 team_new.setMoney(200);
 			 team_new.setName("Sistema");
-			 team_new.setPoints("222");
+			 team_new.setPoints(222);
 			 equipos.add(team_new);
 			newLeague.setTeam(equipos);
 			leagues.add(newLeague);
@@ -217,121 +233,6 @@ public class LeagueServiceTest {
 			 Boolean noTeams = this.leagueService.comprobarLigaVacia(leagues);
 			assertThat(noTeams).isTrue();
 		}
-	 @Test
-		void shouldFindTeamsById() {
-			Optional<Team> team = this.leagueService.findTeamById(1);
-			assertThat(team.isPresent()).isTrue();
-			
-			
-			Optional<Team> team_fail = this.leagueService.findTeamById(300);
-			assertThat(team_fail.isPresent()).isFalse();
-		}
-	 
-	 @Test
-		void shouldFindTeamsByUsername() {
-			Collection<Integer> teams = this.leagueService.findTeamsByUsername("migniearj");
-			assertThat(teams.size()> 0).isTrue();
-			
-
-			
-			Collection<Integer> teams_fail = this.leagueService.findTeamsByUsername("negative_test");
-			assertThat(teams_fail.size()).isEqualTo(0);
-		}
-	 
-	 
-	 @Test
-	 @Transactional
-	 void shouldInsertTeam() {
-		 
-		 Iterable<Team> teams = this.leagueService.findAllTeams();
-		 List<Team> team = new ArrayList<Team>();
-		 teams.forEach(team::add);
-		 Integer equipo1 = team.size();
-		 
-		 Team team_new = new Team();
-		 team_new.setMoney("200");
-		 team_new.setName("TEST");
-		 team_new.setPoints("222");
-		 team_new.setLeague(this.leagueService.findLeague(1).get());
-		 team_new.setUser(this.userService.findUser("migniearj").get());
-		 System.out.println(team_new);
-		 this.leagueService.saveTeam(team_new);
-		 assertThat(team_new.getId().longValue()).isNotEqualTo(0);
-		 
-		teams = this.leagueService.findAllTeams();
-		team = new ArrayList<Team>();
-		 	 teams.forEach(team::add);
-		 
-		 		assertThat(team.size()).isEqualTo(equipo1 + 1);
-		 
-	 
-	 }
-	 
-	 @Test
-	 @Transactional
-	 void shouldDeleteTeam() {
-		 
-		 Iterable<Team> teams = this.leagueService.findAllTeams();
-		 List<Team> team = new ArrayList<Team>();
-		 teams.forEach(team::add);
-		 Integer equipo1 = team.size();
-		 
-		 Team team_new = new Team();
-		 team_new.setMoney("200");
-		 team_new.setName("TEST");
-		 team_new.setPoints("222");
-		 team_new.setLeague(this.leagueService.findLeague(1).get());
-		 team_new.setUser(this.userService.findUser("migniearj").get());
-		 
-		 this.leagueService.saveTeam(team_new);
-		 assertThat(team_new.getId().longValue()).isNotEqualTo(0);
-		 
-		 Iterable<Team> teams1 = this.leagueService.findAllTeams();
-		 List<Team> team1 = new ArrayList<Team>();
-		 teams1.forEach(team1::add);
-		 
-		 
-		 this.leagueService.delete(team_new);
-		 assertThat(team_new.getId().longValue()).isNotEqualTo(0);
-		 
-		 teams = this.leagueService.findAllTeams();
-			team = new ArrayList<Team>();
-			 	 teams.forEach(team::add);
-			 	 
-		
-			 
-			 		assertThat(team.size()).isEqualTo(equipo1);
-
-	 }
-	 
-	 @Test
-	 @Transactional
-	 void shouldFindTeamByLeagueId() {
-		 List<Team> team = this.leagueService.findTeamByLeagueId(1);
-		 Integer equipo1 = team.size();
-			 
-			 		assertThat(equipo1).isNotEqualTo(0);
-
-	 }
-	 
-	 @Test
-	 @Transactional
-	 void shouldFindTeamByUsername() {
-		 List<Team> team = this.leagueService.findTeamByUsername("migniearj");
-		 Integer equipo1 = team.size();
-			 
-			 		assertThat(equipo1).isNotEqualTo(0);
-
-	 }
-	 
-	 @Test
-	 @Transactional
-	 void shouldFindTeamByUsernameAndLeagueId() {
-		 Team team = this.leagueService.findTeamByUsernameAndLeagueId("migniearj", 2).get();
-			 
-			 		assertThat(team).isNotNull();
-
-	 }
-	 
+	
 	 
 }

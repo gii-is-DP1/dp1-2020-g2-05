@@ -49,9 +49,11 @@ public class LeagueValidator implements Validator {
            count++;
 		}
 		// name validation
-		if (!StringUtils.hasLength(name) || name.length()>10 || name.length()<3 || count != 0 ){
-			errors.rejectValue("name", REQUIRED+" and between 3 and 50 characters", REQUIRED+" and between 3 and 50 characters and no special ones");
-		}
+//		if (!StringUtils.hasLength(name) || name.length()>10 || name.length()<3 || count != 0 || name.isBlank() || name.isEmpty()){
+//			errors.rejectValue("name", REQUIRED+" and between 3 and 50 characters", REQUIRED+" and between 3 and 50 characters and no special ones");
+//		}
+		
+		
 		
 		//races completed validation
 //		if(league.getRacesCompleted()==null || league.getRacesCompleted()<0 || league.getRacesCompleted()>20) {

@@ -64,6 +64,7 @@ import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.LineupService;
 import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
+import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -91,6 +92,10 @@ public class LineupControllerTest {
 	@MockBean
 	@Autowired
 	LeagueService leagueService;
+	
+	@MockBean
+	@Autowired
+	TeamService teamService;
 	
 	@MockBean
 	@Autowired
@@ -147,9 +152,9 @@ public class LineupControllerTest {
 		Team team = new Team();
 		team.setId(TEST_TEAM_ID);
 		team.setLeague(liga);
-		team.setMoney("2");
+		team.setMoney(2);
 		team.setName("teamtest");
-		team.setPoints("132");
+		team.setPoints(132);
 		team.setUser(user);
 		teams.add(team);
 		user.setTeam(teams);
@@ -201,7 +206,7 @@ public class LineupControllerTest {
 	    
 		
 		this.lineupService.saveLineup(lineup);
-		this.leagueService.saveTeam(team);
+		this.teamService.saveTeam(team);
 		this.userService.saveUser(user);
 		given(this.userService.getUserSession()).willReturn(user);
 

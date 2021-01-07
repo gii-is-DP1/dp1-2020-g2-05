@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +20,7 @@ import motogpAPI.RaceCode;
 @Service
 public class ResultService {
 	
-	
+
 	private ResultRepository resultRepository;
 	
 	private VisitRepository visitRepository;
@@ -57,12 +58,17 @@ public class ResultService {
 //	}
 	@Transactional
 	public List<Result> findResultsByCategoryAndId(Integer gpId, String raceCode,Category category) throws DataAccessException {
-		System.out.println("dentro bro");
 		return resultRepository.findResultsByCategoryAndId(gpId, raceCode,category);
 	}
 	
 	
-	public Collection<Visit> findVisitsByPetId(int petId) {
-		return visitRepository.findByPetId(petId);
+	public List<Result> findAll() {
+		List<Result> res = new ArrayList<Result>();
+		resultRepository.findAll().forEach(res::add);
+		return res;
 	}
+	
+	
+	
+	
 }

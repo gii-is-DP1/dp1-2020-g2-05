@@ -9,7 +9,7 @@
 <petclinic:layout pageName="Team">
 
 
-	
+     	<c:if test="${Editar!=true}">
 	
     <h2>
         <c:if test="${team['new']}">New </c:if> Team
@@ -19,23 +19,61 @@
         	<input type="hidden" name="id" value="${team.id}"/>
             <input type="hidden"  name="league" value="${leagueId}"/>	
             <petclinic:inputField label="Name" name="name"/>
-            <petclinic:inputField label="points" name="points"/>
-            <petclinic:inputField label="money" name="money"/>
+    		<input type="hidden"  name="points" value="0"/>
+            <input type="hidden"  name="money" value="2000"/>
             <input type="hidden"  name="league" value="${team.league}"/>	
              <input type="hidden"  name="user" value="${team.user.username}"/>	 
-<%-- 		     <h3>liga <c:out value="${team.league}" /></h3> --%>
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <c:choose>
-                    <c:when test="${team['new']}">
+               
                         <button class="btn btn-default" type="submit">Add Teams</button>
-                    </c:when>
-                    <c:otherwise>
-                        <button class="btn btn-default" type="submit">Update Teams</button>
-                    </c:otherwise>
-                </c:choose>
+              
+               
             </div>
         </div>
      </form:form> 
+     </c:if>
+     	<c:if test="${Editar==true}">
+     	 <c:if test="${admin==true}">
+     	<form:form modelAttribute="team" class="form-horizontal" id="add-pilot-form" actions="/leagues/{leagueId}/teams/new"  > 
+        <div class="form-group has-feedback">
+        	<input type="hidden" name="id" value="${team.id}"/>
+            <input type="hidden"  name="league" value="${leagueId}"/>	
+            <petclinic:inputField label="Name" name="name"/>
+           <petclinic:inputField label="points" name="points"/>
+            <petclinic:inputField label="money" name="money"/>
+            <input type="hidden"  name="league" value="${team.league}"/>	
+             <input type="hidden"  name="user" value="${team.user.username}"/>	 
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+          
+     	        <button class="btn btn-default" type="submit">Update Teams</button>
+              
+            </div>
+        </div>
+     </form:form>      	
+     	</c:if>
+     <c:if test="${usuario==true}">
+     	<form:form modelAttribute="team" class="form-horizontal" id="add-pilot-form" actions="/leagues/{leagueId}/teams/new"  > 
+        <div class="form-group has-feedback">
+        	<input type="hidden" name="id" value="${team.id}"/>
+            <input type="hidden"  name="league" value="${leagueId}"/>	
+            <petclinic:inputField label="Name" name="name"/>
+            <input type="hidden"  name="points" value="${team.points}"/>	
+             <input type="hidden"  name="money" value="${team.money}"/>	 
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+          
+     	        <button class="btn btn-default" type="submit">Update Teams</button>
+              
+            </div>
+        </div>
+     </form:form>      	
+
+     </c:if>
+     
+     </c:if>
 </petclinic:layout>

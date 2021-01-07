@@ -26,7 +26,7 @@
 <!-- 		</thead> -->
 <!-- 		<tbody>	 -->
 			<c:forEach items="${ligas}" var="league">
-
+					
 					<div class="columns">
 						<ul class="price">
 							<li class="header"><c:out value="${league.name} " /></li>
