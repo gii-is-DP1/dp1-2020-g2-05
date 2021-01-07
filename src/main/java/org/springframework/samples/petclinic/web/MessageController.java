@@ -188,28 +188,7 @@ public class MessageController {
 		return "messages/messageDetails";
 	}
 	
-////	@GetMapping(path="/messages/{messageId}")
-////	public ModelAndView muestraMensajePorId(@PathVariable("messageId") int messageId) {
-////		ModelAndView mav = new ModelAndView("messages/messageDetails");
-////		mav.addObject(this.messageService.findMessageById(messageId));
-////		return mav;
-////	}
-//	
 
-//	 
-//	@PostMapping(path="messages/save")
-//	public String guardarMensaje(@Valid Message message, BindingResult result, ModelMap model) {
-//		String view = "messages/messagesList";
-//		if(result.hasErrors()) {
-//			model.addAttribute("messagee", message);
-//			return "messages/messagesEdit";
-//		}else {
-//			System.out.println(message.getId());
-//			messageService.saveMessage(message);
-//			model.addAttribute("message", "Message successfully saved!");
-//		}
-//		return view;
-//	}
 	
 
 
