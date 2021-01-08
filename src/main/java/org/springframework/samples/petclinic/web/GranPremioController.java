@@ -45,7 +45,6 @@ public class GranPremioController {
 		List<GranPremio> gps = GPService.findAllActualYear(2020).stream().distinct()
 								.sorted(Comparator.comparing(GranPremio::getId)).collect(Collectors.toList());
 		model.addAttribute("listaGP", gps);
-		model.addAttribute("racesCompleted", this.TCService.getTabla().get().getRacesCompleted());
 		log.info("Showing all GPs in database: " + gps);
 		return "gp/gpList";
 	}
