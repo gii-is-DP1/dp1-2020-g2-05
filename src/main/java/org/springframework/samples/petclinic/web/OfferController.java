@@ -79,6 +79,7 @@ public class OfferController {
 				// el piloto, se cancela la oferta
 				offer.setStatus(Status.Denied);
 				offerService.saveOffer(offer);
+				recruitService.quitOnSale(offer.getRecruit());
 				modelMap.addAttribute("message", "Offer cancelled!");
 			} else if (recruitService.getRecruitsByTeam(purchaserTeam.getId()).size() >= 4) {// RN-07: Máximo de
 																								// fichajes

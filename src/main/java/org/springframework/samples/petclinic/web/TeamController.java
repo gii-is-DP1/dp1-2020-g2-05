@@ -217,9 +217,10 @@ public class TeamController {
 		if (team.isPresent()) {
 			model.addAttribute("message", "Team found!");
 			model.addAttribute("team", team.get());
-			List<Recruit> l = recruitService.getRecruitsByTeam(teamID);
-			System.out.println(l);
-			model.addAttribute("misFichajes", l);
+			List<Recruit> fichajesEnVenta = recruitService.getRecruitsOnSaleByTeam(teamID);
+			List<Recruit> fichajes = recruitService.getRecruitsNotOnSaleByTeam(teamID);
+			model.addAttribute("misFichajes", fichajes);
+			model.addAttribute("fichajesEnVenta", fichajesEnVenta);
 			model.addAttribute("misAlineaciones", lineupService.findByTeam(teamID));
 		} else {
 			model.addAttribute("message", "Team not found!");
@@ -257,6 +258,7 @@ public class TeamController {
 																// fichajes
 				log.info("Fichaje: " + opRecruit.get().getId() + " a un precio de: " + offer.getPrice());
 				offerService.putOnSale(opRecruit.get(), offer.getPrice());
+				recruitService.putOnSale(opRecruit.get());
 				return "redirect:/leagues/{leagueId}/market";
 			} else {
 				modelMap.addAttribute("message", "Recruit not found or you only own 2 riders!");

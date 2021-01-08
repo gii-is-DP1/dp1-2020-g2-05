@@ -63,6 +63,15 @@
 				</c:choose>
 			</tr>
 		</c:forEach>
+		<c:forEach items="${fichajesEnVenta}" var="recruit">
+			<tr>
+				<td><c:out value="${recruit.pilot.name}" /></td>
+				<td><c:out value="${recruit.pilot.lastName}" /></td>
+				<td><c:out value="${recruit.pilot.category}" /></td>
+				<td><c:out value="${recruit.pilot.dorsal}" /></td>
+				<td><c:out value="${recruit.pilot.nationality}" /></td>
+			</tr>
+		</c:forEach>
 	</table>
 
 	<h2>Lineup Selection</h2>

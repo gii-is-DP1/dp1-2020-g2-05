@@ -44,6 +44,14 @@ public class RecruitService {
 		return this.recruitRepository.findAllRecruits(teamID);
 	}
 
+	public List<Recruit> getRecruitsOnSaleByTeam(int teamID) {
+		return this.recruitRepository.findAllRecruitSOnSaleByTeam(teamID);
+	}
+
+	public List<Recruit> getRecruitsNotOnSaleByTeam(int teamID) {
+		return this.recruitRepository.findAllRecruitSNotOnSaleByTeam(teamID);
+	}
+
 	@Transactional
 	public void saveRecruit(Pilot pilot, Team team) throws DataAccessException { // Para guardar nuevos fichajes en la
 																					// base de datos
@@ -78,6 +86,15 @@ public class RecruitService {
 		deleteRecruit(recruit);
 		// Segundo añado el recruit al equipo que compra
 		saveRecruit(recruit.getPilot(), purchaserTeam);
+	}
 
+	@Transactional
+	public void putOnSale(Recruit recruit) {
+		this.recruitRepository.putRecruitOnSale(recruit.getId());
+	}
+
+	@Transactional
+	public void quitOnSale(Recruit recruit) {
+		this.recruitRepository.quitRecruitOnSale(recruit.getId());
 	}
 }

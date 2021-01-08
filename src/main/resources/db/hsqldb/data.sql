@@ -153,11 +153,11 @@ INSERT INTO team(id,name,points,money,league_id, username) VALUES (6,'MigueSnOw'
 INSERT INTO team(id,name,points,money,league_id, username) VALUES (7,'Miguelito',2757,4686,1, 'aleruijur');
 INSERT INTO team(id,name,points,money,league_id, username) VALUES (11,'polloRebozado',120,40000,2,'alvcorcas');
 
-INSERT INTO recruit(id,pilot_id,team_id) VALUES (1,1,1);
-INSERT INTO recruit(id,pilot_id,team_id) VALUES (2,2,1);
-INSERT INTO recruit(id,pilot_id,team_id) VALUES (3,3,1);
-INSERT INTO recruit(id,pilot_id,team_id) VALUES (4,4,11);
-INSERT INTO recruit(id,pilot_id,team_id) VALUES (5,5,11);
+INSERT INTO recruit(id,for_sale,pilot_id,team_id) VALUES (1,true,1,1);
+INSERT INTO recruit(id,for_sale,pilot_id,team_id) VALUES (2,false,2,1);
+INSERT INTO recruit(id,for_sale,pilot_id,team_id) VALUES (3,false,3,1);
+INSERT INTO recruit(id,for_sale,pilot_id,team_id) VALUES (4,false,4,11);
+INSERT INTO recruit(id,for_sale,pilot_id,team_id) VALUES (5,false,5,11);
 
 INSERT INTO offer(id,price,status,recruit_id,team_id) VALUES (1,2000,2,1,1);
 
