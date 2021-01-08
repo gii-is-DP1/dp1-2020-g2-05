@@ -68,6 +68,7 @@ public class RecruitService {
 
 	private Recruit createRecruit(Pilot pilot, Team team) {
 		Recruit recruit = new Recruit();
+		recruit.setForSale(false);
 		recruit.setPilot(pilot);
 		recruit.setTeam(team);
 		return recruit;

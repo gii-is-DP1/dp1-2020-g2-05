@@ -87,7 +87,6 @@ public class OfferController {
 			} else if (purchaserTeam.getMoney() >= price) {
 				teamService.saveTeamMoney(purchaserTeam, -price);// Restar dinero al comprador
 				teamService.saveTeamMoney(offer.getRecruit().getTeam(), price);// Dar dinero al vendedor
-
 				offer.setTeam(purchaserTeam);
 				offer.setStatus(Status.Accepted);
 				offerService.saveOffer(offer);
@@ -97,10 +96,11 @@ public class OfferController {
 																						// vendedor y lo añadimos al
 																						// equipo comprador
 
-				transactionService.trade(price, recruit.getPilot(), sellerTeam, purchaserTeam, offer); // Guardamos los
-																										// registros de
-				// las transacciones en las
-				// carteras de ambos equipos
+				transactionService.trade(price, recruit.getPilot(), sellerTeam, purchaserTeam); // Guardamos los
+																								// registros
+																								// de// carteras
+																								// de ambos
+																								// equipos
 
 				modelMap.addAttribute("message", "Pilot recruited!");
 			} else {

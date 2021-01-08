@@ -14,21 +14,21 @@ import org.springframework.samples.petclinic.util.Status;
 
 @Entity
 @Table(name = "offer")
-public class Offer extends BaseEntity{
+public class Offer extends BaseEntity {
 
 	@Column(name = "price")
 	@NotNull
 	@Min(0)
 	private Integer price;
-	
+
 	@Enumerated(EnumType.ORDINAL)
 	@Column(name = "status")
 	private Status status;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "team_id")
 	private Team team;
-	
+
 	@ManyToOne()
 	@JoinColumn(name = "recruit_id")
 	private Recruit recruit;
@@ -56,7 +56,7 @@ public class Offer extends BaseEntity{
 	public void setStatus(Status status) {
 		this.status = status;
 	}
-	
+
 	public Recruit getRecruit() {
 		return recruit;
 	}
@@ -64,5 +64,10 @@ public class Offer extends BaseEntity{
 	public void setRecruit(Recruit recruit) {
 		this.recruit = recruit;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Offer [price=" + price + ", status=" + status + ", team=" + team + ", recruit=" + recruit + "]";
+	}
+
 }

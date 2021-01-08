@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -39,9 +38,6 @@ public class Transaction extends BaseEntity implements Comparable<Transaction> {
 
 	@ManyToOne()
 	private Team team;
-
-	@OneToOne()
-	private Offer offer;
 
 //	public Transaction(@NotNull LocalDate date, @NotNull Integer price, @NotNull TransactionType transactionType,
 //			@NotBlank String concept, Team team, Offer offer) {
@@ -100,14 +96,6 @@ public class Transaction extends BaseEntity implements Comparable<Transaction> {
 
 	public void setTeam(Team team) {
 		this.team = team;
-	}
-
-	public Offer getOffer() {
-		return offer;
-	}
-
-	public void setOffer(Offer offer) {
-		this.offer = offer;
 	}
 
 	@Override
