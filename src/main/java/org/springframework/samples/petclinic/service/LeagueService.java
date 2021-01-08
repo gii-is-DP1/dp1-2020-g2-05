@@ -55,7 +55,7 @@ public class LeagueService {
 
 	
 	@Transactional
-	public void saveLeague(League league) throws DataAccessException,duplicatedLeagueNameException{
+	public Boolean saveLeague(League league) throws DataAccessException,duplicatedLeagueNameException{
 		log.info("Intentando guardar liga : "+ league);
 		Iterable<League> ligas = leagueRepository.findAll();
 		List<League> listLigas = new ArrayList<League>();
@@ -63,11 +63,12 @@ public class LeagueService {
 		for(int i=0;i<listLigas.size();i++) {
 			if(listLigas.get(i).getName().equals(league.getName())) {
 				log.warn("No se ha podido guardar la liga " + league);
-				throw new duplicatedLeagueNameException();
+				throw new duplicatedLeagueNameException("Duplicated league name");
 			}
 		}
 		log.info("La liga '" + league +"' se ha guardado correctamente");
 		leagueRepository.save(league);
+		return true;
 	}
 
 	public void deleteLeague(League league) throws DataAccessException {
@@ -77,15 +78,11 @@ public class LeagueService {
 	public Optional<League> findLeagueByLeagueCode(String leagueCode) throws DataAccessException {
 		return leagueRepository.findLeagueByLeagueCode(leagueCode);
 	}
-
-	public List<Integer> findTeamsByUsername(String username) throws DataAccessException {
-		return leagueRepository.findTeamsByUsername(username);
-	}
-
-	public Integer findTeamsByLeagueId(Integer id) throws DataAccessException {
-		return leagueRepository.findTeamsByLeagueId(id);
-	}
-
+	
+	
+	
+	
+	
 //	public Optional<User> findUserByUsername(String username) throws DataAccessException {
 //		return leagueRepository.findUserByUsername(username);
 //	}
@@ -160,9 +157,11 @@ public class LeagueService {
 //			return lista;
 //	}
 
-	public List<League> obtenerLigasPorUsuario(Collection<Integer> collect) {
-
-		List<League> myLeaguesList = collect.stream().map(x -> this.findLeague(x).get()).collect(Collectors.toList());
+	public List<League> obtenerLigasPorUsuario(Collection<Integer> collect){
+	
+	    
+		List<League> myLeaguesList = collect.stream().map(x->this.findLeague(x).get()).collect(Collectors.toList());
+	    
 
 		return myLeaguesList;
 	}

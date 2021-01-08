@@ -33,6 +33,7 @@ public class TablaConsultasService {
 	public void actualizarTabla(Category category) throws DataAccessException {
 		TablaConsultas tabla = this.getTabla().get();
 		if(category.toString().equals(tabla.getCurrentCategory().toString())) {
+			log.debug("CARRERAS AUMENTADAS : "+tabla.getRacesCompleted()+"->"+(tabla.getRacesCompleted()+1));
 		tabla.setRacesCompleted(tabla.getRacesCompleted()+1);
 		tabla.setActualRace(tabla.getRacesCompleted()+1);
 	
@@ -53,6 +54,8 @@ public class TablaConsultasService {
 
 			}
 		if(tabla.getRacesCompleted()>20) {
+			tabla.setCurrentCategory(Category.MOTOGP); 
+			log.info("TABLA CONSULTA SET CATEGORY:" + Category.MOTOGP  );
 			tabla.setRacesCompleted(20);
 			tabla.setActualRace(20);
 			}	

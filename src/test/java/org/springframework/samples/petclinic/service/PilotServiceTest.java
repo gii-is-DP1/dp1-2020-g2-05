@@ -29,7 +29,10 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.BDCarrera;
 import org.springframework.samples.petclinic.model.FormRellenarBD;
@@ -67,6 +70,23 @@ public class PilotServiceTest {
 	@Autowired
 	protected ResultService resultService;
 
+	@Test
+	void shouldNotPopulatePilotsAndResultsRaceByRace() throws JSONException, IOException, ParseException {
+		BDCarrera form = new BDCarrera();
+		form.setCategory(Category.MOTOGP);
+		form.setRacecode(RaceCode.QAT);
+		form.setSession(Session.RACE);
+		form.setYear(2045);
+		try {
+			this.pilotService.poblarBDCarreraACarrera(form, new GranPremio(), true);
+
+		} catch (NotFoundException e) {
+			assertThat(e.getMessage()).isEqualTo("No se han encontrado carreras para los parametros dados");
+		}
+
+	}
+
+	
 	@Test
 	void shouldPopulatePilotsAndResultsYearly() {
 		FormRellenarBD form = new FormRellenarBD();
@@ -122,20 +142,7 @@ public class PilotServiceTest {
 		assertThat(granPremio.getHasBeenRun()).isTrue();
 	}
 
-	@Test
-	void shouldNotPopulatePilotsAndResultsRaceByRace() throws JSONException, IOException, ParseException {
-		FormRellenarBD form = new FormRellenarBD();
-		form.setCategory(Category.MOTOGP);
-		form.setAnyoInicial(2045);
-		form.setAnyoFinal(2047);
-		try {
-			this.pilotService.poblarBD(form);
-
-		} catch (NotFoundException e) {
-			assertThat(e.getMessage()).isEqualTo("No se han encontrado carreras para los anyos dados");
-		}
-
-	}
+	
 
 	@Test
 	void shouldSavePilotAndDelete() {
@@ -180,5 +187,51 @@ public class PilotServiceTest {
 	
 	}
 	
+	@Test
+	void shouldFindPilotByName() {
+		Optional<Pilot> pilotSaved = this.pilotService.findByName("Rojas", "Antonio");
+		assertThat(pilotSaved.isPresent()).isTrue();
 	
+	}
+	@Test
+	void shouldNotFindPilotByName() {
+		Optional<Pilot> pilotSaved = this.pilotService.findByName("Test", "Negative");
+		assertThat(pilotSaved.isPresent()).isFalse();
+	
+	}
+	
+	@Test
+	void shouldGetRecruits() {
+		List<Pilot> pilotSaved = this.pilotService.getRecruits();
+		assertThat(pilotSaved.get(1).getName()).isEqualTo("Antonio");
+		assertThat(pilotSaved.get(0).getName()).isEqualTo("Sergio");
+		assertThat(pilotSaved.get(1).getLastName()).isEqualTo("Rojas");
+		assertThat(pilotSaved.get(0).getLastName()).isEqualTo("Rojas");
+	
+	}
+	
+	
+	@Test
+	void shouldGetRecruitsByTeamId() {
+		List<Pilot> pilotSaved = this.pilotService.getRecruits(1);
+		assertThat(pilotSaved.get(1).getName()).isEqualTo("Antonio");
+		assertThat(pilotSaved.get(0).getName()).isEqualTo("Sergio");
+		assertThat(pilotSaved.get(1).getLastName()).isEqualTo("Rojas");
+		assertThat(pilotSaved.get(0).getLastName()).isEqualTo("Rojas");
+	}
+	
+	@Test
+	void shouldNotGetRecruitsByTeamId() {
+		List<Pilot> pilotSaved = this.pilotService.getRecruits(1223);
+		assertThat(pilotSaved.isEmpty()).isTrue();
+	
+	}
+
+	@Test
+	@Transactional
+	void shouldPage() {
+		Pageable pageable = PageRequest.of(2, 5, Sort.by(Order.asc("category"), Order.asc("name"), Order.desc("lastName")));
+		Page<Pilot> pilotSaved = this.pilotService.findAllPage(pageable);
+		assertThat(pilotSaved.getSize()).isEqualTo(5);
+	}
 }
