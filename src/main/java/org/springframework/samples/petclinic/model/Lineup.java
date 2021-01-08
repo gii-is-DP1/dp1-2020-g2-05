@@ -22,25 +22,25 @@ public class Lineup extends BaseEntity {
     @Enumerated(EnumType.ORDINAL)
 	@Column(name = "category")
 	@NotNull
-	public Category category;
+	private Category category;
 
     @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 	@ManyToOne
 	@JoinColumn(name = "recruit1_id")
 	@NotNull
-	public Recruit recruit1;
+	private Recruit recruit1;
 
     @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 	@ManyToOne
 	@JoinColumn(name = "recruit2_id")
 	@NotNull
-	public Recruit recruit2;
+	private Recruit recruit2;
 	
 	@NotAudited
 	@ManyToOne
 	@JoinColumn(name = "team_id")
 	@NotNull
-	public Team team;
+	private Team team;
 	
 //	@ManyToOne
 //	@JoinColumn(name = "league_id")
@@ -51,7 +51,7 @@ public class Lineup extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "gp_id")
 	@NotNull
-	public GranPremio gp;
+	private GranPremio gp;
 
 	public Category getCategory() {
 		return (Category) category;
