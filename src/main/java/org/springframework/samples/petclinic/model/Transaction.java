@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "Transaction")
-public class Transaction extends BaseEntity {
+public class Transaction extends BaseEntity implements Comparable<Transaction> {
 
 	@Column(name = "date")
 	@NotNull
@@ -108,6 +108,11 @@ public class Transaction extends BaseEntity {
 
 	public void setOffer(Offer offer) {
 		this.offer = offer;
+	}
+
+	@Override
+	public int compareTo(Transaction o) {
+		return this.id.compareTo(o.id);
 	}
 
 }

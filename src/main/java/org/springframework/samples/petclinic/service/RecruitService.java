@@ -72,4 +72,8 @@ public class RecruitService {
 	public Iterable<Recruit> findAll() {
 		return this.recruitRepository.findAll();
 	}
+
+	public void Trade(int pilotId, int leagueId) {
+
+	}
 }

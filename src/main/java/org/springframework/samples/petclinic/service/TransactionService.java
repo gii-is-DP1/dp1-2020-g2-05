@@ -22,8 +22,8 @@ public class TransactionService {
 		this.transactionRepository = transactionRepository;
 	}
 
-	public List<Transaction> getTeamTrades(int teamID) {
-		return transactionRepository.findTradesByTeamId(teamID);
+	public List<Transaction> getTeamTransactions(int teamID) {
+		return transactionRepository.findTransactionsByTeamId(teamID);
 	}
 
 	public void saveTransaction(Integer remainingMoney, Integer amount, TransactionType transactionType, String concept,

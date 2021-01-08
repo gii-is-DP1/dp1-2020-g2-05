@@ -10,6 +10,6 @@ import org.springframework.samples.petclinic.model.Transaction;
 public interface TransactionRepository extends CrudRepository<Transaction, Integer> {
 
 	@Query("SELECT t FROM Transaction t WHERE t.team.id = :teamID")
-	List<Transaction> findTradesByTeamId(@Param("teamID") int teamID);
+	List<Transaction> findTransactionsByTeamId(@Param("teamID") int teamID);
 
 }

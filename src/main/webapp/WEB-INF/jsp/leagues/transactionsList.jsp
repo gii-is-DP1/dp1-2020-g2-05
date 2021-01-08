@@ -3,36 +3,43 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
-<%@ page import="org.springframework.samples.petclinic.model.TransactionType"%>
+<%@ page
+	import="org.springframework.samples.petclinic.model.TransactionType"%>
 
 <petclinic:layout pageName="transaction">
-	<h2>Transaction</h2>
-	<table id="tradesTable" class="table table-striped">
+	<h2>
+		Current money:
+		<c:out value="${money}" />
+	</h2>
+	<h2>Transactions</h2>
+	<table id="transactionsTable" class="table table-striped">
 		<thead>
 			<tr>
 				<th>Date</th>
 				<th>Remaining money</th>
-				<th>Price</th>
+				<th>Amount</th>
 				<th>Concept</th>
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${transaction}" var="transaction">
+			<c:forEach items="${transactions}" var="transaction">
 				<tr>
 					<td><c:out value="${transaction.date}" /></td>
 					<td><c:out value="${transaction.remainingMoney}" /></td>
-					<td>
-						<c:if test="${transactionrade.transactionType != TransactionType.BUY}">
-							<p style="color: green;">
-								+ <c:out value="${transaction.price}" />
-							</p>
-						</c:if> 
-					
-						<c:if test="${transaction.transactionType != TransactionType.BUY}">
-							<p style="color: red;">
-								- <c:out value="${transaction.price}" />
-							</p>
-						</c:if>
+					<td><c:choose>
+							<c:when
+								test="${transaction.transactionType != TransactionType.BUY}">
+								<p style="color: green;">
+									+ <c:out value="${transaction.amount}" />
+								</p>
+							</c:when>
+
+							<c:otherwise>
+								<p style="color: red;">
+									- <c:out value="${transaction.amount}" />
+								</p>
+							</c:otherwise>
+						</c:choose>
 					</td>
 
 					<td><c:out value="${transaction.concept}" /></td>
