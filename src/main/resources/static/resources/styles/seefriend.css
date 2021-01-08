@@ -1,0 +1,29 @@
+@charset "ISO-8859-1";
+
+
+#contenedor {
+		height: 50%;
+		
+		display:flex;
+}
+#datosUser {
+	margin-right:10px;
+	margin-top: 4%;
+	width: 48%;
+	height: 100%;
+	padding: 30px;
+	border: 1px solid #414b50;
+	display: inline-block;
+}
+#teams {
+	border: 1px solid #414b50;
+	margin-top: 4%;
+	width: 48%;
+	height: 100%;
+	padding: 30px;
+	display: inline-block;
+}
+
+#teamIndividual{
+	margin-bottom: 15px;
+}

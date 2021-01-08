@@ -17,7 +17,7 @@ import org.springframework.samples.petclinic.model.Result;
 import org.springframework.samples.petclinic.service.PilotService;
 
 import motogpAPI.model.InfoCarrera;
-import org.springframework.samples.petclinic.model.Category;
+import motogpAPI.Category;
 
 
 public class Tests {
@@ -32,7 +32,7 @@ public class Tests {
 //		List<RiderOnlineData> resultado = data.getResultsByRaceNumber(Category.MotoGP, 2016, 1, Session.RACE);
 //		List<RiderOnlineData> resultado2 = data.getResultsByRaceCode(motogpAPI.Category.Moto3, 2020, RaceCode.SMR, Session.RACE);
 //		List<InfoCarrera> resultado3 = PeticionesGet.getResultsByRaceCodeCampu(Category.MOTO3, 2020, RaceCode.SMR, Session.RACE);
-//		List<RiderStandingsData> resultado3 = data.getChampionshipStandings(Category.MotoGP, 2016);
+		List<RiderStandingsData> resultado3 = data.getChampionshipStandings(Category.MotoGP, 2016);
 //
 //		System.out.println("\n Get Result By Race Number \n");
 //		for (int i=0; i < resultado.size(); i++) {
@@ -42,10 +42,10 @@ public class Tests {
 //		for (int i=0; i < resultado2.size(); i++) {
 //			System.out.println(resultado2.get(i));
 //		}
-//		System.out.println("\n Get Cahmpionship Standings \n");
-//		for (int i=0; i < resultado3.size(); i++) {
-//			System.out.println(resultado3.get(i));
-//		}
+		System.out.println("\n Get Championship Standings \n");
+		for (int i=0; i < resultado3.size(); i++) {
+			System.out.println(resultado3.get(i));
+		}
 //		List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceNumberCampu(Category.MOTO2, 2021, 1, Session.RACE);
 		
 //		System.out.println(todosLosResultadosDeUnaCarrera);
@@ -55,8 +55,8 @@ public class Tests {
 //		}
 //		
 
-			Record prueba = PeticionesGet.obtieneRecords(2018, Pais.SPA, Category.MOTOGP);
-			System.out.println(prueba);
+//			Record prueba = PeticionesGet.obtieneRecords(2018, Pais.SPA, Category.MOTOGP);
+//			System.out.println(prueba);
 
 //		for (Pais p:Pais.values()) {
 //			System.out.println("Pais: " + p);

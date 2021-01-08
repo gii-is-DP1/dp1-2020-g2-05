@@ -33,6 +33,9 @@
 						<spring:url value="/friends/remove/{username}" var="messageUrl">
 							<spring:param name="username" value="${friend.username}" />
 						</spring:url> <a href="${fn:escapeXml(messageUrl)}">Dejar de seguir</a>
+						<spring:url value="/friends/{username}" var="messageUrl">
+							<spring:param name="username" value="${friend.username}" />
+						</spring:url> <a href="${fn:escapeXml(messageUrl)}">Ver perfil</a>
 					</td>
 				</tr>
 				

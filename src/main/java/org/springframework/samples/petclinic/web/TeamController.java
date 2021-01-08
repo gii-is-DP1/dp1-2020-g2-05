@@ -295,6 +295,8 @@ System.out.println("dentro details");
 
 		authority = this.leagueService.findAuthoritiesByUsername(team.get().getUser().getUsername());
 
+		System.out.println(authority);
+		
 		model.put("Editar", true);
 		if (authority.equals("admin")) {
 			model.put("admin", true);
