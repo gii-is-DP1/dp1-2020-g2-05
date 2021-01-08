@@ -1,8 +1,6 @@
 package org.springframework.samples.petclinic.web;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -107,7 +105,7 @@ public class ResultController {
 		model.addAttribute("gp", gp);
 		model.addAttribute("resultados",listaResultados);
 		model.addAttribute("record", record);
-		return "results/resultsByCategory";
+		return "results/resultsByCategory"; 
 	}
 	
 //	@PostMapping(value = "/result/new")

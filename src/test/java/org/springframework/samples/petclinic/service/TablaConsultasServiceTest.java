@@ -33,7 +33,7 @@ public class TablaConsultasServiceTest {
 	 @Test
 		void shouldGetTabla() {
 		 	Optional<TablaConsultas> TC = this.TCService.getTabla();
-			assertThat(TC.isEmpty()).isFalse();
+			assertThat(TC.isPresent()).isTrue();
 		}
 	
 	 @Test

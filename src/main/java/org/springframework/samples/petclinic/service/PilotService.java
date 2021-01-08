@@ -78,28 +78,17 @@ public class PilotService {
 	
 	public static final Integer MAXIMO_CARRERAS=18;
 	
-	@Autowired
 	private PilotRepository pilotRepository;
-
-	@Autowired
 	private GranPremioService gpService;
-	
-
-	@Autowired
 	private ResultService resultService;
-
+//	private AuthoritiesService authoritiesService;
+	
 	@Autowired
-	private AuthoritiesService authoritiesService;
-
-	@Autowired
-	public PilotService(PilotRepository pilotRepository) {
+	public PilotService(PilotRepository pilotRepository, GranPremioService gpService, ResultService resultService) {
 		this.pilotRepository = pilotRepository;
+		this.gpService = gpService;
+		this.resultService = resultService;
 	}
-
-//	@Transactional(readOnly = true)
-//	public Collection<Pilot> findPilotByLastName(String lastName) throws DataAccessException {
-//		return pilotRepository.findByLastName(lastName);
-//	}
 
 	@Transactional
 	public int pilotCount() {
@@ -110,10 +99,7 @@ public class PilotService {
 	public Iterable<Pilot> findAll() {
 		return pilotRepository.findAll();
 	}
-	@Transactional
-	public List<Pilot> findAllList() {
-		return pilotRepository.findAll();
-	}
+
 	public void delete(Pilot pilotId) {
 		pilotRepository.delete(pilotId);
 
@@ -131,7 +117,7 @@ public class PilotService {
 	public List<String> obtenerResultsFormatted(Set<Result> result){
 		ResultFormatter formatter = new ResultFormatter(resultService);
 		List<String> res = new ArrayList<String>();
-		for(Result r:result) {
+		for (Result r:result) {
 			res.add(formatter.print(r, Locale.ENGLISH));
 		}
 		return res;
@@ -139,9 +125,8 @@ public class PilotService {
 	
 	public void poblarBD(FormRellenarBD form) throws JSONException, IOException, ParseException {
 //		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MMM-dd");		
-		for(int i=form.getAnyoInicial();i<form.getAnyoFinal();i++) {
-
-			for(int j=0;j<MAXIMO_CARRERAS;j++) {
+		for(int i=form.getAnyoInicial(); i < form.getAnyoFinal(); i++) {
+			for (int j=0;j<MAXIMO_CARRERAS;j++) {
 				GranPremio gp = new GranPremio(); //entidad de una carrera
 				List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceNumberCampu(form.getCategory(), i, j, Session.RACE);
 				if(todosLosResultadosDeUnaCarrera.size()==0) {
@@ -155,39 +140,31 @@ public class PilotService {
 					gp.setRaceCode(todosLosResultadosDeUnaCarrera.get(0).getRaceCode());
 					gp.setCalendar(false);
 					this.gpService.saveGP(gp);
-					 
-					for(int k=0;k<todosLosResultadosDeUnaCarrera.size();k++) {
+
+					for (int k=0;k<todosLosResultadosDeUnaCarrera.size();k++) {
 						InfoCarrera resultado_k = todosLosResultadosDeUnaCarrera.get(k);
 						gp.setCircuit(resultado_k.getLugar());
 						gp.setSite(resultado_k.getNombreEvento());
-						
+
 						Pilot pilot = new Pilot();
 						pilot.setName(resultado_k.getPiloto().split(" ")[0]);
 						pilot.setLastName(resultado_k.getPiloto().split(" ")[1]);
 						pilot.setDorsal(resultado_k.getNumeros().toString());
 
-						if(resultado_k.getPais().isEmpty()) {
-							pilot.setNationality("Andorra");
+						if (resultado_k.getPais().isEmpty()) {pilot.setNationality("Andorra");} 
+						else {pilot.setNationality(resultado_k.getPais());}
 
-						}else {
-							pilot.setNationality(resultado_k.getPais());
-
-						}
-					
-						
 						pilot.setCategory((form.getCategory()));
-						
+
 						Random random = new Random();
 						pilot.setBaseValue(random.nextInt(3000) + 1000);//Valores arbitrarios, pueden cambiar
-						
+
 						Result result = new Result();
-						
-						if(this.countByName(pilot.getLastName(), pilot.getName())!=0) {
+
+						if (this.countByName(pilot.getLastName(), pilot.getName())!=0) {
 							result.setPilot(this.pilotRepository.findByName(pilot.getLastName(), pilot.getName()).get());
-
-						}else {
+						} else {
 							result.setPilot(pilot);
-
 						}
 						result.setPosition(resultado_k.getPosicion());
 						result.setGp(gp);
@@ -196,11 +173,7 @@ public class PilotService {
 						this.resultService.saveResult(result);
 						this.savePilot(pilot);
 					}
-					
 				}
-				
-				
-				
 			}			
 		}
 	}
@@ -211,7 +184,7 @@ public class PilotService {
 		//EL GP QUE SE PASA COMO PARAMETRO, O ESTA VACIO, O ESTA EN EL CALENDARIO
 		//				GranPremio gp = new GranPremio(); //entidad de una carrera
 		List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceCodeCampu(form.getCategory(), form.getYear(), form.getRacecode(), form.getSession());
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 		if (todosLosResultadosDeUnaCarrera.size()==0) {
 			throw new NotFoundException("No se han encontrado carreras para los parametros dados");
@@ -225,8 +198,12 @@ public class PilotService {
 				gp.setDate0(date);
 				gp.setRaceCode(todosLosResultadosDeUnaCarrera.get(0).getRaceCode());
 				gp.setHasBeenRun(true);
-				gp.setHasBeenRun(true);
 				gp.setCalendar(true);
+				try {
+					this.gpService.populateRecord(gp);
+				} catch (Exception e) {
+					System.out.println("Sorry, records are unavailable for this GP!"); // Provisional
+				}
 				this.gpService.saveGP(gp);	
 			}
 
@@ -271,26 +248,10 @@ public class PilotService {
 		}
 	}			
 		
-//	@Autowired
-//	private UserService userService;
-//	
-//	@Autowired
-//	private AuthoritiesService authoritiesService;
-//
-//	@Autowired
-//	public PilotService(PilotRepository pilotRepository) {
-//		this.pilotRepository = pilotRepository;
-//	}	
-
 	@Transactional
 	public Optional<Pilot> findPilotById(int pilotId) {
 		return pilotRepository.findById(pilotId);
 	}
-
-//	@Transactional(readOnly = true)
-//	public Collection<Pilot> findPilotByLastName(String lastName) throws DataAccessException {
-//		return pilotRepository.findByLastName(lastName);
-//	}
 
 	@Transactional
 	public void savePilot(Pilot pilot) throws DataAccessException {

@@ -366,7 +366,7 @@ System.out.println("dentro details");
 	public String showTeams(@PathVariable int leagueId, Map<String, Object> model) {
 		User usuario = this.userService.getUserSession();
 
-			Boolean existeLiga = this.leagueService.findLeague(leagueId).isEmpty();
+			Boolean existeLiga = !this.leagueService.findLeague(leagueId).isPresent();
 			if (existeLiga) {
 				return "redirect:/leagues";
 			}

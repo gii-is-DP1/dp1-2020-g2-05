@@ -10,10 +10,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +22,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
-import org.springframework.samples.petclinic.model.Authorities;
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Offer;
@@ -36,6 +33,7 @@ import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.OfferService;
 import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.TeamService;
+import org.springframework.samples.petclinic.service.TradeService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.util.Status;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
@@ -50,7 +48,8 @@ class OfferControllerTests {
 	private static final int TEST_LEAGUE_ID = 1;
 	private static final int TEST_OFFER1_ID = 1;
 	private static final int TEST_OFFER2_ID = 2;
-	private static final int TEST_OFFERFAIL_ID = 3;
+	private static final int TEST_OFFER3_ID = 3;
+	private static final int TEST_OFFERFAIL_ID = 4;
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -65,6 +64,9 @@ class OfferControllerTests {
 	private TeamService teamService;
 	
 	@MockBean
+	private TradeService tradeService;
+	
+	@MockBean
 	private UserService userService;
 	
 	@MockBean
@@ -72,9 +74,14 @@ class OfferControllerTests {
 	
 	private Offer offer1 = new Offer();
 	private Offer offer2 = new Offer();
+	private Offer offer3 = new Offer();
 	private List<Offer> offersList = new ArrayList<>();
 	private Recruit recruit1 = new Recruit();
 	private Recruit recruit2 = new Recruit();
+	private Recruit recruit3 = new Recruit();
+	private Recruit recruit4 = new Recruit();
+	private Recruit recruit5 = new Recruit();
+	private List<Recruit> recruitTeam1List = new ArrayList<>();
 	private Team team1 = new Team();
 	private Team team2 = new Team();
 	private Team team3 = new Team();
@@ -84,6 +91,9 @@ class OfferControllerTests {
 	private League league = new League();
 	private Pilot pilot1 = new Pilot();
 	private Pilot pilot2 = new Pilot();
+	private Pilot pilot3 = new Pilot();
+	private Pilot pilot4 = new Pilot();
+	private Pilot pilot5 = new Pilot();
 	
 	@BeforeEach
 	void setup() {
@@ -92,12 +102,35 @@ class OfferControllerTests {
 		pilot1.setName("Ale");
 		pilot1.setLastName("Ruiz");
 		pilot1.setNationality("Spain");
+		pilot1.setBaseValue(200);
 		
 		pilot2.setCategory(Category.MOTOGP);
 		pilot2.setDorsal("7");
 		pilot2.setName("Juan");
 		pilot2.setLastName("Perez");
 		pilot2.setNationality("Spain");
+		pilot2.setBaseValue(400);
+		
+		pilot3.setCategory(Category.MOTOGP);
+		pilot3.setDorsal("3");
+		pilot3.setName("Rodri");
+		pilot3.setLastName("Perez");
+		pilot3.setNationality("Spain");
+		pilot3.setBaseValue(500);
+		
+		pilot4.setCategory(Category.MOTOGP);
+		pilot4.setDorsal("2");
+		pilot4.setName("Omar");
+		pilot4.setLastName("Perez");
+		pilot4.setNationality("Spain");
+		pilot4.setBaseValue(2000);
+	
+		pilot5.setCategory(Category.MOTOGP);
+		pilot5.setDorsal("5");
+		pilot5.setName("Pepe");
+		pilot5.setLastName("Perez");
+		pilot5.setNationality("Spain");
+		pilot5.setBaseValue(500);
 		
 		league.setId(TEST_LEAGUE_ID);
 		league.setLeagueCode("UDTQCSSOND");
@@ -146,19 +179,36 @@ class OfferControllerTests {
 		recruit1.setTeam(team1);
 		recruit2.setPilot(pilot2);
 		recruit2.setTeam(team2);
+		recruit3.setPilot(pilot4);
+		recruit3.setTeam(team1);
+		recruit4.setPilot(pilot3);
+		recruit4.setTeam(team1);
+		recruit5.setPilot(pilot5);
+		recruit5.setTeam(team1);
 		
 		offer1.setId(TEST_OFFER1_ID);
 		offer1.setRecruit(recruit1);
 		offer1.setPrice(2000);
 		offer1.setStatus(Status.Outstanding);
 		
+		offer3.setId(TEST_OFFER3_ID);
+		offer3.setRecruit(recruit3);
+		offer3.setPrice(1000);
+		offer3.setStatus(Status.Accepted);
+		
 		offer2.setId(TEST_OFFER2_ID);
 		offer2.setRecruit(recruit2);
 		offer2.setPrice(1000);
-		offer2.setStatus(Status.Accepted);
+		offer2.setStatus(Status.Outstanding);
 		
 		offersList.add(offer1);
 		offersList.add(offer2);
+		offersList.add(offer3);
+		
+		recruitTeam1List.add(recruit1);
+		recruitTeam1List.add(recruit3);
+		recruitTeam1List.add(recruit4);
+		recruitTeam1List.add(recruit5);
 	}
 	
 	@WithMockUser(value = "spring")
@@ -194,7 +244,7 @@ class OfferControllerTests {
 		.andExpect(model().attribute("offers", Matchers.hasItem(Matchers.<Offer> hasProperty("price", is(offer2.getPrice())))))
 		.andExpect(model().attribute("offers", Matchers.hasItem(Matchers.<Offer> hasProperty("status", is(offer2.getStatus())))))
 		.andExpect(model().attribute("offers", Matchers.hasItem(Matchers.<Offer> hasProperty("recruit", is(offer2.getRecruit())))))
-		.andExpect(model().attribute("message", is("Pilot recruit!")));
+		.andExpect(model().attribute("message", is("Pilot recruited!")));
 	}
 	
 	@WithMockUser(value = "spring")
@@ -214,6 +264,20 @@ class OfferControllerTests {
 		.andExpect(model().attribute("offers", Matchers.hasItem(Matchers.<Offer> hasProperty("status", is(offer2.getStatus())))))
 		.andExpect(model().attribute("offers", Matchers.hasItem(Matchers.<Offer> hasProperty("recruit", is(offer2.getRecruit())))))
 		.andExpect(model().attribute("message", is("Offer cancelled!")));
+	}
+	
+	@WithMockUser(value = "spring")
+	@Test
+	void testTryToRecruitWith4Recruits() throws Exception {
+		given(offerService.findOffersByLeague(TEST_LEAGUE_ID)).willReturn(offersList);
+		given(userService.getUserSession()).willReturn(user1);
+		given(teamService.findTeamByUsernameAndLeagueId(user1.getUsername(), TEST_LEAGUE_ID)).willReturn(Optional.of(team1));
+		given(offerService.findOfferById(TEST_OFFER2_ID)).willReturn(Optional.of(offer2));
+		given(recruitService.getRecruitsByTeam(team1.getId())).willReturn(recruitTeam1List);
+		
+		mockMvc.perform(get("/leagues/{leagueId}/market/{offerId}",TEST_LEAGUE_ID,TEST_OFFER2_ID)).andExpect(status().is2xxSuccessful())
+		.andExpect(view().name("offers/offersList"))
+		.andExpect(model().attribute("message", is("You already own 4 riders on this league")));
 	}
 	
 	@WithMockUser(value = "spring")
@@ -239,11 +303,11 @@ class OfferControllerTests {
 	@Test
 	void testTryToRecruitPilotIsNotInSale() throws Exception {
 		given(offerService.findOffersByLeague(TEST_LEAGUE_ID)).willReturn(offersList);
-		given(userService.getUserSession()).willReturn(user1);
-		given(teamService.findTeamByUsernameAndLeagueId(user1.getUsername(), TEST_LEAGUE_ID)).willReturn(Optional.of(team1));
-		given(offerService.findOfferById(TEST_OFFER2_ID)).willReturn(Optional.of(offer2));
+		given(userService.getUserSession()).willReturn(user2);
+		given(teamService.findTeamByUsernameAndLeagueId(user2.getUsername(), TEST_LEAGUE_ID)).willReturn(Optional.of(team2));
+		given(offerService.findOfferById(TEST_OFFER3_ID)).willReturn(Optional.of(offer3));
 		
-		mockMvc.perform(get("/leagues/{leagueId}/market/{offerId}",TEST_LEAGUE_ID,TEST_OFFER2_ID)).andExpect(status().is2xxSuccessful())
+		mockMvc.perform(get("/leagues/{leagueId}/market/{offerId}",TEST_LEAGUE_ID,TEST_OFFER3_ID)).andExpect(status().is2xxSuccessful())
 		.andExpect(view().name("offers/offersList"))
 		.andExpect(model().attribute("offers", Matchers.hasItem(Matchers.<Offer> hasProperty("price", is(offer1.getPrice())))))
 		.andExpect(model().attribute("offers", Matchers.hasItem(Matchers.<Offer> hasProperty("status", is(offer1.getStatus())))))
@@ -251,7 +315,7 @@ class OfferControllerTests {
 		.andExpect(model().attribute("offers", Matchers.hasItem(Matchers.<Offer> hasProperty("price", is(offer2.getPrice())))))
 		.andExpect(model().attribute("offers", Matchers.hasItem(Matchers.<Offer> hasProperty("status", is(offer2.getStatus())))))
 		.andExpect(model().attribute("offers", Matchers.hasItem(Matchers.<Offer> hasProperty("recruit", is(offer2.getRecruit())))))
-		.andExpect(model().attribute("message", is("This pilot isn't on sale")));
+		.andExpect(model().attribute("message", is("This pilot isn't on sale anymore")));
 	}
 	
 	@WithMockUser(value = "spring")

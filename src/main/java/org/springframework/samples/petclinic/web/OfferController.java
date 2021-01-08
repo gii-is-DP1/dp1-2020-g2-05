@@ -79,8 +79,10 @@ public class OfferController {
 															// el piloto, se cancela la oferta
 				offer.setStatus(Status.Denied);
 				offerService.saveOffer(offer);
-
-			} else if (team.getMoney() >= price && recruitService.getRecruitsByTeam(team.getId()).size() < 4) { // RN-07:
+				modelMap.addAttribute("message", "Offer cancelled!");
+			} else if (recruitService.getRecruitsByTeam(team.getId()).size() >= 4){
+				modelMap.addAttribute("message", "You already own 4 riders on this league");
+			} else if (team.getMoney() >= price) { // RN-07:
 				// Máximo
 				// de
 				// fichajes
@@ -106,9 +108,8 @@ public class OfferController {
 				// vendedor
 
 				modelMap.addAttribute("message", "Pilot recruited!");
-			} else {
-				modelMap.addAttribute("message",
-						"Not enought money to recruit this pilot or you already own 4 riders on this league");
+			}else {
+				modelMap.addAttribute("message", "Not enought money to recruit this pilot");
 			}
 		} else {
 			modelMap.addAttribute("message", "Offer not found!");
