@@ -159,8 +159,7 @@ INSERT INTO recruit(id,pilot_id,team_id) VALUES (3,3,1);
 INSERT INTO recruit(id,pilot_id,team_id) VALUES (4,4,11);
 INSERT INTO recruit(id,pilot_id,team_id) VALUES (5,5,11);
 
-INSERT INTO offer(id,price,status,recruit_id) VALUES (1,2000,2,1);
-INSERT INTO offer(id,price,status,recruit_id) VALUES (2,3000,2,2);
+INSERT INTO offer(id,price,status,recruit_id,team_id) VALUES (1,2000,2,1,1);
 
 INSERT INTO lineup(id,category,gp_id,recruit1_id,recruit2_id,team_id) VALUES (1,1,1,2,2,1); 
 INSERT INTO lineup(id,category,gp_id,recruit1_id,recruit2_id,team_id) VALUES (2,1,2,2,1,1); 
