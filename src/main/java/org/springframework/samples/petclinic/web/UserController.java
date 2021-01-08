@@ -18,6 +18,7 @@ package org.springframework.samples.petclinic.web;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.model.Authorities;
 import org.springframework.samples.petclinic.model.Message;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.User;
@@ -54,10 +56,14 @@ public class UserController {
 	private static final String USER_CREATE_FORM = "users/createUserForm";
 
 	private final UserService userService;
+	
+	private final AuthoritiesService authoritiesService;
+
 
 	@Autowired
-	public UserController(UserService userService) {
+	public UserController(UserService userService, AuthoritiesService authoritiesService) {
 		this.userService = userService;
+		this.authoritiesService = authoritiesService;
 	}
 
 	@InitBinder
@@ -81,7 +87,11 @@ public class UserController {
 		}
 		else {
 			//creating owner, user, and authority
+		
 			this.userService.saveUser(user);
+			
+			authoritiesService.saveAuthorities(user.getUsername(), "user");
+
 			return "redirect:/";
 		}
 	}
@@ -89,7 +99,7 @@ public class UserController {
 	@GetMapping("/friends")
 	public String listadoAmigos(ModelMap modelMap) {
 		User user = new User();
-		user.setEmail("userfalso@falso.com");
+		user.setEmail(userService.getUserSession().getUsername());
 		user.setPassword("falso");
 		modelMap.addAttribute("resultados", userService.findFriendByUser(userService.getUserSession().getUsername()));
 		modelMap.addAttribute("user",user);
@@ -98,6 +108,11 @@ public class UserController {
 	
 	@PostMapping("/friends")
 	public String processAddFollower(@Valid User user,BindingResult result, ModelMap model) {
+		if(user.getUsername().equals(userService.getUserSession().getUsername())) {
+			ObjectError error =  new ObjectError("user", "No puedes seguirte a ti mismo");
+			result.addError(error);
+			
+		}
 		if(result.hasErrors()) {
 			List<ObjectError> errores = result.getAllErrors();
 			List<String> erroresstring = new ArrayList<String>();
@@ -110,8 +125,8 @@ public class UserController {
 			return "friends/friendsList";
 		}else {
 			List <User> friends1 =  userService.getUserSession().getFriends();
-			
-			friends1.add(userService.findUser(user.getUsername()).get());
+			Optional<User> friend = 	userService.findUser(user.getUsername());
+			friends1.add(friend.get());
 	
 			userService.getUserSession().setFriends(friends1);
 			
@@ -121,17 +136,28 @@ public class UserController {
 		}
 	}
 	
-	@GetMapping(path="friends/remove/{username}")
-	public String borrarMensaje(@PathVariable("username") User user, ModelMap model,RedirectAttributes ra) {
-		List <User> friends1 =  userService.getUserSession().getFriends();
+	@GetMapping(path="/friends/remove/{username}")
+	public String borrarFriend(@PathVariable("username") String username, ModelMap model,RedirectAttributes ra) {
+		User session = userService.getUserSession();
 		
-		friends1.removeIf(x -> x.getUsername().equals(user.getUsername()));
-
+		List <User> friends1 =  session.getFriends();
+	
+		friends1.removeIf(x -> x.getUsername().equals(username));
 		userService.getUserSession().setFriends(friends1);
-		
 		userService.saveUser(userService.getUserSession());
+		ra.addAttribute("message", "Friend successfully deleted!");
 
 		return "redirect:/friends";
 	}
+	
+
+	@GetMapping(path="/friends/{username}")
+	public String seeFriend(@PathVariable("username") String username,ModelMap modelMap) {
+	
+		Optional<User> userr = userService.findUser(username);
+		modelMap.addAttribute("user",userr.get());
+		return "friends/seefriend";
+	}
+	
 
 }

@@ -27,7 +27,7 @@ class RecruitServiceTest {
 	
 	@Test
 	void shouldFindRecruitByCorrectPilotId() {
-		Recruit recruit = recruitService.getRecruitByPilotId(1).get();
+		Recruit recruit = recruitService.getRecruitByPilotId(1, 2).get();
 		
 		assertThat(recruit.getTeam().getId().equals(1));
 		assertThat(recruit.getPilot().getDorsal().equals("93"));

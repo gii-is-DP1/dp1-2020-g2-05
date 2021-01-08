@@ -75,27 +75,28 @@ public class GranPremioService {
 		return GPsIniciales;
 	}
 
-	public static List<List<GranPremio>> granPremiosPorCategoria(List<GranPremio> lista){
-		 List<List<GranPremio>> res = new ArrayList<List<GranPremio>>();
-		 List<GranPremio> motoGP = new ArrayList<GranPremio>();
-		 List<GranPremio> moto2 = new ArrayList<GranPremio>();
-		 List<GranPremio> moto3 = new ArrayList<GranPremio>();
-		 for(int i=0;i<lista.size();i++) {
-			 
-			 Category category = lista.get(i).getResults().stream().collect(Collectors.toList()).get(i).getPilot().getCategory();
-			 if(category.equals(Category.MOTOGP)) {
-				 motoGP.add(lista.get(i));
-			 }else if(category.equals(Category.MOTO2)) {
-				 moto2.add(lista.get(i));
-			 }else if(category.equals(Category.MOTO3)) {
-				 moto3.add(lista.get(i));
-			 }
-		 }
-		 res.add(motoGP);
-		 res.add(moto2);
-		 res.add(moto3);
-		 return res;
-	}
+//	public static List<List<GranPremio>> granPremiosPorCategoria(List<GranPremio> lista){
+//		 List<List<GranPremio>> res = new ArrayList<List<GranPremio>>();
+//		 List<GranPremio> motoGP = new ArrayList<GranPremio>();
+//		 List<GranPremio> moto2 = new ArrayList<GranPremio>();
+//		 List<GranPremio> moto3 = new ArrayList<GranPremio>();
+//		 for(int i=0;i<lista.size();i++) {
+//			 
+//			 Category category = lista.get(i).getResults().stream().collect(Collectors.toList()).get(i).getPilot().getCategory();
+//			 if(category.equals(Category.MOTOGP)) {
+//				 motoGP.add(lista.get(i));
+//			 }else if(category.equals(Category.MOTO2)) {
+//				 moto2.add(lista.get(i));
+//			 }else if(category.equals(Category.MOTO3)) {
+//				 moto3.add(lista.get(i));
+//			 }
+//		 }
+//		 res.add(motoGP);
+//		 res.add(moto2);
+//		 res.add(moto3);
+//		 return res;
+//	}
+	
 	public void delete(GranPremio gp) {
 		GPRepository.delete(gp);
 	}

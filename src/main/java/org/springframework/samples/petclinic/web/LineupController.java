@@ -75,16 +75,17 @@ public class LineupController {
 
 	@GetMapping(path = "/lineups/{lineupId}")
 	public String muestraAlineacionPorId(@PathVariable("lineupId") int lineupId, ModelMap model) {
+		String view = "lineups/lineupDetails";
 		Optional<Lineup> lineupOptional = lineupService.findLineup(lineupId);
 		if (lineupOptional.isPresent()) {
 			Lineup lineup = lineupOptional.get();
 			log.info("Lineup con id (" + lineupId + ") encontrado: " + lineup);
 			model.addAttribute("lineup", lineup);
 		} else {
+			view = "redirect:/leagues/{leagueId}/teams/{teamId}/details";
 			log.warn("Lineup con id (" + lineupId + ") NO encontrado.");
-			model.addAttribute("encontrado", false);
 		}
-		return "lineups/lineupDetails";
+		return view;
 	}
 
 	@GetMapping(path = "/newLineup")
@@ -99,7 +100,7 @@ public class LineupController {
 		GranPremio currentGP = this.granPremioService.findGPById(currentGPId).get();
 		lineup.setGp(currentGP);
 		model.put("lineup", lineup);
-		model.addAttribute("leagueCategory", this.TCService.getTabla().get().getCurrentCategory());
+		model.addAttribute("leagueCategory", currentCategory);
 		log.info("Leading to creation form...");
 		return "lineups/lineupsEdit";
 	}
@@ -109,6 +110,7 @@ public class LineupController {
 			@Valid Lineup lineup, BindingResult result, ModelMap model) {
 		if (result.hasErrors()) {
 			log.warn("The lineup creation form has errors!");
+			log.warn("Errors: " + result);
 			Integer currentGPId = this.TCService.getTabla().get().getActualRace();
 			GranPremio currentGP = this.granPremioService.findGPById(currentGPId).get();
 			lineup.setGp(currentGP);
@@ -116,7 +118,7 @@ public class LineupController {
 			return "lineups/lineupsEdit";
 		} else {
 			this.lineupService.saveLineup(lineup);
-			log.info("Lineup succesfully created!");
+			log.info("Lineup succesfully created!: " + lineup);
 			return "redirect:/leagues/{leagueId}/teams/{teamId}/details";
 		}
 	}
@@ -146,6 +148,7 @@ public class LineupController {
 			@Valid Lineup lineup, BindingResult result, ModelMap model) {
 		if (result.hasErrors()) {
 			log.info("The lineup edit form has errors!");
+			log.warn("Errors: " + result);
 			GranPremio currentGP = this.lineupService.findLineup(lineup.getId()).get().getGp();
 			lineup.setGp(currentGP);
 			model.put("lineup", lineup);
@@ -167,8 +170,9 @@ public class LineupController {
 	public String borrarLineup(@RequestHeader(name = "Referer") String referer, @PathVariable("lineupId") int lineupId,
 			ModelMap model) {
 		Optional<Lineup> lineup = lineupService.findLineup(lineupId);
-		log.info("Deleting lineup with id: (" + lineupId + "): " + lineup.get());
+		log.info("Deleting lineup with id: (" + lineupId + ")");
 		if (lineup.isPresent()) {
+			log.info("Lineup: " + lineup.get());
 			lineupService.delete(lineup.get());
 			model.addAttribute("message", "Lineup successfully deleted!");
 		} else {

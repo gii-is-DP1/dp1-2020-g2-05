@@ -71,6 +71,8 @@ public class MessageControllerTest {
 	private org.springframework.samples.petclinic.model.User user = new org.springframework.samples.petclinic.model.User();
 	private Message message = new Message();
 	private Message messagenew = new Message();
+	private Message messagelimpio = new Message();
+
 	private Message messagenewpred = new Message();
 	private List<Message> lista = new ArrayList<Message>();
 
@@ -95,6 +97,7 @@ public class MessageControllerTest {
 		user.setAuthorities(auth);
 		userrec.setAuthorities(auth);
 		
+		//Mensaje con errores
 		message.setId(1);
 		message.setUsernamesend(user);
 		message.setUsernamereceive(user);
@@ -102,9 +105,19 @@ public class MessageControllerTest {
 		message.setAsunto("PRUEBA");
 		message.setCuerpo("PRUEBA CUERPO");
 		
+		//Mensaje sin errores
 		messagenew.setId(2);
 		messagenew.setUsernamesend(user);
+		messagenew.setUsernamereceive(userrec);
 		messagenew.setVisto(0);
+		messagenew.setAsunto("PRUEBA");
+		messagenew.setCuerpo("PRUEBA CUERPO");
+		
+		//Mensaje que manda al form el controller
+		messagelimpio.setId(4);
+		messagelimpio.setVisto(0);
+		messagelimpio.setUsernamesend(user);
+
 		
 		messagenewpred.setId(3);
 		messagenewpred.setUsernamesend(user);
@@ -126,12 +139,6 @@ public class MessageControllerTest {
 		
 	}
 	
-//	@WithMockUser(value = "spring")
-//  @Test
-//  void testInitCreationForm() throws Exception {
-//	mockMvc.perform(get("/owners/new")).andExpect(status().isOk()).andExpect(model().attributeExists("owner"))
-//			.andExpect(view().name("owners/createOrUpdateOwnerForm"));
-//	}
 	
 @WithMockUser(value = "spring")
 @Test
@@ -162,15 +169,67 @@ void testBorrarMensajeFallido() throws Exception {
 			.andExpect(view().name("redirect:/messages"));
 }
 
+
 @WithMockUser(value = "spring")
 @Test
 void testCrearMensaje() throws Exception {
 	mockMvc.perform(get("/messages/new"))	
 			.andExpect(status().isOk())
-			.andExpect(model().attribute("messagee", is(messagenew)))
+			.andExpect(model().attribute("messagee", is(messagelimpio)))
 			.andExpect(model().attribute("usersend", is(user)))
 			.andExpect(view().name("messages/messagesEdit"));
 }
+
+@WithMockUser(value = "spring")
+@Test
+void testCrearMensaje2SinErrores() throws Exception {
+	mockMvc.perform(post("/messages/new") 
+			.with(csrf())	
+			.param("asunto", messagenew.getAsunto())
+			.param("cuerpo", messagenew.getCuerpo())
+			.param("id", messagenew.getId().toString())
+			.param("usernamesend.username", messagenew.getUsernamesend().getUsername())
+			.param("usernamesend.password", messagenew.getUsernamesend().getPassword())
+			.param("usernamesend.email", messagenew.getUsernamesend().getEmail())
+			.param("usernamesend.enabled", "True")
+			
+			.param("usernamereceive.username", messagenew.getUsernamereceive().getUsername())
+			.param("usernamereceive.password", messagenew.getUsernamereceive().getPassword())
+			.param("usernamereceive.email", messagenew.getUsernamereceive().getEmail())
+			.param("usernamereceive.enabled", "True")
+			.param("visto", "0"))	
+			.andExpect(status().is3xxRedirection())			
+			.andExpect(view().name("redirect:/messages/"));
+}
+
+@WithMockUser(value = "spring")
+@Test
+void testCrearMensaje2ConErrores() throws Exception {
+	
+	//El error es que no te puedes enviar un mensaje a ti mismo
+	mockMvc.perform(post("/messages/new") 
+			.with(csrf())	
+			.param("asunto", message.getAsunto())
+			.param("cuerpo", message.getCuerpo())
+			.param("id", message.getId().toString())
+			.param("usernamesend.username", message.getUsernamesend().getUsername())
+			.param("usernamesend.password", message.getUsernamesend().getPassword())
+			.param("usernamesend.email", message.getUsernamesend().getEmail())
+			.param("usernamesend.enabled", "True")
+
+			
+			.param("usernamereceive.username", message.getUsernamereceive().getUsername())
+			.param("usernamereceive.password", message.getUsernamereceive().getPassword())
+			.param("usernamereceive.email", message.getUsernamereceive().getEmail())
+			.param("usernamereceive.enabled", "True")
+
+			.param("visto", "0"))	
+			.andExpect(status().isOk())			
+			.andExpect(view().name("messages/messagesEdit"));
+}
+
+
+
 
 @WithMockUser(value = "spring")
 @Test
@@ -182,17 +241,24 @@ void testCrearMensajePredefinido() throws Exception {
 			.andExpect(view().name("messages/messagesEdit"));
 }
 
+
 @WithMockUser(value = "spring")
 @Test
-void testCrearMensaje2() throws Exception {
-//	given(userService.findUser(userrec.getUsername())).willReturn(Optional.of(userrec));
+void testCrearMensajePredefinido2SinErrores() throws Exception {
 	mockMvc.perform(post("/messages/new") 
 			.with(csrf())	
-			.param("asunto", message.getAsunto())
-			.param("cuerpo", message.getCuerpo())
-			.param("id", message.getId().toString())
-			.param("usernamesend", String.valueOf(message.getUsernamesend()))
-			.param("usernamereceive", String.valueOf(message.getUsernamereceive()))
+			.param("asunto", messagenew.getAsunto())
+			.param("cuerpo", messagenew.getCuerpo())
+			.param("id", messagenew.getId().toString())
+			.param("usernamesend.username", messagenew.getUsernamesend().getUsername())
+			.param("usernamesend.password", messagenew.getUsernamesend().getPassword())
+			.param("usernamesend.email", messagenew.getUsernamesend().getEmail())
+			.param("usernamesend.enabled", "True")
+			.param("usernamereceive.username", messagenew.getUsernamereceive().getUsername())
+			.param("usernamereceive.password", messagenew.getUsernamereceive().getPassword())
+			.param("usernamereceive.email", messagenew.getUsernamereceive().getEmail())
+			.param("usernamereceive.enabled", "True")
+
 			.param("visto", "0"))	
 			.andExpect(status().is3xxRedirection())			
 			.andExpect(view().name("redirect:/messages/"));
@@ -201,13 +267,22 @@ void testCrearMensaje2() throws Exception {
 @WithMockUser(value = "spring")
 @Test
 void testCrearMensajePredefinido2ConErrores() throws Exception {
+	//El error es que no te puedes enviar un mensaje a ti mismo
+
 	mockMvc.perform(post("/messages/new") 
 			.with(csrf())	
 			.param("asunto", message.getAsunto())
 			.param("cuerpo", message.getCuerpo())
 			.param("id", message.getId().toString())
-			.param("usernamesend", message.getUsernamesend().toString())
-			.param("usernamereceive", "martorsan13")
+			.param("usernamesend.username", message.getUsernamesend().getUsername())
+			.param("usernamesend.password", message.getUsernamesend().getPassword())
+			.param("usernamesend.email", message.getUsernamesend().getEmail())
+			.param("usernamesend.enabled", "True")
+			.param("usernamereceive.username", message.getUsernamereceive().getUsername())
+			.param("usernamereceive.password", message.getUsernamereceive().getPassword())
+			.param("usernamereceive.email", message.getUsernamereceive().getEmail())
+			.param("usernamereceive.enabled", "True")
+
 			.param("visto", "0"))	
 			.andExpect(status().isOk())			
 			.andExpect(view().name("messages/messagesEdit"));
