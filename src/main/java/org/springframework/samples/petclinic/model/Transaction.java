@@ -7,22 +7,25 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "Trade")
-public class Trade extends BaseEntity {
+@Table(name = "Transaction")
+public class Transaction extends BaseEntity implements Comparable<Transaction> {
 
 	@Column(name = "date")
 	@NotNull
 	private LocalDate date;
 
-	@Column(name = "price")
+	@Column(name = "remainingMoney")
 	@NotNull
-	private Integer price;
+	private Integer remainingMoney;
+
+	@Column(name = "amount")
+	@NotNull
+	private Integer amount;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "transactionType")
@@ -36,10 +39,7 @@ public class Trade extends BaseEntity {
 	@ManyToOne()
 	private Team team;
 
-	@OneToOne()
-	private Offer offer;
-
-//	public Trade(@NotNull LocalDate date, @NotNull Integer price, @NotNull TransactionType transactionType,
+//	public Transaction(@NotNull LocalDate date, @NotNull Integer price, @NotNull TransactionType transactionType,
 //			@NotBlank String concept, Team team, Offer offer) {
 //		super();
 //		this.date = date;
@@ -58,12 +58,20 @@ public class Trade extends BaseEntity {
 		this.date = date;
 	}
 
-	public Integer getPrice() {
-		return price;
+	public Integer getRemainingMoney() {
+		return remainingMoney;
 	}
 
-	public void setPrice(Integer price) {
-		this.price = price;
+	public void setRemainingMoney(Integer remainingMoney) {
+		this.remainingMoney = remainingMoney;
+	}
+
+	public Integer getAmount() {
+		return amount;
+	}
+
+	public void setAmount(Integer price) {
+		this.amount = price;
 	}
 
 	public TransactionType getTransactionType() {
@@ -90,12 +98,9 @@ public class Trade extends BaseEntity {
 		this.team = team;
 	}
 
-	public Offer getOffer() {
-		return offer;
-	}
-
-	public void setOffer(Offer offer) {
-		this.offer = offer;
+	@Override
+	public int compareTo(Transaction o) {
+		return this.id.compareTo(o.id);
 	}
 
 }

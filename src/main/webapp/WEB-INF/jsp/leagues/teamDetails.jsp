@@ -16,7 +16,6 @@
 			<th>Points</th>
 			<th>Money</th>
 			<th>User</th>
-			<!-- 			<th>Actions</th> -->
 		</tr>
 		
 		<tr>
@@ -62,6 +61,15 @@
 							</spring:url> <a href="${fn:escapeXml(putOnSaleUrl)}">Poner a la venta</a></td>
 					</c:otherwise>
 				</c:choose>
+			</tr>
+		</c:forEach>
+		<c:forEach items="${fichajesEnVenta}" var="recruit">
+			<tr>
+				<td><c:out value="${recruit.pilot.name}" /></td>
+				<td><c:out value="${recruit.pilot.lastName}" /></td>
+				<td><c:out value="${recruit.pilot.category}" /></td>
+				<td><c:out value="${recruit.pilot.dorsal}" /></td>
+				<td><c:out value="${recruit.pilot.nationality}" /></td>
 			</tr>
 		</c:forEach>
 	</table>
