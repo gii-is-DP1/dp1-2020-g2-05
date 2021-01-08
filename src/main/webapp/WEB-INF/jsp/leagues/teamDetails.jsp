@@ -16,7 +16,6 @@
 			<th>Points</th>
 			<th>Money</th>
 			<th>User</th>
-			<!-- 			<th>Actions</th> -->
 		</tr>
 		
 		<tr>

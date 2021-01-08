@@ -52,10 +52,10 @@ public class RecruitService {
 	}
 
 	@Transactional
-	public void deleteRecruit(Pilot pilot, Team team) throws DataAccessException { // Para borrar fichajes de la BBDD
-																					// por ejemplo cuando los vendo
-		Recruit recruit = createRecruit(pilot, team);
-		this.recruitRepository.delete(recruit);
+	public void deleteRecruit(Recruit recruit) throws DataAccessException { // Para borrar fichajes de la BBDD
+																			// al
+		this.recruitRepository.deleteById(recruit.getId());
+
 	}
 
 	private Recruit createRecruit(Pilot pilot, Team team) {
@@ -73,7 +73,11 @@ public class RecruitService {
 		return this.recruitRepository.findAll();
 	}
 
-	public void Trade(int pilotId, int leagueId) {
+	public void trade(Recruit recruit, Team sellerTeam, Team purchaserTeam) {
+		// Primero elimino el recruit del equipo que vende
+		deleteRecruit(recruit);
+		// Segundo añado el recruit al equipo que compra
+		saveRecruit(recruit.getPilot(), purchaserTeam);
 
 	}
 }

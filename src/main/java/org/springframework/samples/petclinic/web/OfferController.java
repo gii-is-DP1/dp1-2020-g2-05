@@ -4,9 +4,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Offer;
-import org.springframework.samples.petclinic.model.Pilot;
+import org.springframework.samples.petclinic.model.Recruit;
 import org.springframework.samples.petclinic.model.Team;
-import org.springframework.samples.petclinic.model.TransactionType;
 import org.springframework.samples.petclinic.service.OfferService;
 import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.TeamService;
@@ -38,7 +37,8 @@ public class OfferController {
 
 	@Autowired
 	public OfferController(OfferService offerService, RecruitService recruitService, UserService userService,
-			LeagueService leagueService, TeamService teamService, TransactionService transactionService) {
+//			LeagueService leagueService, 
+			TeamService teamService, TransactionService transactionService) {
 		this.offerService = offerService;
 		this.recruitService = recruitService;
 		this.userService = userService;
@@ -70,45 +70,39 @@ public class OfferController {
 
 		if (opo.isPresent()) {
 			Offer offer = opo.get();
-			Team team = getUserTeam(leagueId);// Esdudería que va a comprar un piloto
-			Integer price = offer.getPrice();
+			Team purchaserTeam = getUserTeam(leagueId);
 			Team sellerTeam = offer.getRecruit().getTeam();
+			Integer price = offer.getPrice();
 			if (!offer.getStatus().equals(Status.Outstanding)) {
 				modelMap.addAttribute("message", "This pilot isn't on sale anymore");
-			} else if (team.getId() == sellerTeam.getId()) {// Si la escudería es la misma que ofrecio
-															// el piloto, se cancela la oferta
+			} else if (purchaserTeam.getId() == sellerTeam.getId()) {// Si la escudería es la misma que ofrecio
+				// el piloto, se cancela la oferta
 				offer.setStatus(Status.Denied);
 				offerService.saveOffer(offer);
 				modelMap.addAttribute("message", "Offer cancelled!");
-			} else if (recruitService.getRecruitsByTeam(team.getId()).size() >= 4){
+			} else if (recruitService.getRecruitsByTeam(purchaserTeam.getId()).size() >= 4) {// RN-07: Máximo de
+																								// fichajes
 				modelMap.addAttribute("message", "You already own 4 riders on this league");
-			} else if (team.getMoney() >= price) { // RN-07:
-				// Máximo
-				// de
-				// fichajes
-				teamService.saveTeamMoney(team, -price);// Restar dinero al comprador
+			} else if (purchaserTeam.getMoney() >= price) {
+				teamService.saveTeamMoney(purchaserTeam, -price);// Restar dinero al comprador
 				teamService.saveTeamMoney(offer.getRecruit().getTeam(), price);// Dar dinero al vendedor
 
-				offer.setTeam(team);
+				offer.setTeam(purchaserTeam);
 				offer.setStatus(Status.Accepted);
 				offerService.saveOffer(offer);
-				Pilot pilot = offer.getRecruit().getPilot(); // Piloto sobre el que se hace la compraventa
-				String fullName = pilot.getName() + " " + pilot.getLastName();
-				recruitService.saveRecruit(pilot, team);
-				transactionService.saveTransaction(team.getMoney(), price, TransactionType.BUY, "Compra de " + fullName,
-						team, offer); // Guardar
-				// transaccion
-				// en el
-				// registro del comprador
-				transactionService.saveTransaction(sellerTeam.getMoney(), price, TransactionType.SELL,
-						"Venta de " + fullName, sellerTeam, offer); // Guardar
-				// transaccion
-				// en el
-				// registro del
-				// vendedor
+
+				Recruit recruit = offer.getRecruit();
+				recruitService.trade(offer.getRecruit(), sellerTeam, purchaserTeam); // Eliminamos el piloto del equipo
+																						// vendedor y lo añadimos al
+																						// equipo comprador
+
+				transactionService.trade(price, recruit.getPilot(), sellerTeam, purchaserTeam, offer); // Guardamos los
+																										// registros de
+				// las transacciones en las
+				// carteras de ambos equipos
 
 				modelMap.addAttribute("message", "Pilot recruited!");
-			}else {
+			} else {
 				modelMap.addAttribute("message", "Not enought money to recruit this pilot");
 			}
 		} else {
