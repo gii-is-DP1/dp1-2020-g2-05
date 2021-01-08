@@ -75,16 +75,17 @@ public class LineupController {
 
 	@GetMapping(path = "/lineups/{lineupId}")
 	public String muestraAlineacionPorId(@PathVariable("lineupId") int lineupId, ModelMap model) {
+		String view = "lineups/lineupDetails";
 		Optional<Lineup> lineupOptional = lineupService.findLineup(lineupId);
 		if (lineupOptional.isPresent()) {
 			Lineup lineup = lineupOptional.get();
 			log.info("Lineup con id (" + lineupId + ") encontrado: " + lineup);
 			model.addAttribute("lineup", lineup);
 		} else {
+			view = "redirect:/leagues/{leagueId}/teams/{teamId}/details";
 			log.warn("Lineup con id (" + lineupId + ") NO encontrado.");
-			model.addAttribute("encontrado", false);
 		}
-		return "lineups/lineupDetails";
+		return view;
 	}
 
 	@GetMapping(path = "/newLineup")
