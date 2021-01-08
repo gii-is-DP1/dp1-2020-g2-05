@@ -1,6 +1,7 @@
 package org.springframework.samples.petclinic.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -125,25 +126,16 @@ public class LeagueServiceTest {
 	 @Test
 	 @Transactional
 	 void shouldNotInsertLeague()  throws DataAccessException, duplicatedLeagueNameException  {
-		Iterable<League> league = this.leagueService.findAll();
-		List<League> found = new ArrayList<League>();
-	    league.forEach(found::add);
-		Integer found1=found.size();
-		
+	
 		League newLeague = new League();
 		newLeague.setLeagueCode("UDTQCSSOND");
 		newLeague.setLeagueDate("22/12/2222");
-		newLeague.setName("liga2222");
-		
-		this.leagueService.saveLeague(newLeague);
-		
-		assertThat(newLeague.getId().longValue()).isNotEqualTo(0);
-
-		league = this.leagueService.findAll();
-		found=new ArrayList<League>();
-	    league.forEach(found::add);
-
-		assertThat(found.size()).isEqualTo(found1 + 1);
+		newLeague.setName("Liga1");
+		try {
+			this.leagueService.saveLeague(newLeague);
+		}catch(duplicatedLeagueNameException e){
+			assertThat(e.getMessage()).isEqualTo("Duplicated league name");
+		}
 	 }
 	 
 	 @Test
@@ -232,6 +224,16 @@ public class LeagueServiceTest {
 			Set<Team> eq = newLeague.getTeam();
 			 Boolean noTeams = this.leagueService.comprobarLigaVacia(leagues);
 			assertThat(noTeams).isTrue();
+		}
+	 @Test
+		void shouldFindAuthorities() {
+		 	String aut = this.leagueService.findAuthoritiesByUsername("antcammar4");
+			assertThat(aut).isEqualTo("admin");
+		}
+	 @Test
+		void shouldNotFindAuthorities() {
+		 	String aut = this.leagueService.findAuthoritiesByUsername("notFoundUserqwertyuioawsdeftg");
+			assertThat(aut).isEqualTo(null);
 		}
 	
 	 

@@ -61,6 +61,9 @@ import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.samples.petclinic.model.Category;
 import motogpAPI.PeticionesGet;
 import motogpAPI.RaceCode;
@@ -73,6 +76,7 @@ import motogpAPI.model.InfoCarrera;
  *
  * @author Michael Isvy
  */
+@Slf4j
 @Service
 public class PilotService {
 	
@@ -129,9 +133,9 @@ public class PilotService {
 			for (int j=0;j<MAXIMO_CARRERAS;j++) {
 				GranPremio gp = new GranPremio(); //entidad de una carrera
 				List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceNumberCampu(form.getCategory(), i, j, Session.RACE);
-				if(todosLosResultadosDeUnaCarrera.size()==0) {
-					throw new NotFoundException("No se han encontrado carreras para los anyos dados");
-				}else {
+//				if(todosLosResultadosDeUnaCarrera.size()==0) {
+//					throw new NotFoundException("No se han encontrado carreras para los anyos dados");
+//				}else {
 					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 					LocalDate date = LocalDate.parse(todosLosResultadosDeUnaCarrera.get(0).getFecha(), formatter);				
 					gp.setSite(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
@@ -176,7 +180,7 @@ public class PilotService {
 				}
 			}			
 		}
-	}
+//	}
 	
 	//	2016, RaceCode.AUT, Session.RACE
 	public void poblarBDCarreraACarrera(BDCarrera form,GranPremio gp,Boolean GpEstaEnCalendario) throws JSONException, IOException, ParseException {
@@ -184,11 +188,13 @@ public class PilotService {
 		//EL GP QUE SE PASA COMO PARAMETRO, O ESTA VACIO, O ESTA EN EL CALENDARIO
 		//				GranPremio gp = new GranPremio(); //entidad de una carrera
 		List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceCodeCampu(form.getCategory(), form.getYear(), form.getRacecode(), form.getSession());
-//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		log.info("La api ha obtenido los resultados satisfactoriamente para year :" + form.getYear()+", category:" + form.getCategory());
 
-		if (todosLosResultadosDeUnaCarrera.size()==0) {
-			throw new NotFoundException("No se han encontrado carreras para los parametros dados");
-		} else {
+		//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+//		if (todosLosResultadosDeUnaCarrera.size()==0) {
+//			throw new NotFoundException("No se han encontrado carreras para los parametros dados");
+//		} else {
 			
 			if (GpEstaEnCalendario==false) {
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -245,7 +251,8 @@ public class PilotService {
 				this.resultService.saveResult(result);
 				this.savePilot(pilot);
 			}
-		}
+			log.info("La api ha asociado los resultados al gp : " + gp.getSite());
+//		}
 	}			
 		
 	@Transactional

@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.web.LeagueController;
+import org.springframework.security.acls.model.NotFoundException;
 
 import motogpAPI.model2.Detail;
 import motogpAPI.model2.Example2;
@@ -188,7 +189,6 @@ public class PeticionesGet {
 			
 			Example example = new ObjectMapper().readValue(result.toString(),Example.class);
 			
-
 			List<String> idCarreras = new ArrayList<String>();
 			for(int i=0;i<example.getRaces().size();i++) {
 				idCarreras.add(example.getRaces().get(i).getSession().getUuid());
@@ -235,12 +235,14 @@ public class PeticionesGet {
 						piloto, pais, equipo, kmh, vueltaMasRapidaPole,raceCode,category,lugar,fecha_exacta);
 				listaCarrera.add(n);
 				}
-			
+
 		}catch (Exception e) {
 			// TODO: handle exception
 		}
 		
-		
+		if(listaCarrera.isEmpty()) {
+			throw new NotFoundException("No se han encontrado carreras para los anyos dados");
+		}
 		return listaCarrera;
 	}
 	
@@ -294,7 +296,10 @@ public class PeticionesGet {
 			Example2 example2 = new ObjectMapper().readValue(jsonObject.toString(),Example2.class);
 
 			List<InfoCarrera> listaCarrera = new ArrayList<InfoCarrera>();
-
+			if(example2.getEvent()==null) {
+				log.warn("La api no podido obtener los resultados satisfactoriamente para year :" + year+", category:" + category);
+				throw new NotFoundException("No se han encontrado carreras para los parametros dados");
+			}
 			String nombreEvento = example2.getEvent().getName();
 			String raceCode = example2.getEvent().getCode();
 			System.out.println(nombreEvento);
@@ -369,7 +374,6 @@ public class PeticionesGet {
 			result = new JSONObject(JsonReader.readJsonFromUrl(url, baseURL, URL_JSON_SESSIONS));
 
 		} catch (IOException e) {
-			log.warn("La api no ha podido encontrar ningun resultado con los parámetros "+ category + ", " + year + ", " + session );
 		}
 
 		return result;
