@@ -2,9 +2,6 @@ package org.springframework.samples.petclinic.web;
 
 import static org.mockito.BDDMockito.given;
 
-
-
-
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -20,24 +17,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.core.convert.ConversionService;
-import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.configuration.GenericIdToEntityConverter;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
-
 import org.springframework.samples.petclinic.model.Authorities;
-
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Pilot;
@@ -55,7 +44,6 @@ import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
-import static org.hamcrest.Matchers.is;
 
 @WebMvcTest(controllers=PilotController.class,
 excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class),
@@ -71,8 +59,8 @@ public class PilotControllerTest {
 	
 	private static final Integer PILOT_TEST_ID = 2345;
 	
-	 @Autowired
-	 private WebApplicationContext context;
+	
+
 	 
 	 @MockBean
 	 @Autowired
@@ -111,6 +99,7 @@ public class PilotControllerTest {
 		League liga = new League();
 		Team team = new Team();
 		Pilot pilot = new Pilot();
+
 		
 		@BeforeEach
 		void setup() throws DataAccessException, duplicatedLeagueNameException {
@@ -238,5 +227,17 @@ public class PilotControllerTest {
 					.andExpect(status().is3xxRedirection())
 					.andExpect(view().name("redirect:/pilotsPaged"));
 		}
+		
+		@WithMockUser(value = "spring")
+		@Test
+		void testDeletePilotErrors() throws Exception {
+			given(this.pilotService.findPilotById(PILOT_TEST_ID)).willReturn(Optional.empty());
+
+			mockMvc.perform(get("/pilots/delete/{pilotId}", PILOT_TEST_ID))
+					.andExpect(status().is3xxRedirection())
+					.andExpect(view().name("redirect:/pilotsPaged"));
+		}
+		
+
 
 }
