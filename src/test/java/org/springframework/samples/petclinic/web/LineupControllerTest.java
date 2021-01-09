@@ -244,6 +244,7 @@ public class LineupControllerTest {
 
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/lineups/{lineupId}", TEST_LEAGUE_ID, TEST_TEAM_ID, TEST_LINEUP_ID))
 		.andExpect(status().isOk())	
+		.andExpect(model().attributeHasNoErrors("lineup"))
 		.andExpect(model().attribute("lineup", is(lineup)))
 		.andExpect(view().name("lineups/lineupDetails"));
 	}
@@ -266,6 +267,7 @@ public class LineupControllerTest {
 
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/newLineup", TEST_LEAGUE_ID, TEST_TEAM_ID))
 		.andExpect(status().isOk())
+		.andExpect(model().attributeHasNoErrors("lineup"))
 		.andExpect(model().attribute("lineup", hasProperty("category", is(lineup.getCategory()))))
 		.andExpect(model().attribute("lineup", hasProperty("gp", is(lineup.getGp()))))
 		.andExpect(model().attribute("leagueCategory", is(lineup.getCategory())))

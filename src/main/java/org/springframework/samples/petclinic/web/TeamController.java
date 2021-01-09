@@ -314,7 +314,7 @@ public class TeamController {
 
 	}
 
-	@PostMapping(value = "/leagues/{leagueId}/teams/{teamId}/edit")
+	@PostMapping(path = "/leagues/{leagueId}/teams/{teamId}/edit")
 	public String editarPilotoPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
 			@Valid Team team, ModelMap model, BindingResult result) {
 		League league = this.leagueService.findLeague(leagueId).get();

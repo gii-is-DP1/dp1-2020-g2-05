@@ -354,7 +354,7 @@
 					<generateAssertionsForAllFields>true</generateAssertionsForAllFields>
 
 					<!-- Where to generate assertions entry point classes -->
-<!-- 					<entryPointClassPackage>org.assertj</entryPointClassPackage> -->
+					<entryPointClassPackage>org.assertj</entryPointClassPackage>
 
 					<!-- Restrict classes to generate assertions for with regex -->
 <!-- 					<includes> -->
@@ -371,8 +371,8 @@
 <!-- 					</excludes> -->
 
 					<!-- Sets the base directory where to generate assertions -->
-<!-- 					<targetDir>src/test/generated-assertions</targetDir> -->
-					<targetDir>target/generated-test-sources</targetDir>
+					<targetDir>src/test/generated-assertions</targetDir>
+<!-- 					<targetDir>target/generated-test-sources</targetDir> -->
 
 					<!-- If true, all files in targetDir are removed before generating new 
 						ones (default to false) -->
@@ -383,7 +383,7 @@
 						-> src/test/generated-assertions/my/assertions/PlayerAssert If not set, each 
 						assertion class is generated in the package of the class to assert. Ex: com.nba.Player 
 						-> src/test/generated-assertions/com/nba/PlayerAssert -->
-<!-- 					<generateAssertionsInPackage>my.assertions</generateAssertionsInPackage> -->
+					<generateAssertionsInPackage>org.springframework.samples.petclinic.customAssertions</generateAssertionsInPackage>
 
 					<!-- Select which assertions entry point classes to generate -->
 					<generateAssertions>true</generateAssertions>

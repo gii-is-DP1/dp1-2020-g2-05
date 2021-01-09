@@ -122,7 +122,6 @@ public class GPControllerTest {
 
 		mockMvc.perform(get("/granPremios"))	
 		.andExpect(status().isOk())
-		.andExpect(model().attribute("racesCompleted", is(TCConsulta.getRacesCompleted())))
 		.andExpect(model().attribute("listaGP", is(listagps)))
 		.andExpect(view().name("gp/gpList"));
 	}	
