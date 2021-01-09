@@ -71,9 +71,12 @@ public class TeamService {
 		List<Team> list = league.getTeam().stream().collect(Collectors.toList());
 		for(int i = 0; i<list.size(); i++) {
 			Team t = list.get(i);
-			if(t.getName().equals(team.getName())) {
+			
+			if(t.getName().equals(team.getName()) && t.getId()!=team.getId()) {
 				igual = true;
 			}
+
+		
 		}
 		
 		if(!igual) {

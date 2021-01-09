@@ -333,7 +333,7 @@ public class TeamController {
 		} else {
 			log.info("Equipo " + team + " editado correctamente");
 			User usuario = this.userService.getUserSession();
-			Team teamToUpdate = this.teamService.findTeamById(team.getId()).get();
+			Team teamToUpdate = this.teamService.findTeamById(teamId).get();
 			BeanUtils.copyProperties(team, teamToUpdate);
 			model.put("team", team);
 			teamToUpdate.setUser(usuario);
