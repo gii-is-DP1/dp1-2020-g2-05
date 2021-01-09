@@ -38,7 +38,7 @@ class TransactionServiceTest {
 		String fullName = pilot.getName() + " " + pilot.getLastName();
 		Integer price = offer.getPrice();
 
-		transactionService.saveTransaction(price, TransactionType.BUY, "Compra de: " + fullName, team, offer);
+		transactionService.saveTransaction(price, TransactionType.BUY, "Compra de: " + fullName, team);
 
 		Long afterList = StreamSupport.stream(transactionService.findAll().spliterator(), false).count();
 		assertThat(beforeList.equals(afterList - 1)).isTrue();
@@ -55,7 +55,7 @@ class TransactionServiceTest {
 		Pilot pilot = offer.getRecruit().getPilot();
 		Integer price = offer.getPrice();
 
-		transactionService.trade(price, pilot, sellerTeam, purchaserTeam, offer);
+		transactionService.trade(price, pilot, sellerTeam, purchaserTeam);
 
 		Long afterList = StreamSupport.stream(transactionService.findAll().spliterator(), false).count();
 		assertThat(beforeList.equals(afterList - 2)).isTrue();

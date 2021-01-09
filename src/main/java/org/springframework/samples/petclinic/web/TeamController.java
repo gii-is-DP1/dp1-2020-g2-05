@@ -148,10 +148,6 @@ public class TeamController {
 		team.setLeague(league);
 
 		log.info("La liga " + league + " ha sido asignada correctamente");
-//		System.out.println(league.get().getId().equals(team.getLeague().getId()));
-		System.out.println(team.getLeague());
-		System.out.println(team.getUser());
-		System.out.println(result.getAllErrors());
 		if (result.hasErrors()) {
 			model.put("team", team);
 			model.put("message", result.getAllErrors());
@@ -301,6 +297,8 @@ public class TeamController {
 
 		authority = this.leagueService.findAuthoritiesByUsername(team.get().getUser().getUsername());
 
+		System.out.println(authority);
+		
 		model.put("Editar", true);
 		if (authority.equals("admin")) {
 			model.put("admin", true);
@@ -319,6 +317,14 @@ public class TeamController {
 	@PostMapping(value = "/leagues/{leagueId}/teams/{teamId}/edit")
 	public String editarPilotoPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
 			@Valid Team team, ModelMap model, BindingResult result) {
+		League league = this.leagueService.findLeague(leagueId).get();
+		System.out.println(league);
+		log.debug("Asignandole la liga " + league);
+		team.setLeague(league);
+
+		System.out.println(team.getLeague());
+		System.out.println(team.getUser());
+		System.out.println(result.getAllErrors());
 		if (result.hasErrors()) {
 			log.warn("El equipo " + team + " no ha podido ser editado correctamente");
 			model.put("team", team);
