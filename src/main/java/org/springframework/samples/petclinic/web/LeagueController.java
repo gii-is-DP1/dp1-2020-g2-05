@@ -60,6 +60,7 @@ public class LeagueController {
 	public void initPetBinder(WebDataBinder dataBinder) {
 		dataBinder.setValidator(new LeagueValidator());
 	}
+	
 
 	@GetMapping("/leagues")
 	public String leagues(ModelMap modelMap) throws JSONException, IOException {
