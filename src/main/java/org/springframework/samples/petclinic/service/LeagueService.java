@@ -53,9 +53,9 @@ public class LeagueService {
 	@Transactional
 	public Boolean saveLeague(League league) throws DataAccessException, duplicatedLeagueNameException {
 		log.info("Intentando guardar liga : " + league);
-		Iterable<League> ligas = leagueRepository.findAll();
-		List<League> listLigas = new ArrayList<League>();
-		ligas.forEach(listLigas::add);
+//		Iterable<League> ligas = leagueRepository.findAll();
+		List<League> listLigas = this.findAll();
+//		ligas.forEach(listLigas::add);
 		for (int i = 0; i < listLigas.size(); i++) {
 			if (listLigas.get(i).getName().equals(league.getName())) {
 				log.warn("No se ha podido guardar la liga " + league);
@@ -116,13 +116,17 @@ public class LeagueService {
 
 		for (League league : result) {
 			Set<Team> equipos = league.getTeam();
-			if (equipos.size() <= 1) {
+			if (equipos.size() == 1) {
 				if (equipos.stream().collect(Collectors.toList()).get(0).getName().equals("Sistema")) {
 					this.deleteLeague(league);
 					ret = true;
 					log.warn("Se ha detectado una liga sin equipos : " + league);
 
 				}
+			}else if(equipos.isEmpty()) {
+				this.deleteLeague(league);
+				ret = true;
+				log.warn("Se ha detectado una liga sin equipos : " + league);
 			}
 
 		}
@@ -157,8 +161,10 @@ public class LeagueService {
 	}
 
 	@Transactional
-	public Iterable<League> findAll() {
-		return leagueRepository.findAll();
+	public List<League> findAll() {
+		List<League> listaReturn = new ArrayList<>();
+		leagueRepository.findAll().forEach(listaReturn::add);
+		return  listaReturn;
 	}
 
 	public Optional<League> findLeague(Integer leagueId) {

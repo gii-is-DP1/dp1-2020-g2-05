@@ -60,7 +60,6 @@ public class LeagueController {
 	public void initPetBinder(WebDataBinder dataBinder) {
 		dataBinder.setValidator(new LeagueValidator());
 	}
-	
 
 	@GetMapping("/leagues")
 	public String leagues(ModelMap modelMap) throws JSONException, IOException {
@@ -69,25 +68,24 @@ public class LeagueController {
 
 		Optional<TablaConsultas> tabla = this.TCService.getTabla();
 
-		List<League> result = leagueService.convertirIterableLista(leagueService.findAll());
+		List<League> leagueList = leagueService.findAll();
 
 		log.debug("Intentando detectar si hay ligas sin equipos");
-		if (this.leagueService.comprobarLigaVacia(result)) { // si ha eliminado a una liga da true y refresco la pagina
-			log.info("Liga borrada");
-
-			return leagues(modelMap);
+		if (this.leagueService.comprobarLigaVacia(leagueList)) { // si ha eliminado a una liga da true 
+			log.info("Liga borrada");                        // y refresco la lista de ligas
+		
+			leagueList = leagueService.findAll();
 		} else {
 			log.info("No se han detectado ligas sin equipos");
-
 		}
 
-		if (AUTHORITY.equals("admin")) {
-			modelMap.addAttribute("admin", true);
-		} else if (!AUTHORITY.equals("admin")) {
+		if (AUTHORITY.equals("admin")) {  // se hace para que si el user
+			modelMap.addAttribute("admin", true);//no es admin no se muestre
+		} else if (!AUTHORITY.equals("admin")) {// el codigo de liga en la vista
 			modelMap.addAttribute("user", true);
 		}
 
-		modelMap.addAttribute("ligas", result);
+		modelMap.addAttribute("ligas", leagueList);
 		modelMap.addAttribute("categoriaActual", tabla.get().getCurrentCategory());
 		modelMap.addAttribute("carrerasCompletadas", tabla.get().getRacesCompleted());
 		return "leagues/leagueList";
@@ -100,21 +98,29 @@ public class LeagueController {
 		List<League> myLeaguesList = new ArrayList<League>();
 
 		if (Optional.of(user).isPresent()) {
-			myLeaguesList = leagueService.obtenerListaIntegerToTeams(teamService.findTeamsByUsername(user.getUsername())); // obtengo
-			// usuario
+			myLeaguesList = leagueService.obtenerListaIntegerToTeams(teamService.findTeamsByUsername(user.getUsername())); 
+			//se obtienen las ligas en las que un usuario participa 
+			//consultando la id de las ligas en las que tiene sus equipos
 		}
-		log.info("Mostrando ligas del user '"+user.getUsername()+"'");
+		log.info("Mostrando ligas del user '" + user.getUsername() + "'");
 		try {
 
 			if (modelMap.getAttribute("yaTienesEquipo").equals(true)) {
 				modelMap.addAttribute("leagueYaEquipoId", modelMap.getAttribute("leagueYaEquipoId"));
-
+					//si yatienesequipo es true significa que el usuario ya 
+					//tiene equipo en esta liga
+					//leagueyaequipo es para saber que id es la de la liga
+					//en la que el usuario ya tiene equipo
 			}
 
-		} catch (NullPointerException e) {
-		}
+			} catch (NullPointerException e) {
+				//si yatienesequipo es null entra aqui
+				log.warn("Null pointer exception capturado porque 'yaTienesEquipo' es null " );
+			}
 
 		if (myLeaguesList.size() == 0) {
+			//si el tamaño de la lista es 0 tenemos que 
+			//decirle que no tiene ligas en la vista
 			modelMap.addAttribute("noTengoLigas", true);
 			return "leagues/myLeagues";
 		} else {
@@ -133,10 +139,11 @@ public class LeagueController {
 //		if(!(AUTHORITY.equals("admin"))) {
 //			return "redirect:/leagues";
 //		}
+		
+		//aqui se entra cuando se corre un GP para aumentar el numero de carreras
 		Category category = Category.valueOf(model.getAttribute("category").toString());
 
 		TCService.actualizarTabla(category);
-
 
 		return "redirect:/leagues";
 	}
@@ -145,13 +152,15 @@ public class LeagueController {
 	public String initcrearLiga(ModelMap model) throws DataAccessException, duplicatedLeagueNameException {
 		User user = this.userService.getUserSession();
 
-		if ( user==null || !Optional.of(user).isPresent()) {
+		if (user == null || !Optional.of(user).isPresent()) {
 			return "/leagues/leagueList";
 		}
 
 		Integer num_leagues = leagueService.findLeaguesByUsername(user.getUsername());
 
 		if (num_leagues >= 5) {
+			//Si pertence a mas de 5 ligas, no puede
+			//crear mas ligas
 			model.addAttribute("yaTieneMaxTeams", true);
 			return myLeagues(model);
 		}
@@ -162,7 +171,7 @@ public class LeagueController {
 		League newLeague = new League();
 		newLeague.setLeagueCode(leagueService.randomString(10));
 		newLeague.setLeagueDate(formatter.format(date));
-
+		//creamos la liga con codigo y fecha actual 
 		log.debug("Liga dummy : " + newLeague);
 
 		model.addAttribute("league", newLeague);
@@ -184,7 +193,6 @@ public class LeagueController {
 
 				User user = this.userService.getUserSession();
 
-				Set<Team> setTeams = new HashSet();
 
 				Team team = new Team();
 				team.setUser(this.userService.getUserSession());
@@ -192,11 +200,15 @@ public class LeagueController {
 				team.setMoney(2000);
 				team.setPoints(0);
 				team.setName(user.getUsername() + " team");
-				league.setTeam(setTeams);
+				league.addTeam(team);
 
 				this.leagueService.saveLeague(league);
 
 				this.teamService.saveTeam(team);
+				
+				//para evitar que se creara la liga y despues se quedara sin equipos
+				//asignados le asignamos un equipo con el nombre del usuario + teams
+				
 				log.info("Equipo " + team + " guardado correctamente.");
 
 			} catch (duplicatedLeagueNameException e) {
@@ -206,11 +218,10 @@ public class LeagueController {
 				model.put("message", results.getAllErrors());
 				return "/leagues/createLeagueName";
 			}
-			
+
 			log.debug("Creando el equipo sistema");
 			teamService.saveSystemTeam(league);
 			log.info("Equipo sistema creado correctamente");
-
 
 			return "redirect:/leagues/myLeagues";
 		}
@@ -221,16 +232,19 @@ public class LeagueController {
 	public String unirseLiga(ModelMap model) {
 		User user = this.userService.getUserSession();
 
-		if (user==null || !Optional.of(user).isPresent() ) {
+		if (user == null || !Optional.of(user).isPresent()) {
 			return "/leagues/leagueList";
 		}
+		
 		log.debug("Intentando unir a " + user.getUsername() + " a una liga");
 
-		model.addAttribute("league", new League());
+		
 
 		Integer num_leagues = this.leagueService.findLeaguesByUsername(user.getUsername());
 
-		if (num_leagues == 5) {
+		if (num_leagues >= 5) {
+			//Si pertence a mas de 5 ligas, no puede
+			//unirse a mas ligas
 			model.addAttribute("yaTieneMaxTeams", true);
 			return myLeagues(model);
 		}
@@ -241,7 +255,8 @@ public class LeagueController {
 		} catch (NullPointerException e) {
 
 		}
-
+		log.debug("redirigiendo para introducir un codigo de liga");
+		model.addAttribute("league", new League());
 		return "/leagues/createLeague";
 	}
 
@@ -249,13 +264,12 @@ public class LeagueController {
 	public String unirseLigaCode(League league, ModelMap model) {
 		User user = this.userService.getUserSession();
 
-
 		List<Integer> idLeague = this.teamService.findTeamsByUsername(user.getUsername());
 
 		Optional<League> liga = this.leagueService.findLeagueByLeagueCode(league.getLeagueCode().trim());
 
 		if (!liga.isPresent()) {
-			log.warn("No se han encontrado ligas con el codigo :'" + league.getLeagueCode()+"'");
+			log.warn("No se han encontrado ligas con el codigo :'" + league.getLeagueCode() + "'");
 			model.addAttribute("noLeagueFound", true);
 			return unirseLiga(model);
 		}
@@ -263,7 +277,8 @@ public class LeagueController {
 		Integer numTeamsLeague = this.teamService.findTeamsByLeagueId(liga.get().getId());
 
 		if (idLeague.contains(liga.get().getId())) {
-			log.info("El user '"+user.getUsername()+ "' ya pertenece a la liga con codigo :'"+league.getLeagueCode()+"'");
+			log.info("El user '" + user.getUsername() + "' ya pertenece a la liga con codigo :'"
+					+ league.getLeagueCode() + "'");
 
 			model.addAttribute("yaTienesEquipo", true);
 			model.addAttribute("leagueYaEquipoId", liga.get().getId());
@@ -271,15 +286,18 @@ public class LeagueController {
 		}
 
 		if (numTeamsLeague > 5) {
-			log.info("La liga con codigo :'"+league.getLeagueCode()+"' ya tiene el maximo de equipos");
+			log.info("La liga con codigo :'" + league.getLeagueCode() + "' ya tiene el maximo de equipos");
 
 			model.addAttribute("yaTieneMaxTeams", true);
 			return myLeagues(model);
 		}
-		log.info("Redirigiendo a crear equipo para entrar en la liga con codigo :'"+league.getLeagueCode()+"'");
+		log.info("Redirigiendo a crear equipo para entrar en la liga con codigo :'" + league.getLeagueCode() + "'");
 		model.addAttribute("yaTienesEquipo", false);
+	
+//		model.addAttribute("vengoDelJoinLeague",true);
+//		this.teamController.crearEquipo(liga.get().getId(),model);
+//		return "redirect:/leagues/myLeagues";
 		return "redirect:/leagues/" + liga.get().getId() + "/teams/new";
-//		teamController.crearEquipo(leagueId, model);
 	}
 
 }
