@@ -35,40 +35,7 @@ public class UserServiceTest {
 			assertThat(user_fail.isPresent()).isFalse();
 		}
 	 
-//	 @Test
-//	   void shouldFindMessagesByUsernameReceive() {
-//		 	Iterable<Message> num_messages = this.messageService.findAllUsernameReceive("martorsan13");
-//			 List<Message> messages = new ArrayList<Message>();
-//			 num_messages.forEach(messages::add);
-//				System.out.println("El numero de mensajes recibidos por mariano es " + messages.size());
-//
-//			assertThat(messages.size()!=0).isTrue();
-//			
-//			
-//			Iterable<Message> num_messages_zero = this.messageService.findAllUsernameReceive("serrojjim");
-//			 List<Message> messages_fail = new ArrayList<Message>();
-//			 num_messages_zero.forEach(messages_fail::add);
-//				System.out.println("El numero de mensajes recibido  por sergio es " + messages_fail.size());
-//
-//			assertThat(messages_fail.size()==0).isTrue();
-//	 }
-//	 
-//	 @Test
-//	   void shouldFindMessagesByUsernameSend() {
-//		 	Iterable<Message> num_messages = this.messageService.findAllUsernameSend("serrojjim");
-//			List<Message> messages = new ArrayList<Message>();
-//			num_messages.forEach(messages::add);
-//			System.out.println("El numero de mensajes enviado es antcammar4" + + messages.size());
-//			assertThat(messages.size()!=0).isTrue();
-//						
-//			
-//			Iterable<Message> num_messages_zero = this.messageService.findAllUsernameSend("antcammar4");
-//			List<Message> messages_fail = new ArrayList<Message>();
-//			 num_messages_zero.forEach(messages_fail::add);
-//				System.out.println("El numero de mensajes enviado  por antcama es " + messages_fail.size());
-//
-//			assertThat(messages_fail.size()==0).isTrue();
-//	 }
+
 	 
 	 @Test
 	 @Transactional
@@ -82,6 +49,7 @@ public class UserServiceTest {
 		newUser.setUsername("Prueba");
 		newUser.setPassword("prueba");
 		newUser.setEmail("prueba@gmail.com");
+		newUser.setImgperfil("probando");
 		newUser.setEnabled(true);
 		this.userService.saveUser(newUser);
 		assertThat(newUser.getUsername()).isNotEqualTo(null);
@@ -105,6 +73,7 @@ public class UserServiceTest {
 			newUser.setUsername("Prueba");
 			newUser.setPassword("prueba");
 			newUser.setEmail("prueba@gmail.com");
+			newUser.setImgperfil("probando");
 			newUser.setEnabled(true);
 		
 			this.userService.saveUser(newUser);
@@ -115,5 +84,21 @@ public class UserServiceTest {
 	    
 		assertThat(found.size()).isEqualTo(found1);
 	 }
+	 
+	 @Test
+		void shouldFindFriendsByUser() {
+		 	List<User> friends1 = userService.findUser("serrojjim").get().getFriends();
+		 	Optional<User> friend = 	userService.findUser("martorsan13");
+			friends1.add(friend.get());
+	
+			userService.findUser("serrojjim").get().setFriends(friends1);
+			
+			userService.saveUser(userService.findUser("serrojjim").get());
+		 
+			List<User> friends = this.userService.findFriendByUser("serrojjim");
+			assertThat(friends.contains(friend.get())).isTrue();
+			assertThat(friends.contains(userService.findUser("admin1").get())).isFalse();
+		
+		}
 
 }
