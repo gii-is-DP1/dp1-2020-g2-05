@@ -1,6 +1,6 @@
 package org.springframework.samples.petclinic.model;
 
-import java.util.Optional;
+
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -10,9 +10,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
-
-import com.sun.istack.NotNull;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "team")
@@ -24,10 +24,12 @@ public class Team extends BaseEntity implements Comparable<Team> {
 	
 	
 	@Column(name = "points")
+	@Min(0)
 	@NotNull
 	private Integer points;
 	
 	@Column(name = "money")
+	@Min(0)
 	@NotNull
 	private Integer money;
 	
