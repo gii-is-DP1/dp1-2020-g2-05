@@ -179,7 +179,7 @@ public class LeagueControllerTest {
     	@WithMockUser(value = "spring")
     	@Test
     	void testShowLeagues() throws Exception {
-    		given(this.leagueService.convertirIterableLista(leagueService.findAll())).willReturn(lista);
+    		given(leagueService.findAll()).willReturn(lista);
     		given(this.leagueService.findAuthoritiesByUsername(user.getUsername())).willReturn("admin");
     		given( this.TCService.getTabla()).willReturn(Optional.of(this.TCConsulta));
 //    		given( this.TCService.getTabla().get().getCurrentCategory()).willReturn(Category.MOTO2);
@@ -197,7 +197,7 @@ public class LeagueControllerTest {
     	@WithMockUser(value = "spring")
     	@Test
     	void testLimitedShowLeagues() throws Exception {
-    		given(this.leagueService.convertirIterableLista(leagueService.findAll())).willReturn(lista);
+    		given(leagueService.findAll()).willReturn(lista);
     		given(this.leagueService.findAuthoritiesByUsername(user.getUsername())).willReturn("user");
     		given(this.TCService.getTabla()).willReturn(Optional.of(TCConsulta));
     		

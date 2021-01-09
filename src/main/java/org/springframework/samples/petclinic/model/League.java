@@ -92,6 +92,9 @@ public class League extends NamedEntity {
 //	}
 
 	public Set<Team> getTeam() {
+		if(this.team==null) {
+			this.team=new HashSet<Team>();
+		}
 		return team;
 	}
 
@@ -125,8 +128,8 @@ public class League extends NamedEntity {
 //	}
 
 	public void addTeam(Team team) {
-		getTeam().add(team);
-		team.setLeague(this);
+		this.getTeam().add(team);
+	//	team.setLeague(this);
 	}
 
 
