@@ -21,9 +21,16 @@ import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
+import javax.validation.Valid;
+
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.assertj.core.util.Lists;
 import org.hamcrest.Matchers;
 import org.hamcrest.collection.HasItemInArray;
@@ -38,6 +45,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -58,6 +66,7 @@ import org.springframework.samples.petclinic.model.Recruit;
 import org.springframework.samples.petclinic.model.TablaConsultas;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.User;
+import org.springframework.samples.petclinic.repository.LineupRepository;
 import org.springframework.samples.petclinic.repository.TablaConsultasRepository;
 import org.springframework.samples.petclinic.service.GranPremioService;
 import org.springframework.samples.petclinic.service.LeagueService;
@@ -265,6 +274,7 @@ public class LineupControllerTest {
 	
 	
 //	Una vez se corre un GP, entonces, ya no se podrá crear, editar o eliminar un lineup respecto a dicho GP.
+//  Esto lo implementaremos en el próximo sprint, cuando sepamos como hacer el tema de la seguridad
 	
 //	@WithMockUser(value = "spring")
 //	@Test
@@ -332,12 +342,123 @@ public class LineupControllerTest {
 				// Solo falla con los param de recruit1 y 2, con los demas, da igual si son null o no :(
 				// Cuando hay typeMismatch, si da error, pero cuando algo es null, no.
 				
-				.param("id", "uno")//lineup.getId().toString())
-				.param("category", "test_error_category")//lineup.getCategory().toString())
-//				.param("team", lineup.getTeam().getId().toString())
-//				.param("gp.id", lineup.getGp().getId().toString())
-				.param("recruit1.id", "test_error_string"))
-//				.param("recruit2.id", lineup.getRecruit2().getId().toString()))
+				.param("id", "uno")//lineup.getId().toString())   // Error
+				.param("category", "test_error_category")//lineup.getCategory().toString())   // Error
+//				.param("team", lineup.getTeam().getId().toString())    // No da error
+//				.param("gp.id", lineup.getGp().getId().toString())    // No da error
+				.param("recruit1.id", "test_error_string"))   // Error
+//				.param("recruit2.id", lineup.getRecruit2().getId().toString()))   // Error
+				.andExpect(status().isOk())
+				.andExpect(model().attributeHasErrors("lineup"))
+				.andExpect(model().attributeErrorCount("lineup", 4))
+				.andExpect(view().name("lineups/lineupsEdit"));
+	}
+	
+	@WithMockUser(value = "spring")
+	@Test
+	void testEditLineupGet() throws Exception {
+		given(this.lineupService.findLineup(lineup.getId())).willReturn(Optional.of(lineup));
+
+		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/editLineup/{lineupId}", TEST_LEAGUE_ID, TEST_TEAM_ID, TEST_LINEUP_ID)
+				.with(csrf())
+				.header("Referer", "/leagues/1/teams/1/details")
+				.param("id", lineup.getId().toString())
+				.param("category", lineup.getCategory().toString())
+				.param("team", lineup.getTeam().getId().toString())
+				.param("gp.id", lineup.getGp().getId().toString())
+				.param("gp.calendar", lineup.getGp().getCalendar().toString())
+				.param("gp.circuit", lineup.getGp().getCircuit().toString())
+				.param("gp.date0", lineup.getGp().getDate0().toString())
+				.param("gp.hasBeenRun", lineup.getGp().getHasBeenRun().toString())
+				.param("gp.raceCode", lineup.getGp().getRaceCode().toString())
+				.param("gp.site", lineup.getGp().getSite().toString())
+				.param("recruit1.id", lineup.getRecruit1().getId().toString()) 
+				.param("recruit2.id", lineup.getRecruit2().getId().toString())
+				.flashAttr("recruitsSelection", listaPilotos))
+		.andExpect(status().isOk())
+		.andExpect(model().attribute("lineup", is(lineup)))
+//		.andExpect(model().attribute("lineup", hasProperty("id", is(lineup.getId()))))
+//		.andExpect(model().attribute("lineup", hasProperty("category", is(lineup.getCategory()))))
+//		.andExpect(model().attribute("lineup", hasProperty("team", is(lineup.getTeam()))))
+//		.andExpect(model().attribute("lineup", hasProperty("gp", is(lineup.getGp()))))
+		.andExpect(view().name("lineups/lineupsEdit"));
+	}
+	
+	@WithMockUser(value = "spring")
+	@Test
+	void testEditLineupGetError() throws Exception {
+		given(this.lineupService.findLineup(lineup.getId())).willReturn(Optional.empty());
+
+		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/editLineup/{lineupId}", TEST_LEAGUE_ID, TEST_TEAM_ID, TEST_LINEUP_ID)
+				.with(csrf())
+				.header("Referer", "/leagues/1/teams/1/details"))
+		.andExpect(status().is3xxRedirection())
+//		.andExpect(model().attribute("message", is("Lineup not found!")))
+		.andExpect(view().name("redirect:/leagues/{leagueId}/teams/{teamId}/details"));
+	}
+
+//	@PostMapping(value = "/editLineup/{lineupId}")
+//	public String editarLineupPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
+//			@Valid Lineup lineup, BindingResult result, ModelMap model) {
+//		if (result.hasErrors()) {
+//			GranPremio currentGP = this.lineupService.findLineup(lineup.getId()).get().getGp();
+//			lineup.setGp(currentGP);
+//			model.put("lineup", lineup);
+//			return "lineups/lineupsEdit";
+//		} else {
+//			Lineup lineupToUpdate = this.lineupService.findLineup(lineup.getId()).get();
+//			BeanUtils.copyProperties(lineup, lineupToUpdate);
+//			lineupToUpdate.setGp(this.granPremioService.findGPById(lineupToUpdate.getGp().getId()).get());
+//			this.lineupService.saveLineup(lineupToUpdate);
+//			model.addAttribute("message", "Lineup successfully saved!");
+//			return "redirect:/leagues/{leagueId}/teams/{teamId}/details";
+//		}
+//	}
+	
+	@WithMockUser(value = "spring")
+	@Test
+	void testEditLineupPost() throws Exception {
+		given(this.lineupService.findLineup(lineup.getId())).willReturn(Optional.of(lineup));
+		given(this.granPremioService.findGPById(Mockito.any(Integer.class))).willReturn(Optional.of(gp));
+	   
+		mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/editLineup/{lineupId}", TEST_LEAGUE_ID, TEST_TEAM_ID, TEST_LINEUP_ID)
+				.with(csrf())
+				.header("Referer", "/leagues/1/teams/1/details")
+				.param("id", lineup.getId().toString())
+				.param("category", lineup.getCategory().toString())
+				.param("team", lineup.getTeam().getId().toString())
+				.param("gp.id", lineup.getGp().getId().toString())
+				.param("gp.calendar", lineup.getGp().getCalendar().toString())
+				.param("gp.circuit", lineup.getGp().getCircuit().toString())
+				.param("gp.date0", lineup.getGp().getDate0().toString())
+				.param("gp.hasBeenRun", lineup.getGp().getHasBeenRun().toString())
+				.param("gp.raceCode", lineup.getGp().getRaceCode().toString())
+				.param("gp.site", lineup.getGp().getSite().toString())
+				.param("recruit1.id", lineup.getRecruit1().getId().toString()) 
+				.param("recruit2.id", lineup.getRecruit2().getId().toString())
+				.flashAttr("recruitsSelection", listaPilotos))
+		.andExpect(status().is3xxRedirection())
+//		.andExpect(model().attribute("message", is("Lineup successfully saved!")))
+		.andExpect(view().name("redirect:/leagues/{leagueId}/teams/{teamId}/details"));
+	}
+	
+	@WithMockUser(value = "spring")
+	@Test
+	void testEditLineupPostHasErrors() throws Exception {
+		given(this.lineupService.findLineup(Mockito.any())).willReturn(Optional.of(lineup));
+	   
+		mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/editLineup/{lineupId}", TEST_LEAGUE_ID, TEST_TEAM_ID, TEST_LINEUP_ID)
+				.with(csrf())
+				
+				// Solo falla con los param de recruit1 y 2, con los demas, da igual si son null o no :(
+				// Cuando hay typeMismatch, si da error, pero cuando algo es null, no.
+				
+				.param("id", "uno")//lineup.getId().toString())   // Error
+				.param("category", "test_error_category")//lineup.getCategory().toString())   // Error
+//				.param("team", lineup.getTeam().getId().toString())    // No da error
+//				.param("gp.id", lineup.getGp().getId().toString())    // No da error
+				.param("recruit1.id", "test_error_string"))   // Error
+//				.param("recruit2.id", lineup.getRecruit2().getId().toString()))   // Error
 				.andExpect(status().isOk())
 				.andExpect(model().attributeHasErrors("lineup"))
 				.andExpect(model().attributeErrorCount("lineup", 4))

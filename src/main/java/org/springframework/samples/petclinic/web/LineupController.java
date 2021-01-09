@@ -157,7 +157,8 @@ public class LineupController {
 			Lineup lineupToUpdate = this.lineupService.findLineup(lineup.getId()).get();
 			log.info("Updating lineup with ID: " + lineup.getId());
 			BeanUtils.copyProperties(lineup, lineupToUpdate);
-			lineupToUpdate.setGp(this.granPremioService.findGPById(lineupToUpdate.getGp().getId()).get());
+			GranPremio gp = this.granPremioService.findGPById(lineupToUpdate.getGp().getId()).get();
+			lineupToUpdate.setGp(gp);
 			this.lineupService.saveLineup(lineupToUpdate);
 			log.info("Saving edited lineup: " + lineupToUpdate);
 //			log.info("El gp asociado es: " + lineupToUpdate.getGp().getId());
