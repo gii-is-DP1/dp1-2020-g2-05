@@ -394,7 +394,8 @@ public class LeagueControllerTest {
     	
     	@Test		
     	@WithMockUser(value = "spring")
-    	void testJoinToLeaguePostTrhowException() throws Exception {
+    	void testNewLeaguePostTrhowException() throws Exception {
+    		when(leagueService.saveLeague(any())).thenThrow(duplicatedLeagueNameException.class);
     		mockMvc.perform(post("/leagues/new")
     			.with(csrf())
     			.param("id", liga.getId().toString())

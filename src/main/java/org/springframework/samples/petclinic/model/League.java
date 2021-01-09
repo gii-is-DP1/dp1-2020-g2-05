@@ -39,7 +39,8 @@ import java.util.Set;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.*;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -47,11 +48,15 @@ import javax.validation.constraints.Size;
 public class League extends NamedEntity {
 
 	@Column(name = "league_date")        
-	@DateTimeFormat(pattern = "yyyy/MM/dd")
+//	@DateTimeFormat(pattern = "yyyy/MM/dd")
+	@NotNull
+	@NotEmpty
+	@NotBlank
 	private String leagueDate;
 
 	@Column(name = "league_code", unique=true)       
 	@Size(min = 10, max = 10)
+	@NotNull
 	private String leagueCode;
 
 //	@Column(name = "active_category")       
