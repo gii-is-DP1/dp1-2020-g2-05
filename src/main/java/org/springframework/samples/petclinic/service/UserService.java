@@ -17,6 +17,7 @@ package org.springframework.samples.petclinic.service;
 
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -74,7 +75,7 @@ public class UserService {
 		return usuario;
 	}
 
-	public Object findFriendByUser(String username) {
+	public List<User> findFriendByUser(String username) {
 		return userRepository.findFriendByUser(username);
 		
 	}
