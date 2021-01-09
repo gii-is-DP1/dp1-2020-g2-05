@@ -299,7 +299,6 @@ public class TeamController {
 
 		System.out.println(authority);
 		
-		model.put("Editar", true);
 		if (authority.equals("admin")) {
 			model.put("admin", true);
 		} else {
@@ -314,7 +313,7 @@ public class TeamController {
 
 	}
 
-	@PostMapping(path = "/leagues/{leagueId}/teams/{teamId}/edit")
+	@PostMapping(value = "/leagues/{leagueId}/teams/{teamId}/edit")
 	public String editarPilotoPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
 			@Valid Team team, ModelMap model, BindingResult result) {
 		League league = this.leagueService.findLeague(leagueId).get();

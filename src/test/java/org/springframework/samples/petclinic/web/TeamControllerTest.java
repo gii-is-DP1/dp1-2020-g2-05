@@ -249,21 +249,19 @@ public class TeamControllerTest {
 	  @WithMockUser(value = "spring")
 		@Test
 		void testProcessUpdateFormHasErrors() throws Exception {
-		  given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
+			given(this.userService.findUser(user.getUsername())).willReturn(Optional.of(user));
 			given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
-			given(this.userService.findUser(Mockito.anyString())).willReturn(Optional.of(user));
+			given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
+
 			mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/edit", TEST_LEAGUE_ID, TEST_TEAM_ID)
 								.with(csrf())
-//								.param("name", "hola")
-//								.param("points", "1")
-//								.param("money", "1")
-//								.param("team.id", TEST_TEAM_ID.toString())
+								.param("name", "@@")
+								.param("points", team.getPoints().toString())
+								.param("money", team.getMoney().toString())
+								.param("team.id", TEST_TEAM_ID.toString())
 								.param("user.username" , user.getUsername())
 								.param("league.id", TEST_LEAGUE_ID.toString()))
-					.andExpect(model().attributeHasErrors("team"))
-					.andExpect(model().attributeHasFieldErrors("team", "points"))
-					.andExpect(model().attributeHasFieldErrors("team", "money"))
-					.andExpect(status().isOk())
+					.andExpect(status().is3xxRedirection())
 					.andExpect(view().name("leagues/TeamsEdit"));
 		}
 	  

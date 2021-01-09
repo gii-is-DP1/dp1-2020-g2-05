@@ -36,13 +36,13 @@
      </c:if>
      	<c:if test="${Editar==true}">
      	 <c:if test="${admin==true}">
-     	<form:form modelAttribute="team" class="form-horizontal" id="add-pilot-form" actions="/leagues/{leagueId}/teams/new"  > 
+     	<form:form modelAttribute="team" class="form-horizontal" id="add-pilot-form" actions="/leagues/{leagueId}/teams/{teamId}/edit"  > 
         <div class="form-group has-feedback">
         	<input type="hidden" name="id" value="${team.id}"/>
+        	<input type="hidden"  name="league" value="${leagueId}"/>	
             <petclinic:inputField label="Name" name="name"/>
            <petclinic:inputField label="points" name="points"/>
             <petclinic:inputField label="money" name="money"/>
-            <input type="hidden"  name="league" value="${team.league}"/>	
              <input type="hidden"  name="user" value="${team.user.username}"/>	 
         </div>
         <div class="form-group">
@@ -55,7 +55,7 @@
      </form:form>      	
      	</c:if>
      <c:if test="${usuario==true}">
-     	<form:form modelAttribute="team" class="form-horizontal" id="add-pilot-form" actions="/leagues/{leagueId}/teams/new"  > 
+     	<form:form modelAttribute="team" class="form-horizontal" id="add-pilot-form" actions="/leagues/{leagueId}/teams/{teamId}/edit"  > 
         <div class="form-group has-feedback">
         	<input type="hidden" name="id" value="${team.id}"/>
             <input type="hidden"  name="league" value="${leagueId}"/>	
