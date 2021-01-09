@@ -4,13 +4,12 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Offer;
-import org.springframework.samples.petclinic.model.Pilot;
+import org.springframework.samples.petclinic.model.Recruit;
 import org.springframework.samples.petclinic.model.Team;
-import org.springframework.samples.petclinic.model.TransactionType;
 import org.springframework.samples.petclinic.service.OfferService;
 import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.TeamService;
-import org.springframework.samples.petclinic.service.TradeService;
+import org.springframework.samples.petclinic.service.TransactionService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.util.Status;
 import org.springframework.stereotype.Controller;
@@ -34,16 +33,17 @@ public class OfferController {
 
 	private final UserService userService;
 
-	private final TradeService tradeService;
+	private final TransactionService transactionService;
 
 	@Autowired
-	public OfferController(OfferService offerService, RecruitService recruitService,
-			UserService userService, TeamService teamService, TradeService tradeService) {
+	public OfferController(OfferService offerService, RecruitService recruitService, UserService userService,
+//			LeagueService leagueService, 
+			TeamService teamService, TransactionService transactionService) {
 		this.offerService = offerService;
 		this.recruitService = recruitService;
 		this.userService = userService;
 		this.teamService = teamService;
-		this.tradeService = tradeService;
+		this.transactionService = transactionService;
 	}
 
 	@ModelAttribute("userTeam")
@@ -70,40 +70,40 @@ public class OfferController {
 
 		if (opo.isPresent()) {
 			Offer offer = opo.get();
-			Team team = getUserTeam(leagueId);// Esdudería que va a comprar un piloto
+			Team purchaserTeam = getUserTeam(leagueId);
+			Team sellerTeam = offer.getRecruit().getTeam();
 			Integer price = offer.getPrice();
 			if (!offer.getStatus().equals(Status.Outstanding)) {
 				modelMap.addAttribute("message", "This pilot isn't on sale anymore");
-			} else if (team.getId() == offer.getRecruit().getTeam().getId()) {// Si la escudería es la misma que ofrecio
-																				// el piloto, se cancela la oferta
+			} else if (purchaserTeam.getId() == sellerTeam.getId()) {// Si la escudería es la misma que ofrecio
+				// el piloto, se cancela la oferta
 				offer.setStatus(Status.Denied);
 				offerService.saveOffer(offer);
+				recruitService.quitOnSale(offer.getRecruit());
 				modelMap.addAttribute("message", "Offer cancelled!");
-			} else if (recruitService.getRecruitsByTeam(team.getId()).size() >= 4){
+			} else if (recruitService.getRecruitsByTeam(purchaserTeam.getId()).size() >= 4) {// RN-07: Máximo de
+																								// fichajes
 				modelMap.addAttribute("message", "You already own 4 riders on this league");
-			} else if (team.getMoney() >= price) { // RN-07:
-				// Máximo
-				// de
-				// fichajes
-				teamService.saveTeamMoney(team, -price);// Restar dinero al comprador
+			} else if (purchaserTeam.getMoney() >= price) {
+				teamService.saveTeamMoney(purchaserTeam, -price);// Restar dinero al comprador
 				teamService.saveTeamMoney(offer.getRecruit().getTeam(), price);// Dar dinero al vendedor
-
-				offer.setTeam(team);
+				offer.setTeam(purchaserTeam);
 				offer.setStatus(Status.Accepted);
 				offerService.saveOffer(offer);
-				Pilot pilot = offer.getRecruit().getPilot(); // Piloto sobre el que se hace la compraventa
-				String fullName = pilot.getName() + " " + pilot.getLastName();
-				recruitService.saveRecruit(pilot, team);
-				tradeService.saveTrade(price, TransactionType.BUY, fullName, team, offer); // Guardar transaccion en el
-				// registro del comprador
-				tradeService.saveTrade(price, TransactionType.SELL, fullName, offer.getRecruit().getTeam(), offer); // Guardar
-				// transaccion
-				// en el
-				// registro del
-				// vendedor
+
+				Recruit recruit = offer.getRecruit();
+				recruitService.trade(offer.getRecruit(), sellerTeam, purchaserTeam); // Eliminamos el piloto del equipo
+																						// vendedor y lo añadimos al
+																						// equipo comprador
+
+				transactionService.trade(price, recruit.getPilot(), sellerTeam, purchaserTeam); // Guardamos los
+																								// registros
+																								// de// carteras
+																								// de ambos
+																								// equipos
 
 				modelMap.addAttribute("message", "Pilot recruited!");
-			}else {
+			} else {
 				modelMap.addAttribute("message", "Not enought money to recruit this pilot");
 			}
 		} else {

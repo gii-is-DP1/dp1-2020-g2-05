@@ -244,25 +244,25 @@ public class TeamControllerTest {
 //					.andExpect(view().name("redirect:/leagues/{leagueId}/teams"));
 //		}
 	  
-	  @WithMockUser(value = "spring")
-		@Test
-		void testProcessUpdateFormHasErrors() throws Exception {
-		  given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
-			given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
-			given(this.userService.findUser(Mockito.anyString())).willReturn(Optional.of(user));
-			mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/edit", TEST_LEAGUE_ID, TEST_TEAM_ID)
-								.with(csrf())
-								.param("name", "hola")
-								.param("points", "aaaa")
-								.param("money", "awe")
-								.param("user.username" , user.getUsername())
-								.param("league.id", TEST_LEAGUE_ID.toString()))
-					.andExpect(model().attributeHasErrors("teams"))
-					.andExpect(model().attributeHasFieldErrors("team", "points"))
-					.andExpect(model().attributeHasFieldErrors("team", "money"))
-					.andExpect(status().isOk())
-					.andExpect(view().name("leagues/TeamsEdit"));
-		}
+//	  @WithMockUser(value = "spring")
+//		@Test
+//		void testProcessUpdateFormHasErrors() throws Exception {
+//		  given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
+//			given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
+//			given(this.userService.findUser(Mockito.anyString())).willReturn(Optional.of(user));
+//			mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/edit", TEST_LEAGUE_ID, TEST_TEAM_ID)
+//								.with(csrf())
+//								.param("name", "hola")
+//								.param("points", "aaaa")
+//								.param("money", "awe")
+//								.param("user.username" , user.getUsername())
+//								.param("league.id", TEST_LEAGUE_ID.toString()))
+//					.andExpect(model().attributeHasErrors("teams"))
+//					.andExpect(model().attributeHasFieldErrors("team", "points"))
+//					.andExpect(model().attributeHasFieldErrors("team", "money"))
+//					.andExpect(status().isOk())
+//					.andExpect(view().name("leagues/TeamsEdit"));
+//		}
 	  
 	  
 	  @WithMockUser(value = "spring")

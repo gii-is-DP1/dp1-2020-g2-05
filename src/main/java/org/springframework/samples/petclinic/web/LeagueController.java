@@ -99,7 +99,7 @@ public class LeagueController {
 		List<League> myLeaguesList = new ArrayList<League>();
 
 		if (Optional.of(user).isPresent()) {
-			myLeaguesList = leagueService.obtenerLigasPorUsuario(teamService.findTeamsByUsername(user.getUsername())); // obtengo
+			myLeaguesList = leagueService.obtenerListaIntegerToTeams(teamService.findTeamsByUsername(user.getUsername())); // obtengo
 			// usuario
 		}
 		log.info("Mostrando ligas del user '"+user.getUsername()+"'");
@@ -144,7 +144,7 @@ public class LeagueController {
 	public String initcrearLiga(ModelMap model) throws DataAccessException, duplicatedLeagueNameException {
 		User user = this.userService.getUserSession();
 
-		if (!Optional.of(user).isPresent()) {
+		if ( user==null || !Optional.of(user).isPresent()) {
 			return "/leagues/leagueList";
 		}
 
@@ -220,14 +220,14 @@ public class LeagueController {
 	public String unirseLiga(ModelMap model) {
 		User user = this.userService.getUserSession();
 
-		if (!Optional.of(user).isPresent()) {
+		if (user==null || !Optional.of(user).isPresent() ) {
 			return "/leagues/leagueList";
 		}
 		log.debug("Intentando unir a " + user.getUsername() + " a una liga");
 
 		model.addAttribute("league", new League());
 
-		Integer num_leagues = this.leagueService.findLeaguesByUsername("asdas");
+		Integer num_leagues = this.leagueService.findLeaguesByUsername(user.getUsername());
 
 		if (num_leagues == 5) {
 			model.addAttribute("yaTieneMaxTeams", true);
@@ -277,7 +277,7 @@ public class LeagueController {
 		}
 		log.info("Redirigiendo a crear equipo para entrar en la liga con codigo :'"+league.getLeagueCode()+"'");
 		model.addAttribute("yaTienesEquipo", false);
-		return "redirect:/leagues/" + liga.get().getLeagueCode() + "/teams/new";
+		return "redirect:/leagues/" + liga.get().getId() + "/teams/new";
 //		teamController.crearEquipo(leagueId, model);
 	}
 

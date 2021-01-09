@@ -174,26 +174,28 @@ public class PilotControllerTest {
 			given(this.pilotService.findPilotById(PILOT_TEST_ID)).willReturn(Optional.of(pilot));
 		}
 		
-//		@WithMockUser(value = "spring")
-//		  @Test
-//		  	void testInitCreationForm() throws Exception {
-//			given(this.pilotService.findPilotById(PILOT_TEST_ID)).willReturn(Optional.of(pilot));
-//
-//				mockMvc.perform(get("/pilots/new"))
-//				.andExpect(status()
-//					.isOk())
-//					.andExpect(view().name("pilots/pilotsEdit"))
-//					.andExpect(model().attributeExists("pilot"));
-//
-//}
+		@WithMockUser(value = "spring")
+		  @Test
+		  	void testInitCreationForm() throws Exception {
+			given(this.pilotService.findPilotById(PILOT_TEST_ID)).willReturn(Optional.of(pilot));
+
+				mockMvc.perform(get("/pilots/new"))
+				.andExpect(status()
+					.isOk())
+					.andExpect(view().name("pilots/pilotsEdit"))
+					.andExpect(model().attributeExists("pilot"));
+
+}
 		
 		@WithMockUser(value = "spring")
 	    @Test
 		void testProcessCreationFormHasErrors() throws Exception {
 			given(this.pilotService.findPilotById(PILOT_TEST_ID)).willReturn(Optional.of(pilot));
+			given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
+			given(this.userService.findUser(user.getUsername())).willReturn(Optional.of(user));
 
 
-			mockMvc.perform(post("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID)
+			mockMvc.perform(post("/pilots/save")
 								.with(csrf())
 								.param("name", "aaa")
 								.param("lastName", "aaa")
@@ -201,10 +203,40 @@ public class PilotControllerTest {
 								.param("category", "h")
 								.param("nationality" , "@@@" ))
 					.andExpect(model().attributeHasErrors("pilot"))
-					.andExpect(model().attributeHasFieldErrors("pilot", "dorsal"))
 					.andExpect(model().attributeHasFieldErrors("pilot", "category"))
 					.andExpect(status().isOk())
 					.andExpect(view().name("pilots/pilotsEdit"));
+		}
+		
+		@WithMockUser(value = "spring")
+	    @Test
+		void testProcessCreationFormSuccesfull() throws Exception {
+			given(this.pilotService.findPilotById(PILOT_TEST_ID)).willReturn(Optional.of(pilot));
+			given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
+			given(this.userService.findUser(user.getUsername())).willReturn(Optional.of(user));
+
+
+			mockMvc.perform(post("/pilots/save")
+								.with(csrf())
+								.param("name", "Antonio")
+								.param("lastName", "Perez")
+								.param("dorsal", "123")
+								.param("baseValue", pilot.getBaseValue().toString())
+								.param("category", pilot.getCategory().toString())
+								.param("nationality" , "Spain" ))
+					.andExpect(model().attributeHasNoErrors("pilot"))
+					.andExpect(status().isOk())
+					.andExpect(view().name("pilots/pilotsListPaged"));
+		}
+		
+		@WithMockUser(value = "spring")
+		@Test
+		void testDeletePilot() throws Exception {
+			given(this.pilotService.findPilotById(PILOT_TEST_ID)).willReturn(Optional.of(pilot));
+
+			mockMvc.perform(get("/pilots/delete/{pilotId}", PILOT_TEST_ID))
+					.andExpect(status().is3xxRedirection())
+					.andExpect(view().name("redirect:/pilotsPaged"));
 		}
 
 }

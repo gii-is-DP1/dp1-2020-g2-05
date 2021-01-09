@@ -31,7 +31,7 @@ public class TeamValidator implements Validator{
 		
 		//Points validation
 		if(team.getPoints()==null) {
-			 errors.rejectValue("points", REQUIRED, "Team Id cannot be null");
+			 errors.rejectValue("points", REQUIRED, "Team points cannot be null");
 		}
 		
 		//league  validation

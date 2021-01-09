@@ -18,7 +18,7 @@
 		
 		<c:forEach items="${listaGP}" var="res">
 			<tr>
-				<c:if test="${racesCompleted >= res.id}">
+				<c:if test="${res.hasBeenRun==true}">
 
 					<td	style="text-align: center; background-color: #b8bbb757; color: #00000040;"><c:out value="${res.site}" /></td>
 					<td	style="text-align: center; background-color: #b8bbb757; color: #00000040;"><c:out value="${res.circuit}" /></td>
@@ -44,7 +44,7 @@
 				</c:if>
 			</tr>
 			
-			<c:if test="${racesCompleted < res.id}">
+				<c:if test="${res.hasBeenRun==false}">
 
 				<td style="text-align: center;"><c:out value="${res.site}" /></td>
 				<td style="text-align: center;"><c:out value="${res.circuit}" /></td>

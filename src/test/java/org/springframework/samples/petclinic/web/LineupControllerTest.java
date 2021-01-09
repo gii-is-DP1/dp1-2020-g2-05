@@ -230,12 +230,23 @@ public class LineupControllerTest {
 	
 	@WithMockUser(value = "spring")
 	@Test
-	void testShowLineupById() throws Exception {
+	void testShowExistentLineupById() throws Exception {
 		given(lineupService.findLineup(TEST_LINEUP_ID)).willReturn(Optional.of(lineup));
 
-		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/lineups/{lineupId}", TEST_LEAGUE_ID, TEST_TEAM_ID, TEST_TEAM_ID)).andExpect(status().isOk())	
+		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/lineups/{lineupId}", TEST_LEAGUE_ID, TEST_TEAM_ID, TEST_LINEUP_ID))
+		.andExpect(status().isOk())	
 		.andExpect(model().attribute("lineup", is(lineup)))
 		.andExpect(view().name("lineups/lineupDetails"));
+	}
+	
+	@WithMockUser(value = "spring")
+	@Test
+	void testShowNonExistentLineupById() throws Exception {
+		given(lineupService.findLineup(TEST_LINEUP_ID)).willReturn(Optional.empty());
+
+		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/lineups/{lineupId}", TEST_LEAGUE_ID, TEST_TEAM_ID, TEST_LINEUP_ID))
+		.andExpect(status().is3xxRedirection())	
+		.andExpect(view().name("redirect:/leagues/{leagueId}/teams/{teamId}/details"));
 	}
 		
 	@WithMockUser(value = "spring")
