@@ -45,11 +45,15 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
 import org.springframework.samples.petclinic.model.Authorities;
 import org.springframework.samples.petclinic.model.Category;
@@ -391,7 +395,6 @@ public class LeagueControllerTest {
     	@Test		
     	@WithMockUser(value = "spring")
     	void testJoinToLeaguePostTrhowException() throws Exception {
-    		when(leagueService.saveLeague(any())).thenThrow(duplicatedLeagueNameException.class);
     		mockMvc.perform(post("/leagues/new")
     			.with(csrf())
     			.param("id", liga.getId().toString())
