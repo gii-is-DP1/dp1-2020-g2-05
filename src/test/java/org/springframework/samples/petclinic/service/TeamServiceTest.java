@@ -2,8 +2,10 @@ package org.springframework.samples.petclinic.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,7 +13,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Category;
+import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Team;
+import org.springframework.samples.petclinic.web.duplicatedLeagueNameException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +32,9 @@ public class TeamServiceTest {
 	 
 	 @Autowired
 	 	protected UserService userService;
+	 
+	 @Autowired
+	 	protected RecruitService recruitService;
 	 
 	 @Test
 	 void shouldCountTeamsByLeagueId() {
@@ -158,5 +167,47 @@ public class TeamServiceTest {
 
 	 }
 	 
+	@Test
+	@Transactional
+	void shouldSaveTeamMoney() {
+		Team team = teamService.findTeamById(1).get();
+		Integer money = team.getMoney();
+		 
+		teamService.saveTeamMoney(team, 300);
 
+		assertThat(team.getMoney()).isEqualTo(money + 300);
+	}
+	
+	@Test
+	@Transactional
+	void shouldSaveSystemTeam() throws DataAccessException, duplicatedLeagueNameException {
+		League league = new League();
+		league.setLeagueCode("UDTQCSSOND");
+		league.setName("prueba");
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		Date date = new Date();
+		league.setLeagueDate(formatter.format(date));
+		leagueService.saveLeague(league);
+		 
+		teamService.saveSystemTeam(league);
+		
+		List<Team> teams = teamService.findTeamByLeagueId(league.getId());
+		
+		assertThat(teams.get(0).getName()).isEqualTo("Sistema");
+		assertThat(teams.get(0).getLeague()).isEqualTo(league);
+		assertThat(teams.get(0).getMoney()).isEqualTo(0);
+		assertThat(teams.get(0).getPoints()).isEqualTo(0);
+		assertThat(teams.size()).isEqualTo(1);
+	}
+
+	@Test
+	@Transactional
+	void shouldRecruitAndOfferAll() {
+		Team team = teamService.findTeamById(8).get();
+		
+		teamService.recruitAndOfferAll(team, Category.MOTO2);
+		
+		assertThat(recruitService.getRecruitsByTeam(team.getId()).size()).isGreaterThan(0);
+	}
+	
 }
