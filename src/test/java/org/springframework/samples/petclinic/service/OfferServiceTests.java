@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.model.Offer;
+import org.springframework.samples.petclinic.model.Recruit;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.util.Status;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ class OfferServiceTests {
 	protected OfferService offerService;
 	
 	@Autowired
-	protected LeagueService leagueService;
+	protected RecruitService recruitService;
 	
 	@Autowired
 	protected TeamService teamService;
@@ -51,7 +52,7 @@ class OfferServiceTests {
 	@Test
 	void shouldFindOffersByLeague() {
 		Collection<Offer> offers = offerService.findOffersByLeague(2);
-		assertThat(offers.size()).isEqualTo(2);
+		assertThat(offers.size()).isEqualTo(1);
 		
 		Collection<Offer> offersFail = offerService.findOffersByLeague(0);
 		assertThat(offersFail).isEmpty();
@@ -75,6 +76,19 @@ class OfferServiceTests {
 //		Double actualMoney = Double.parseDouble(team.getMoney());
 //		assertThat(actualMoney).isEqualTo(initialMoney + 200);
 //	}
+	
+	@Test
+	@Transactional
+	void shouldPutOnSale() {
+		Recruit recruit = recruitService.findRecruit(2).get();
+		
+		offerService.putOnSale(recruit, 300);
+		
+		Offer offer = offerService.findOfferById(2).get();// La nueva oferta creada
+		assertThat(offer.getRecruit()).isEqualTo(recruit);
+		assertThat(offer.getPrice()).isEqualTo(300);
+		assertThat(offer.getStatus()).isEqualTo(Status.Outstanding);
+	}
 	
 	@Test
 	@Transactional

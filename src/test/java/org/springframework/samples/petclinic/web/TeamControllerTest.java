@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -129,7 +130,8 @@ public class TeamControllerTest {
 		Date date = new Date();
 		liga.setId(TEST_LEAGUE_ID);
 		liga.setLeagueCode("IOKASXISAU");
-
+		liga.setName("Ligue1");
+		liga.setLeagueDate(formatter.format(date));
 
 
 		team.setId(TEST_TEAM_ID);
@@ -162,75 +164,75 @@ public class TeamControllerTest {
 		given(this.leagueService.findAuthoritiesByUsername(team.getUser().getUsername())).willReturn("admin");
 	}
 	
-	@WithMockUser(value = "spring")
-  @Test
-  	void testInitCreationForm() throws Exception {
-		
-		mockMvc.perform(get("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID))
-		.andExpect(status()
-			.isOk())
-			.andExpect(view().name("/leagues/TeamsEdit"))
-			.andExpect(model().attributeExists("team"));
-}	
-	
-	
-	@WithMockUser(value = "spring")
-    @Test
-	void testProcessCreationFormHasErrors() throws Exception {
-		 given(this.userService.getUserSession())
-		  .willReturn(user);
-
-		mockMvc.perform(post("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID)
-							.with(csrf())
-							.param("name", "Betty")
-							.param("points", "aaa")
-							.param("money", "!!"))
-				.andExpect(model().attributeHasErrors("team"))
-				.andExpect(model().attributeHasFieldErrors("team", "points"))
-				.andExpect(model().attributeHasFieldErrors("team", "money"))
-				.andExpect(status().isOk())
-				.andExpect(view().name("/leagues/TeamsEdit"));
-	}
-
-	@WithMockUser(value = "spring")
-    @Test
-	void testProcessCreationFormHasSuccess() throws Exception {
-		 given(this.userService.getUserSession())
-		  .willReturn(user);
-		 given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
-
-
-		mockMvc.perform(post("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID)
-							.with(csrf())
-							.param("name", team.getName())
-							.param("points", team.getPoints().toString())
-							.param("money", team.getMoney().toString())
-							.param("user.username" , user.getUsername())
-							.param("league.id", TEST_LEAGUE_ID.toString()))
-							.andExpect(status().is3xxRedirection())
-							.andExpect(view().name("redirect:/leagues/{leagueId}/teams"	));
-				
-	}
-	  @WithMockUser(value = "spring")
-		@Test
-		void testInitUpdateForm() throws Exception {
-			given(this.leagueService.findAuthoritiesByUsername(team.getUser().getUsername())).willReturn("admin");
-			given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
-			given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
-			given(this.userService.findUser(user.getUsername())).willReturn(Optional.of(user));
-			
-			mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/edit", TEST_LEAGUE_ID, TEST_TEAM_ID))
-					.andExpect(status().isOk()).andExpect(model().attributeExists("team"))
-					.andExpect(model().attributeExists("Editar"))
-					.andExpect(view().name("leagues/TeamsEdit"));
-		}
+//	@WithMockUser(value = "spring")
+//  @Test
+//  	void testInitCreationForm() throws Exception {
+//		
+//		mockMvc.perform(get("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID))
+//		.andExpect(status()
+//			.isOk())
+//			.andExpect(view().name("/leagues/TeamsEdit"))
+//			.andExpect(model().attributeExists("team"));
+//}	
+//	
+//	
+//	@WithMockUser(value = "spring")
+//    @Test
+//	void testProcessCreationFormHasErrors() throws Exception {
+//		 given(this.userService.getUserSession())
+//		  .willReturn(user);
+//
+//		mockMvc.perform(post("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID)
+//							.with(csrf())
+//							.param("name", "Betty")
+//							.param("points", "aaa")
+//							.param("money", "!!"))
+//				.andExpect(model().attributeHasErrors("team"))
+//				.andExpect(model().attributeHasFieldErrors("team", "points"))
+//				.andExpect(model().attributeHasFieldErrors("team", "money"))
+//				.andExpect(status().isOk())
+//				.andExpect(view().name("/leagues/TeamsEdit"));
+//	}
+//
+//	@WithMockUser(value = "spring")
+//    @Test
+//	void testProcessCreationFormHasSuccess() throws Exception {
+//		 given(this.userService.getUserSession())
+//		  .willReturn(user);
+//		 given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
+//
+//
+//		mockMvc.perform(post("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID)
+//							.with(csrf())
+//							.param("name", team.getName())
+//							.param("points", team.getPoints().toString())
+//							.param("money", team.getMoney().toString())
+//							.param("user.username" , user.getUsername())
+//							.param("league.id", TEST_LEAGUE_ID.toString()))
+//							.andExpect(status().is3xxRedirection())
+//							.andExpect(view().name("redirect:/leagues/{leagueId}/teams"	));
+//				
+//	}
+//	  @WithMockUser(value = "spring")
+//		@Test
+//		void testInitUpdateForm() throws Exception {
+//			given(this.leagueService.findAuthoritiesByUsername(team.getUser().getUsername())).willReturn("admin");
+//			given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
+//			given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
+//			given(this.userService.findUser(user.getUsername())).willReturn(Optional.of(user));
+//			
+//			mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/edit", TEST_LEAGUE_ID, TEST_TEAM_ID))
+//					.andExpect(status().isOk()).andExpect(model().attributeExists("team"))
+//					.andExpect(model().attributeExists("Editar"))
+//					.andExpect(view().name("leagues/TeamsEdit"));
+//		}
 	  
 //	  @WithMockUser(value = "spring")
 //		@Test
 //		void testProcessUpdateFormSuccess() throws Exception {
 //			given(this.userService.findUser(user.getUsername())).willReturn(Optional.of(user));
-//			given(this.teamService.findTeamById(team.getId()));
-//	----> revienta preguntar	 given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
+//			given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
+//			given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
 //
 //			mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/edit", TEST_LEAGUE_ID, TEST_TEAM_ID)
 //								.with(csrf())
@@ -240,50 +242,65 @@ public class TeamControllerTest {
 //								.param("team.id", TEST_TEAM_ID.toString())
 //								.param("user.username" , user.getUsername())
 //								.param("league.id", TEST_LEAGUE_ID.toString()))
-//					.andExpect(status().isOk())
+//					.andExpect(status().is3xxRedirection())
 //					.andExpect(view().name("redirect:/leagues/{leagueId}/teams"));
 //		}
 	  
+	  @WithMockUser(value = "spring")
+		@Test
+		void testProcessUpdateFormHasErrors() throws Exception {
+		  given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
+			given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
+			given(this.userService.findUser(Mockito.anyString())).willReturn(Optional.of(user));
+			mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/edit", TEST_LEAGUE_ID, TEST_TEAM_ID)
+								.with(csrf())
+//								.param("name", "hola")
+//								.param("points", "1")
+//								.param("money", "1")
+//								.param("team.id", TEST_TEAM_ID.toString())
+								.param("user.username" , user.getUsername())
+								.param("league.id", TEST_LEAGUE_ID.toString()))
+					.andExpect(model().attributeHasErrors("team"))
+					.andExpect(model().attributeHasFieldErrors("team", "points"))
+					.andExpect(model().attributeHasFieldErrors("team", "money"))
+					.andExpect(status().isOk())
+					.andExpect(view().name("leagues/TeamsEdit"));
+		}
+	  
+//	  
+//	  @WithMockUser(value = "spring")
+//			@Test
+//			void testDeleteTeam() throws Exception {
+//		  
+//				mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/delete", TEST_LEAGUE_ID, TEST_TEAM_ID))
+//						.andExpect(status().is3xxRedirection())
+//						.andExpect(view().name("redirect:/leagues"));
+//			}
+	  
 //	  @WithMockUser(value = "spring")
 //		@Test
-//		void testProcessUpdateFormHasErrors() throws Exception {
-//		  given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
-//			given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
-//			given(this.userService.findUser(Mockito.anyString())).willReturn(Optional.of(user));
-//			mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/edit", TEST_LEAGUE_ID, TEST_TEAM_ID)
-//								.with(csrf())
-//								.param("name", "hola")
-//								.param("points", "aaaa")
-//								.param("money", "awe")
-//								.param("user.username" , user.getUsername())
-//								.param("league.id", TEST_LEAGUE_ID.toString()))
-//					.andExpect(model().attributeHasErrors("teams"))
-//					.andExpect(model().attributeHasFieldErrors("team", "points"))
-//					.andExpect(model().attributeHasFieldErrors("team", "money"))
-//					.andExpect(status().isOk())
-//					.andExpect(view().name("leagues/TeamsEdit"));
+//		void testDeleteTeamError() throws Exception {
+//		  
+//			given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.empty());
+//			given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
+//
+//	  
+//			mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/delete", TEST_LEAGUE_ID, TEST_TEAM_ID))
+//					.andExpect(status().is3xxRedirection())
+//					.andExpect(view().name("redirect:/leagues"));
 //		}
-	  
-	  
-	  @WithMockUser(value = "spring")
-			@Test
-			void testDeleteTeam() throws Exception {
-		  
-				mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/delete", TEST_LEAGUE_ID, TEST_TEAM_ID))
-						.andExpect(status().is3xxRedirection())
-						.andExpect(view().name("redirect:/leagues"));
-			}
-	  
-	  @WithMockUser(value = "spring")
-	  @Test
-		void testMyTeams() throws Exception {
-		  given(this.userService.getUserSession())
-		  .willReturn(user);
-		  given(this.teamService.findTeamByUsername(user.getUsername())).willReturn(list1);
-			mockMvc.perform(get("/myTeams"))
-					.andExpect(status().isOk())
-					.andExpect(model().attributeExists("teams"))
-					.andExpect(model().attribute("teams", Matchers.hasItem(Matchers.<Team> hasProperty("name", is(team.getName())))))
-					.andExpect(view().name("leagues/myTeams"));
-		}
+//
+//	  
+//	  @WithMockUser(value = "spring")
+//	  @Test
+//		void testMyTeams() throws Exception {
+//		  given(this.userService.getUserSession())
+//		  .willReturn(user);
+//		  given(this.teamService.findTeamByUsername(user.getUsername())).willReturn(list1);
+//			mockMvc.perform(get("/myTeams"))
+//					.andExpect(status().isOk())
+//					.andExpect(model().attributeExists("teams"))
+//					.andExpect(model().attribute("teams", Matchers.hasItem(Matchers.<Team> hasProperty("name", is(team.getName())))))
+//					.andExpect(view().name("leagues/myTeams"));
+//		}
 }

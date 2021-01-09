@@ -1,5 +1,7 @@
 package org.springframework.samples.petclinic.web;
 
+
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 
@@ -11,9 +13,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.mockito.Mockito.when;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -33,6 +37,12 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.samples.petclinic.configuration.GenericIdToEntityConverter;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
 
@@ -56,7 +66,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 import static org.hamcrest.Matchers.is;
-
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 @WebMvcTest(controllers=PilotController.class,
 excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class),
 excludeAutoConfiguration= SecurityConfiguration.class)
@@ -71,8 +82,8 @@ public class PilotControllerTest {
 	
 	private static final Integer PILOT_TEST_ID = 2345;
 	
-	 @Autowired
-	 private WebApplicationContext context;
+	
+
 	 
 	 @MockBean
 	 @Autowired
@@ -111,6 +122,10 @@ public class PilotControllerTest {
 		League liga = new League();
 		Team team = new Team();
 		Pilot pilot = new Pilot();
+		private Pageable pageable = PageRequest.of(0, 5, Sort.by(Order.asc("category"), Order.asc("name"), Order.desc("lastName")));
+		private Page<Pilot> paginaPilotos;
+		private String pageNumber="0";
+		private String pageSize="5";
 		
 		@BeforeEach
 		void setup() throws DataAccessException, duplicatedLeagueNameException {
@@ -165,7 +180,9 @@ public class PilotControllerTest {
 			pilot.setNationality("Spain");
 			pilot.setResults(new HashSet<Result>());
 			
-			
+			List<Pilot> listaPilotosPagina = new ArrayList<Pilot>();
+			listaPilotosPagina.add(pilot);
+			 paginaPilotos= new PageImpl<>(listaPilotosPagina, pageable, 0);
 			
 			given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
 			given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
@@ -237,6 +254,68 @@ public class PilotControllerTest {
 			mockMvc.perform(get("/pilots/delete/{pilotId}", PILOT_TEST_ID))
 					.andExpect(status().is3xxRedirection())
 					.andExpect(view().name("redirect:/pilotsPaged"));
+		}
+		
+		@WithMockUser(value = "spring")
+		@Test
+		void testDeletePilotErrors() throws Exception {
+			given(this.pilotService.findPilotById(PILOT_TEST_ID)).willReturn(Optional.empty());
+
+			mockMvc.perform(get("/pilots/delete/{pilotId}", PILOT_TEST_ID))
+					.andExpect(status().is3xxRedirection())
+					.andExpect(view().name("redirect:/pilotsPaged"));
+		}
+		
+		@WithMockUser(value = "spring")
+		@Test
+		void testPagePilot() throws Exception {
+			Integer maxPageNumber = (int) Math.ceil((double) paginaPilotos.getTotalElements()/paginaPilotos.getSize());
+    		when(this.pilotService.findAllPage(any())).thenReturn(paginaPilotos);
+			mockMvc.perform(get("/pilotsPaged")
+					.param("pageNumber", pageNumber)
+					.param("pageSize", pageSize))
+					.andExpect(status().isOk())
+					.andExpect(model().attribute("pageNumber", is(Integer.parseInt(pageNumber))))
+					.andExpect(model().attribute("pageSize", is(Integer.parseInt(pageSize))))
+					.andExpect(model().attribute("maxPageNumber", is(maxPageNumber)))
+					.andExpect(model().attribute("resultadosPaginados", is(paginaPilotos.getContent())))
+					.andExpect(view().name("pilots/pilotsListPaged"));
+		}
+		
+		@WithMockUser(value = "spring")
+		@Test
+		void testPagePilotPageNumberGreaterThanMaxPageNumber() throws Exception {
+			Integer maxPageNumber = (int) Math.ceil((double) paginaPilotos.getTotalElements()/paginaPilotos.getSize());
+    		Integer cuenta = maxPageNumber+1;
+			when(this.pilotService.findAllPage(any())).thenReturn(paginaPilotos);
+			mockMvc.perform(get("/pilotsPaged")
+					.param("pageNumber", cuenta.toString())
+					.param("pageSize", pageSize))
+					.andExpect(status().isOk())
+					.andExpect(model().attribute("pageNumber", is(maxPageNumber-1)))
+					.andExpect(model().attribute("pageSize", is(Integer.parseInt(pageSize))))
+					.andExpect(model().attribute("maxPageNumber", is(maxPageNumber)))
+					.andExpect(model().attribute("resultadosPaginados", is(paginaPilotos.getContent())))
+					.andExpect(view().name("pilots/pilotsListPaged"));
+		}
+	
+		@WithMockUser(value = "spring")
+		@Test
+		void testPagePilotNumberFormatException() throws Exception {
+			pageNumber="test";
+			pageSize="test";
+			Integer maxPageNumber = (int) Math.ceil((double) paginaPilotos.getTotalElements()/paginaPilotos.getSize());
+
+			when(this.pilotService.findAllPage(any())).thenReturn(paginaPilotos);
+			mockMvc.perform(get("/pilotsPaged")
+					.param("pageNumber", pageNumber)
+					.param("pageSize", pageSize))
+					.andExpect(status().isOk())
+					.andExpect(model().attribute("pageNumber", is(0))) //modificar si se modifica en el controller
+					.andExpect(model().attribute("pageSize", is(5))) //modificar si se modifica en el controller
+					.andExpect(model().attribute("maxPageNumber", is(maxPageNumber)))
+					.andExpect(model().attribute("resultadosPaginados", is(paginaPilotos.getContent())))
+					.andExpect(view().name("pilots/pilotsListPaged"));
 		}
 
 }
