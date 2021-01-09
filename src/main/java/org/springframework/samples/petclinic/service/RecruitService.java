@@ -25,29 +25,35 @@ public class RecruitService {
 		this.pilotService = pilotService;
 	}
 
+	@Transactional(readOnly = true)
 	public Optional<Recruit> findRecruit(Integer recruitId) { // Encuentra un fichaje en base a su ID de fichaje
 		return recruitRepository.findById(recruitId);
 	}
 
+	@Transactional(readOnly = true)
 	public List<Pilot> getRecruits() throws DataAccessException { // Nos da todos los pilotos correspondientes a los
 																	// fichajes que existen en el sistema
 		return this.pilotService.getRecruits();
 	}
 
+	@Transactional(readOnly = true)
 	public List<Pilot> getPilotsByTeam(int teamID) throws DataAccessException { // Nos da todos los pilotos que posee un
 		// equipo concreto ahora mismo
 		return this.pilotService.getRecruits(teamID);
 	}
 
+	@Transactional(readOnly = true)
 	public List<Recruit> getRecruitsByTeam(int teamID) throws DataAccessException { // Muestra todos los fichajes de un
 																					// mismo equipo
 		return this.recruitRepository.findAllRecruits(teamID);
 	}
 
+	@Transactional(readOnly = true)
 	public List<Recruit> getRecruitsOnSaleByTeam(int teamID) {
 		return this.recruitRepository.findAllRecruitSOnSaleByTeam(teamID);
 	}
 
+	@Transactional(readOnly = true)
 	public List<Recruit> getRecruitsNotOnSaleByTeam(int teamID) {
 		return this.recruitRepository.findAllRecruitSNotOnSaleByTeam(teamID);
 	}
