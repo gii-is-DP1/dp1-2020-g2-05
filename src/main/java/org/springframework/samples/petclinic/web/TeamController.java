@@ -314,7 +314,7 @@ public class TeamController {
 
 	}
 
-	@PostMapping(value = "/leagues/{leagueId}/teams/{teamId}/edit")
+	@PostMapping(path = "/leagues/{leagueId}/teams/{teamId}/edit")
 	public String editarPilotoPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
 			@Valid Team team, ModelMap model, BindingResult result) {
 		League league = this.leagueService.findLeague(leagueId).get();
@@ -333,7 +333,7 @@ public class TeamController {
 		} else {
 			log.info("Equipo " + team + " editado correctamente");
 			User usuario = this.userService.getUserSession();
-			Team teamToUpdate = this.teamService.findTeamById(team.getId()).get();
+			Team teamToUpdate = this.teamService.findTeamById(teamId).get();
 			BeanUtils.copyProperties(team, teamToUpdate);
 			model.put("team", team);
 			teamToUpdate.setUser(usuario);

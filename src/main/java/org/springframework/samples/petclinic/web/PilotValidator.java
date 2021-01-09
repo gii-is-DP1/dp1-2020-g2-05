@@ -49,13 +49,13 @@ public class PilotValidator implements Validator{
 		if(!StringUtils.hasLength(lastName) || lastName.length()>30 || lastName.length()<1 || count != 0)
 			errors.rejectValue("name", REQUIRED+" and between 3 and 50 characters", REQUIRED+" and between 3 and 50 characters and no special ones");
 		
-		if(pilot.getBaseValue() != null) {
+		if(pilot.getBaseValue() == null) {
 			errors.rejectValue("BaseValue",REQUIRED + " cannot be null");
 		}
 		
-		if(pilot.getCategory() != Category.MOTO2 || pilot.getCategory() != Category.MOTO3 || pilot.getCategory() != Category.MOTOGP) {
-			errors.rejectValue("Category", REQUIRED + " should be Moto3, Moto2 or MotoGP");
-		}
+//		if(pilot.getCategory() != Category.MOTO2 || pilot.getCategory() != Category.MOTO3 || pilot.getCategory() != Category.MOTOGP) {
+//			errors.rejectValue("Category", REQUIRED + " should be Moto3, Moto2 or MotoGP");
+//		}
 		
 		if(resultado == false) {
 			errors.rejectValue("Dorsal", REQUIRED + "shoudl be Integer");
