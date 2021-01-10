@@ -565,43 +565,6 @@ public class TeamControllerTest {
 			.andExpect(model().attributeExists("message"))
 			.andExpect(view().name("/leagues/teamDetails"));
 	} 
-	  
-	  @WithMockUser(value = "spring")
-			@Test
-			void testDeleteTeam() throws Exception {
-		  
-				mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/delete", TEST_LEAGUE_ID, TEST_TEAM_ID))
-						.andExpect(status().is3xxRedirection())
-						.andExpect(view().name("redirect:/leagues"));
-			}
-	  
-	  @WithMockUser(value = "spring")
-		@Test
-		void testDeleteTeamError() throws Exception {
-		  
-			given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.empty());
-			given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
-
-	  
-			mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/delete", TEST_LEAGUE_ID, TEST_TEAM_ID))
-					.andExpect(status().is3xxRedirection())
-					.andExpect(view().name("redirect:/leagues"));
-		}
-
-	  
-	  @WithMockUser(value = "spring")
-	  @Test
-		void testMyTeams() throws Exception {
-		  given(this.userService.getUserSession())
-		  .willReturn(user);
-		  given(this.teamService.findTeamByUsername(user.getUsername())).willReturn(list1);
-			mockMvc.perform(get("/myTeams"))
-					.andExpect(status().isOk())
-					.andExpect(model().attributeExists("teams"))
-					.andExpect(model().attribute("teams", Matchers.hasItem(Matchers.<Team> hasProperty("name", is(team.getName())))))
-					.andExpect(view().name("leagues/myTeams"));
-		}
-	
 
 //		mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/edit", TEST_LEAGUE_ID, TEST_TEAM_ID)
 //				.with(csrf())
