@@ -1,0 +1,93 @@
+
+
+====================================
+AssertJ assertions generation report
+====================================
+
+--- Generator input parameters ---
+
+Generating AssertJ assertions for classes in following packages and subpackages:
+- org.springframework.samples.petclinic.model
+
+--- Generator results ---
+
+Directory where custom assertions files have been generated:
+- src/test/generated-assertions
+
+Custom assertions files generated:
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\AbstractAuthoritiesAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\AbstractBDCarreraAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\AbstractBaseEntityAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\AbstractCategoryAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\AbstractFormRellenarBDAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\AbstractGranPremioAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\AbstractLeagueAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\AbstractLineupAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\AbstractLineupTestsAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\AbstractMessageAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\AbstractNamedEntityAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\AbstractOfferAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\AbstractPersonAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\AbstractPilotAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\AbstractRecordAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\AbstractRecordCircuitoAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\AbstractRecordMejorVueltaAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\AbstractRecordPoleAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\AbstractRecordVueltaRapidaAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\AbstractRecruitAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\AbstractResultAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\AbstractRolAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\AbstractStatusAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\AbstractTablaConsultasAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\AbstractTeamAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\AbstractTeamModelTestAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\AbstractTeamValidatorTestsAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\AbstractTransactionAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\AbstractTransactionTypeAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\AbstractUserAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\AbstractUserRevEntityAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\AbstractUserRevisionListenerAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\AuthoritiesAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\BDCarreraAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\BaseEntityAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\CategoryAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\FormRellenarBDAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\GranPremioAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\LeagueAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\LineupAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\LineupTestsAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\MessageAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\NamedEntityAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\OfferAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\PersonAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\PilotAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\RecordAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\RecordCircuitoAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\RecordMejorVueltaAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\RecordPoleAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\RecordVueltaRapidaAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\RecruitAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\ResultAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\RolAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\StatusAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\TablaConsultasAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\TeamAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\TeamModelTestAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\TeamValidatorTestsAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\TransactionAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\TransactionTypeAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\UserAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\UserRevEntityAssert.java
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\springframework\samples\petclinic\customAssertions\UserRevisionListenerAssert.java
+
+Assertions entry point class has been generated in file:
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\assertj\Assertions.java
+
+BddAssertions entry point class has been generated in file:
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\assertj\BddAssertions.java
+
+SoftAssertions entry point class has been generated in file:
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\assertj\SoftAssertions.java
+
+JUnitSoftAssertions entry point class has been generated in file:
+- C:\Users\super\git\dp1-2020-g2-05\src\test\generated-assertions\org\assertj\JUnitSoftAssertions.java

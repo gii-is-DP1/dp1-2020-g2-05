@@ -316,7 +316,7 @@
 			<plugin>
 				<groupId>org.assertj</groupId>
 				<artifactId>assertj-assertions-generator-maven-plugin</artifactId>
-				<version>2.1.0</version>
+				<version>2.2.0</version>
 
 				<!-- Generate assertions at every build -->
 <!-- 				<executions> -->
@@ -331,7 +331,7 @@
 
 					<!-- List the package of classes you want to generate assertions for -->
 					<packages>
-<!-- 						<param>org.springframework.samples.petclinic.model</param> -->
+						<param>org.springframework.samples.petclinic.model</param>
 <!-- 						<param>org.springframework.samples.petclinic.customAssertions</param> -->
 						<!-- <param>org.assertj.examples.data</param> -->
 						<!-- <param>com.google.common.net</param> -->
@@ -341,7 +341,7 @@
 					<classes>
 						<!-- <param>java.nio.file.Path</param> -->
 						<!-- <param>com.fake.UnknownClass</param> -->
-						<param>org.springframework.samples.petclinic.model.lineup</param>
+<!-- 						<param>org.springframework.samples.petclinic.model.Lineup</param> -->
 					</classes>
 
 					<!-- Whether generated assertions classes can be inherited with consistent 
@@ -376,7 +376,7 @@
 
 					<!-- If true, all files in targetDir are removed before generating new 
 						ones (default to false) -->
-<!-- 					<cleanTargetDir>true</cleanTargetDir> -->
+					<cleanTargetDir>true</cleanTargetDir>
 
 					<!-- Set the package where assertion classes are generated, combine 
 						it with targetDir to get the path to assertions classes. Ex: com.nba.Player 
