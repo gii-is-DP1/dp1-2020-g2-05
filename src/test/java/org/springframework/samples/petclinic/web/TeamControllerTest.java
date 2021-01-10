@@ -206,79 +206,54 @@ public class TeamControllerTest {
 		user.setUsername("antcammar4");
 		user.setEnabled(true);
 	
-//		Set<Authorities> auth = new HashSet<Authorities>();
-//		Authorities autho = new Authorities();
-//		user.setPassword("test");
-//		autho.setAuthority("admin");
-//		autho.setUser(user);
-//		autho.setId(1);
-//		auth.add(autho);
-//		
-//		user.setAuthorities(auth);
-//		
-//		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");  
-//		League liga = new League();
-//	    Date date = new Date();  
-//	    liga.setId(TEST_LEAGUE_ID);
-//	    liga.setLeagueCode("UDTQCSSOND");
-//	    liga.setName("prueba");
-//	    liga.setLeagueDate(formatter.format(date));
-//	    
-//		Set<Team> teams = new HashSet<Team>();
-//		Team team = new Team();
-//		team.setId(TEST_TEAM_ID);
-//		team.setLeague(liga);
-//		team.setMoney(2);
-//		team.setName("teamtest");
-//		team.setPoints(132);
-//		team.setUser(user);
-//		teams.add(team);
-//		user.setTeam(teams);
-//		
-//		Pilot pilot1 = new Pilot();
-//		pilot1.setId(1);
-//		pilot1.setCategory(Category.MOTO3);
-//		pilot1.setDorsal("27");
-//		pilot1.setName("Ale");
-//		pilot1.setLastName("Ruiz");
-//		pilot1.setNationality("Spain");
-//		
-//		Pilot pilot2 = new Pilot();
-//		pilot2.setId(2);
-//		pilot2.setCategory(Category.MOTO3);
-//		pilot2.setDorsal("7");
-//		pilot2.setName("Juan");
-//		pilot2.setLastName("Perez");
-//		pilot2.setNationality("Spain");
-//		
-//		Recruit recruit1 = new Recruit();
-//		recruit1.setId(1);
-//		recruit1.setPilot(pilot1);
-//		recruit1.setTeam(team);
-//		
-//		Recruit recruit2 = new Recruit();
-//		recruit2.setId(2);
-//		recruit2.setPilot(pilot2);
-//		recruit2.setTeam(team);
-//		
-//		GranPremio gp = new GranPremio();
-//		gp.setId(1);
-//		gp.setCalendar(true);
-//		gp.setCircuit("Losail");
-//		gp.setDate0(LocalDate.of(2020, 3, 8));
-//		gp.setHasBeenRun(false);
-//		gp.setRaceCode("QAT");
-//		gp.setSite("Grand Prix Of Qatar");
-//		
-//	    lineup.setId(1);
-//	    lineup.setCategory(Category.MOTO3);
-//	    lineup.setGp(gp);
-//	    lineup.setRecruit1(recruit1);
-//	    lineup.setRecruit2(recruit2);
-//	    lineup.setTeam(team);
-//	    
-//		
-//		this.lineupService.saveLineup(lineup); 
+		Pilot pilot1 = new Pilot();
+		pilot1.setId(1);
+		pilot1.setCategory(Category.MOTO3);
+		pilot1.setDorsal("27");
+		pilot1.setName("Ale");
+		pilot1.setLastName("Ruiz");
+		pilot1.setNationality("Spain");
+		
+		Pilot pilot2 = new Pilot();
+		pilot2.setId(2);
+		pilot2.setCategory(Category.MOTO3);
+		pilot2.setDorsal("7");
+		pilot2.setName("Juan");
+		pilot2.setLastName("Perez");
+		pilot2.setNationality("Spain");
+		
+		Recruit recruit1 = new Recruit();
+		recruit1.setId(1);
+		recruit1.setPilot(pilot1);
+		recruit1.setTeam(team);
+		
+		Recruit recruit2 = new Recruit();
+		recruit2.setId(2);
+		recruit2.setPilot(pilot2);
+		recruit2.setTeam(team);
+		
+		GranPremio gp = new GranPremio();
+		gp.setId(1);
+		gp.setCalendar(true);
+		gp.setCircuit("Losail");
+		gp.setDate0(LocalDate.of(2020, 3, 8));
+		gp.setHasBeenRun(false);
+		gp.setRaceCode("QAT");
+		gp.setSite("Grand Prix Of Qatar");
+		
+	    lineup.setId(1);
+	    lineup.setCategory(Category.MOTO3);
+	    lineup.setGp(gp);
+	    lineup.setRecruit1(recruit1);
+	    lineup.setRecruit2(recruit2);
+	    lineup.setTeam(team);
+	    
+		
+		this.lineupService.saveLineup(lineup); 
+		
+		listaLineups.add(lineup);
+		listaRecruitsEnVenta.add(recruit1);
+		listaRecruitsNoEnVenta.add(recruit2);
 
 		given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
 		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
