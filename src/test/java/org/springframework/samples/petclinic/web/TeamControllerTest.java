@@ -53,6 +53,7 @@ import org.springframework.samples.petclinic.service.OfferService;
 import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.util.Status;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -73,6 +74,8 @@ public class TeamControllerTest {
 	private static final Integer TEST_TEAM_ID = 1;
 	
 	private static final Integer TEST_TEAM1_ID = 2;
+	
+	private static final Integer TEST_RECRUIT_ID = 1;
 
 	
 	 @Autowired
@@ -115,11 +118,20 @@ public class TeamControllerTest {
 	League liga1 = new League();
 	Team team = new Team();
 	Team team1 = new Team();
+
+	Recruit recruit1 = new Recruit();
+	Recruit recruit2 = new Recruit();
+	Recruit recruit3 = new Recruit();
+	Recruit recruit4 = new Recruit();
+	List<Recruit> listRecruits = new ArrayList<>();
+	List<Recruit> listRecruits2 = new ArrayList<>();
+
 	
     private Lineup lineup = new Lineup();
     private List<Lineup> listaLineups = new ArrayList<Lineup>();
     private List<Recruit> listaRecruitsNoEnVenta = new ArrayList<Recruit>();
     private List<Recruit> listaRecruitsEnVenta = new ArrayList<Recruit>();
+
 
 
 	
@@ -203,6 +215,17 @@ public class TeamControllerTest {
         List<League> list = new ArrayList<League>();
 		list.add(liga);
 		
+
+		recruit1.setTeam(team);
+		listRecruits.add(recruit1);
+		
+		recruit2.setTeam(team1);
+		recruit3.setTeam(team1);
+		recruit4.setTeam(team1);
+		listRecruits2.add(recruit2);
+		listRecruits2.add(recruit3);
+		listRecruits2.add(recruit4);
+
 		user.setUsername("antcammar4");
 		user.setEnabled(true);
 	
@@ -254,6 +277,7 @@ public class TeamControllerTest {
 		listaLineups.add(lineup);
 		listaRecruitsEnVenta.add(recruit1);
 		listaRecruitsNoEnVenta.add(recruit2);
+
 
 		given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
 		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
@@ -472,6 +496,76 @@ public class TeamControllerTest {
 //		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
 //		given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
 //
+
+	@WithMockUser(value = "spring")
+	@Test
+	void testSetPriceSuccess() throws Exception {
+		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
+		given(this.recruitService.findRecruit(TEST_RECRUIT_ID)).willReturn(Optional.of(recruit1));
+		
+		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/details/{recruitId}", TEST_LEAGUE_ID, TEST_TEAM_ID, TEST_RECRUIT_ID)).andExpect(status().isOk())
+			.andExpect(model().attributeExists("offer"))
+			.andExpect(model().attributeExists("recruitToSale"))
+			.andExpect(view().name("/leagues/teamDetails"));
+	}
+	
+	@WithMockUser(value = "spring")
+	@Test
+	void testSetPriceError() throws Exception {
+		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
+		given(this.recruitService.findRecruit(10)).willReturn(Optional.empty());
+		
+		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/details/{recruitId}", TEST_LEAGUE_ID, TEST_TEAM_ID, 10)).andExpect(status().isOk())
+			.andExpect(model().attributeExists("message"))
+			.andExpect(model().attribute("message",is("Recruit not found!")))
+			.andExpect(view().name("/leagues/teamDetails"));
+	}
+	
+	@WithMockUser(value = "spring")
+	@Test
+	void testPutOnSaleSuccess() throws Exception {
+		given(this.recruitService.getRecruitsByTeam(TEST_TEAM1_ID)).willReturn(listRecruits2);
+		given(this.teamService.findTeamById(TEST_TEAM1_ID)).willReturn(Optional.of(team1));
+		given(this.recruitService.findRecruit(2)).willReturn(Optional.of(recruit2));
+
+		mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/details/{recruitId}", TEST_LEAGUE_ID, TEST_TEAM1_ID, 2)
+				.with(csrf())
+				.param("status", Status.Outstanding.toString())
+				.param("price", "1500"))
+			.andExpect(status().is3xxRedirection())
+			.andExpect(view().name("redirect:/leagues/{leagueId}/market"));
+	}
+	
+	@WithMockUser(value = "spring")
+	@Test
+	void testPutOnSaleWith2RecruitsOrLess() throws Exception {
+		given(this.recruitService.getRecruitsByTeam(TEST_TEAM_ID)).willReturn(listRecruits);
+		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
+		given(this.recruitService.findRecruit(TEST_RECRUIT_ID)).willReturn(Optional.of(recruit1));
+
+		mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/details/{recruitId}", TEST_LEAGUE_ID, TEST_TEAM_ID, TEST_RECRUIT_ID)
+				.with(csrf())
+				.param("status", Status.Outstanding.toString())
+				.param("price", "1500"))
+			.andExpect(status().isOk())
+			.andExpect(view().name("/leagues/teamDetails"));
+	}
+	
+	@WithMockUser(value = "spring")
+	@Test
+	void testPutOnSaleError() throws Exception {
+		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
+		given(this.recruitService.findRecruit(TEST_RECRUIT_ID)).willReturn(Optional.of(recruit1));
+
+		mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/details/{recruitId}", TEST_LEAGUE_ID, TEST_TEAM_ID, TEST_RECRUIT_ID)
+				.with(csrf())
+				.param("status", "")
+				.param("price", ""))
+			.andExpect(status().isOk())
+			.andExpect(model().attributeExists("message"))
+			.andExpect(view().name("/leagues/teamDetails"));
+	} 
+
 //		mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/edit", TEST_LEAGUE_ID, TEST_TEAM_ID)
 //				.with(csrf())
 //				.param("name", "125")
@@ -506,7 +600,6 @@ public class TeamControllerTest {
 		.andExpect(status().is3xxRedirection())
 		.andExpect(view().name("redirect:/leagues"));
 	}
-
 
 	@WithMockUser(value = "spring")
 	@Test
