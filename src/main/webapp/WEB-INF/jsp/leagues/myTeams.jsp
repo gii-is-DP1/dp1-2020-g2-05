@@ -27,9 +27,8 @@
 					<td><c:out value="${team.name} " /></td>
 					<td><c:out value="${team.points}" /></td>
 					<td><spring:url
-							value="/leagues/{leagueId}/teams/{teamId}/transactions" var="TeamUrl">
-							<spring:param name="leagueId" value="${team.league.id}" />
-							<spring:param name="teamId" value="${team.id}" />
+							value="/myTeams/{teamID}/transactions" var="TeamUrl">
+							<spring:param name="teamID" value="${team.id}" />
 						</spring:url> <a href="${fn:escapeXml(TeamUrl)}"><c:out
 								value="${team.money}" /></a></td>
 					<td><c:out value="${team.user.username}" /></td>

@@ -16,9 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Controller
 public class TransactionController {
 
@@ -35,8 +32,8 @@ public class TransactionController {
 		this.userService = userService;
 	}
 
-	@GetMapping("/leagues/{leagueID}/teams/{teamID}/transactions")
-	public ModelAndView getTrades(@PathVariable("leagueID") int leagueID, @PathVariable("teamID") int teamID) {
+	@GetMapping("/myTeams/{teamID}/transactions")
+	public ModelAndView getTrades(@PathVariable("teamID") int teamID) {
 		ModelAndView mav = new ModelAndView();
 		User user = this.userService.getUserSession();
 		Optional<Team> optTeam = teamService.findTeamById(teamID);

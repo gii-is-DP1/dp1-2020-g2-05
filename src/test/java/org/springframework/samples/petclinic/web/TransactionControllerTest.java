@@ -1,107 +1,105 @@
 package org.springframework.samples.petclinic.web;
 
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
-import org.springframework.samples.petclinic.service.TeamService;
+import org.springframework.samples.petclinic.model.Authorities;
+import org.springframework.samples.petclinic.model.League;
+import org.springframework.samples.petclinic.model.Owner;
+import org.springframework.samples.petclinic.model.Team;
+import org.springframework.samples.petclinic.model.Transaction;
+import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.TransactionService;
-import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(controllers = LeagueController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
-public class TransactionControllerTest {
-	class TestNest {
-		@MockBean
-		@Autowired
-		TransactionController transactionController;
+@WebMvcTest(controllers = TransactionController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
+class TransactionControllerTest {
 
-		@MockBean
-		@Autowired
-		TransactionService transactionService;
+	private static final int TEST_TEAM_ID = 11;
 
-		@MockBean
-		@Autowired
-		TeamService teamService;
+	@MockBean
+	private TransactionService transactionService;
 
-		@MockBean
-		@Autowired
-		UserService userService;
+	@Autowired
+	private MockMvc mockMvc;
 
-		@Autowired
-		private MockMvc mockMvc;
-//
-//		private User user = new User();
-//		private List<League> lista = new ArrayList<League>();
-//		private League liga = new League();
+	private User user = new User();
+	private League league = new League();
+	private Team team = new Team();
+	private List<Transaction> transactions;
 
-//		@BeforeEach
-//		void setup(TestInfo testInfo) throws DataAccessException, duplicatedLeagueNameException {
-//			if (testInfo.getTags().contains("SkipCleanup")) {
-//				return;
-//			}
-//			TCConsulta.setCurrentCategory(Category.MOTO3);
-//			TCConsulta.setRacesCompleted(0);
-//			user.setUsername("antcammar4");
-//			user.setEnabled(true);
-//
-//			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-//			Date date = new Date();
-//			liga.setId(TEST_LEAGUE_ID);
-//			liga.setLeagueCode("UDTQCSSOND");
-//			liga.setName("prueba");
-//			liga.setLeagueDate(formatter.format(date));
-//
-//			Set<Authorities> auth = new HashSet<Authorities>();
-//			Authorities autho = new Authorities();
-//			user.setPassword("test");
-//			autho.setAuthority("admin");
-//			autho.setUser(user);
-//			autho.setId(1);
-//			auth.add(autho);
-//
-//			user.setAuthorities(auth);
-//
-//			Set<Team> teams = new HashSet<Team>();
-//			Team team = new Team();
-//			team.setId(TEST_TEAM_ID);
-//			team.setLeague(liga);
-//			team.setMoney(2);
-//			team.setName("teamtest");
-//			team.setPoints(132);
-//			team.setUser(user);
-//			teams.add(team);
-//			user.setTeam(teams);
-//			liga.setTeam(teams);
-//
-//			this.leagueService.saveLeague(liga);
-//			this.teamService.saveTeam(team);
-//
-//			lista.add(liga);
-//
-//			this.userService.saveUser(user);
-//			given(this.userService.getUserSession()).willReturn(user);
-//
-//		}
-//
-//		@WithMockUser(value = "spring")
-//		@Test
-//		void testShowTransactionList() throws Exception {
-//			given(this.transactionService.getTeamTransactions(TEST_TEAM_ID).willReturn(transactions);
-//			given(this.leagueService.findAuthoritiesByUsername(user.getUsername())).willReturn("admin");
-//			given(this.TCService.getTabla()).willReturn(Optional.of(this.TCConsulta));
-////	    		given( this.TCService.getTabla().get().getCurrentCategory()).willReturn(Category.MOTO2);
-////	    		given( this.TCService.getTabla().get().getRacesCompleted()).willReturn(0);
-//
-//			mockMvc.perform(get("/leagues")).andExpect(status().isOk()).andExpect(view().name("leagues/leagueList"))
-//					.andExpect(model().attribute("admin", is(true)))
-//					.andExpect(model().attribute("categoriaActual", is(Category.MOTO3)))
-//					.andExpect(model().attribute("carrerasCompletadas", is(0))).andExpect(model().attribute("ligas",
-//							Matchers.hasItem(Matchers.<League>hasProperty("leagueCode", is(liga.getLeagueCode())))));
-//
-//		}
+	@BeforeEach
+	void setUp() {
+
+		user.setUsername("alvcorcas");
+		user.setEnabled(true);
+		Set<Authorities> auth = new HashSet<Authorities>();
+		Authorities autho = new Authorities();
+		user.setPassword("test");
+		autho.setAuthority("admin");
+		autho.setUser(user);
+		autho.setId(1);
+		auth.add(autho);
+		user.setAuthorities(auth);
+
+		league.setId(1);
+		league.setLeagueCode("QWEASDFRGT");
+		league.setLeagueDate("12/12/2020");
+		league.setName("Test");
+
+		team.setId(TEST_TEAM_ID);
+		team.setLeague(league);
+		team.setMoney(2000);
+		team.setName("polloRebozado");
+		team.setPoints(0);
+		team.setUser(user);
+
+		Set<Team> teamSet = Stream.of(team).collect(Collectors.toSet());
+
+		league.setTeam(teamSet);
+
+		Transaction transaction = new Transaction();
+		transaction.setId(1);
+		transaction.setAmount(2000);
+		transaction.setConcept("Recompensa por buenos resultados de Test Ramirez");
+		transaction.setDate(LocalDate.now());
+		transaction.setRemainingMoney(team.getMoney());
+		transaction.setTeam(team);
+
+		transactions = Stream.of(transaction).collect(Collectors.toList());
+
 	}
+
+	@WithMockUser(value = "spring")
+	@Test
+	void testGetTransactionList() throws Exception {
+		mockMvc.perform(get("/myTeams/{teamID}/transactions", TEST_TEAM_ID)).andExpect(status().isOk())
+				.andExpect(model().attributeExists("transactions"))
+				.andExpect(model().attribute("transactions", transactions)).andExpect(model().attributeExists("money"));
+	}
+
 }
