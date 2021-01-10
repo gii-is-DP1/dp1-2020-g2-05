@@ -15,7 +15,7 @@ public class LineupTests {
 		lineup.setRecruit2(new Recruit());
 		lineup.setTeam(new Team());
 
-		Assertions.assertThat(lineup).hasAllRelationships();
+		Assertions.assertThat(lineup).hasAllRelations();
 	}
 		
 	@Test
@@ -27,6 +27,6 @@ public class LineupTests {
 		lineup.setRecruit2(null);
 		lineup.setTeam(null);
 
-		Assertions.assertThat(lineup).doesNotHaveAnyRelationships();
+		Assertions.assertThat(lineup).doesNotHaveAnyRelations();
 	}
 }
