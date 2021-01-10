@@ -15,6 +15,8 @@
  */
 package org.springframework.samples.petclinic.model;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -65,7 +67,9 @@ public class League extends NamedEntity {
 //
 //	@Column(name = "races_completed")        
 //	private Integer racesCompleted;
-
+	
+	
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="league")
 	Set<Team> team;
 
