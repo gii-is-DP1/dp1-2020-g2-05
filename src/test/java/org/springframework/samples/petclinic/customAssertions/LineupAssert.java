@@ -14,7 +14,7 @@ public class LineupAssert extends AbstractAssert<LineupAssert, Lineup> {
 		return new LineupAssert(actual);
 	}
 
-	public LineupAssert hasAllRelationships() {
+	public LineupAssert hasAllRelations() {
 		isNotNull();
 		Boolean errors = false;
 		String res = "";
@@ -45,7 +45,7 @@ public class LineupAssert extends AbstractAssert<LineupAssert, Lineup> {
 		return this;
 	}
 	
-	public LineupAssert doesNotHaveAnyRelationships() {
+	public LineupAssert doesNotHaveAnyRelations() {
 		isNotNull();
 		Boolean errors = false;
 		String res = "";

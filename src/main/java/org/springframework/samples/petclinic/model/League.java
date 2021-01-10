@@ -47,8 +47,16 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "league")
-public class League extends NamedEntity {
+public class League extends BaseEntity {
 
+	
+	
+	@Column(name = "name", unique=true)   
+	@Size(min = 3, max = 50)
+	@NotEmpty
+	@NotBlank
+	private String name;
+	
 	@Column(name = "league_date")        
 //	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	@NotNull
@@ -130,6 +138,14 @@ public class League extends NamedEntity {
 //	public void setActiveCategory(Category activeCategory) {
 //		this.activeCategory = activeCategory;
 //	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public void addTeam(Team team) {
 		this.getTeam().add(team);
