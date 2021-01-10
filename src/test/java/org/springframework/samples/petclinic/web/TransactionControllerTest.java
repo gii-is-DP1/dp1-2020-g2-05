@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -31,7 +32,9 @@ import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.Transaction;
 import org.springframework.samples.petclinic.model.User;
+import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.TransactionService;
+import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -43,6 +46,12 @@ class TransactionControllerTest {
 
 	@MockBean
 	private TransactionService transactionService;
+
+	@MockBean
+	private TeamService teamService;
+
+	@MockBean
+	private UserService userService;
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -91,6 +100,12 @@ class TransactionControllerTest {
 		transaction.setTeam(team);
 
 		transactions = Stream.of(transaction).collect(Collectors.toList());
+
+		given(this.transactionService.getTeamTransactions(TEST_TEAM_ID)).willReturn(transactions);
+
+		given(this.userService.getUserSession()).willReturn(user);
+
+		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
 
 	}
 
