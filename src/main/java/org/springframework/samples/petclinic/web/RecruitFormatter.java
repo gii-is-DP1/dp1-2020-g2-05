@@ -24,8 +24,8 @@ public class RecruitFormatter implements Formatter<Recruit> {
 	}
 
 	@Override
-	public String print(Recruit recruit, Locale locale) {
-		return recruit.getPilot().getName() + " " + recruit.getPilot().getLastName();
+	public String print(Recruit recruit, Locale locale) { // Provisional
+		return recruit.getPilot().getName() + " " + recruit.getPilot().getLastName() + ", " + recruit.getTeam().getLeague().getId();
 	}
 
 	@Override
@@ -33,9 +33,11 @@ public class RecruitFormatter implements Formatter<Recruit> {
 		List<Pilot> findRecruits = this.recruitService.getRecruits();
 		for (Pilot pilot : findRecruits) {
 			String string = pilot.getName() + " " + pilot.getLastName();
-			if (string.equals(text)) {
-//				Recruit recruit = this.recruitService.getRecruitByPilotId(pilot.getId()).get();
-//				return recruit;
+			String[] split = text.split(",");
+			if (string.equals(split[0].trim())) {
+				Integer leagueId = Integer.parseInt(split[split.length-1].trim()); // Provisional
+				Recruit recruit = this.recruitService.getRecruitByPilotId(pilot.getId(), leagueId).get();
+				return recruit;
 			}
 		}
 		throw new ParseException("Recruit not found: " + text, 0);

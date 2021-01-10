@@ -29,7 +29,7 @@ public class PilotFormatter implements Formatter<Pilot> {
 	
 	@Override
 	public Pilot parse(String text, Locale locale) throws ParseException {
-		List<Pilot> findPilots = StreamSupport.stream(this.pilotService.findAll().spliterator(), false).collect(Collectors.toList());
+		List<Pilot> findPilots = this.pilotService.findAll();
 		for (Pilot pilot : findPilots) {
 			String string = pilot.getName() + pilot.getLastName();
 			if (string.equals(text)) {
