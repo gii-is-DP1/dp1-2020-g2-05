@@ -4,8 +4,6 @@ import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
@@ -27,28 +25,12 @@ public class Transaction extends BaseEntity implements Comparable<Transaction> {
 	@NotNull
 	private Integer amount;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "transactionType")
-	@NotNull
-	private TransactionType transactionType;
-
 	@Column(name = "concept")
 	@NotBlank
 	private String concept;
 
 	@ManyToOne()
 	private Team team;
-
-//	public Transaction(@NotNull LocalDate date, @NotNull Integer price, @NotNull TransactionType transactionType,
-//			@NotBlank String concept, Team team, Offer offer) {
-//		super();
-//		this.date = date;
-//		this.price = price;
-//		this.transactionType = transactionType;
-//		this.concept = concept;
-//		this.team = team;
-//		this.offer = offer;
-//	}
 
 	public LocalDate getDate() {
 		return date;
@@ -74,14 +56,6 @@ public class Transaction extends BaseEntity implements Comparable<Transaction> {
 		this.amount = price;
 	}
 
-	public TransactionType getTransactionType() {
-		return transactionType;
-	}
-
-	public void setTransactionType(TransactionType transactionType) {
-		this.transactionType = transactionType;
-	}
-
 	public String getConcept() {
 		return concept;
 	}
@@ -101,6 +75,12 @@ public class Transaction extends BaseEntity implements Comparable<Transaction> {
 	@Override
 	public int compareTo(Transaction o) {
 		return this.id.compareTo(o.id);
+	}
+
+	@Override
+	public String toString() {
+		return "Transaction [date=" + date + ", remainingMoney=" + remainingMoney + ", amount=" + amount + ", concept="
+				+ concept + ", team=" + team + "]";
 	}
 
 }
