@@ -66,7 +66,7 @@ public class MessageValidator implements Validator {
 		
 		//usernamereceive validation
 		if(message.getUsernamereceive()==null) {
-			 errors.rejectValue("asunto", REQUIRED, "El destinatario no puede ser null");
+			 errors.rejectValue("usernamereceive", REQUIRED, "El destinatario no puede ser null");
 		}
 	}
 
