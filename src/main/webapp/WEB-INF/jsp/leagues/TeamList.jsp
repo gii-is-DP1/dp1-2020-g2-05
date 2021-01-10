@@ -14,7 +14,10 @@
 	<c:if test="${EquipoNo!=null}"><h2><c:out value="${EquipoNo}" /></h2></c:if>
 	<c:if test="${Error!=null}"><h2><c:out value="${Error}" /></h2></c:if>
 	
-	<table id="teamsTable" class="table table-striped">
+	
+		
+		<c:if test="${admin == true}">
+		<table id="teamsTable" class="table table-striped">
 		<thead>
 			<tr>
 				<th>Name</th>
@@ -27,7 +30,62 @@
 			</tr>
 		</thead>
 		<tbody>
+		<c:forEach items="${teams}" var="team">
+		<tr>
+					<td><c:out value="${team.name} " /></td>
+					<td><c:out value="${team.points}" /></td>
+					<td><c:out value="${team.money}" /></td>
+					<td><c:out value="${team.user.username}" /></td>
+					<td>
+						<spring:url value="/leagues/{leagueId}/teams/{teamId}/edit" var="TeamUrl">
+								<spring:param name="teamId" value="${team.id}" />
+							<spring:param name="leagueId" value="${team.league.id}" />
+						</spring:url> <a href="${fn:escapeXml(TeamUrl)}">Edit</a>
+						<spring:url value="/leagues/{leagueId}/teams/{teamId}/delete" var="TeamUrl">
+							<spring:param name="teamId" value="${team.id}" />
+							<spring:param name="leagueId" value="${league.id}" />
+						</spring:url> <a href="${fn:escapeXml(TeamUrl)}">Delete</a>
+						
+<!-- 			Visualizar fichajes de un equipo -->
+
+						<spring:url value="/leagues/{leagueId}/teams/{teamId}/details" var="TeamUrl">
+							<spring:param name="teamId" value="${team.id}" />
+							<spring:param name="leagueId" value="${league.id}" />
+						</spring:url> <a href="${fn:escapeXml(TeamUrl)}">Details</a>
+						
+<!-- 			Visualizar fichajes de un equipo -->
+						
+					
+					</td>
+				</tr>
+				
+		</c:forEach>
+		</tbody>
+		</table>
+			<spring:url value="/leagues/{leagueId}/teams/new" var="TeamUrl">
+							<spring:param name="leagueId" value="${league.id}" />
+						</spring:url> <a href="${fn:escapeXml(TeamUrl)}">New</a>
+	<spring:url value="market" var="marketUrl">
+	</spring:url> <a href="${fn:escapeXml(marketUrl)}">Go to Market</a>
+	
+		</c:if>
+		<c:if test="${usuario == true }">
+		<table id="teamsTable" class="table table-striped">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Points</th>
+<!-- 				<c:if test="condition"></c:if> -->
+				<th>money</th>
+				<th>user</th>
+				<th>Actions</th>
+	
+			</tr>
+		</thead>
+		<tbody>
+		
 			<c:forEach items="${teams}" var="team">
+			<c:if test="${team.name != 'Sistema' }">
 				<c:if test="${team.user.username == user.username}">
 				<tr>
 					<td><c:out value="${team.name} " /></td>
@@ -67,13 +125,12 @@
 					<td><c:out value="" /></td>
 				</tr>
 				</c:if>
+				</c:if>
 			</c:forEach>
+			
+			
 		</tbody>
-	</table>
-	
-	<spring:url value="/leagues/{leagueId}/teams/new" var="TeamUrl">
-							<spring:param name="leagueId" value="${league.id}" />
-						</spring:url> <a href="${fn:escapeXml(TeamUrl)}">New</a>
-	<spring:url value="market" var="marketUrl">
-	</spring:url> <a href="${fn:escapeXml(marketUrl)}">Go to Market</a>
+		</table>
+	</c:if>
+
 </petclinic:layout>
