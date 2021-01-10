@@ -10,7 +10,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.Lineup;
 import org.springframework.samples.petclinic.model.Result;
 import org.springframework.samples.petclinic.model.Team;
-import org.springframework.samples.petclinic.model.Visit;
 
 public interface TeamRepository extends CrudRepository<Team, Integer> {
 

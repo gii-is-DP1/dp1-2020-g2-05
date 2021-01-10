@@ -5,9 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import javax.validation.Valid;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.League;
@@ -78,8 +76,25 @@ public class TeamController {
 	private Boolean Editar = false;
 	private Boolean BorrarDesdeMyTeams = false;
 
-	
-	
+	public User getUserSession() {
+		User usuario = new User();
+		try {
+			Object auth = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			Integer index1 = auth.toString().indexOf("Username:");
+			Integer index2 = auth.toString().indexOf("; Password:"); // CON ESTO TENEMOS EL STRIN Username: user
+			String nombreUsuario = auth.toString().substring(index1, index2).split(": ")[1]; // con esto hemos spliteado
+																								// lo de arriba y nos
+																								// hemos quedado con
+																								// user.
+
+			Optional<User> user = this.userService.findUser(nombreUsuario);
+
+			usuario = user.get();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return usuario;
+	}
 //	@GetMapping(path = "/leagues/{leagueId}/teams/{teamId}")
 //	public String security(@PathVariable("leagueId") int leagueId,@PathVariable("teamId") int teamId, ModelMap model) {
 //		System.out.println("hhhh");
@@ -103,7 +118,12 @@ public class TeamController {
 
 	@GetMapping(path = "/leagues/{leagueId}/teams/new")
 	public String crearEquipo(@PathVariable("leagueId") int leagueId, ModelMap model) {
+	//		if(model.getAttribute("vengoDelJoinLeague")==null || (boolean)model.getAttribute("vengoDelJoinLeague")==false) {
+	//			
+	//			return "redirect:/leagues";
+	//		}
 		log.info("Abriendo el formulario para crear un equipo");
+		
 		Team team = new Team();
 		League liga = this.leagueService.findLeague(leagueId).get();
 		team.setLeague(liga);
@@ -282,6 +302,7 @@ public class TeamController {
 
 		System.out.println(authority);
 		
+		model.put("Editar", true);
 		if (authority.equals("admin")) {
 			model.put("admin", true);
 		} else {
@@ -296,13 +317,17 @@ public class TeamController {
 
 	}
 
-	@PostMapping(value = "/leagues/{leagueId}/teams/{teamId}/edit")
+	@PostMapping(path = "/leagues/{leagueId}/teams/{teamId}/edit")
 	public String editarPilotoPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
 			@Valid Team team, ModelMap model, BindingResult result) {
 		League league = this.leagueService.findLeague(leagueId).get();
+		System.out.println(league);
 		log.debug("Asignandole la liga " + league);
 		team.setLeague(league);
 
+		System.out.println(team.getLeague());
+		System.out.println(team.getUser());
+		System.out.println(result.getAllErrors());
 		if (result.hasErrors()) {
 			log.warn("El equipo " + team + " no ha podido ser editado correctamente");
 			model.put("team", team);

@@ -2,39 +2,51 @@ package org.springframework.samples.petclinic.web;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.Transaction;
+import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.TransactionService;
+import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Controller
 public class TransactionController {
 
 	private TransactionService transactionService;
 	private TeamService teamService;
+	private UserService userService;
 
 	@Autowired
-	public TransactionController(TransactionService transactionService, TeamService teamService) {
+	public TransactionController(TransactionService transactionService, TeamService teamService,
+			UserService userService) {
 		super();
 		this.transactionService = transactionService;
 		this.teamService = teamService;
+		this.userService = userService;
 	}
 
-	@GetMapping("/leagues/{leagueID}/teams/{teamID}/transactions")
-	public ModelAndView getTrades(@PathVariable("leagueID") int leagueID, @PathVariable("teamID") int teamID) {
-		ModelAndView mav = new ModelAndView("leagues/transactionsList");
-		List<Transaction> l = transactionService.getTeamTransactions(teamID);
-		l.sort(Comparator.reverseOrder());
-		mav.addObject("transactions", l);
-		mav.addObject("money", teamService.findTeamById(teamID).get().getMoney());
+	@GetMapping("/myTeams/{teamID}/transactions")
+	public ModelAndView getTrades(@PathVariable("teamID") int teamID) {
+		ModelAndView mav = new ModelAndView();
+		User user = this.userService.getUserSession();
+		Optional<Team> optTeam = teamService.findTeamById(teamID);
+		if (optTeam.isPresent() && user.equals(optTeam.get().getUser())) {
+			Team team = optTeam.get();
+			mav.setViewName("leagues/transactionsList");
+			List<Transaction> transactions = transactionService.getTeamTransactions(teamID);
+			transactions.sort(Comparator.reverseOrder());
+			mav.addObject("transactions", transactions);
+			mav.addObject("money", team.getMoney());
+		} else {
+			mav.setViewName("redirect:/myTeams");
+		}
 		return mav;
 	}
 }

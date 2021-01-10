@@ -4,16 +4,14 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.Transaction;
-import org.springframework.samples.petclinic.model.TransactionType;
 import org.springframework.samples.petclinic.repository.TransactionRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Service
 public class TransactionService {
 
@@ -25,18 +23,18 @@ public class TransactionService {
 		this.transactionRepository = transactionRepository;
 	}
 
+	@Transactional(readOnly = true)
 	public List<Transaction> getTeamTransactions(int teamID) {
 		return transactionRepository.findTransactionsByTeamId(teamID);
 	}
 
-	public void saveTransaction(Integer amount, TransactionType transactionType, String concept, Team team) {
+	@Transactional
+	public void saveTransaction(Integer amount, String concept, Team team) throws DataAccessException {
 		Transaction transaction = new Transaction();
 		transaction.setDate(LocalDate.now());
 		transaction.setRemainingMoney(team.getMoney());
 		transaction.setAmount(amount);
-		transaction.setTransactionType(transactionType);
 		transaction.setConcept(concept);
-		log.info("El equipo es: " + team);
 		transaction.setTeam(team);
 		transactionRepository.save(transaction);
 	}
@@ -45,16 +43,14 @@ public class TransactionService {
 		String fullName = pilot.getName() + " " + pilot.getLastName();
 		// Transaccion del equipo vendedor
 
-		log.info("Transacciones de: " + price + " " + TransactionType.SELL + " " + "Venta de " + fullName + " "
-				+ sellerTeam);
-
-		saveTransaction(price, TransactionType.SELL, "Venta de " + fullName, sellerTeam);
+		saveTransaction(price, "Venta de " + fullName, sellerTeam);
 
 		// Transaccion del equipo comprador
-		saveTransaction(price, TransactionType.BUY, "Compra de " + fullName, purchaserTeam);
+		saveTransaction(-price, "Compra de " + fullName, purchaserTeam);
 
 	}
 
+	@Transactional(readOnly = true)
 	public Iterable<Transaction> findAll() {
 		return this.transactionRepository.findAll();
 	}

@@ -3,8 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
-<%@ page
-	import="org.springframework.samples.petclinic.model.TransactionType"%>
+
 
 <petclinic:layout pageName="transaction">
 	<h2>
@@ -28,15 +27,15 @@
 					<td><c:out value="${transaction.remainingMoney}" /></td>
 					<td><c:choose>
 							<c:when
-								test="${transaction.transactionType != TransactionType.BUY}">
+								test="${transaction.amount > 0}">
 								<p style="color: green;">
-									+ <c:out value="${transaction.amount}" />
+									+<c:out value="${transaction.amount}" />
 								</p>
 							</c:when>
 
 							<c:otherwise>
 								<p style="color: red;">
-									- <c:out value="${transaction.amount}" />
+									<c:out value="${transaction.amount}" />
 								</p>
 							</c:otherwise>
 						</c:choose>
