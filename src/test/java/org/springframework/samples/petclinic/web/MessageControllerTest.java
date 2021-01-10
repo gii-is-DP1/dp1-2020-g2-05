@@ -245,7 +245,7 @@ void testCrearMensajePredefinido() throws Exception {
 @WithMockUser(value = "spring")
 @Test
 void testCrearMensajePredefinido2SinErrores() throws Exception {
-	mockMvc.perform(post("/messages/new") 
+	mockMvc.perform(post("/messages/new/{username}", userrec.getUsername()) 
 			.with(csrf())	
 			.param("asunto", messagenew.getAsunto())
 			.param("cuerpo", messagenew.getCuerpo())
@@ -269,7 +269,7 @@ void testCrearMensajePredefinido2SinErrores() throws Exception {
 void testCrearMensajePredefinido2ConErrores() throws Exception {
 	//El error es que no te puedes enviar un mensaje a ti mismo
 
-	mockMvc.perform(post("/messages/new") 
+	mockMvc.perform(post("/messages/new/{username}", userrec.getUsername()) 
 			.with(csrf())	
 			.param("asunto", message.getAsunto())
 			.param("cuerpo", message.getCuerpo())
