@@ -10,12 +10,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-
-import com.sun.istack.NotNull;
 
 @Entity
 @Table(name = "team")
@@ -28,10 +28,12 @@ public class Team extends BaseEntity implements Comparable<Team> {
 	
 	@Column(name = "points")
 	@NotNull
+	@Min(0)
 	private Integer points;
 	
 	@Column(name = "money")
 	@NotNull
+	@Min(0)
 	private Integer money;
 	
 	@ManyToOne()
