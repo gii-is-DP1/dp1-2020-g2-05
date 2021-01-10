@@ -1,6 +1,7 @@
 package org.springframework.samples.petclinic.model;
 
 import java.util.List;
+
 import java.util.Set;
 
 
@@ -14,8 +15,12 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.JoinColumn;
-
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.validator.constraints.URL;
 
 import lombok.Data;
 
@@ -29,6 +34,7 @@ public class User{
 	
 	@Column(name = "email")
 	@NotEmpty
+	@Email
 	String email;
 	
 	@Column(name = "password")
@@ -37,18 +43,19 @@ public class User{
 	
 	@Column(name = "imgperfil")
 	@NotEmpty
+	@URL
 	String imgperfil;
 	
 	boolean enabled;
 	
 	
-	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<Authorities> authorities;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<Team> team;
-	
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "usernamesend")
 	private Set<Message> messages_send;
@@ -58,7 +65,7 @@ public class User{
 	
 	@ManyToMany
 	@JoinTable(name="friends", joinColumns={@JoinColumn(name="userqueagrega")}, inverseJoinColumns={@JoinColumn(name="useragregado")})
-
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<User> friends;
 	
 	@Override

@@ -110,6 +110,7 @@ public class UserController {
 			result.addError(error);
 			
 		}
+		
 		if(result.hasErrors()) {
 			List<ObjectError> errores = result.getAllErrors();
 			List<String> erroresstring = new ArrayList<String>();

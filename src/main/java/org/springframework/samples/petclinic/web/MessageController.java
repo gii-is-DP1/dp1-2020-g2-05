@@ -46,6 +46,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javassist.expr.NewArray;
+import lombok.extern.slf4j.Slf4j;
 
 
 
@@ -56,6 +57,7 @@ import javassist.expr.NewArray;
  * @author Arjen Poutsma
  * @author Michael Isvy
  */
+@Slf4j
 @Controller
 public class MessageController {
 
@@ -84,6 +86,8 @@ public class MessageController {
 		User user =userService.getUserSession();
 		List<Message> probando =  messageService.findAllUsernameReceive(user.getUsername());
 		modelMap.addAttribute("resultados", probando);
+		log.info("Listado de mensajes cargado correctamente");
+
 		return "messages/messagesList";
 	}
 	
@@ -93,7 +97,11 @@ public class MessageController {
 		if(message.isPresent()) {
 			messageService.delete(message.get());
 			ra.addAttribute("message", "message successfully deleted!");
+			log.info("El mensaje"+message+" se ha eliminado correctamente");
+
 		}else {
+			log.info("El mensaje"+message+" no se ha podido eliminar");
+
 			ra.addAttribute("message", "message not found!");
 		}
 		return "redirect:/messages";
@@ -106,18 +114,30 @@ public class MessageController {
 		message.setVisto(0);
 		model.put("messagee", message);		
 		model.put("usersend", userService.getUserSession());		
-		
+		log.info("Inicializado formulario correctamente");
+
 		return "messages/messagesEdit";
 	}
 	
 	@GetMapping(path="/messages/new/{username}")
 	public String crearMensajePredefinido(@PathVariable("username") String username,ModelMap model) {
 		Message message = new Message();
-		Optional<User> usuariorecibe = userService.findUser(username);
+		try {
+			Optional<User> usuariorecibe = userService.findUser(username);
+			message.setUsernamereceive(usuariorecibe.get());
+
+		} catch (Exception e) {
+			log.warn("No se ha encontrado el usuario");
+
+			return "errors/exception";
+		}
+		
+		
 		message.setUsernamesend(userService.getUserSession());
-		message.setUsernamereceive(usuariorecibe.get());
 		message.setVisto(0);
 		model.put("messagee", message);		
+		log.info("Inicializado formulario correctamente");
+
 		return "messages/messagesEdit";
 	}
 
@@ -125,6 +145,7 @@ public class MessageController {
 	
 	@PostMapping(value = "/messages/new")
 	public String processCreationForm(@Valid Message message, BindingResult result,ModelMap model) {
+	
 		
 		if (result.hasErrors()) {
 			List<ObjectError> errores = result.getAllErrors();
@@ -135,15 +156,19 @@ public class MessageController {
 			model.put("message",erroresstring );	
 			model.put("messagee", message);		
 			model.put("usersend", userService.getUserSession());		
+			log.info("El mensaje"+message+" no se ha podido guardar correctamente");
 
 			return "messages/messagesEdit";
 		}
 		else {
+			
+				
 			message.setVisto(0); 
 			message.setUsernamesend(userService.getUserSession());
 
 			this.messageService.saveMessage(message);
-			
+			log.info("El mensaje"+message+" se ha guardado correctamente");
+
 			return "redirect:/messages/";
 		}
 	}
@@ -160,6 +185,7 @@ public class MessageController {
 			model.put("message",erroresstring );	
 			model.put("messagee", message);		
 			model.put("usersend", userService.getUserSession());		
+			log.info("El mensaje"+message+" no se ha podido guardar correctamente");
 
 			return "messages/messagesEdit";
 		}
@@ -168,7 +194,8 @@ public class MessageController {
 			message.setUsernamesend(userService.getUserSession());
 
 			this.messageService.saveMessage(message);
-			
+			log.info("El mensaje"+message+" se ha guardado correctamente");
+
 			return "redirect:/messages/";
 		}
 	}
