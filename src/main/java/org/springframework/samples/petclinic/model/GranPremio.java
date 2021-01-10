@@ -18,6 +18,8 @@ import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -62,10 +64,12 @@ public class GranPremio extends BaseEntity {
 	public void setCalendar(Boolean calendar) {
 		this.calendar = calendar;
 	}
-
+	
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="gp")
 	private Set<Result> results;
 	
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "gp")
 	private Set<Lineup> lineups;
 
