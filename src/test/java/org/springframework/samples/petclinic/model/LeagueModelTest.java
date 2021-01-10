@@ -13,6 +13,7 @@ import javax.validation.Validator;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.samples.petclinic.customAssertions.Assertions;
 import org.springframework.samples.petclinic.web.LeagueValidator;
 import org.springframework.validation.Errors;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -38,7 +39,7 @@ class LeagueModelTest {
 		LocaleContextHolder.setLocale(Locale.ENGLISH);
 		League league = new League();
 		league.setLeagueCode("ASDWQASDEW");
-		
+		league.setName("test");
 		Validator validator = createValidator();
 		List<ConstraintViolation<League>> constraintViolations = validator.validate(league).stream().collect(Collectors.toList());
 
@@ -58,6 +59,8 @@ class LeagueModelTest {
 		League league = new League();
 		league.setLeagueCode("ASAS");
 		league.setLeagueDate("2020/01/01");
+		league.setName("test");
+
 		Validator validator = createValidator();
 		List<ConstraintViolation<League>> constraintViolations = validator.validate(league).stream().collect(Collectors.toList());
 
@@ -74,6 +77,8 @@ class LeagueModelTest {
 		LocaleContextHolder.setLocale(Locale.ENGLISH);
 		League league = new League();
 		league.setLeagueDate("2020/01/01");
+		league.setName("test");
+
 		Validator validator = createValidator();
 		List<ConstraintViolation<League>> constraintViolations = validator.validate(league).stream().collect(Collectors.toList());
 
@@ -82,5 +87,37 @@ class LeagueModelTest {
 		assertThat(violation.getPropertyPath().toString()).isEqualTo("leagueCode");
 		assertThat(violation.getMessage()).isEqualTo("must not be null");
 	
+	}
+	@Test
+	void shouldNotValidateWhenLeagueNameEmpty() {
+
+		LocaleContextHolder.setLocale(Locale.ENGLISH);
+		League league = new League();
+		league.setLeagueDate("2020/01/01");
+		league.setLeagueCode("1234567899");
+		Validator validator = createValidator();
+		List<ConstraintViolation<League>> constraintViolations = validator.validate(league).stream().collect(Collectors.toList());
+
+		assertThat(constraintViolations.size()).isEqualTo(2);
+		ConstraintViolation<League> violation = constraintViolations.get(0);
+		assertThat(violation.getPropertyPath().toString()).isEqualTo("name");
+		assertThat(violation.getMessage()).isEqualTo("must not be blank");
+		violation = constraintViolations.get(1);
+		assertThat(violation.getPropertyPath().toString()).isEqualTo("name");
+		assertThat(violation.getMessage()).isEqualTo("must not be empty");
+	}
+	
+	@Test
+	void shouldValidate() {
+
+		LocaleContextHolder.setLocale(Locale.ENGLISH);
+		League league = new League();
+		league.setLeagueDate("2020/01/01");
+		league.setLeagueCode("1234567899");
+		league.setName("Test");
+		Validator validator = createValidator();
+		List<ConstraintViolation<League>> constraintViolations = validator.validate(league).stream().collect(Collectors.toList());
+
+		assertThat(constraintViolations.size()).isEqualTo(0);
 	}
 }
