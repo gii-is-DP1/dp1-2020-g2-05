@@ -9,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.Result;
-import org.springframework.samples.petclinic.model.Visit;
 import org.springframework.samples.petclinic.repository.ResultRepository;
-import org.springframework.samples.petclinic.repository.VisitRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,14 +21,9 @@ public class ResultService {
 
 	private ResultRepository resultRepository;
 	
-	private VisitRepository visitRepository;
-	
-
 	@Autowired
-	public ResultService(ResultRepository resultRepository,
-			VisitRepository visitRepository) {
+	public ResultService(ResultRepository resultRepository) {
 		this.resultRepository = resultRepository;
-		this.visitRepository = visitRepository;
 	}
 
 //	@Transactional(readOnly = true)
@@ -40,7 +33,7 @@ public class ResultService {
 //	
 	@Transactional
 	public void saveResult(Result result) throws DataAccessException {
-		visitRepository.save(result);
+		resultRepository.save(result);
 	}
 
 	@Transactional(readOnly = true)
@@ -63,9 +56,7 @@ public class ResultService {
 	
 	
 	public List<Result> findAll() {
-		List<Result> res = new ArrayList<Result>();
-		resultRepository.findAll().forEach(res::add);
-		return res;
+		return (List<Result>) resultRepository.findAll();
 	}
 	
 	
