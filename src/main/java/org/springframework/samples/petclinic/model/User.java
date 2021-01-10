@@ -43,7 +43,7 @@ public class User{
 	
 	@Column(name = "imgperfil")
 	@NotEmpty
-	@URL
+//	@URL
 	String imgperfil;
 	
 	boolean enabled;
