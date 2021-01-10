@@ -33,6 +33,9 @@ public class TablaConsultasService {
 	public void actualizarTabla(Category category) throws DataAccessException {
 		TablaConsultas tabla = this.getTabla().get();
 		if(category.toString().equals(tabla.getCurrentCategory().toString())) {
+			//para que no se aumente en +3 las carreras, para eso
+			//comprobamos si la categoria pasada como
+			//parametro es la categoria actual y aumentamos +1
 			log.debug("CARRERAS AUMENTADAS : "+tabla.getRacesCompleted()+"->"+(tabla.getRacesCompleted()+1));
 		tabla.setRacesCompleted(tabla.getRacesCompleted()+1);
 		tabla.setActualRace(tabla.getRacesCompleted()+1);

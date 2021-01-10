@@ -68,7 +68,7 @@ public class TeamService {
 		boolean igual =  false;
 	
 		League league = team.getLeague();
-		List<Team> list = league.getTeam().stream().collect(Collectors.toList());
+		List<Team> list = this.findTeamByLeagueId(league.getId());
 		for(int i = 0; i<list.size(); i++) {
 			Team t = list.get(i);
 			
@@ -118,7 +118,7 @@ public class TeamService {
 		sysTeam.setMoney(0);
 		sysTeam.setPoints(0);
 		sysTeam.setUser(userService.findUser("admin1").get());
-		teamRepository.save(sysTeam);
+		saveTeam(sysTeam);
 		log.debug("Creada la escudería sisteama:" + sysTeam);
 		
 		log.info("Procedemos a fichar y ofertar a todos los pilotos con la escudería sistema que estén en la categoría actual");

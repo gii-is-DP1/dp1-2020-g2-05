@@ -30,10 +30,7 @@ class LeagueModelTest {
 		return localValidatorFactoryBean;
 	}
 
-	private LeagueValidator createValidatorLeague() {
-		LeagueValidator leagueValidator = new LeagueValidator();	
-		return leagueValidator;
-	}
+
 	
 	@Test
 	void shouldNotValidateWhenLeagueDateNameEmptyAndBlankAndNull() {

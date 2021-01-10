@@ -30,7 +30,7 @@ public class TeamValidator implements Validator{
 		}
 		
 		//Points validation
-		if(team.getPoints()==null) {
+		if(team.getPoints()==null || team.getPoints()<0) {
 			 errors.rejectValue("points", REQUIRED, "Team points cannot be null");
 		}
 		
@@ -40,7 +40,7 @@ public class TeamValidator implements Validator{
 		}
 		
 		// Money validation
-		if (team.getMoney() == null ) {
+		if (team.getMoney() == null || team.getMoney()<0) {
 			errors.rejectValue("money", REQUIRED,  REQUIRED);
 		}
 		
