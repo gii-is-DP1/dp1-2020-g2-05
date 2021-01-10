@@ -601,7 +601,6 @@ public class TeamControllerTest {
 		.andExpect(view().name("redirect:/leagues"));
 	}
 
-
 	@WithMockUser(value = "spring")
 	@Test
 	void testMyTeams() throws Exception {

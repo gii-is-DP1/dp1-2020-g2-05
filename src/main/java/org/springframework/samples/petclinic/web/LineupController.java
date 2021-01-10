@@ -11,6 +11,7 @@ import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.GranPremio;
 import org.springframework.samples.petclinic.model.Lineup;
 import org.springframework.samples.petclinic.model.Pilot;
+import org.springframework.samples.petclinic.model.Recruit;
 import org.springframework.samples.petclinic.service.GranPremioService;
 import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.LineupService;
@@ -62,8 +63,9 @@ public class LineupController {
 	}
 
 	@ModelAttribute("recruitsSelection")
-	public List<Pilot> getAllRecruits(@PathVariable("teamId") int teamId) {
-		return this.recruitService.getPilotsByTeam(teamId);
+	public List<Recruit> getAllRecruits(@PathVariable("teamId") int teamId) {
+//		return this.recruitService.getPilotsByTeam(teamId);
+		return this.recruitService.getRecruitsNotOnSaleByTeam(teamId);
 	}
 	
 	@GetMapping("/lineups")

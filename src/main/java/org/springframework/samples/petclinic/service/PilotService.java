@@ -91,8 +91,8 @@ public class PilotService {
 	}
 
 	@Transactional
-	public Iterable<Pilot> findAll() {
-		return pilotRepository.findAll();
+	public List<Pilot> findAll() {
+		return (List<Pilot>) pilotRepository.findAll();
 	}
 
 	public void delete(Pilot pilotId) {
