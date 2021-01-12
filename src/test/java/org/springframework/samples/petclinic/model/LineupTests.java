@@ -6,6 +6,8 @@ import org.springframework.samples.petclinic.customAssertions.Assertions;
 
 public class LineupTests {
 	
+//	org.springframework.samples.petclinic.entryPointsForAssertions.Assertions.assertThat(lineup). <-- Hay que importar ese paquete
+
 	@Test
 	void validacionNotEmptyPositive() {
 		Lineup lineup = new Lineup();

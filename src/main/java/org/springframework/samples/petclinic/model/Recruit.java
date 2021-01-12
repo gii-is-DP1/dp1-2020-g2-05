@@ -86,11 +86,8 @@ public class Recruit extends BaseEntity {
 
 	@Override
 	public String toString() {
-		return "Recruit ["
-//				+ "lineup1=" + lineup1 + ", lineup2=" + lineup2 + ","
-//				+ " offer=" + offer + ", "
-				+ "pilot=" + pilot
-				+ ", team=" + team + "]";
+		return pilot.getName() + " " + pilot.getLastName() + ", " + team.getLeague().getId();
+		// NO TOCAR, POR FAVOR, QUE SI NO, NO FUNCIONA NADA DE LINEUP :(
 	}
 
 }

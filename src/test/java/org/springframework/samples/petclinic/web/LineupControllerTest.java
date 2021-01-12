@@ -269,7 +269,7 @@ public class LineupControllerTest {
 		.andExpect(model().attribute("lineup", hasProperty("category", is(lineup.getCategory()))))
 		.andExpect(model().attribute("lineup", hasProperty("gp", is(lineup.getGp()))))
 		.andExpect(model().attribute("leagueCategory", is(lineup.getCategory())))
-		.andExpect(view().name("lineups/lineupsEdit"));
+		.andExpect(view().name("thymeleaf/lineupsEdit"));
 	}
 	
 	
@@ -351,7 +351,7 @@ public class LineupControllerTest {
 				.andExpect(status().isOk())
 				.andExpect(model().attributeHasErrors("lineup"))
 				.andExpect(model().attributeErrorCount("lineup", 4))
-				.andExpect(view().name("lineups/lineupsEdit"));
+				.andExpect(view().name("thymeleaf/lineupsEdit"));
 	}
 	
 	@WithMockUser(value = "spring")
@@ -381,7 +381,7 @@ public class LineupControllerTest {
 //		.andExpect(model().attribute("lineup", hasProperty("category", is(lineup.getCategory()))))
 //		.andExpect(model().attribute("lineup", hasProperty("team", is(lineup.getTeam()))))
 //		.andExpect(model().attribute("lineup", hasProperty("gp", is(lineup.getGp()))))
-		.andExpect(view().name("lineups/lineupsEdit"));
+		.andExpect(view().name("thymeleaf/lineupsEdit"));
 	}
 	
 	@WithMockUser(value = "spring")
@@ -397,24 +397,6 @@ public class LineupControllerTest {
 		.andExpect(view().name("redirect:/leagues/{leagueId}/teams/{teamId}/details"));
 	}
 
-//	@PostMapping(value = "/editLineup/{lineupId}")
-//	public String editarLineupPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
-//			@Valid Lineup lineup, BindingResult result, ModelMap model) {
-//		if (result.hasErrors()) {
-//			GranPremio currentGP = this.lineupService.findLineup(lineup.getId()).get().getGp();
-//			lineup.setGp(currentGP);
-//			model.put("lineup", lineup);
-//			return "lineups/lineupsEdit";
-//		} else {
-//			Lineup lineupToUpdate = this.lineupService.findLineup(lineup.getId()).get();
-//			BeanUtils.copyProperties(lineup, lineupToUpdate);
-//			lineupToUpdate.setGp(this.granPremioService.findGPById(lineupToUpdate.getGp().getId()).get());
-//			this.lineupService.saveLineup(lineupToUpdate);
-//			model.addAttribute("message", "Lineup successfully saved!");
-//			return "redirect:/leagues/{leagueId}/teams/{teamId}/details";
-//		}
-//	}
-	
 	@WithMockUser(value = "spring")
 	@Test
 	void testEditLineupPost() throws Exception {
@@ -462,7 +444,7 @@ public class LineupControllerTest {
 				.andExpect(status().isOk())
 				.andExpect(model().attributeHasErrors("lineup"))
 				.andExpect(model().attributeErrorCount("lineup", 4))
-				.andExpect(view().name("lineups/lineupsEdit"));
+				.andExpect(view().name("thymeleaf/lineupsEdit"));
 	}
 	
 	@WithMockUser(value = "spring")
