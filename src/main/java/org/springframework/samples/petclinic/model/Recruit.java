@@ -86,7 +86,13 @@ public class Recruit extends BaseEntity {
 
 	@Override
 	public String toString() {
-		return pilot.getName() + " " + pilot.getLastName() + ", " + team.getLeague().getId();
+		String r = "";
+		try {
+			r = pilot.getName() + " " + pilot.getLastName() + ", " + team.getLeague().getId();
+		} catch (Exception e) {
+			r = "Ha habido un error en Recruit.toString(): " + e;
+		}
+		return r;
 		// NO TOCAR, POR FAVOR, QUE SI NO, NO FUNCIONA NADA DE LINEUP :(
 	}
 

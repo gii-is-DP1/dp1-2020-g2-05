@@ -125,7 +125,7 @@ public class LineupControllerTest {
 	private	Lineup lineup = new Lineup();
 	TablaConsultas TCConsulta = new TablaConsultas();
 	private GranPremio gp = new GranPremio();
-	private List<Pilot> listaPilotos = new ArrayList<Pilot>();
+	private List<Recruit> listaPilotos = new ArrayList<Recruit>();
 	Recruit recruit1 = new Recruit();
 	Recruit recruit2 = new Recruit();
 
@@ -183,8 +183,8 @@ public class LineupControllerTest {
 		pilot2.setLastName("Perez");
 		pilot2.setNationality("Spain");
 		
-		listaPilotos.add(pilot1);
-		listaPilotos.add(pilot2);
+		listaPilotos.add(recruit1);
+		listaPilotos.add(recruit2);
 
 		recruit1.setId(1);
 		recruit1.setPilot(pilot1);
@@ -400,11 +400,11 @@ public class LineupControllerTest {
 	@Test
 	void testEditLineupPost() throws Exception {
 		given(this.lineupService.findLineup(lineup.getId())).willReturn(Optional.of(lineup));
-		given(this.granPremioService.findGPById(Mockito.any(Integer.class))).willReturn(Optional.of(gp));
+		given(this.granPremioService.findGPById(Mockito.anyInt())).willReturn(Optional.of(gp));
 	   
 		mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/editLineup/{lineupId}", TEST_LEAGUE_ID, TEST_TEAM_ID, TEST_LINEUP_ID)
 				.with(csrf())
-				.header("Referer", "/leagues/1/teams/1/details")
+//				.header("Referer", "/leagues/1/teams/1/details")
 				.param("id", lineup.getId().toString())
 				.param("category", lineup.getCategory().toString())
 				.param("team", lineup.getTeam().getId().toString())

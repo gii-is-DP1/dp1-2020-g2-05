@@ -204,7 +204,7 @@ public class LineupController {
 	}
 	
 	@GetMapping(path = "/editLineup/{lineupId}")
-	public String editarLineupGet(@RequestHeader(name = "Referer") String referer,
+	public String editarLineupGet(//@RequestHeader(name = "Referer") String referer,
 			@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
 			@PathVariable("lineupId") int lineupId, ModelMap model) {
 
@@ -236,9 +236,11 @@ public class LineupController {
 		} else {
 			Lineup lineupToUpdate = this.lineupService.findLineup(lineup.getId()).get();
 			log.info("Updating lineup with ID: " + lineup.getId());
+			log.info("Lineup: " + lineup);
 			BeanUtils.copyProperties(lineup, lineupToUpdate);
 			GranPremio gp = this.granPremioService.findGPById(lineupToUpdate.getGp().getId()).get();
 			lineupToUpdate.setGp(gp);
+			log.debug("lineupToUpdate: " + lineupToUpdate);
 			this.lineupService.saveLineup(lineupToUpdate);
 			log.info("Saving edited lineup: " + lineupToUpdate);
 //			log.info("El gp asociado es: " + lineupToUpdate.getGp().getId());
