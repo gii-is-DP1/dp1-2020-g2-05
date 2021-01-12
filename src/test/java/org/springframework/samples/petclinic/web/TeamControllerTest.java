@@ -247,7 +247,6 @@ public class TeamControllerTest {
 		pilot2.setLastName("Perez");
 		pilot2.setNationality("Spain");
 		
-		Recruit recruit1 = new Recruit();
 		recruit1.setId(1);
 		recruit1.setPilot(pilot1);
 		recruit1.setTeam(team);

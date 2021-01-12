@@ -125,8 +125,9 @@ public class LineupControllerTest {
 	private	Lineup lineup = new Lineup();
 	TablaConsultas TCConsulta = new TablaConsultas();
 	private GranPremio gp = new GranPremio();
-	private List<Pilot> listaPilotos = new ArrayList<Pilot>();
-
+	private List<Recruit> listaPilotos = new ArrayList<Recruit>();
+	Recruit recruit1 = new Recruit();
+	Recruit recruit2 = new Recruit();
 
 	@BeforeEach 
 	void setup() throws DataAccessException {
@@ -182,15 +183,13 @@ public class LineupControllerTest {
 		pilot2.setLastName("Perez");
 		pilot2.setNationality("Spain");
 		
-		listaPilotos.add(pilot1);
-		listaPilotos.add(pilot2);
+		listaPilotos.add(recruit1);
+		listaPilotos.add(recruit2);
 
-		Recruit recruit1 = new Recruit();
 		recruit1.setId(1);
 		recruit1.setPilot(pilot1);
 		recruit1.setTeam(team);
 		
-		Recruit recruit2 = new Recruit();
 		recruit2.setId(2);
 		recruit2.setPilot(pilot2);
 		recruit2.setTeam(team);
@@ -269,7 +268,7 @@ public class LineupControllerTest {
 		.andExpect(model().attribute("lineup", hasProperty("category", is(lineup.getCategory()))))
 		.andExpect(model().attribute("lineup", hasProperty("gp", is(lineup.getGp()))))
 		.andExpect(model().attribute("leagueCategory", is(lineup.getCategory())))
-		.andExpect(view().name("lineups/lineupsEdit"));
+		.andExpect(view().name("thymeleaf/lineupsEdit"));
 	}
 	
 	
@@ -351,7 +350,7 @@ public class LineupControllerTest {
 				.andExpect(status().isOk())
 				.andExpect(model().attributeHasErrors("lineup"))
 				.andExpect(model().attributeErrorCount("lineup", 4))
-				.andExpect(view().name("lineups/lineupsEdit"));
+				.andExpect(view().name("thymeleaf/lineupsEdit"));
 	}
 	
 	@WithMockUser(value = "spring")
@@ -381,7 +380,7 @@ public class LineupControllerTest {
 //		.andExpect(model().attribute("lineup", hasProperty("category", is(lineup.getCategory()))))
 //		.andExpect(model().attribute("lineup", hasProperty("team", is(lineup.getTeam()))))
 //		.andExpect(model().attribute("lineup", hasProperty("gp", is(lineup.getGp()))))
-		.andExpect(view().name("lineups/lineupsEdit"));
+		.andExpect(view().name("thymeleaf/lineupsEdit"));
 	}
 	
 	@WithMockUser(value = "spring")
@@ -397,33 +396,15 @@ public class LineupControllerTest {
 		.andExpect(view().name("redirect:/leagues/{leagueId}/teams/{teamId}/details"));
 	}
 
-//	@PostMapping(value = "/editLineup/{lineupId}")
-//	public String editarLineupPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
-//			@Valid Lineup lineup, BindingResult result, ModelMap model) {
-//		if (result.hasErrors()) {
-//			GranPremio currentGP = this.lineupService.findLineup(lineup.getId()).get().getGp();
-//			lineup.setGp(currentGP);
-//			model.put("lineup", lineup);
-//			return "lineups/lineupsEdit";
-//		} else {
-//			Lineup lineupToUpdate = this.lineupService.findLineup(lineup.getId()).get();
-//			BeanUtils.copyProperties(lineup, lineupToUpdate);
-//			lineupToUpdate.setGp(this.granPremioService.findGPById(lineupToUpdate.getGp().getId()).get());
-//			this.lineupService.saveLineup(lineupToUpdate);
-//			model.addAttribute("message", "Lineup successfully saved!");
-//			return "redirect:/leagues/{leagueId}/teams/{teamId}/details";
-//		}
-//	}
-	
 	@WithMockUser(value = "spring")
 	@Test
 	void testEditLineupPost() throws Exception {
 		given(this.lineupService.findLineup(lineup.getId())).willReturn(Optional.of(lineup));
-		given(this.granPremioService.findGPById(Mockito.any(Integer.class))).willReturn(Optional.of(gp));
+		given(this.granPremioService.findGPById(Mockito.anyInt())).willReturn(Optional.of(gp));
 	   
 		mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/editLineup/{lineupId}", TEST_LEAGUE_ID, TEST_TEAM_ID, TEST_LINEUP_ID)
 				.with(csrf())
-				.header("Referer", "/leagues/1/teams/1/details")
+//				.header("Referer", "/leagues/1/teams/1/details")
 				.param("id", lineup.getId().toString())
 				.param("category", lineup.getCategory().toString())
 				.param("team", lineup.getTeam().getId().toString())
@@ -462,7 +443,7 @@ public class LineupControllerTest {
 				.andExpect(status().isOk())
 				.andExpect(model().attributeHasErrors("lineup"))
 				.andExpect(model().attributeErrorCount("lineup", 4))
-				.andExpect(view().name("lineups/lineupsEdit"));
+				.andExpect(view().name("thymeleaf/lineupsEdit"));
 	}
 	
 	@WithMockUser(value = "spring")
