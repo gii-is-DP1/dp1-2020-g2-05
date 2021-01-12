@@ -126,7 +126,8 @@ public class LineupControllerTest {
 	TablaConsultas TCConsulta = new TablaConsultas();
 	private GranPremio gp = new GranPremio();
 	private List<Pilot> listaPilotos = new ArrayList<Pilot>();
-
+	Recruit recruit1 = new Recruit();
+	Recruit recruit2 = new Recruit();
 
 	@BeforeEach 
 	void setup() throws DataAccessException {
@@ -185,12 +186,10 @@ public class LineupControllerTest {
 		listaPilotos.add(pilot1);
 		listaPilotos.add(pilot2);
 
-		Recruit recruit1 = new Recruit();
 		recruit1.setId(1);
 		recruit1.setPilot(pilot1);
 		recruit1.setTeam(team);
 		
-		Recruit recruit2 = new Recruit();
 		recruit2.setId(2);
 		recruit2.setPilot(pilot2);
 		recruit2.setTeam(team);
