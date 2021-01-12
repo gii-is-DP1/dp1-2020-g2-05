@@ -9,6 +9,9 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 @Entity
 @Table(name = "Transaction")
 public class Transaction extends BaseEntity implements Comparable<Transaction> {
@@ -30,6 +33,7 @@ public class Transaction extends BaseEntity implements Comparable<Transaction> {
 	private String concept;
 
 	@ManyToOne()
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Team team;
 
 	public LocalDate getDate() {

@@ -114,6 +114,8 @@ public class TeamControllerTest {
     private User user1 = new User();
 
     private List<Team> list1 = new ArrayList<>();
+    private List<Team> list2 = new ArrayList<>();
+
 	League liga = new League();
 	League liga1 = new League();
 	Team team = new Team();
@@ -581,6 +583,17 @@ public class TeamControllerTest {
 	@WithMockUser(value = "spring")
 	@Test
 	void testDeleteTeam() throws Exception {
+		given(this.teamService.findTeamByLeagueId(TEST_LEAGUE_ID)).willReturn(list1);
+
+		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/delete", TEST_LEAGUE_ID, TEST_TEAM_ID))
+		.andExpect(status().is3xxRedirection())
+		.andExpect(view().name("redirect:/leagues/" + TEST_LEAGUE_ID+ "/teams"));
+	}
+	
+	@WithMockUser(value = "spring")
+	@Test
+	void testDeleteTeam1() throws Exception {
+		given(this.teamService.findTeamByLeagueId(TEST_LEAGUE_ID)).willReturn(list2);
 
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/delete", TEST_LEAGUE_ID, TEST_TEAM_ID))
 		.andExpect(status().is3xxRedirection())
