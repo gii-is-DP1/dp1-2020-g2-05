@@ -240,6 +240,9 @@ public class PilotService {
 				result.setLap(false);
 				result.setPole(false);
 				this.resultService.saveResult(result);
+				Set<Result> results = new HashSet<Result>();
+				results.add(result);
+				pilot.setResults(results);
 				this.savePilot(pilot);
 			}
 			log.info("La api ha asociado los resultados al gp : " + gp.getSite());

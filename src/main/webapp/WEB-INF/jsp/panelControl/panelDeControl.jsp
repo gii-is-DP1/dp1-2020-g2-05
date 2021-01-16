@@ -30,14 +30,23 @@
 			<spring:param name="date" value="${res.date0}" />
 			<spring:param name="code" value="${res.raceCode}" />
 			<spring:param name="id" value="${res.id}" />
-			</spring:url> 			 			 <c:if test="${res.hasBeenRun==false}">
-			<a href="${fn:escapeXml(leagueUrl)}"> Poblar</a></c:if>
+			</spring:url> 			 			
+			 <c:if test="${res.hasBeenRun==false}">
+			<a href="${fn:escapeXml(leagueUrl)}"> Poblar</a>
+			</c:if>
 			
 			<spring:url value="/granPremios/{id}/delete" var="deleteGranPremioUrl">
 			<spring:param name="id" value="${res.id}" />
 			</spring:url> 			 			 
 			<a href="${fn:escapeXml(deleteGranPremioUrl)}"> Delete</a>
 			
+		    <c:if test="${res.hasBeenRun==true}">
+			<spring:url value="/granPremios/{id}/validateResults/{code}" var="deleteGranPremioUrl">
+			<spring:param name="id" value="${res.id}" />
+			<spring:param name="code" value="${res.raceCode}" />
+			</spring:url> 			 			 
+			<a href="${fn:escapeXml(deleteGranPremioUrl)}"> Validate Results</a>
+			</c:if>
 			 </h5>
 			
 				

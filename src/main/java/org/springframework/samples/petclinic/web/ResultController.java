@@ -1,17 +1,22 @@
 package org.springframework.samples.petclinic.web;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.GranPremio;
+import org.springframework.samples.petclinic.model.Lineup;
 import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Record;
 import org.springframework.samples.petclinic.model.Result;
 import org.springframework.samples.petclinic.service.GranPremioService;
+import org.springframework.samples.petclinic.service.LineupService;
 import org.springframework.samples.petclinic.service.PilotService;
 import org.springframework.samples.petclinic.service.ResultService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
@@ -40,12 +45,14 @@ public class ResultController {
 
 	private  ResultService resultService;
 	private GranPremioService GPService;
+	private LineupService lineupService;
 //	private  PilotService pilotService;
 
 	@Autowired
-	public ResultController(ResultService resultService, GranPremioService GPService) {//PilotService pilotService) {
+	public ResultController(ResultService resultService, GranPremioService GPService,LineupService lineupService) {//PilotService pilotService) {
 		this.resultService = resultService;
 		this.GPService = GPService;
+		this.lineupService=lineupService;
 //		this.pilotService = pilotService;
 	}
 
@@ -148,4 +155,21 @@ public class ResultController {
 //		}
 //	}
 
+
+	@GetMapping(value = "/validateResults/{code}")
+	public String validateResults(@PathVariable("gpId") Integer gpId,@PathVariable("code") String code,ModelMap model) {
+		List<Result> todosLosResultados = new ArrayList<Result>();
+		List<Result> lista = this.resultService.findResultsByCategoryAndId(gpId, code, Category.MOTO2);
+		List<Result> lista2 = this.resultService.findResultsByCategoryAndId(gpId, code, Category.MOTO3);
+		List<Result> lista3 = this.resultService.findResultsByCategoryAndId(gpId, code, Category.MOTOGP);
+		todosLosResultados.addAll(lista);
+		todosLosResultados.addAll(lista2);
+		todosLosResultados.addAll(lista3);
+		List<Lineup> listaLineups =this.lineupService.findAll();
+		
+		
+		this.resultService.validateResults(listaLineups, todosLosResultados,gpId);
+		log.info("resultados validados  correctamente");
+		return "redirect:/controlPanelSP"; 
+	}
 }

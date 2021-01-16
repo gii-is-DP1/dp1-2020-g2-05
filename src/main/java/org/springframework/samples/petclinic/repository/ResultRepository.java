@@ -17,15 +17,24 @@ package org.springframework.samples.petclinic.repository;
 
 import java.util.List;
 
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
-import org.springframework.samples.petclinic.model.BaseEntity;
+import org.springframework.samples.petclinic.model.Authorities;
 import org.springframework.samples.petclinic.model.Category;
+import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Result;
-
+import org.springframework.samples.petclinic.model.User;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 import motogpAPI.RaceCode;
 
 
@@ -37,6 +46,6 @@ public interface ResultRepository extends CrudRepository<Result, Integer> {
 
 	@Query("SELECT r FROM Result r WHERE r.gp.id = :gpId AND r.gp.raceCode = :raceCode AND r.pilot.category = :category")
 	List<Result> findResultsByCategoryAndId(Integer gpId, String raceCode, Category category) throws DataAccessException;
-
+	
 
 }
