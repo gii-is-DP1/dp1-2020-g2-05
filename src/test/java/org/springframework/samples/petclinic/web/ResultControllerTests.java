@@ -30,6 +30,7 @@ import org.springframework.samples.petclinic.model.RecordPole;
 import org.springframework.samples.petclinic.model.RecordVueltaRapida;
 import org.springframework.samples.petclinic.model.Result;
 import org.springframework.samples.petclinic.service.GranPremioService;
+import org.springframework.samples.petclinic.service.LineupService;
 import org.springframework.samples.petclinic.service.ResultService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -49,6 +50,9 @@ class ResultControllerTests {
 	
 	@MockBean
 	private ResultService resultService;
+	@MockBean
+	private LineupService lineupService;
+
 	
 	@MockBean
 	private GranPremioService GPService;
