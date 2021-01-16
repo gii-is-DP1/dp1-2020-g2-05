@@ -597,7 +597,7 @@ public class TeamControllerTest {
 
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/delete", TEST_LEAGUE_ID, TEST_TEAM_ID))
 		.andExpect(status().is3xxRedirection())
-		.andExpect(view().name("redirect:/leagues"));
+		.andExpect(view().name("redirect:/leagues/"+TEST_LEAGUE_ID+"/teams"));
 	}
 
 	@WithMockUser(value = "spring")

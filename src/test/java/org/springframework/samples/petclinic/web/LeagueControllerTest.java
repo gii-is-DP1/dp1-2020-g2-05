@@ -186,7 +186,6 @@ public class LeagueControllerTest {
     		
     		mockMvc.perform(get("/leagues")).andExpect(status().isOk())
     			.andExpect(view().name("leagues/leagueList"))
-    			.andExpect(model().attribute("admin", is(true)))
     			.andExpect(model().attribute("categoriaActual", is(Category.MOTO3)))
     			.andExpect(model().attribute("carrerasCompletadas", is(0)))
     			.andExpect(model().attribute("ligas", Matchers.hasItem(Matchers.<League> hasProperty("leagueCode", is(liga.getLeagueCode())))));
@@ -202,7 +201,6 @@ public class LeagueControllerTest {
     		
     		mockMvc.perform(get("/leagues")).andExpect(status().isOk())
     			.andExpect(view().name("leagues/leagueList"))
-    			.andExpect(model().attribute("user", is(true)))
     			.andExpect(model().attribute("ligas", Matchers.hasItem(Matchers.<League> hasProperty("leagueCode", is(liga.getLeagueCode())))));
     					       		
     	}
@@ -247,7 +245,7 @@ public class LeagueControllerTest {
     	@WithMockUser(value = "spring")
     	@Test
     	void testIncreaseGPsInLeague() throws Exception {
-    		mockMvc.perform(get("/leagues//increase" , TEST_LEAGUE_ID).flashAttr("category", "MOTO3"))
+    		mockMvc.perform(get("/leagues/increase/{category}" , "MOTO3"))
     		.andExpect(status().is3xxRedirection())
     		.andExpect(view().name("redirect:/leagues"));
 

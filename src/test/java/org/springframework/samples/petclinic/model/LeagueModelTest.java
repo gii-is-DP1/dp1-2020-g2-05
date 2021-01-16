@@ -101,10 +101,9 @@ class LeagueModelTest {
 		assertThat(constraintViolations.size()).isEqualTo(2);
 		ConstraintViolation<League> violation = constraintViolations.get(0);
 		assertThat(violation.getPropertyPath().toString()).isEqualTo("name");
-		assertThat(violation.getMessage()).isEqualTo("must not be blank");
 		violation = constraintViolations.get(1);
 		assertThat(violation.getPropertyPath().toString()).isEqualTo("name");
-		assertThat(violation.getMessage()).isEqualTo("must not be empty");
+	
 	}
 	
 	@Test

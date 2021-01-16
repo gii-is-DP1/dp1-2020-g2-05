@@ -16,6 +16,7 @@ import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class PanelDeControlController {
@@ -32,9 +33,23 @@ public class PanelDeControlController {
 	}
 
 
-	@GetMapping(path="/controlPanel")
-	public String muestraPanel(ModelMap model) throws ParseException {	
+	
+	@GetMapping(path="/controlPanelSP")
+	public String muestraPanelSinParams(ModelMap model) throws ParseException {	
 		
+		
+		List<GranPremio> gps = GPService.findAllActualYear(2020).stream().collect(Collectors.toSet()).stream().collect(Collectors.toList());
+		Set<GranPremio> sortedGps = gps.stream().collect(Collectors.toSet());
+		model.addAttribute("listaGP",sortedGps.stream().sorted(Comparator.comparing(GranPremio::getId)).collect(Collectors.toList()));
+
+		return "/panelControl/panelDeControl";
+		 
+	}
+
+	
+	@GetMapping(path={"/controlPanel/{pth}/{code}"})
+	public String muestraPanel(@PathVariable("pth") String pth,@PathVariable("code") String code,ModelMap model) throws ParseException {	
+		model = this.leagueService.descifraUri(pth, code, model);
 		List<GranPremio> gps = GPService.findAllActualYear(2020).stream().collect(Collectors.toSet()).stream().collect(Collectors.toList());
 		Set<GranPremio> sortedGps = gps.stream().collect(Collectors.toSet());
 		model.addAttribute("listaGP",sortedGps.stream().sorted(Comparator.comparing(GranPremio::getId)).collect(Collectors.toList()));
