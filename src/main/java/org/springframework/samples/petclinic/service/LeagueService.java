@@ -17,6 +17,7 @@ import org.springframework.samples.petclinic.repository.TeamRepository;
 import org.springframework.samples.petclinic.web.duplicatedLeagueNameException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.ModelMap;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -171,4 +172,51 @@ public class LeagueService {
 		return leagueRepository.findById(leagueId);
 	}
 
+	
+	public ModelMap descifraUri(String pth,String code,ModelMap model) {
+		//dependiendo del path descifro lo que la api no ha podido encontrar
+		// el index 0 significa cuantos no ha podido encontrar(0 a 2)
+		//los sigiuentes significan, 3 moto3,2 moto2,GP motoGP
+		//por ejemplo el path 12 significa que no ha encontrado un resultado y que es moto2
+		// el path 23G que no ha encontrado 2 y que es moto3 y moto gp
+		//el path  332G que no ha encontrado 3 y que son moto3,moto2 y motogp
+		//...	
+		if(pth.charAt(0)=='1'){
+			if(pth.charAt(1)=='3') {
+				model.addAttribute("messageMoto3NotFound",
+						"API has not found any result to code " + code + " for moto3");
+			}else if(pth.charAt(1)=='2') {
+				model.addAttribute("messageMoto2NotFound",
+						"API has not found any result to code " + code + " for moto2");
+			}else if(pth.charAt(1)=='G') {
+				model.addAttribute("messageMotogpNotFound",
+						"API has not found any result to code " + code + " for motogp");
+			}
+		}else if(pth.charAt(0)=='2') {
+			if(pth.charAt(1)=='3' && pth.charAt(2)=='2') {
+				model.addAttribute("messageMoto3NotFound",
+						"API has not found any result to code " + code + " for moto3");
+				model.addAttribute("messageMoto2NotFound",
+						"API has not found any result to code " + code + " for moto2");
+			}else if(pth.charAt(1)=='3' && pth.charAt(2)=='G') {
+				model.addAttribute("messageMoto3NotFound",
+						"API has not found any result to code " + code + " for moto3");
+				model.addAttribute("messageMotogpNotFound",
+						"API has not found any result to code " + code + " for motogp");
+			}else if(pth.charAt(1)=='2' && pth.charAt(2)=='G') {
+				model.addAttribute("messageMoto2NotFound",
+						"API has not found any result to code " + code + " for moto2");
+				model.addAttribute("messageMotogpNotFound",
+						"API has not found any result to code " + code + " for motogp");
+			}
+		}else if(pth.charAt(0)=='3') {
+			model.addAttribute("messageMoto2NotFound",
+					"API has not found any result to code " + code + " for moto2");
+			model.addAttribute("messageMotogpNotFound",
+					"API has not found any result to code " + code + " for motogp");
+			model.addAttribute("messageMoto3NotFound",
+					"API has not found any result to code " + code + " for moto3");
+		}
+		return model;
+	}
 }

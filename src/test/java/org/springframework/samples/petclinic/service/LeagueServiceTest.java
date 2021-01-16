@@ -22,6 +22,7 @@ import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.web.duplicatedLeagueNameException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.ModelMap;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 public class LeagueServiceTest {
@@ -235,6 +236,72 @@ public class LeagueServiceTest {
 		 	String aut = this.leagueService.findAuthoritiesByUsername("notFoundUserqwertyuioawsdeftg");
 			assertThat(aut).isEqualTo(null);
 		}
-	
+	 @Test
+		void shouldDecodeMoto2NotFound() {
+		 String toDecode = "12";
+		 String code="TEST";
+		 ModelMap model = new ModelMap();
+			model= this.leagueService.descifraUri(toDecode, code, model);
+			assertThat(model.getAttribute("messageMoto2NotFound")).isEqualTo("API has not found any result to code " + code + " for moto2");
+		}
+	@Test
+	void shouldDecodeMotoGPNotFound() {
+	 String toDecode = "1G";
+	 String code="TEST";
+	 ModelMap model = new ModelMap();
+		model= this.leagueService.descifraUri(toDecode, code, model);
+		assertThat(model.getAttribute("messageMotogpNotFound")).isEqualTo("API has not found any result to code " + code + " for motogp");
+	}
 	 
+	@Test
+	void shouldDecodeMotoGPAndMoto3NotFound() {
+	 String toDecode = "23G";
+	 String code="TEST";
+	 ModelMap model = new ModelMap();
+		model= this.leagueService.descifraUri(toDecode, code, model);
+		assertThat(model.getAttribute("messageMoto3NotFound")).isEqualTo("API has not found any result to code " + code + " for moto3");
+		assertThat(model.getAttribute("messageMotogpNotFound")).isEqualTo("API has not found any result to code " + code + " for motogp");
+	}
+
+	@Test
+	void shouldDecodeMoto3AndMotoGPNotFound() {
+	 String toDecode = "232";
+	 String code="TEST";
+	 ModelMap model = new ModelMap();
+		model= this.leagueService.descifraUri(toDecode, code, model);
+		assertThat(model.getAttribute("messageMoto3NotFound")).isEqualTo("API has not found any result to code " + code + " for moto3");
+		assertThat(model.getAttribute("messageMoto2NotFound")).isEqualTo("API has not found any result to code " + code + " for moto2");
+	}
+
+	@Test
+	void shouldDecodeMoto3AndMoto2NotFound() {
+	 String toDecode = "232";
+	 String code="TEST";
+	 ModelMap model = new ModelMap();
+		model= this.leagueService.descifraUri(toDecode, code, model);
+		assertThat(model.getAttribute("messageMoto3NotFound")).isEqualTo("API has not found any result to code " + code + " for moto3");
+		assertThat(model.getAttribute("messageMoto2NotFound")).isEqualTo("API has not found any result to code " + code + " for moto2");
+	}
+
+	@Test
+	void shouldDecodeMoto2AndMotoGPNotFound() {
+	 String toDecode = "22GP";
+	 String code="TEST";
+	 ModelMap model = new ModelMap();
+		model= this.leagueService.descifraUri(toDecode, code, model);
+		assertThat(model.getAttribute("messageMoto2NotFound")).isEqualTo("API has not found any result to code " + code + " for moto2");
+		assertThat(model.getAttribute("messageMotogpNotFound")).isEqualTo("API has not found any result to code " + code + " for motogp");
+	}
+
+	@Test
+	void shouldDecodeMoto2AndMotoGPAndMoto3NotFound() {
+	 String toDecode = "332GP";
+	 String code="TEST";
+	 ModelMap model = new ModelMap();
+		model= this.leagueService.descifraUri(toDecode, code, model);
+		assertThat(model.getAttribute("messageMoto3NotFound")).isEqualTo("API has not found any result to code " + code + " for moto3");
+		assertThat(model.getAttribute("messageMoto2NotFound")).isEqualTo("API has not found any result to code " + code + " for moto2");
+		assertThat(model.getAttribute("messageMotogpNotFound")).isEqualTo("API has not found any result to code " + code + " for motogp");
+	}
+
 }

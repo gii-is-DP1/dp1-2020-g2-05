@@ -37,9 +37,7 @@ import motogpAPI.Session;
 @Controller
 public class PoblarBaseDeDatosController {
 
-	LeagueController leagueController;
 	LeagueService leagueService;
-	PanelDeControlController PController;
 	UserService userService;
 	GranPremioService GPService;
 	PilotService pilotService;
@@ -47,13 +45,11 @@ public class PoblarBaseDeDatosController {
 
 	@Autowired
 	public PoblarBaseDeDatosController(LeagueService leagueService, UserService userService, PilotService pilotService,
-			LeagueController leagueController, PanelDeControlController PController, GranPremioService GPService,
+	 GranPremioService GPService,
 			TablaConsultasService TCService) {
 		this.leagueService = leagueService;
 		this.userService = userService;
 		this.pilotService = pilotService;
-		this.leagueController = leagueController;
-		this.PController = PController;
 		this.GPService = GPService;
 		this.TCService = TCService;
 	}
@@ -164,7 +160,7 @@ public class PoblarBaseDeDatosController {
 
 			}
 			model.addAttribute("category", form.getCategory());
-			return this.leagueController.incrementarLiga(model);
+			return "redirect:/leagues/increase/"+form.getCategory();
 		}
 
 	}
@@ -186,11 +182,16 @@ public class PoblarBaseDeDatosController {
 		form.setSession(Session.RACE);
 		form.setYear(Integer.parseInt((date.split("-")[0])));
 		log.info("Intentando obtener resultados para gp :" + gp);
+		Integer contador=0;
+		String notFound ="";
 		try {
 			this.pilotService.poblarBDCarreraACarrera(form, gp, true);
 		} catch (Exception e) {
 			model.addAttribute("messageMoto3NotFound",
 					"API has not found any result to date " + date + " and code " + code + " for moto3 ");
+			log.warn("API has not found any result to date " + date + " and code " + code + " for moto3 ");
+			contador++;
+			notFound+="3";
 		}
 		log.info("Resultados obtenidos :" + gp);
 
@@ -200,6 +201,10 @@ public class PoblarBaseDeDatosController {
 		} catch (Exception e) {
 			model.addAttribute("messageMoto2NotFound",
 					"API has not found any result to date " + date + " and code " + code + " for moto2");
+			log.warn("API has not found any result to date " + date + " and code " + code + " for moto2 ");
+			contador++;
+			notFound+="2";
+
 		}
 
 		try {
@@ -208,6 +213,10 @@ public class PoblarBaseDeDatosController {
 		} catch (Exception e) {
 			model.addAttribute("messageMotogpNotFound",
 					"API has not found any result to date " + date + " and code " + code + " for motogp");
+			log.warn("API has not found any result to date " + date + " and code " + code + " for motogp ");
+			contador++;
+			notFound+="G";
+
 		}
 		try {
 			this.GPService.populateRecord(gp);
@@ -217,7 +226,7 @@ public class PoblarBaseDeDatosController {
 		this.TCService.actualizarTabla(Category.MOTO2);
 		this.TCService.actualizarTabla(Category.MOTO3);
 		this.TCService.actualizarTabla(Category.MOTOGP);
-		return PController.muestraPanel(model);
+		return "redirect:/controlPanel/"+contador+notFound+"/"+code;
 	}
 
 }

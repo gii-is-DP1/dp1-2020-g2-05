@@ -38,9 +38,6 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 public class LeagueController {
 
-	private String AUTHORITY;
-
-	TeamController teamController;
 	TablaConsultasService TCService;
 	TeamService teamService;
 	LeagueService leagueService;
@@ -48,12 +45,11 @@ public class LeagueController {
 
 	@Autowired
 	public LeagueController(LeagueService leagueService, UserService userService, TablaConsultasService TCService,
-			TeamService teamService, TeamController teamController) {
+			TeamService teamService) {
 		this.leagueService = leagueService;
 		this.userService = userService;
 		this.TCService = TCService;
 		this.teamService = teamService;
-		this.teamController = teamController;
 	}
 
 	@InitBinder("league")
@@ -63,8 +59,6 @@ public class LeagueController {
 
 	@GetMapping("/leagues")
 	public String leagues(ModelMap modelMap) throws JSONException, IOException {
-		User user = this.userService.getUserSession();
-		AUTHORITY = this.leagueService.findAuthoritiesByUsername(user.getUsername());
 
 		Optional<TablaConsultas> tabla = this.TCService.getTabla();
 
@@ -77,12 +71,6 @@ public class LeagueController {
 			leagueList = leagueService.findAll();
 		} else {
 			log.info("No se han detectado ligas sin equipos");
-		}
-
-		if (AUTHORITY.equals("admin")) {  // se hace para que si el user
-			modelMap.addAttribute("admin", true);//no es admin no se muestre
-		} else if (!AUTHORITY.equals("admin")) {// el codigo de liga en la vista
-			modelMap.addAttribute("user", true);
 		}
 
 		modelMap.addAttribute("ligas", leagueList);
@@ -133,17 +121,13 @@ public class LeagueController {
 
 	}
 
-	@GetMapping(path = "/leagues/increase")
-	public String incrementarLiga(ModelMap model) throws DataAccessException, duplicatedLeagueNameException {
-//		AUTHORITY = this.leagueService.findAuthoritiesByUsername(this.userService.getUserSession().getUsername());
-//		if(!(AUTHORITY.equals("admin"))) {
-//			return "redirect:/leagues";
-//		}
+	@GetMapping(path = "/leagues/increase/{category}")
+	public String incrementarLiga(@PathVariable("category") String category,ModelMap model) throws DataAccessException, duplicatedLeagueNameException {
 		
 		//aqui se entra cuando se corre un GP para aumentar el numero de carreras
-		Category category = Category.valueOf(model.getAttribute("category").toString());
+		Category categoryP = Category.valueOf(category);
 
-		TCService.actualizarTabla(category);
+		TCService.actualizarTabla(categoryP);
 
 		return "redirect:/leagues";
 	}

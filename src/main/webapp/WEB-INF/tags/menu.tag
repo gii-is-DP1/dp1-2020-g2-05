@@ -55,8 +55,8 @@
 					<span>Settle DB</span>
 				</petclinic:menuItem>
 				
-				<petclinic:menuItem active="${name eq 'CP'}" url="/controlPanel"
-					title="leads to /controlPanel">
+				<petclinic:menuItem active="${name eq 'CP'}" url="/controlPanelSP"
+					title="leads to /controlPanelSP">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Control Panel<span>
 				</petclinic:menuItem>

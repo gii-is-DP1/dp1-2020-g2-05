@@ -259,7 +259,7 @@ public class TeamController {
 			log.info("Equipo " + team + "borrado correctamente");
 			model.addAttribute("message", "Team successfully deleted!");
 			List<Team> t = this.teamService.findTeamByLeagueId(leagueId);
-			if(t.isEmpty()) {
+			if(t.size()==1 && t.get(0).getName().equals("Sistema")) {
 				return "redirect:/leagues";
 			}else {
 				return "redirect:/leagues/" + leagueId + "/teams";
