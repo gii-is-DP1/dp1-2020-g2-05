@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.web;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -170,6 +171,9 @@ public class ResultController {
 		
 		this.resultService.validateResults(listaLineups, todosLosResultados,gpId);
 		log.info("resultados validados  correctamente");
+		this.resultService.createTimeMessage();
+		log.info("mensaje temporal creado hasta mañana a las " + LocalTime.now());
+
 		return "redirect:/controlPanelSP"; 
 	}
 }

@@ -47,6 +47,9 @@ public class TablaConsultas extends BaseEntity{
 	@NotNull
 	private Category currentCategory;
 
+	@Column(name = "time_message")        
+	private String timeMessage;
+
 	public Integer getActualRace() {
 		return actualRace;
 	}
@@ -71,11 +74,20 @@ public class TablaConsultas extends BaseEntity{
 		this.currentCategory = currentCategory;
 	}
 
+	public String getTimeMessage() {
+		return timeMessage;
+	}
+
+	public void setTimeMessage(String timeMessage) {
+		this.timeMessage = timeMessage;
+	}
+
 	@Override
 	public String toString() {
-		return "tablaConsultas [actualRace=" + actualRace + ", racesCompleted=" + racesCompleted + ", currentCategory="
-				+ currentCategory + "]";
+		return "TablaConsultas [actualRace=" + actualRace + ", racesCompleted=" + racesCompleted + ", currentCategory="
+				+ currentCategory + ", timeMessage=" + timeMessage + "]";
 	}
+	
 
 	
 

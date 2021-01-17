@@ -1,5 +1,8 @@
 package motogpAPI;
 
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,7 +35,7 @@ public class Tests {
 //		List<RiderOnlineData> resultado = data.getResultsByRaceNumber(Category.MotoGP, 2016, 1, Session.RACE);
 //		List<RiderOnlineData> resultado2 = data.getResultsByRaceCode(motogpAPI.Category.Moto3, 2020, RaceCode.SMR, Session.RACE);
 //		List<InfoCarrera> resultado3 = PeticionesGet.getResultsByRaceCodeCampu(Category.MOTO3, 2020, RaceCode.SMR, Session.RACE);
-		List<RiderStandingsData> resultado3 = data.getChampionshipStandings(Category.MotoGP, 2016);
+//		List<RiderStandingsData> resultado3 = data.getChampionshipStandings(Category.MotoGP, 2016);
 //
 //		System.out.println("\n Get Result By Race Number \n");
 //		for (int i=0; i < resultado.size(); i++) {
@@ -42,10 +45,10 @@ public class Tests {
 //		for (int i=0; i < resultado2.size(); i++) {
 //			System.out.println(resultado2.get(i));
 //		}
-		System.out.println("\n Get Championship Standings \n");
-		for (int i=0; i < resultado3.size(); i++) {
-			System.out.println(resultado3.get(i));
-		}
+//		System.out.println("\n Get Championship Standings \n");
+//		for (int i=0; i < resultado3.size(); i++) {
+//			System.out.println(resultado3.get(i));
+//		}
 //		List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceNumberCampu(Category.MOTO2, 2021, 1, Session.RACE);
 		
 //		System.out.println(todosLosResultadosDeUnaCarrera);
@@ -140,6 +143,11 @@ public class Tests {
 //		System.out.println(prueba.getVueltaRapida());
 //		System.out.println(prueba.getRecordDelCircuito());
 //		System.out.println(prueba.getMejorVuelta());
+//		System.out.println(LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), LocalDate.now().getDayOfMonth()+1) +" "+ LocalTime.now());
+		LocalDate time = LocalDate.now();
+		LocalDate mañana = time.plusDays(1);
+		LocalDate mañana2 = LocalDate.parse(mañana.toString());
+		System.out.println(mañana2.isAfter(LocalDate.now()));
 	}
 	
 }

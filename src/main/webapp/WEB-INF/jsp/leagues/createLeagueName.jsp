@@ -15,7 +15,6 @@
 </c:forEach>
      <form:form modelAttribute="league" class="form-horizontal" id="add-pilot-form" actions="/leagues/new"  > 
         <div class="form-group has-feedback">
-		        	<input type="hidden" name="id" value="${league.id}"/>
 		        	<input type="hidden" name="leagueCode" value="${league.leagueCode}"/>
 		        	<input type="hidden" name="leagueDate" value="${league.leagueDate}"/>
 <%-- 		        	<input type="hidden" name="racesCompleted" value="${league.racesCompleted}"/> --%>
