@@ -1,5 +1,7 @@
 package org.springframework.samples.petclinic.service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +75,27 @@ public class TablaConsultasService {
 	
 	public void saveTabla(TablaConsultas tabla) throws DataAccessException {
 		 TCRepository.save(tabla);
+	}
+	
+	public boolean checkDates(TablaConsultas tabla) {
+		if(tabla.getTimeMessage()=="" ||tabla.getTimeMessage()==null ) {
+			return false;
+		}
+		//metodo para checkear si hoy y la hora de hoy es superior a 
+		//timeMessage. Si se cumple devuelve false por lo que se puede usar
+		//para mensajes temporales
+		LocalDate hoy = LocalDate.now();
+		LocalDate fechaExpiracion = LocalDate.parse(tabla.getTimeMessage().split(",")[0]);
+		if(fechaExpiracion.isAfter(hoy)) {
+			return true;
+		}else if(fechaExpiracion.isEqual(hoy)) {
+			LocalTime ahora = LocalTime.now();
+			LocalTime timeExpiracion = LocalTime.parse(tabla.getTimeMessage().split(",")[1]);
+			if(ahora.isBefore(timeExpiracion)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 }

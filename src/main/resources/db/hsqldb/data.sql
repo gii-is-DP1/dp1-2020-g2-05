@@ -92,4 +92,4 @@ INSERT INTO lineup(id,category,gp_id,recruit1_id,recruit2_id,team_id) VALUES (3,
 INSERT INTO lineup(id,category,gp_id,recruit1_id,recruit2_id,team_id) VALUES (4,1,3,1,2,1); 
 INSERT INTO lineup(id,category,gp_id,recruit1_id,recruit2_id,team_id) VALUES (5,1,3,1,2,1); 
 
-INSERT INTO tabla_consultas(actual_race,races_completed,categoria_actual) VALUES(1,0,'MOTO3')
+INSERT INTO tabla_consultas(actual_race,races_completed,categoria_actual,time_message) VALUES(1,0,'MOTO3',null)

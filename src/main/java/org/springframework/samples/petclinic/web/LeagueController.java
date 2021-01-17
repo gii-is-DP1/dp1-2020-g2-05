@@ -72,7 +72,10 @@ public class LeagueController {
 		} else {
 			log.info("No se han detectado ligas sin equipos");
 		}
-
+		Boolean message=this.TCService.checkDates(tabla.get());
+		if(message) {
+			modelMap.addAttribute("temporalMessage","Results has been validated, check your lineups and teams score!!");
+		}
 		modelMap.addAttribute("ligas", leagueList);
 		modelMap.addAttribute("categoriaActual", tabla.get().getCurrentCategory());
 		modelMap.addAttribute("carrerasCompletadas", tabla.get().getRacesCompleted());
@@ -153,7 +156,7 @@ public class LeagueController {
 		Date date = new Date();
 
 		League newLeague = new League();
-		newLeague.setLeagueCode(leagueService.randomString(10));
+		newLeague.setLeagueCode("1234567890");
 		newLeague.setLeagueDate(formatter.format(date));
 		//creamos la liga con codigo y fecha actual 
 		log.debug("Liga dummy : " + newLeague);
@@ -174,7 +177,8 @@ public class LeagueController {
 		} else {
 
 			try {
-
+				SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+				Date date = new Date();
 				User user = this.userService.getUserSession();
 
 
@@ -185,6 +189,8 @@ public class LeagueController {
 				team.setPoints(0);
 				team.setName(user.getUsername() + " team");
 				league.addTeam(team);
+				league.setLeagueCode(leagueService.randomString(10));
+				league.setLeagueDate(formatter.format(date));
 
 				this.leagueService.saveLeague(league);
 

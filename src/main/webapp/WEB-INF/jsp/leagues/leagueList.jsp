@@ -14,7 +14,7 @@
 <petclinic:layout pageName="leagues">
 
 	<h2>Leagues</h2>
-	
+	<c:if test="${temporalMessage!=null}"><h3><c:out value="${temporalMessage}"></c:out></h3></c:if>
 	<div id="divLeagueTable">
 <!-- 	<table> -->
 <!-- 		<thead> -->

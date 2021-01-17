@@ -1,5 +1,7 @@
 package org.springframework.samples.petclinic.service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -11,6 +13,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.Lineup;
 import org.springframework.samples.petclinic.model.Result;
+import org.springframework.samples.petclinic.model.TablaConsultas;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.repository.ResultRepository;
 import org.springframework.samples.petclinic.repository.TeamRepository;
@@ -88,6 +91,19 @@ public class ResultService {
 				}
 			}
 		}
+	}
+	
+	
+	public void createTimeMessage() {
+		TablaConsultas tc=  TCService.getTabla().get();
+		LocalDate hoy = LocalDate.now();
+		LocalTime ahora = LocalTime.now();
+		LocalDate mañana = hoy.plusDays(1);
+		tc.setTimeMessage(mañana+","+ahora);
+		this.TCService.saveTabla(tc);
+		//aqui lo que se hace es establecer la propiedad time message
+		//a mañana en la hora actual
+
 	}
 	
 	public  Integer calculaPuntos(Integer pos) {
