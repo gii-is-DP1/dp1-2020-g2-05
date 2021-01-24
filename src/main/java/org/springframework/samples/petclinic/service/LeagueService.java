@@ -67,23 +67,27 @@ public class LeagueService {
 		leagueRepository.save(league);
 		return true;
 	}
-
+	
+	@Transactional
 	public void deleteLeague(League league) throws DataAccessException {
 		leagueRepository.delete(league);
 	}
-
+	 
+	@Transactional(readOnly = true)
 	public Optional<League> findLeagueByLeagueCode(String leagueCode) throws DataAccessException {
-		return leagueRepository.findLeagueByLeagueCode(leagueCode);
+		return leagueRepository.findByLeagueCode(leagueCode);
 	}
 
 //	public Optional<User> findUserByUsername(String username) throws DataAccessException {
 //		return leagueRepository.findUserByUsername(username);
 //	}
 
+	@Transactional(readOnly = true)
 	public String findAuthoritiesByUsername(String username) throws DataAccessException {
 		return leagueRepository.findAuthoritiesByUsername(username);
 	}
 
+	@Transactional(readOnly = true)
 	public Integer findLeaguesByUsername(String username) throws DataAccessException {
 		return leagueRepository.findLeaguesByUsername(username);
 	}
@@ -112,6 +116,7 @@ public class LeagueService {
 		return result;
 	}
 
+	@Transactional
 	public boolean comprobarLigaVacia(List<League> result) {
 		Boolean ret = false;
 
@@ -154,6 +159,7 @@ public class LeagueService {
 //			return lista;
 //	}
 
+	
 	public List<League> obtenerListaIntegerToTeams(Collection<Integer> collect) {
 
 		List<League> myLeaguesList = collect.stream().map(x -> this.findLeague(x).get()).collect(Collectors.toList());
@@ -175,7 +181,7 @@ public class LeagueService {
 	
 	public ModelMap descifraUri(String pth,String code,ModelMap model) {
 		//dependiendo del path descifro lo que la api no ha podido encontrar
-		// el index 0 significa cuantos no ha podido encontrar(0 a 2)
+		// el index 0 significa cuantos no ha podido encontrar(1 a 3)
 		//los sigiuentes significan, 3 moto3,2 moto2,GP motoGP
 		//por ejemplo el path 12 significa que no ha encontrado un resultado y que es moto2
 		// el path 23G que no ha encontrado 2 y que es moto3 y moto gp
