@@ -16,4 +16,7 @@ public interface GranPremioRepository  extends  CrudRepository<GranPremio, Integ
 	
 	@Query("SELECT gp FROM GranPremio gp WHERE gp.date0 >= :year AND gp.calendar = true")
 	public List<GranPremio> findAllActualYear(@Param("year") LocalDate year);
+	
+	@Query("SELECT gp FROM GranPremio gp WHERE gp.hasBeenRun=true ORDER BY gp.id DESC")
+	public List<GranPremio> findUltimoGpSinValidar() ;
 }

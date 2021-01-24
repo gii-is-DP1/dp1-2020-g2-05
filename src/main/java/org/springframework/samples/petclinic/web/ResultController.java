@@ -157,23 +157,17 @@ public class ResultController {
 //	}
 
 
-	@GetMapping(value = "/validateResults/{code}")
-	public String validateResults(@PathVariable("gpId") Integer gpId,@PathVariable("code") String code,ModelMap model) {
-		List<Result> todosLosResultados = new ArrayList<Result>();
-		List<Result> lista = this.resultService.findResultsByCategoryAndId(gpId, code, Category.MOTO2);
-		List<Result> lista2 = this.resultService.findResultsByCategoryAndId(gpId, code, Category.MOTO3);
-		List<Result> lista3 = this.resultService.findResultsByCategoryAndId(gpId, code, Category.MOTOGP);
-		todosLosResultados.addAll(lista);
-		todosLosResultados.addAll(lista2);
-		todosLosResultados.addAll(lista3);
-		List<Lineup> listaLineups =this.lineupService.findAll();
-		
-		
-		this.resultService.validateResults(listaLineups, todosLosResultados,gpId);
-		log.info("resultados validados  correctamente");
-		this.resultService.createTimeMessage();
-		log.info("mensaje temporal creado hasta mañana a las " + LocalTime.now());
-
-		return "redirect:/controlPanelSP"; 
-	}
+//	@GetMapping(value = "/validateResults/{code}")
+//	public String validateResults(@PathVariable("gpId") Integer gpId,@PathVariable("code") String code,ModelMap model) {
+//	
+//		List<Lineup> listaLineups =this.lineupService.findAll();
+//		
+//		
+//		this.resultService.validateResults(listaLineups, todosLosResultados,gpId);
+//		log.info("resultados validados  correctamente");
+//		this.resultService.createTimeMessage();
+//		log.info("mensaje temporal creado hasta mañana a las " + LocalTime.now());
+//
+//		return "redirect:/controlPanelSP"; 
+//	}
 }

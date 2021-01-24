@@ -21,7 +21,7 @@
                
         </div>
 	<div>
-	<c:forEach items="${listaGP}" var="res">
+	<c:forEach items="${listaGP}" var="res" varStatus="status">
 		
 			 <h5>
 			 <c:out value="${res.circuit}"  />  
@@ -30,8 +30,10 @@
 			<spring:param name="date" value="${res.date0}" />
 			<spring:param name="code" value="${res.raceCode}" />
 			<spring:param name="id" value="${res.id}" />
-			</spring:url> 			 			
-			 <c:if test="${res.hasBeenRun==false}">
+			</spring:url> 	
+			
+					 			
+			 <c:if test="${(res.hasBeenRun==false && listaGP[status.index-1].hasBeenRun==true) || (status.index == 0 && res.hasBeenRun==false) }">
 			<a href="${fn:escapeXml(leagueUrl)}"> Poblar</a>
 			</c:if>
 			
@@ -40,13 +42,13 @@
 			</spring:url> 			 			 
 			<a href="${fn:escapeXml(deleteGranPremioUrl)}"> Delete</a>
 			
-		    <c:if test="${res.hasBeenRun==true}">
-			<spring:url value="/granPremios/{id}/validateResults/{code}" var="deleteGranPremioUrl">
-			<spring:param name="id" value="${res.id}" />
-			<spring:param name="code" value="${res.raceCode}" />
-			</spring:url> 			 			 
-			<a href="${fn:escapeXml(deleteGranPremioUrl)}"> Validate Results</a>
-			</c:if>
+<%-- 		    <c:if test="${res.hasBeenRun==true}"> --%>
+<%-- 			<spring:url value="/granPremios/{id}/validateResults/{code}" var="deleteGranPremioUrl"> --%>
+<%-- 			<spring:param name="id" value="${res.id}" /> --%>
+<%-- 			<spring:param name="code" value="${res.raceCode}" /> --%>
+<%-- 			</spring:url> 			 			  --%>
+<%-- 			<a href="${fn:escapeXml(deleteGranPremioUrl)}"> Validate Results</a> --%>
+<%-- 			</c:if> --%>
 			 </h5>
 			
 				

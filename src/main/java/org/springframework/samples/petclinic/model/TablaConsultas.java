@@ -16,6 +16,10 @@
 package org.springframework.samples.petclinic.model;
 
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -42,6 +46,12 @@ public class TablaConsultas extends BaseEntity{
 	@NotNull
 	private Integer racesCompleted;
 	
+	@Column(name = "races_validated")        
+	@Min(0)
+	@Max(20)
+	private Integer gpsValidated; 
+	
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "categoria_actual")        
 	@NotNull
@@ -49,6 +59,39 @@ public class TablaConsultas extends BaseEntity{
 
 	@Column(name = "time_message")        
 	private String timeMessage;
+	
+	@Column(name = "num_users")      
+	@NotNull
+	private Integer numUsers;
+	
+	@Column(name = "num_equipos")      
+	@NotNull
+	private Integer numEquipos;
+	
+	@Column(name = "num_ligas")      
+	@NotNull
+	private Integer numLigas;
+	
+	@Column(name = "fecha_sistema")      
+	private LocalDate fechaSistema;
+	
+
+	public Integer getGpsValidated() {
+		return gpsValidated;
+	}
+
+	public void setGpsValidated(Integer gpsValidated) {
+		this.gpsValidated = gpsValidated;
+	}
+
+
+	public LocalDate getFechaSistema() {
+		return fechaSistema;
+	}
+
+	public void setFechaSistema(LocalDate fechaSistema) {
+		this.fechaSistema = fechaSistema;
+	}
 
 	public Integer getActualRace() {
 		return actualRace;
@@ -80,6 +123,30 @@ public class TablaConsultas extends BaseEntity{
 
 	public void setTimeMessage(String timeMessage) {
 		this.timeMessage = timeMessage;
+	}
+
+	public Integer getNumUsers() {
+		return numUsers;
+	}
+
+	public void setNumUsers(Integer numUsers) {
+		this.numUsers = numUsers;
+	}
+
+	public Integer getNumEquipos() {
+		return numEquipos;
+	}
+
+	public void setNumEquipos(Integer numEquipos) {
+		this.numEquipos = numEquipos;
+	}
+
+	public Integer getNumLigas() {
+		return numLigas;
+	}
+
+	public void setNumLigas(Integer numLigas) {
+		this.numLigas = numLigas;
 	}
 
 	@Override
