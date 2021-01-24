@@ -48,8 +48,10 @@ public class UserService {
 	}
 
 	@Transactional
-	public Iterable<User> findAll(){
-		return userRepository.findAll();
+	public List<User> findAll(){
+		
+		List<User> lista = (List<User>) userRepository.findAll();
+		return lista;
 	}
 	
 	@Transactional

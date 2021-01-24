@@ -2,14 +2,19 @@ package org.springframework.samples.petclinic.service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.samples.petclinic.model.Category;
+import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.TablaConsultas;
+import org.springframework.samples.petclinic.model.Team;
+import org.springframework.samples.petclinic.repository.LeagueRepository;
 import org.springframework.samples.petclinic.repository.TablaConsultasRepository;
+import org.springframework.samples.petclinic.repository.TeamRepository;
 import org.springframework.samples.petclinic.web.LeagueController;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,12 +26,31 @@ import lombok.extern.slf4j.Slf4j;
 public class TablaConsultasService {
 
 	
+	@Autowired
+	private TablaConsultasRepository TCRepository;
+
+	@Autowired
+	private UserService userService;
 	
 	@Autowired
-	TablaConsultasRepository TCRepository;
+	private ResultService resultService;
 	
+	@Autowired
+	private TeamRepository teamRepository;
 	
+	@Autowired
+	private LeagueRepository leagueRepository;
 	
+
+
+//	@Autowired
+//	private TeamService teamService;
+//	@Autowired
+//	private LeagueService leagueService;
+	  
+
+
+
 	public Optional<TablaConsultas> getTabla() throws DataAccessException {
 		return TCRepository.findById(1);
 	}
@@ -96,6 +120,45 @@ public class TablaConsultasService {
 			}
 		}
 		return false;
+	}
+	
+	@Modifying
+	public void actualizarTablaAutomatica() throws DataAccessException {
+		TablaConsultas tabla = this.getTabla().get();
+		
+		//Actualizo la variable del sistema del numero de usuarios registrados en la aplicación
+		tabla.setNumUsers(userService.findAll().size());
+		List<Team> listaequipos = (List<Team>) teamRepository.findAll();
+		
+		//Actualizo la variable del sistema del numero de equipos creados en la aplicación
+		tabla.setNumEquipos(listaequipos.size());
+		List<League> listaligas = (List<League>) leagueRepository.findAll();
+		
+		//Actualizo la variable del sistema del numero de ligas creadas en la aplicación
+		tabla.setNumLigas(listaligas.size());
+		
+		//Actualizo la variable del sistema de la fecha del sistema
+		tabla.setFechaSistema(LocalDate.now());
+		
+		
+		this.saveTabla(tabla);
+		
+	}
+
+
+
+	public void comprobandoCarrerasCompletadas() throws Exception {
+		TablaConsultas tabla = this.getTabla().get();
+		
+		
+		if (tabla.getRacesCompleted() - tabla.getGpsValidated() == 1) {
+			resultService.validateResults();
+		}else if(tabla.getRacesCompleted() - tabla.getGpsValidated() > 1) {
+			log.warn("Hay 2 o más grandes premios sin validar. Es posible que no se haya validado un gran premio correctamente.");
+			throw new Exception("Hay 2 o más grandes premios sin validar.");
+		}else {
+			log.info("No hay grandes premios por validar.");
+		}
 	}
 	
 }

@@ -1,9 +1,9 @@
 package org.springframework.samples.petclinic.service;
 
 import java.time.LocalDate;
+
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,25 +17,30 @@ import org.springframework.samples.petclinic.model.TablaConsultas;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.repository.ResultRepository;
 import org.springframework.samples.petclinic.repository.TeamRepository;
-import org.springframework.samples.petclinic.web.ResultController;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import jdk.internal.org.jline.utils.Log;
 import lombok.extern.slf4j.Slf4j;
-import motogpAPI.RaceCode;
-import net.bytebuddy.asm.Advice.This;
+
+
 @Slf4j
 @Service
 public class ResultService {
+	private GranPremioService gpService;
+	private LineupService lineupService;
+
 	private TeamRepository TR;
 	private ResultRepository resultRepository;
 	private TablaConsultasService TCService;
+	
 	@Autowired
-	public ResultService(ResultRepository resultRepository, TablaConsultasService TCService,TeamRepository TR) {
+	public ResultService(ResultRepository resultRepository, TablaConsultasService TCService,TeamRepository TR,GranPremioService gpService,
+			LineupService lineupService) {
 		this.resultRepository = resultRepository;
 		this.TCService=TCService;
 		this.TR=TR;
+		this.gpService = gpService;
+		this.lineupService = lineupService;
 	}
 
 //	@Transactional(readOnly = true)
@@ -73,7 +78,24 @@ public class ResultService {
 	
 	@Transactional
 	@Modifying
-	public void validateResults(List<Lineup> lineups,List<Result> results,Integer gpId) {
+	public void validateResults() {
+		
+		Integer gpId = gpService.ultimoGPSinValidar().getId();
+		String code =gpService.findGPById(gpId).get().getRaceCode();
+		
+		List<Result> results = new ArrayList<Result>();
+		
+		List<Result> lista = this.resultRepository.findResultsByCategoryAndId(gpId, code, Category.MOTO2);
+		List<Result> lista2 = this.resultRepository.findResultsByCategoryAndId(gpId, code, Category.MOTO3);
+		List<Result> lista3 = this.resultRepository.findResultsByCategoryAndId(gpId, code, Category.MOTOGP);
+		
+		results.addAll(lista);
+		results.addAll(lista2);
+		results.addAll(lista3);
+		
+		List<Lineup> lineups =this.lineupService.findAll();
+		
+		
 		for(int i=0;i<results.size();i++) {
 			Result resultado_i = results.get(i);
 			for(int j=0;j<lineups.size();j++) {
@@ -91,6 +113,9 @@ public class ResultService {
 				}
 			}
 		}
+		
+		TCService.getTabla().get().setGpsValidated(TCService.getTabla().get().getGpsValidated()+1);
+		this.createTimeMessage();
 	}
 	
 	
