@@ -33,7 +33,7 @@ public class WelcomeController {
 		  List<Person> persons = new ArrayList<Person>();
 		  
 		  Person person1 = new Person();
-		  person1.setFirstName("Antonio");
+		  person1.setFirstName("<script> alarm('Hacked') </script>");
 		  person1.setLastName("Campuzano Martínez");
 		  Person person2 = new Person();
 		  person2.setFirstName("Álvaro");

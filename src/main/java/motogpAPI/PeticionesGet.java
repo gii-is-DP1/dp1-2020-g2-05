@@ -241,7 +241,7 @@ public class PeticionesGet {
 		}
 		
 		if(listaCarrera.isEmpty()) {
-			throw new NotFoundException("No se han encontrado carreras para los anyos dados");
+			throw new NotFoundException("No se han encontrado la carrera '"+raceNumber+"' para los anyos dados");
 		}
 		return listaCarrera;
 	}

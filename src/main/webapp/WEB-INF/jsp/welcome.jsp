@@ -14,7 +14,7 @@
     <p><h2>Group ${group}</h2></p>
     <p><ul>
     <c:forEach items="${persons}" var = "person">
-    	<li>${person.lastName}, ${person.firstName}</li>
+    	<li><c:out value="${person.lastName}"></c:out>,<c:out value="${person.firstName}"></c:out></li>
     </c:forEach>
     </ul></p>
     </div>
