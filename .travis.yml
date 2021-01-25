@@ -1,20 +1,8 @@
 dist: trusty
 language: java
 jdk: oraclejdk8
-
-addons:
-  sonarcloud:
-    organization: "gii-is-dp1"
-    token:
-      secure: "oXWXADCCG6909MujB/RbR0D2XfIumqsKsezqOBFX8yRzAuUQC6LDowoxk4wFPq46GK7rnKC2HkWV5kzAYGIcZEImXH5hfMoH61s2Jja6WkvKJB6D/hr1oEAuSmvG69hJll1tiuY5zX67yLYvPv3HH2hCZmOLmywvMC0As5Av3+PwtIAj2B5WSvPRy6Ecwmh3NO9yruE37OPzl0VRRvRgI4cND8oSJoiY5Bepg0N0bCxthSGQSSxcyzjUAl2KKdJGHPzarH1wHzNUkCyYjyk173Q4bHx6tLXomJfYPbCqYvV2lgdv8ul6yfajfcDhoMgM25z746lld/Pni0Ikb9d3aXfV5UjfKe2peRUwgfUOd4XJ0CPDrLboySuwYI+Q7LSKoStpovhH7b8+MIdHC5pHGLVw15h6eqyFHPSoiCRHN0QzstP3MfwTiOcLPT7Oj9zTlcDpb6cQ0aUnVSVT0QTIGbAQx6H9hrkWrLE6lf5wg9pURZ9ZS/umIX9P+205I0/l0N/CnESQh4Z63QuUPBVrz4rTTR0++L065QvWsKMq3BUD8U1L9qR0+g8K4r6qxWLhAEuhhILLpjFQ4vfNtFZiJMhTE97h1+Jy0X5eYlu9jXKp/aMbQ6bWosLxrPzkfhP9g3KQa+WHT50l9bMD2N1CKp/4rexLjF2d9JoxGhuCXQc="
 services:
   - mysql
 before_install:
   - mysql -e 'CREATE DATABASE petclinic;'
-script:
-  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=gii-is-DP1_dp1-2020-g2-05
-  - mvn test -Dspring-boot.run.profiles=mysql-travis
-cache:
-  directories:
-    - '$HOME/.m2/repository'
-    - '$HOME/.sonar/cache'
+script: mvn test -Dspring-boot.run.profiles=mysql-travis
