@@ -4,7 +4,7 @@ jdk: oraclejdk8
 
 addons:
   sonarcloud:
-    organization: "gii-is-dp1"
+    organization: "gii-is-DP1"
     token:
       secure: "OsjTrlJM+1TvsKzI4J5hF8D3zKZ+fDdYcRVpVT4DMdr29paJJO3Mh6+6HSSAB+n8rz+4KWhZLtRIW0b90CAaoyrI4a1Ej8LOvUp9tSzZe6K0yTZXX6L5ukrd5uV8wqfL1zGFy+6s40DxUOrtSraUwEc8aipxDk+tI9q5+aEpan2PIDfZFXYEQ4MpQsAXwuUiAhd7Z/1AAgMrQMiVWbzUrcKCZiJS2X7U1CxvvGLtfzr1HcIGACQU9Y4X7rjI//7KYwKPDmCsGplUucWWU8z9P+v8Zp/MerS0MSGAPbbxQESD69jRFyHed/wZOG+KwPoeFAtQNhZKbUnj2xYrEZ4P+85oZex0r9cNJYAx9zKCuqAvKuSo7bA2Wr66XtetD7K3YP9gytQdk6SpNzxv085E3+tIK3ugek7qjQ8kfdfY+rPYVKobBU92pXxfgv+eNj+aubwPhO+hjb7Y0jwFcalNxy609oHP7t+oC3HxNAE0J6BuV+MTw5yLKF+bhlDZw7zO6BeeA+fivd8fi+EZHTNLbkkWd/13p00kAXzOpSijqzILVhy3i6QEBvv5mLTn8WUmVaLUOqqNXPDmc5z0lcPucR3nUDNLJosYXOMqiUFfiEVxNo+1qo3coApTVR7cEG7k1+BxLQ75PoQg+dV1p6mGMYBdgUt4N/2M2bISYQ49cYc="
 services:
