@@ -32,6 +32,7 @@ import org.springframework.samples.petclinic.model.Result;
 import org.springframework.samples.petclinic.service.GranPremioService;
 import org.springframework.samples.petclinic.service.LineupService;
 import org.springframework.samples.petclinic.service.ResultService;
+import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -47,6 +48,9 @@ class ResultControllerTests {
 
 	@Autowired
 	private MockMvc mockMvc;
+	
+	@MockBean
+	private TablaConsultasService tablaConsultas;
 	
 	@MockBean
 	private ResultService resultService;

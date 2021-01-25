@@ -56,13 +56,9 @@ public class TeamController {
 		this.teamService = teamService;
 		this.userService = userService;
 		this.recruitService = recruitService;
-
-		this.lineupService = lineupService;
-
 		this.lineupService = lineupService;
 		this.offerService = offerService;
 
-		this.lineupService = lineupService;
 	}
 
 	@InitBinder("team")

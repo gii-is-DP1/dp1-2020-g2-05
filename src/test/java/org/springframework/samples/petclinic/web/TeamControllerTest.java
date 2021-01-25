@@ -51,6 +51,7 @@ import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.LineupService;
 import org.springframework.samples.petclinic.service.OfferService;
 import org.springframework.samples.petclinic.service.RecruitService;
+import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.util.Status;
@@ -99,6 +100,9 @@ public class TeamControllerTest {
 	 @MockBean
 	 @Autowired
 	 private OfferService offerService;
+	 
+	 @MockBean
+	 private TablaConsultasService tablaConsultas;
 	 
 	 @MockBean
 	 @Autowired

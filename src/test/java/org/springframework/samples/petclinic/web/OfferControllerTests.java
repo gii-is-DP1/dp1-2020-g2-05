@@ -32,6 +32,7 @@ import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.OfferService;
 import org.springframework.samples.petclinic.service.RecruitService;
+import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.TransactionService;
 import org.springframework.samples.petclinic.service.UserService;
@@ -49,6 +50,8 @@ class OfferControllerTests {
 	private static final int TEST_OFFER3_ID = 3;
 	private static final int TEST_OFFERFAIL_ID = 4;
 
+	@MockBean
+	private TablaConsultasService tablaConsultas;
 	@Autowired
 	private MockMvc mockMvc;
 
@@ -67,8 +70,8 @@ class OfferControllerTests {
 	@MockBean
 	private UserService userService;
 
-	@MockBean
-	private LeagueService leagueService;
+	// @MockBean
+	// private LeagueService leagueService;
 
 	private Offer offer1 = new Offer();
 	private Offer offer2 = new Offer();

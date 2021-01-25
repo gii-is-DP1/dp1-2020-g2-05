@@ -31,6 +31,7 @@ import org.springframework.samples.petclinic.repository.UserRepository;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.MessageService;
+import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -60,6 +61,8 @@ public class UserControllerTest {
 	@Autowired
 	private AuthoritiesService authoritiesService;
 
+	 @MockBean
+	 private TablaConsultasService tablaConsultas;
 	
 	@Autowired
 	private MockMvc mockMvc;

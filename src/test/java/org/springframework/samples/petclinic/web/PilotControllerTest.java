@@ -59,6 +59,7 @@ import org.springframework.samples.petclinic.service.LineupService;
 import org.springframework.samples.petclinic.service.OfferService;
 import org.springframework.samples.petclinic.service.PilotService;
 import org.springframework.samples.petclinic.service.RecruitService;
+import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
@@ -89,7 +90,8 @@ public class PilotControllerTest {
 	 @Autowired
 	 private UserService userService;
 	 
-	
+	 @MockBean
+	private TablaConsultasService tablaConsultas;
 	 
 	 @MockBean
 	 @Autowired
