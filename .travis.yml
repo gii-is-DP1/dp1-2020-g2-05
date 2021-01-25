@@ -5,4 +5,16 @@ services:
   - mysql
 before_install:
   - mysql -e 'CREATE DATABASE petclinic;'
-script: mvn test -Dspring-boot.run.profiles=mysql-travis
+
+addons:
+  sonarcloud:
+    organization: "gii-is-dp1"
+    token:
+      secure: "QPp7csHfx6SX9pphMv6X3tedF3/xw6JrWluqCRTypN2TuC6nEjJaYFC0Gf8NeCbaD/0+HLJexUcSApxHlyTcUpsHsA7S9DKYrjCwZ5VEFSIxEKANgZt/fBXZsZds0GcoeQ/h5Dy7m1HEOoFFmVP03ztJhWKi+hhap3HsBnxQCayvAQS1UG6rhKlRfzwjwxMt2zpYCftwTzoHwtxiRepPGGeIlqIqfl6bG55W1jZAsq4zd0HU8ctBvy4kK1xOdIpXcJfA7G0SdcYgTIfdOia7RAKbKvUhoAYim85ahxcCPSXn0UVgljcQBjwhvzvJ1DSnIox8y+XQfgY+QZsjT1DXVkdN0p76yiI0DjvenmndGQX10zozavYzYYSoKq3eEM6WNljbnFfbxzWVu2NQXjB5wo5F3y74wBXZbDWNmtXmBJyr1OushZQIWN5jJDxG4SDx0D7S8pe0dbyhsSUADT/7DlUbt49zwSK+/el64uXwOpEQmMzAufzgr28Lxr2yYWpAWNvi+OAMDyp0gh5bx+NBM2ughrlrbO5p5wv1YDgnkN51ZbxYmrfYLNqc+8VAZqzFQECK8L+5OiiHJn3LB860Dr5W/fJZuTWF4uKwjigsaWp+F78KI4wszSRqdBotBtRzDXxWBXurgZoRTpUcmCvdGfrjw8rTu6M1uQVrXlxfVC4="
+script:
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=gii-is-DP1_dp1-2020-g2-05
+  - mvn test -Dspring-boot.run.profiles=mysql-travis
+  cache:
+    directories:
+    - '$HOME/.m2/repository'
+    - '$HOME/.sonar/cache'
