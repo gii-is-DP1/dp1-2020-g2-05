@@ -1,4 +1,4 @@
-Nivel de acabado respecto del sprint
+Nivel de acabado respecto del sprintolaoaola
 
 El sprint se ha llevado a cabo de manera satisfactoria, habiendo sido completada casi en plenitud la parte del proyecto correspondiente a todo lo que no es la lógica de las apuestas. El grupo se sigue presentando a un nivel de acabado de nota sobresaliente.
 
