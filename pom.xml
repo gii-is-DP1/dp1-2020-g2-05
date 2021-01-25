@@ -15,6 +15,9 @@
 	<name>G2-5</name>
 
 	<properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
 
 		<!-- Generic properties -->
 		<java.version>1.8</java.version>
@@ -223,7 +226,12 @@
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
 
-
+		<dependency>
+          <groupId>commons-lang</groupId>
+          <artifactId>commons-lang</artifactId>
+          <version>2.6</version>
+        </dependency>
+        
 	</dependencies>
 
 	<build>
@@ -444,18 +452,45 @@
 		</license>
 	</licenses>
 
+<!-- <profiles> -->
+<!-- <profile> -->
+<!-- <id>sonar</id> -->
+<!-- <activation> -->
+<!-- <activeByDefault>true</activeByDefault> -->
+<!-- </activation> -->
+<!-- <properties> -->
+<!-- <sonar.host.url> -->
+<!-- http://localhost:9000 -->
+<!-- </sonar.host.url> -->
+<!-- </properties> -->
+<!-- </profile> -->
+<!-- </profiles> -->
 <profiles>
-<profile>
-<id>sonar</id>
-<activation>
-<activeByDefault>true</activeByDefault>
-</activation>
-<properties>
-<!-- Optional URL to server. Default value is http://localhost:9000 -->
-<sonar.host.url>
-http://localhost:9000
-</sonar.host.url>
-</properties>
-</profile>
-</profiles>
+        <profile>
+            <id>coverage</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>0.8.3</version>
+                        <executions>
+                            <execution>
+                                <id>prepare-agent</id>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>report</id>
+                                <goals>
+                                    <goal>report</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
