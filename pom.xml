@@ -15,6 +15,12 @@
 	<name>G2-5</name>
 
 	<properties>
+        
+        <sonar.projectKey>gii-is-DP1_dp1-2020-g2-05</sonar.projectKey>
+ 		<sonar.organization>gii-is-dp1</sonar.organization>
+  		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        
+        
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
