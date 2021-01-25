@@ -1,21 +1,8 @@
 dist: trusty
 language: java
 jdk: oraclejdk8
-
-addons:
-  sonarcloud:
-    organization: "gii-is-dp1"
-    token:
-      secure: "Xx/oq6OgMuIO0+s6rM+7Esxl+RqOECdHIgFN+7I+HjDhx07hJDpkOE7LB3R9c8Trv4EmBDu7U/APERxigJb8lMosni5d35pFAHVXs5AiwYGF5JfvsULK8QKu/9Ugq3QqAsuk9ZOYjG38m9a7qfHBqomKScPQhhFWrgCXVQLANYr3qq63956aTVWsMw96tj5I/+1nAS8fD6fuqfNWu7e0I35D5MlJyQMcuvfSs1qywflpeoV3D+GNiroG0Xp27JU/jsX3aOrdRKq26360mIzwTwxRMMm7e5J+JCRytMnk2ScPTLLk4qC7o+3Y1KowbyDf3xK0Gl90Rai/lZHwq2yFJjCuaIAMfNVok0Nc56e6htDsjyF+rL8td0TVvr8xTjvmP3J7UUiU9v1dHnLULIDi4b2QTN/7AEMU7sg47M1EjBCh7cqYylDGx5T4O6/xjJATfVyrgwVdW0QEe40zYRNi5aO/gkEc0FPDrxNFEGSwgsfnCfkXTpgxgHFjLyEjn1p1SqZUaAZQ0TG70JOXhgWLiGK5XcRZjqh+cMogc4tZh4QgYgFjjIy6Ell5oyNWcq9MRKtKlfkv0ByFqPSd0KZBEpyq+6+iOmC4QRJDJOHSNuZ2ZZsVJ/fVRCHn6hEWArMAcUFPB2vO1Zop5R0Rso/LQFbzDM0IzAEQSTDhMVIxlss="
 services:
   - mysql
 before_install:
   - mysql -e 'CREATE DATABASE petclinic;'
-script:
-  # JaCoCo is used to have code coverage, "-Pcoverage" activates the maven profile in the pom.xml
-  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=gii-is-DP1_dp1-2020-g2-05
-  - mvn test -Dspring-boot.run.profiles=mysql-travis
-cache:
-  directories:
-    - '$HOME/.m2/repository'
-    - '$HOME/.sonar/cache'
+script: mvn test -Dspring-boot.run.profiles=mysql-travis
