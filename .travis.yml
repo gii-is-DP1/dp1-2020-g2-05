@@ -13,7 +13,7 @@ before_install:
   - mysql -e 'CREATE DATABASE petclinic;'
 script:
   # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
-  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=gii-is-DP1_dp1-2020-g2-05
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=gii-is-dp1_dp1-2020-g2-05
   - mvn test -Dspring-boot.run.profiles=mysql-travis
   cache:
     directories:
