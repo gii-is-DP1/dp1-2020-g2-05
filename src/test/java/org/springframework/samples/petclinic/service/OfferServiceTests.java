@@ -76,19 +76,19 @@ class OfferServiceTests {
 //		Double actualMoney = Double.parseDouble(team.getMoney());
 //		assertThat(actualMoney).isEqualTo(initialMoney + 200);
 //	}
-	
-	@Test
-	@Transactional
-	void shouldPutOnSale() {
-		Recruit recruit = recruitService.findRecruit(2).get();
-		
-		offerService.putOnSale(recruit, 300);
-		
-		Offer offer = offerService.findOfferById(2).get();// La nueva oferta creada
-		assertThat(offer.getRecruit()).isEqualTo(recruit);
-		assertThat(offer.getPrice()).isEqualTo(300);
-		assertThat(offer.getStatus()).isEqualTo(Status.Outstanding);
-	}
+//	
+//	@Test
+//	@Transactional
+//	void shouldPutOnSale() {
+//		Recruit recruit = recruitService.findRecruit(2).get();
+//		
+//		offerService.putOnSale(recruit, 300);
+//		
+//		Offer offer = offerService.findOfferById(2).get();// La nueva oferta creada
+//		assertThat(offer.getRecruit()).isEqualTo(recruit);
+//		assertThat(offer.getPrice()).isEqualTo(300);
+//		assertThat(offer.getStatus()).isEqualTo(Status.Outstanding);
+//	}
 	
 	@Test
 	@Transactional
