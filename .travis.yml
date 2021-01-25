@@ -1,18 +1,21 @@
 dist: trusty
 language: java
-jdk: oraclejdk11
-
-services:
-  - mysql
-before_install:
-  - mysql -e 'CREATE DATABASE petclinic;'
+jdk: oraclejdk8
 
 addons:
   sonarcloud:
     organization: "gii-is-dp1"
     token:
-      secure: "PXbyFlcQxQay98P9+QpXa5xcKQO0PlIlqjcj2lDZMd/qLVlzb3NfB7R1dtRRznyyL/njhfq4Ueq8zt/mGBcLWsXd96RcOGoObF18tFs0GtSDSyRmIdlMk+g57vYFPqSo5mRaSqaXxm6TMm+OZmFm7MVGoPZg+9wI4ZehY9XjCSB22kwj2qvzJkTq/kYipYw3NbRlFY7+Y+EIX+3e/vz3+BeGIAJgNB4EyLJf63m55N3/K/CuEfgvMEcAHdQ3CdsIheX0Vuf4jRvyXi0dUOIWv0QONLe0pxz3onCnipzV81MTb6PhmRjwI43mmjpogsRti9fQScb+ZlDwW8pj4/m9OK+zyj+U0eliFPXJAeX+EzbgiJgKVlLfW5jcJ9pAV1hxee/4xSYw8CofIY1zNpb1zRrcJ2Y0C5JT9xpPxwOp2/Ltf7yDIR04jRRCY48ofeQaV46UCC1djKsskzw0EZzcRDoQljITHXzk/gaFU5qkl2TCZtZJtCXse4FyFcwH+zJiF/HQB2gL8tAiJcSLhgah7+dI0L+d+avoBgjanHzl58X5/cvr4CEYxqpcQFsRSqKhK3tPx4zRa3S6k9MigWevCxfDzCBhw98Pll0X3JRQ/LI5BqCtCNrVJe5f9TLSllB9uhs2Q2UQ7wfFE0u3Ki0fnTWfpvJx9vKLAopjncqleQc="
-
+      secure: "jo2WGKsEaqU7JGdQ/kMr+s9F6vAA86QvZfYEPNgjjZI4I9/MnHMQmrOIZ1pslnA8su0eKjjrefcJIcpdG5Mgs74PaqHB4QlGnmsZB3SVlLQgqQ/3kMCh1j5jziUoGDi1ZMInp2ps7djuegDzlC59kwDVyk7qjATsydEBkn6m372KycV8Y9XPRhwAfrCjGbsDMaGBjnMGEmFTbAzKvY3qVNiIyCieSmAwnzjPUkdEQj8VaFPaN/0ENN28sQFUfoUakaXawiKclvxksrx18qccxSE50VuEdKRWeHMukGEQ82bNsbMW1tUGt8hG0PGLXA16fpYuUVRbPS4KjdpFV6zHWas+9GTtpRHe0ISzvalhSL6cd+RZlK2S5tlIPKUlU+2IOSH/X9TTjH6//lHADewsTz73iIwuCd/bdJUDYRfHQKDViIT/+IztFkmXxNvIIqAuffnQkf0dDSd5g3mWMH6kaaJEaRIVBosCWA3qz9EQSorNo6U40vo3Kp2zrcj0bA28zTX07RFBeKwviS4jLiHX+K9v33a6F4x7Uh6CNSXfv2muJpHAOVqUulel+EYqSUqmuRVdbfO483TgqNCjMUPGjuLQZ980Ovfmpgi3Sq+rrYYbyM3xV/Vs0oKxeC39iBA3sqnAYP8YgmB29Db1HUoHOI+06FEdZyHDJRVj9V4dRv4="
+services:
+  - mysql
+before_install:
+  - mysql -e 'CREATE DATABASE petclinic;'
 script:
-  - mvn test -Dspring-boot.run.profiles=mysql-travis
+  # JaCoCo is used to have code coverage, "-Pcoverage" activates the maven profile in the pom.xml
   - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=gii-is-DP1_dp1-2020-g2-05
+  - mvn test -Dspring-boot.run.profiles=mysql-travis
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+    - '$HOME/.sonar/cache'
