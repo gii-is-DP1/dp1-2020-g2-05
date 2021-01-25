@@ -1,21 +1,18 @@
 dist: trusty
 language: java
-jdk: oraclejdk8
+jdk: oraclejdk11
 
-addons:
-  sonarcloud:
-    organization: "gii-is-DP1"
-    token:
-      secure: "OsjTrlJM+1TvsKzI4J5hF8D3zKZ+fDdYcRVpVT4DMdr29paJJO3Mh6+6HSSAB+n8rz+4KWhZLtRIW0b90CAaoyrI4a1Ej8LOvUp9tSzZe6K0yTZXX6L5ukrd5uV8wqfL1zGFy+6s40DxUOrtSraUwEc8aipxDk+tI9q5+aEpan2PIDfZFXYEQ4MpQsAXwuUiAhd7Z/1AAgMrQMiVWbzUrcKCZiJS2X7U1CxvvGLtfzr1HcIGACQU9Y4X7rjI//7KYwKPDmCsGplUucWWU8z9P+v8Zp/MerS0MSGAPbbxQESD69jRFyHed/wZOG+KwPoeFAtQNhZKbUnj2xYrEZ4P+85oZex0r9cNJYAx9zKCuqAvKuSo7bA2Wr66XtetD7K3YP9gytQdk6SpNzxv085E3+tIK3ugek7qjQ8kfdfY+rPYVKobBU92pXxfgv+eNj+aubwPhO+hjb7Y0jwFcalNxy609oHP7t+oC3HxNAE0J6BuV+MTw5yLKF+bhlDZw7zO6BeeA+fivd8fi+EZHTNLbkkWd/13p00kAXzOpSijqzILVhy3i6QEBvv5mLTn8WUmVaLUOqqNXPDmc5z0lcPucR3nUDNLJosYXOMqiUFfiEVxNo+1qo3coApTVR7cEG7k1+BxLQ75PoQg+dV1p6mGMYBdgUt4N/2M2bISYQ49cYc="
 services:
   - mysql
 before_install:
   - mysql -e 'CREATE DATABASE petclinic;'
+
+addons:
+  sonarcloud:
+    organization: "gii-is-dp1"
+    token:
+      secure: "PXbyFlcQxQay98P9+QpXa5xcKQO0PlIlqjcj2lDZMd/qLVlzb3NfB7R1dtRRznyyL/njhfq4Ueq8zt/mGBcLWsXd96RcOGoObF18tFs0GtSDSyRmIdlMk+g57vYFPqSo5mRaSqaXxm6TMm+OZmFm7MVGoPZg+9wI4ZehY9XjCSB22kwj2qvzJkTq/kYipYw3NbRlFY7+Y+EIX+3e/vz3+BeGIAJgNB4EyLJf63m55N3/K/CuEfgvMEcAHdQ3CdsIheX0Vuf4jRvyXi0dUOIWv0QONLe0pxz3onCnipzV81MTb6PhmRjwI43mmjpogsRti9fQScb+ZlDwW8pj4/m9OK+zyj+U0eliFPXJAeX+EzbgiJgKVlLfW5jcJ9pAV1hxee/4xSYw8CofIY1zNpb1zRrcJ2Y0C5JT9xpPxwOp2/Ltf7yDIR04jRRCY48ofeQaV46UCC1djKsskzw0EZzcRDoQljITHXzk/gaFU5qkl2TCZtZJtCXse4FyFcwH+zJiF/HQB2gL8tAiJcSLhgah7+dI0L+d+avoBgjanHzl58X5/cvr4CEYxqpcQFsRSqKhK3tPx4zRa3S6k9MigWevCxfDzCBhw98Pll0X3JRQ/LI5BqCtCNrVJe5f9TLSllB9uhs2Q2UQ7wfFE0u3Ki0fnTWfpvJx9vKLAopjncqleQc="
+
 script:
-  # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
-  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=gii-is-dp1_dp1-2020-g2-05
   - mvn test -Dspring-boot.run.profiles=mysql-travis
-  cache:
-    directories:
-    - '$HOME/.m2/repository'
-    - '$HOME/.sonar/cache'
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=gii-is-DP1_dp1-2020-g2-05
