@@ -3,8 +3,6 @@ package org.springframework.samples.petclinic.web;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.Formatter;

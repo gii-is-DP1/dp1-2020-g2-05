@@ -12,8 +12,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.samples.petclinic.model.Category;
-
 
 @Entity
 @Table(name = "pilot")

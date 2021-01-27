@@ -2,9 +2,7 @@ package org.springframework.samples.petclinic;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -31,7 +29,7 @@ public class PetclinicApplication {
 	
 	
 	//Ajustar a lunes (0 00 00 ? * 1)
-	@Scheduled(cron = "0 23 23 ? * * ")
+	@Scheduled(cron = "0 06 19 ? * * ")
     public void validarCarreras() throws Exception {
 		log.info("Validando la ultima carrera completada" );
 		System.out.println("VALIDANDO");

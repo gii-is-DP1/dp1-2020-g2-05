@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.GranPremio;
 import org.springframework.samples.petclinic.model.Lineup;
-import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Recruit;
 import org.springframework.samples.petclinic.service.GranPremioService;
 import org.springframework.samples.petclinic.service.LeagueService;

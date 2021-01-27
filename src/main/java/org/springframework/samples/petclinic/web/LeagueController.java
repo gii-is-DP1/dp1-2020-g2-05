@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -156,7 +154,7 @@ public class LeagueController {
 		Date date = new Date();
 
 		League newLeague = new League();
-		newLeague.setLeagueCode("1234567890");
+		newLeague.setLeagueCode("DntHckMe:(");
 		newLeague.setLeagueDate(formatter.format(date));
 		//creamos la liga con codigo y fecha actual 
 		log.debug("Liga dummy : " + newLeague);

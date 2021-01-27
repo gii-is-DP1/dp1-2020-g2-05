@@ -1,6 +1,5 @@
 package org.springframework.samples.petclinic.web;
 
-import java.nio.file.Path;
 import java.text.ParseException;
 import java.util.Comparator;
 import java.util.List;
@@ -9,7 +8,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.GranPremio;
-import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.GranPremioService;
 import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.UserService;

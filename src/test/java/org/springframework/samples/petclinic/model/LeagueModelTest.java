@@ -4,18 +4,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 import java.util.stream.Collectors;
-import org.springframework.validation.Errors;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.samples.petclinic.customAssertions.Assertions;
-import org.springframework.samples.petclinic.web.LeagueValidator;
-import org.springframework.validation.Errors;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 /**
