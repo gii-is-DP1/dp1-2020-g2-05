@@ -92,7 +92,7 @@ public class GranPremioController {
 			log.warn("The GP with id (" + id + ") was not found!");
 		}
 
-		return "redirect:/controlPanel";
+		return "redirect:/controlPanelSP";
 	}
 	
 	@RequestMapping(path="/granPremios/setRecords/{gpId}")

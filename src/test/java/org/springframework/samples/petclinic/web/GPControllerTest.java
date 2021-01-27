@@ -154,7 +154,7 @@ public class GPControllerTest {
 		mockMvc.perform(get("/granPremios/{id}/delete", TEST_GP_ID))
 		.andExpect(status().is3xxRedirection())
 //		.andExpect(model().attribute("message", is("GP successfully deleted!"))) --> Hace falta ponerlo como RedirectAttribute
-		.andExpect(view().name("redirect:/controlPanel"));
+		.andExpect(view().name("redirect:/controlPanelSP"));
 	}
 
 	@WithMockUser(value = "spring")
@@ -165,7 +165,7 @@ public class GPControllerTest {
 		mockMvc.perform(get("/granPremios/{id}/delete", TEST_GP_ID))
 		.andExpect(status().is3xxRedirection())
 //		.andExpect(model().attribute("message", is("GP not found!"))) --> Hace falta ponerlo como RedirectAttribute
-		.andExpect(view().name("redirect:/controlPanel"));
+		.andExpect(view().name("redirect:/controlPanelSP"));
 	}
 
 	@WithMockUser(value = "spring")
