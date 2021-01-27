@@ -1,26 +1,8 @@
 package motogpAPI;
 
-import java.sql.Date;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
 
-import org.hibernate.internal.build.AllowSysOut;
-import org.json.JSONArray;
-import org.springframework.samples.petclinic.model.GranPremio;
-import org.springframework.samples.petclinic.model.Pilot;
-import org.springframework.samples.petclinic.model.Result;
 import org.springframework.samples.petclinic.service.PilotService;
-
-import motogpAPI.model.InfoCarrera;
-import motogpAPI.Category;
 
 
 public class Tests {

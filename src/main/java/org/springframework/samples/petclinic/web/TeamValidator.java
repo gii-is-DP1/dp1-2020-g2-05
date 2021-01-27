@@ -3,7 +3,6 @@ package org.springframework.samples.petclinic.web;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;

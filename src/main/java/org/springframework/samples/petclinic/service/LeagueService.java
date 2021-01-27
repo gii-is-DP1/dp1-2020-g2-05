@@ -13,7 +13,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.repository.LeagueRepository;
-import org.springframework.samples.petclinic.repository.TeamRepository;
 import org.springframework.samples.petclinic.web.duplicatedLeagueNameException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,24 +25,10 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class LeagueService {
 	private LeagueRepository leagueRepository;
-	private TeamRepository teamRepository;
-	private UserService userService;
-	private PilotService pilotService;
-	private RecruitService recruitService;
-	private TablaConsultasService TCService;
-	private OfferService offerService;
 
 	@Autowired
-	public LeagueService(LeagueRepository leagueRepository, TeamRepository teamRepository, UserService userService,
-			PilotService pilotService, RecruitService recruitService, TablaConsultasService TCService,
-			OfferService offerService) {
+	public LeagueService(LeagueRepository leagueRepository) {
 		this.leagueRepository = leagueRepository;
-		this.teamRepository = teamRepository;
-		this.userService = userService;
-		this.pilotService = pilotService;
-		this.recruitService = recruitService;
-		this.TCService = TCService;
-		this.offerService = offerService;
 	}
 
 //	@Autowired
@@ -138,27 +123,6 @@ public class LeagueService {
 		}
 		return ret;
 	}
-
-//	public List<Integer> GPsPorCategoria(List<League> result) {
-//	   			Integer moto2=0;
-//	   			Integer moto3=0;
-//	   			Integer motogp=0;
-//			for(League league:result) {
-//		    	if(league.getActiveCategory().equals(Category.MOTO2)) {
-//		    		moto2=league.getRacesCompleted();
-//		    	}else if(league.getActiveCategory().equals(Category.MOTO3)) {
-//		    		moto3=league.getRacesCompleted();
-//		    	}else if(league.getActiveCategory().equals(Category.MOTOGP)) {
-//		    		motogp=league.getRacesCompleted();
-//		    	}
-//		    }
-//			List<Integer> lista=new ArrayList<Integer>();
-//			lista.add(moto2);
-//			lista.add(moto3);
-//			lista.add(motogp);
-//			return lista;
-//	}
-
 	
 	public List<League> obtenerListaIntegerToTeams(Collection<Integer> collect) {
 
@@ -167,7 +131,6 @@ public class LeagueService {
 		return myLeaguesList;
 	}
 
-	@Transactional
 	public List<League> findAll() {
 		List<League> listaReturn = new ArrayList<>();
 		leagueRepository.findAll().forEach(listaReturn::add);

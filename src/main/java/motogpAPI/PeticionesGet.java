@@ -11,21 +11,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
+import org.springframework.samples.petclinic.model.Category;
+import org.springframework.security.acls.model.NotFoundException;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.samples.petclinic.model.Category;
-import org.springframework.samples.petclinic.web.LeagueController;
-import org.springframework.security.acls.model.NotFoundException;
-
-import motogpAPI.model2.Detail;
-import motogpAPI.model2.Example2;
 import motogpAPI.model.Example;
 import motogpAPI.model.InfoCarrera;
+import motogpAPI.model2.Example2;
 
 @Slf4j
 public class PeticionesGet {

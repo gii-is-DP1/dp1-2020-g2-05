@@ -12,7 +12,6 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
-import org.springframework.samples.petclinic.model.Category;
 
 @Audited //SELECT * FROM LINEUP_AUD, USER_REV_ENTITY WHERE LINEUP_AUD.REV=USER_REV_ENTITY.ID
 @Entity

@@ -15,9 +15,7 @@ import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.repository.LeagueRepository;
 import org.springframework.samples.petclinic.repository.TablaConsultasRepository;
 import org.springframework.samples.petclinic.repository.TeamRepository;
-import org.springframework.samples.petclinic.web.LeagueController;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
 

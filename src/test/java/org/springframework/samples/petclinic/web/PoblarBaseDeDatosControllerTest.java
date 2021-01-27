@@ -1,44 +1,5 @@
 package org.springframework.samples.petclinic.web;
 
-import static org.mockito.BDDMockito.given;
-
-
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
-import java.text.ParseException;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.junit.jupiter.api.Test;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeEach;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.boot.test.mock.mockito.MockBean;
-
-import org.springframework.dao.DataAccessException;
-
-import org.springframework.samples.petclinic.model.GranPremio;
-import org.springframework.samples.petclinic.model.Lineup;
-import org.springframework.samples.petclinic.model.Record;
-import org.springframework.samples.petclinic.model.Result;
-import org.springframework.samples.petclinic.service.GranPremioService;
-import org.springframework.samples.petclinic.service.LeagueService;
-import org.springframework.samples.petclinic.service.UserService;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
-
-
-import static org.hamcrest.Matchers.is;
-
 public class PoblarBaseDeDatosControllerTest {
 	
 //	private static final Integer TEST_ACTUAL_YEAR = 2021;

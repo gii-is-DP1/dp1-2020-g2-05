@@ -3,15 +3,11 @@ package org.springframework.samples.petclinic.web;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.Formatter;
 import org.springframework.samples.petclinic.model.GranPremio;
-import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.service.GranPremioService;
-import org.springframework.samples.petclinic.service.PilotService;
 import org.springframework.stereotype.Component;
 
 @Component
