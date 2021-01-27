@@ -35,35 +35,50 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/resources/**","/webjars/**","/h2-console/**").permitAll()
 				.antMatchers(HttpMethod.GET, "/","/oups/**").permitAll()
 				.antMatchers("/users/new").permitAll()
+				
 				.antMatchers("/admin/**").hasAnyAuthority("admin")
-				.antMatchers("/owners/**").hasAnyAuthority("owner","admin")				
+				
+				.antMatchers("/owners/**").hasAnyAuthority("owner","admin")	
+				
 				.antMatchers("/vets/**").authenticated()
+				
 				.antMatchers("/lineups/**").authenticated()
-				.antMatchers("/messages").authenticated()
+				
 				.antMatchers("/messages/**").authenticated()
-				.antMatchers("/friends").authenticated()
+				.antMatchers("/messages").authenticated()
+				
 				.antMatchers("/friends/**").authenticated()
-				.antMatchers("/leagues/**").authenticated()
-				.antMatchers("/leagues/join/**").authenticated()
-				.antMatchers("/pilots/**").hasAnyAuthority("admin")
-				.antMatchers("/welcome").permitAll()
-				.antMatchers("/recruits/*").authenticated()
-				.antMatchers("/myLeagues/**").authenticated()
+				.antMatchers("/friends").authenticated()
+				
 				.antMatchers("/leagues/{leagueId}/teams/{teamId}/*").permitAll()
+				.antMatchers("/leagues/join/**").authenticated()
+				.antMatchers("/leagues/myLeagues/**").authenticated()
+				.antMatchers("/leagues/**").authenticated()
+				
+				.antMatchers("/pilots/**").hasAnyAuthority("admin")
+				.antMatchers("/pilotsPaged").authenticated()
+
+				.antMatchers("/welcome").permitAll()
+				
+				.antMatchers("/recruits/*").authenticated()
+				
 				.antMatchers("/myTeams/**").authenticated()
 				.antMatchers("/BD/**").hasAnyAuthority("admin")
-				.antMatchers("/granPremios").authenticated()
+				
 				.antMatchers("/controlPanel/**").hasAnyAuthority("admin")
 				.antMatchers("/controlPanelSP/**").hasAnyAuthority("admin")
-				.antMatchers("/pilotsPaged").authenticated()
+				
 				.antMatchers("/results/**").authenticated()
+				
 				.antMatchers("/logging/**").permitAll()
 				.antMatchers("/manage/**").hasAnyAuthority("admin")
-//				.antMatchers("/leagues/increase").hasAnyAuthority("admin")
-				.antMatchers("/granPremios/{id}/delete").hasAnyAuthority("admin")
+				
 				.antMatchers("/granPremios/{id}/validateResults/{code}").hasAnyAuthority("admin")
 				.antMatchers("/granPremios/{id}/results/**").permitAll()
+				.antMatchers("/granPremios/{id}/delete").hasAnyAuthority("admin")
 				.antMatchers("/granPremios/new").hasAnyAuthority("admin")
+				.antMatchers("/granPremios").authenticated()
+
 				.antMatchers("/styles/**").permitAll()
 				.antMatchers("/thyme/**").permitAll()
 				.anyRequest().denyAll()
