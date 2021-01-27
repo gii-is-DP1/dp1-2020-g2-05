@@ -104,6 +104,7 @@ public class PilotService {
 		return res;
 	}
 	
+	@Transactional
 	public void poblarBD(FormRellenarBD form) throws JSONException, IOException, ParseException {
 //		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MMM-dd");		
 		for(int i=form.getAnyoInicial(); i < form.getAnyoFinal(); i++) {
@@ -152,13 +153,14 @@ public class PilotService {
 						result.setLap(false);
 						result.setPole(false);
 						this.resultService.saveResult(result);
-						this.savePilot(pilot);
+						savePilot(pilot);
 					}
 				}
 			}			
 		}
 //	}
 	
+	@Transactional
 	//	2016, RaceCode.AUT, Session.RACE
 	public void poblarBDCarreraACarrera(BDCarrera form,GranPremio gp,Boolean GpEstaEnCalendario) throws JSONException, IOException, ParseException {
 
@@ -229,7 +231,7 @@ public class PilotService {
 				Set<Result> results = new HashSet<Result>();
 				results.add(result);
 				pilot.setResults(results);
-				this.savePilot(pilot);
+				savePilot(pilot);
 			}
 			log.info("La api ha asociado los resultados al gp : " + gp.getSite());
 //		}
