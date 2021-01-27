@@ -54,8 +54,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/leagues/join/**").authenticated()
 				.antMatchers("/leagues/myLeagues/**").authenticated()
 				.antMatchers("/leagues/**").authenticated()
-
-				
 				
 				.antMatchers("/pilots/**").hasAnyAuthority("admin")
 				.antMatchers("/pilotsPaged").authenticated()
@@ -74,7 +72,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				
 				.antMatchers("/logging/**").permitAll()
 				.antMatchers("/manage/**").hasAnyAuthority("admin")
-				
 				
 				.antMatchers("/granPremios/{id}/validateResults/{code}").hasAnyAuthority("admin")
 				.antMatchers("/granPremios/{id}/results/**").permitAll()
