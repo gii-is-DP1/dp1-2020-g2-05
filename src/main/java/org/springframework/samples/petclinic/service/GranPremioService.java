@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -183,6 +181,10 @@ public class GranPremioService {
 //			this.GPRepository.save(gp);
 			System.out.println("Gp_Record: " + gp.getRecord());
 		}
+	}
+	
+	public GranPremio ultimoGPSinValidar() {
+		return GPRepository.findUltimoGpSinValidar().get(0);
 	}
 	
 }

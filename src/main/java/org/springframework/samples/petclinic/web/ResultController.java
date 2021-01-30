@@ -2,32 +2,21 @@ package org.springframework.samples.petclinic.web;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.GranPremio;
-import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Record;
 import org.springframework.samples.petclinic.model.Result;
 import org.springframework.samples.petclinic.service.GranPremioService;
-import org.springframework.samples.petclinic.service.PilotService;
+import org.springframework.samples.petclinic.service.LineupService;
 import org.springframework.samples.petclinic.service.ResultService;
-import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import lombok.extern.slf4j.Slf4j;
-import motogpAPI.RaceCode;
 
 
 @Slf4j
@@ -40,12 +29,14 @@ public class ResultController {
 
 	private  ResultService resultService;
 	private GranPremioService GPService;
+	private LineupService lineupService;
 //	private  PilotService pilotService;
 
 	@Autowired
-	public ResultController(ResultService resultService, GranPremioService GPService) {//PilotService pilotService) {
+	public ResultController(ResultService resultService, GranPremioService GPService,LineupService lineupService) {//PilotService pilotService) {
 		this.resultService = resultService;
 		this.GPService = GPService;
+		this.lineupService=lineupService;
 //		this.pilotService = pilotService;
 	}
 
@@ -148,4 +139,18 @@ public class ResultController {
 //		}
 //	}
 
+
+//	@GetMapping(value = "/validateResults/{code}")
+//	public String validateResults(@PathVariable("gpId") Integer gpId,@PathVariable("code") String code,ModelMap model) {
+//	
+//		List<Lineup> listaLineups =this.lineupService.findAll();
+//		
+//		
+//		this.resultService.validateResults(listaLineups, todosLosResultados,gpId);
+//		log.info("resultados validados  correctamente");
+//		this.resultService.createTimeMessage();
+//		log.info("mensaje temporal creado hasta mañana a las " + LocalTime.now());
+//
+//		return "redirect:/controlPanelSP"; 
+//	}
 }

@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -29,7 +27,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import lombok.extern.slf4j.Slf4j;
@@ -38,9 +35,6 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 public class LeagueController {
 
-	private String AUTHORITY;
-
-	TeamController teamController;
 	TablaConsultasService TCService;
 	TeamService teamService;
 	LeagueService leagueService;
@@ -48,12 +42,11 @@ public class LeagueController {
 
 	@Autowired
 	public LeagueController(LeagueService leagueService, UserService userService, TablaConsultasService TCService,
-			TeamService teamService, TeamController teamController) {
+			TeamService teamService) {
 		this.leagueService = leagueService;
 		this.userService = userService;
 		this.TCService = TCService;
 		this.teamService = teamService;
-		this.teamController = teamController;
 	}
 
 	@InitBinder("league")
@@ -63,8 +56,6 @@ public class LeagueController {
 
 	@GetMapping("/leagues")
 	public String leagues(ModelMap modelMap) throws JSONException, IOException {
-		User user = this.userService.getUserSession();
-		AUTHORITY = this.leagueService.findAuthoritiesByUsername(user.getUsername());
 
 		Optional<TablaConsultas> tabla = this.TCService.getTabla();
 
@@ -78,13 +69,10 @@ public class LeagueController {
 		} else {
 			log.info("No se han detectado ligas sin equipos");
 		}
-
-		if (AUTHORITY.equals("admin")) {  // se hace para que si el user
-			modelMap.addAttribute("admin", true);//no es admin no se muestre
-		} else if (!AUTHORITY.equals("admin")) {// el codigo de liga en la vista
-			modelMap.addAttribute("user", true);
+		Boolean message=this.TCService.checkDates(tabla.get());
+		if(message) {
+			modelMap.addAttribute("temporalMessage","Results has been validated, check your lineups and teams score!!");
 		}
-
 		modelMap.addAttribute("ligas", leagueList);
 		modelMap.addAttribute("categoriaActual", tabla.get().getCurrentCategory());
 		modelMap.addAttribute("carrerasCompletadas", tabla.get().getRacesCompleted());
@@ -133,17 +121,13 @@ public class LeagueController {
 
 	}
 
-	@GetMapping(path = "/leagues/increase")
-	public String incrementarLiga(ModelMap model) throws DataAccessException, duplicatedLeagueNameException {
-//		AUTHORITY = this.leagueService.findAuthoritiesByUsername(this.userService.getUserSession().getUsername());
-//		if(!(AUTHORITY.equals("admin"))) {
-//			return "redirect:/leagues";
-//		}
+	@GetMapping(path = "/leagues/increase/{category}")
+	public String incrementarLiga(@PathVariable("category") String category,ModelMap model) throws DataAccessException, duplicatedLeagueNameException {
 		
 		//aqui se entra cuando se corre un GP para aumentar el numero de carreras
-		Category category = Category.valueOf(model.getAttribute("category").toString());
+		Category categoryP = Category.valueOf(category);
 
-		TCService.actualizarTabla(category);
+		TCService.actualizarTabla(categoryP);
 
 		return "redirect:/leagues";
 	}
@@ -169,7 +153,7 @@ public class LeagueController {
 		Date date = new Date();
 
 		League newLeague = new League();
-		newLeague.setLeagueCode(leagueService.randomString(10));
+		newLeague.setLeagueCode("DntHckMe:(");
 		newLeague.setLeagueDate(formatter.format(date));
 		//creamos la liga con codigo y fecha actual 
 		log.debug("Liga dummy : " + newLeague);
@@ -190,7 +174,8 @@ public class LeagueController {
 		} else {
 
 			try {
-
+				SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+				Date date = new Date();
 				User user = this.userService.getUserSession();
 
 
@@ -201,6 +186,8 @@ public class LeagueController {
 				team.setPoints(0);
 				team.setName(user.getUsername() + " team");
 				league.addTeam(team);
+				league.setLeagueCode(leagueService.randomString(10));
+				league.setLeagueDate(formatter.format(date));
 
 				this.leagueService.saveLeague(league);
 

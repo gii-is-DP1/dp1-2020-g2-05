@@ -11,21 +11,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
+import org.springframework.samples.petclinic.model.Category;
+import org.springframework.security.acls.model.NotFoundException;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.samples.petclinic.model.Category;
-import org.springframework.samples.petclinic.web.LeagueController;
-import org.springframework.security.acls.model.NotFoundException;
-
-import motogpAPI.model2.Detail;
-import motogpAPI.model2.Example2;
 import motogpAPI.model.Example;
 import motogpAPI.model.InfoCarrera;
+import motogpAPI.model2.Example2;
 
 @Slf4j
 public class PeticionesGet {
@@ -241,46 +235,9 @@ public class PeticionesGet {
 		}
 		
 		if(listaCarrera.isEmpty()) {
-			throw new NotFoundException("No se han encontrado carreras para los anyos dados");
+			throw new NotFoundException("No se han encontrado la carrera '"+raceNumber+"' para los anyos dados");
 		}
 		return listaCarrera;
-	}
-	
-	public List<RiderOnlineData> getResultsByRaceNumber(Category category, int year, int raceNumber, Session session) {
-		List<RiderOnlineData> result = new ArrayList<>();
-
-		try {
-			// Requests the JSON object from the website
-			this.raceNumber = raceNumber;
-			JSONObject jsonObject = getJsonObjectResults(category, year, session);
-
-			// Converts the JSON object into a list of RiderOnlineData
-			JSONArray gridJSON = jsonObject.getJSONArray("details");
-			result = getRiderList(gridJSON);
-		} catch (Exception e){
-			e.printStackTrace();
-		} finally {
-			// Reset of the values before returning the results
-			raceCode = null;
-			this.raceNumber = -1;
-			return result;
-		}
-	}
-	
-	public List<RiderOnlineData> getResultsByRaceCode(Category category, int year, RaceCode code, Session session) {
-		List<RiderOnlineData> result = new ArrayList<>();
-
-			// Requests the JSON object from the website
-			raceCode = code;
-			JSONObject jsonObject = getJsonObjectResults(category, year, session);
-
-			// Converts the JSON object into a list of RiderOnlineData
-			JSONArray gridJSON = jsonObject.getJSONArray("details");
-			result = getRiderList(gridJSON);
-			// Reset of the values before returning the results
-			raceCode = null;
-			raceNumber = -1;
-			return result;
 	}
 	
 	public static List<InfoCarrera> getResultsByRaceCodeCampu(Category category, int year, RaceCode code, Session session) throws IOException {
@@ -379,37 +336,7 @@ public class PeticionesGet {
 		return result;
 	}
 	
-	private List<RiderOnlineData> getRiderList(JSONArray classification){
-		List<RiderOnlineData> result = new ArrayList<>();
-
-		for (int i = 0; i<classification.length(); i++){
-			JSONObject rider = classification.getJSONObject(i);
-
-			int position = rider.getInt("finishPosition"); // 0 if not classified
-			String name = rider.getJSONArray("drivers").getJSONObject(0).getString("name");
-			int time = rider.getInt("time"); // 0 if not available
-			int laps = rider.getInt("laps"); // 0 if not available
-			String team = rider.getJSONObject("team").getString("name");
-
-			String nationality;
-			try{
-				nationality = rider.getJSONObject("nationality").getString("name");
-			}catch (Exception e){
-				nationality = "Not Available";
-			}
-
-			int number; // In case the number is not available, this value will be -1
-			try{
-				number = rider.getInt("carNumber");
-			} catch (Exception e){
-				//e.printStackTrace();
-				number = -1;
-			}
-//			result2.add(new InfoCarrera(nombreEvento, position, calculaPuntos(position), number, name, nationality, team, kmh, vueltaMasRapidaPole, raceCode, category, lugar, fecha));
-			result.add(new RiderOnlineData(position, number, name, nationality, team, time, laps));
-		}
-		return result;
-	}
+	
 	
 	private static String getCompleteURL(Category category, int year) throws IOException {
 		String result = URL;

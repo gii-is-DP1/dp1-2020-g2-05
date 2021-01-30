@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.GranPremio;
 import org.springframework.samples.petclinic.model.Lineup;
-import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Recruit;
 import org.springframework.samples.petclinic.service.GranPremioService;
 import org.springframework.samples.petclinic.service.LeagueService;
@@ -90,10 +89,87 @@ public class LineupController {
 		return view;
 	}
 
+//	@GetMapping(path = "/newLineup/petclinic")
+//	public String crearAlineacionGetPetclinic(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
+//			ModelMap model) {
+//
+//		log.info("Creating a lineup for the team with id: " + teamId);
+//		Lineup lineup = new Lineup();
+//		Category currentCategory = this.TCService.getTabla().get().getCurrentCategory();
+//		lineup.setCategory(currentCategory);
+//		Integer currentGPId = this.TCService.getTabla().get().getActualRace();
+//		GranPremio currentGP = this.granPremioService.findGPById(currentGPId).get();
+//		lineup.setGp(currentGP);
+//		model.put("lineup", lineup);
+//		model.addAttribute("leagueCategory", currentCategory);
+//		log.info("Leading to creation form...");
+//		return "lineups/lineupsEdit";
+//	}
+//
+//	@PostMapping(value = "/newLineup/petclinic")
+//	public String crearAlineacionPostPetclinic(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
+//			@Valid Lineup lineup, BindingResult result, ModelMap model) {
+//		if (result.hasErrors()) {
+//			log.warn("The lineup creation form has errors!");
+//			log.warn("Errors: " + result);
+//			Integer currentGPId = this.TCService.getTabla().get().getActualRace();
+//			GranPremio currentGP = this.granPremioService.findGPById(currentGPId).get();
+//			lineup.setGp(currentGP);
+//			model.put("lineup", lineup);
+//			return "lineups/lineupsEdit";
+//		} else {
+//			this.lineupService.saveLineup(lineup);
+//			log.info("Lineup succesfully created!: " + lineup);
+//			return "redirect:/leagues/{leagueId}/teams/{teamId}/details";
+//		}
+//	}
+//
+//	@GetMapping(path = "/editLineup/{lineupId}/petclinic")
+//	public String editarLineupGetPetclinic(//@RequestHeader(name = "Referer") String referer,
+//			@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
+//			@PathVariable("lineupId") int lineupId, ModelMap model) {
+//
+//		String view = "redirect:/leagues/{leagueId}/teams/{teamId}/details";
+//		Optional<Lineup> lineup = this.lineupService.findLineup(lineupId);
+//
+//		if (lineup.isPresent()) {
+//			view = "lineups/lineupsEdit";
+//			log.info("Editing lineup with ID: " + lineupId + "\nLineup info: " + lineup.get());
+//			model.addAttribute("lineup", lineup.get());
+//		} else {
+//			model.addAttribute("message", "Lineup not found!");
+//			log.info("The lineup was not found!");
+//		}
+//
+//		return view;
+//	}
+//
+//	@PostMapping(value = "/editLineup/{lineupId}/petclinic")
+//	public String editarLineupPostPetclinic(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
+//			@Valid Lineup lineup, BindingResult result, ModelMap model) {
+//		if (result.hasErrors()) {
+//			log.info("The lineup edit form has errors!");
+//			log.warn("Errors: " + result);
+//			GranPremio currentGP = this.lineupService.findLineup(lineup.getId()).get().getGp();
+//			lineup.setGp(currentGP);
+//			model.put("lineup", lineup);
+//			return "lineups/lineupsEdit";
+//		} else {
+//			Lineup lineupToUpdate = this.lineupService.findLineup(lineup.getId()).get();
+//			log.info("Updating lineup with ID: " + lineup.getId());
+//			BeanUtils.copyProperties(lineup, lineupToUpdate);
+//			GranPremio gp = this.granPremioService.findGPById(lineupToUpdate.getGp().getId()).get();
+//			lineupToUpdate.setGp(gp);
+//			this.lineupService.saveLineup(lineupToUpdate);
+//			log.info("Saving edited lineup: " + lineupToUpdate);
+////			log.info("El gp asociado es: " + lineupToUpdate.getGp().getId());
+//			model.addAttribute("message", "Lineup successfully saved!");
+//			return "redirect:/leagues/{leagueId}/teams/{teamId}/details";
+//		}
+//	}
+	
 	@GetMapping(path = "/newLineup")
-	public String crearAlineacionGet(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
-			ModelMap model) {
-
+	public String crearAlineacionGet(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, ModelMap model) {
 		log.info("Creating a lineup for the team with id: " + teamId);
 		Lineup lineup = new Lineup();
 		Category currentCategory = this.TCService.getTabla().get().getCurrentCategory();
@@ -104,9 +180,10 @@ public class LineupController {
 		model.put("lineup", lineup);
 		model.addAttribute("leagueCategory", currentCategory);
 		log.info("Leading to creation form...");
-		return "lineups/lineupsEdit";
-	}
 
+	    return "thymeleaf/lineupsEdit";
+	}
+	
 	@PostMapping(value = "/newLineup")
 	public String crearAlineacionPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
 			@Valid Lineup lineup, BindingResult result, ModelMap model) {
@@ -117,16 +194,16 @@ public class LineupController {
 			GranPremio currentGP = this.granPremioService.findGPById(currentGPId).get();
 			lineup.setGp(currentGP);
 			model.put("lineup", lineup);
-			return "lineups/lineupsEdit";
+			return "thymeleaf/lineupsEdit";
 		} else {
 			this.lineupService.saveLineup(lineup);
 			log.info("Lineup succesfully created!: " + lineup);
 			return "redirect:/leagues/{leagueId}/teams/{teamId}/details";
 		}
 	}
-
+	
 	@GetMapping(path = "/editLineup/{lineupId}")
-	public String editarLineupGet(@RequestHeader(name = "Referer") String referer,
+	public String editarLineupGet(//@RequestHeader(name = "Referer") String referer,
 			@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
 			@PathVariable("lineupId") int lineupId, ModelMap model) {
 
@@ -134,7 +211,7 @@ public class LineupController {
 		Optional<Lineup> lineup = this.lineupService.findLineup(lineupId);
 
 		if (lineup.isPresent()) {
-			view = "lineups/lineupsEdit";
+			view = "thymeleaf/lineupsEdit";
 			log.info("Editing lineup with ID: " + lineupId + "\nLineup info: " + lineup.get());
 			model.addAttribute("lineup", lineup.get());
 		} else {
@@ -154,13 +231,15 @@ public class LineupController {
 			GranPremio currentGP = this.lineupService.findLineup(lineup.getId()).get().getGp();
 			lineup.setGp(currentGP);
 			model.put("lineup", lineup);
-			return "lineups/lineupsEdit";
+			return "thymeleaf/lineupsEdit";
 		} else {
 			Lineup lineupToUpdate = this.lineupService.findLineup(lineup.getId()).get();
 			log.info("Updating lineup with ID: " + lineup.getId());
+			log.info("Lineup: " + lineup);
 			BeanUtils.copyProperties(lineup, lineupToUpdate);
 			GranPremio gp = this.granPremioService.findGPById(lineupToUpdate.getGp().getId()).get();
 			lineupToUpdate.setGp(gp);
+			log.debug("lineupToUpdate: " + lineupToUpdate);
 			this.lineupService.saveLineup(lineupToUpdate);
 			log.info("Saving edited lineup: " + lineupToUpdate);
 //			log.info("El gp asociado es: " + lineupToUpdate.getGp().getId());
@@ -168,6 +247,7 @@ public class LineupController {
 			return "redirect:/leagues/{leagueId}/teams/{teamId}/details";
 		}
 	}
+
 
 	@GetMapping(path = "/delete/{lineupId}")
 	public String borrarLineup(@RequestHeader(name = "Referer") String referer, @PathVariable("lineupId") int lineupId,

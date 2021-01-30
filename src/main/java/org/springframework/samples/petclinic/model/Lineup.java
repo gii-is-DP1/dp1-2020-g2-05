@@ -12,7 +12,6 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
-import org.springframework.samples.petclinic.model.Category;
 
 @Audited //SELECT * FROM LINEUP_AUD, USER_REV_ENTITY WHERE LINEUP_AUD.REV=USER_REV_ENTITY.ID
 @Entity
@@ -111,7 +110,7 @@ public class Lineup extends BaseEntity {
 
 	@Override
 	public String toString() {
-		return "Lineup [recruit1=" + recruit1 + ", recruit2=" + recruit2 + ", team=" + team
+		return "Lineup (" + id + ") [recruit1=" + recruit1 + ", recruit2=" + recruit2 + ", team=" + team
 				+ /*", league=" + league + */", gp=" + gp + "]";
 	}
 }

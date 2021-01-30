@@ -16,12 +16,10 @@
 package org.springframework.samples.petclinic.web;
 
 import java.util.regex.Matcher;
-
 import java.util.regex.Pattern;
 
 import org.springframework.samples.petclinic.model.Message;
 import org.springframework.samples.petclinic.model.User;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 

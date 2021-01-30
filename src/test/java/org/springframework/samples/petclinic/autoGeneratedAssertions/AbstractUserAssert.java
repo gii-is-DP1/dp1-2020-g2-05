@@ -4,8 +4,9 @@ import org.assertj.core.api.AbstractObjectAssert;
 import org.assertj.core.internal.Iterables;
 import org.assertj.core.util.Objects;
 import org.springframework.samples.petclinic.model.Authorities;
+import org.springframework.samples.petclinic.model.Message;
+import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.User;
-import org.springframework.samples.petclinic.model.*;
 
 
 /**

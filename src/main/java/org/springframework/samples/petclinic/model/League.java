@@ -15,56 +15,40 @@
  */
 package org.springframework.samples.petclinic.model;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.beans.support.MutableSortDefinition;
-import org.springframework.beans.support.PropertyComparator;
-import org.springframework.format.annotation.DateTimeFormat;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import java.time.LocalDate;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "league")
 public class League extends BaseEntity {
 
-	
-	
-	@Column(name = "name", unique=true)   
+	@Column(name = "name", unique = true)
 	@Size(min = 3, max = 50)
 	@NotEmpty
 	@NotBlank
 	private String name;
-	
-	@Column(name = "league_date")        
+
+	@Column(name = "league_date")
 //	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	@NotNull
 	@NotEmpty
 	@NotBlank
 	private String leagueDate;
 
-	@Column(name = "league_code", unique=true)       
+	@Column(name = "league_code", unique = true)
 	@Size(min = 10, max = 10)
 	@NotNull
 	private String leagueCode;
@@ -75,16 +59,14 @@ public class League extends BaseEntity {
 //
 //	@Column(name = "races_completed")        
 //	private Integer racesCompleted;
-	
-	
+
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="league")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "league")
 	Set<Team> team;
 
 //	@OneToMany(cascade = CascadeType.ALL, mappedBy = "league")
 //	private Set<Lineup> lineups;
 
-	
 	public String getLeagueDate() {
 		return leagueDate;
 	}
@@ -92,8 +74,6 @@ public class League extends BaseEntity {
 	public void setLeagueDate(String leagueDate) {
 		this.leagueDate = leagueDate;
 	}
-
-
 
 //	public Integer getRacesCompleted() {
 //		return racesCompleted;
@@ -104,8 +84,8 @@ public class League extends BaseEntity {
 //	}
 
 	public Set<Team> getTeam() {
-		if(this.team==null) {
-			this.team=new HashSet<Team>();
+		if (this.team == null) {
+			this.team = new HashSet<Team>();
 		}
 		return team;
 	}
@@ -118,17 +98,16 @@ public class League extends BaseEntity {
 		return leagueCode;
 	}
 
-
 	public String setLeagueCode(String leagueCode1) {
-		return this.leagueCode=leagueCode1;
+		return this.leagueCode = leagueCode1;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "League ["+ "name="+ getName()+", leagueDate=" + leagueDate +", leagueCode="+ leagueCode 
-				
+		return "League [" + "name=" + getName() + ", leagueDate=" + leagueDate + ", leagueCode=" + leagueCode
+
 //				+ ", racesCompleted=" + racesCompleted +", currentCategory="+activeCategory 
-				+"]";
+				+ "]";
 	}
 //
 //	public Category getActiveCategory() {
@@ -149,9 +128,7 @@ public class League extends BaseEntity {
 
 	public void addTeam(Team team) {
 		this.getTeam().add(team);
-	//	team.setLeague(this);
+		// team.setLeague(this);
 	}
-
-
 
 }

@@ -1,6 +1,5 @@
 package org.springframework.samples.petclinic.model;
 
-import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.CascadeType;

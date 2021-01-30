@@ -17,13 +17,9 @@ package org.springframework.samples.petclinic.service;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Formatter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -31,33 +27,23 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 
-import javax.validation.Valid;
-
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.BDCarrera;
 import org.springframework.samples.petclinic.model.FormRellenarBD;
 import org.springframework.samples.petclinic.model.GranPremio;
 import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Result;
 import org.springframework.samples.petclinic.repository.PilotRepository;
-import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
 import org.springframework.samples.petclinic.web.ResultFormatter;
-import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.samples.petclinic.model.Category;
 import motogpAPI.PeticionesGet;
-import motogpAPI.RaceCode;
 import motogpAPI.Session;
 import motogpAPI.model.InfoCarrera;
 
@@ -118,6 +104,7 @@ public class PilotService {
 		return res;
 	}
 	
+	@Transactional
 	public void poblarBD(FormRellenarBD form) throws JSONException, IOException, ParseException {
 //		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MMM-dd");		
 		for(int i=form.getAnyoInicial(); i < form.getAnyoFinal(); i++) {
@@ -166,13 +153,14 @@ public class PilotService {
 						result.setLap(false);
 						result.setPole(false);
 						this.resultService.saveResult(result);
-						this.savePilot(pilot);
+						savePilot(pilot);
 					}
 				}
 			}			
 		}
 //	}
 	
+	@Transactional
 	//	2016, RaceCode.AUT, Session.RACE
 	public void poblarBDCarreraACarrera(BDCarrera form,GranPremio gp,Boolean GpEstaEnCalendario) throws JSONException, IOException, ParseException {
 
@@ -240,7 +228,10 @@ public class PilotService {
 				result.setLap(false);
 				result.setPole(false);
 				this.resultService.saveResult(result);
-				this.savePilot(pilot);
+				Set<Result> results = new HashSet<Result>();
+				results.add(result);
+				pilot.setResults(results);
+				savePilot(pilot);
 			}
 			log.info("La api ha asociado los resultados al gp : " + gp.getSite());
 //		}

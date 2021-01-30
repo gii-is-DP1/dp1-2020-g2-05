@@ -2,7 +2,8 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+	<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
 
 
@@ -13,7 +14,7 @@
 <petclinic:layout pageName="leagues">
 
 	<h2>Leagues</h2>
-	
+	<c:if test="${temporalMessage!=null}"><h3><c:out value="${temporalMessage}"></c:out></h3></c:if>
 	<div id="divLeagueTable">
 <!-- 	<table> -->
 <!-- 		<thead> -->
@@ -30,7 +31,8 @@
 					<div class="columns">
 						<ul class="price">
 							<li class="header"><c:out value="${league.name} " /></li>
-							<c:if test="${admin==true}"><li class="grey"><c:out value="${league.leagueCode} " /></li></c:if>
+							<sec:authorize access="hasAuthority('admin')">
+					<li class="grey"><c:out value="${league.leagueCode} " /></li></sec:authorize>
 							<li><c:out value="${league.leagueDate}" /></li>
 							<li class="grey"> <spring:url value="/leagues/{leagueId}/teams" var="leagueUrl">
 							<spring:param name="leagueId" value="${league.id}" />

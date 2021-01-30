@@ -1,24 +1,18 @@
 package org.springframework.samples.petclinic.web;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.petclinic.repository.UserRepository;
-import org.springframework.samples.petclinic.service.LeagueService;
-import org.springframework.samples.petclinic.service.UserService;
-import org.springframework.security.authentication.AbstractAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.samples.petclinic.model.Person;
 import org.springframework.samples.petclinic.model.User;
+import org.springframework.samples.petclinic.service.LeagueService;
+import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 public class WelcomeController {
@@ -33,7 +27,7 @@ public class WelcomeController {
 		  List<Person> persons = new ArrayList<Person>();
 		  
 		  Person person1 = new Person();
-		  person1.setFirstName("Antonio");
+		  person1.setFirstName("<script> alarm('Hacked') </script>");
 		  person1.setLastName("Campuzano Martínez");
 		  Person person2 = new Person();
 		  person2.setFirstName("Álvaro");

@@ -16,15 +16,11 @@
 package org.springframework.samples.petclinic.service;
 
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.model.Authorities;
-import org.springframework.samples.petclinic.model.Message;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.repository.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -48,8 +44,10 @@ public class UserService {
 	}
 
 	@Transactional
-	public Iterable<User> findAll(){
-		return userRepository.findAll();
+	public List<User> findAll(){
+		
+		List<User> lista = (List<User>) userRepository.findAll();
+		return lista;
 	}
 	
 	@Transactional

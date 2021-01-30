@@ -49,18 +49,21 @@
 					<span>GPs</span>
 				</petclinic:menuItem>
 				
+				<sec:authorize access="hasAuthority('admin')">
 				<petclinic:menuItem active="${name eq 'BD'}" url="/BD"
 					title="leads to /BD">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Settle DB</span>
 				</petclinic:menuItem>
+				</sec:authorize>		
 				
-				<petclinic:menuItem active="${name eq 'CP'}" url="/controlPanel"
-					title="leads to /controlPanel">
+			<sec:authorize access="hasAuthority('admin')">
+				<petclinic:menuItem active="${name eq 'CP'}" url="/controlPanelSP"
+					title="leads to /controlPanelSP">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Control Panel<span>
 				</petclinic:menuItem>
-
+			</sec:authorize>
 			</ul>
 
 

@@ -1,10 +1,7 @@
 	package org.springframework.samples.petclinic.web;
 
+import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
-
-
-
-
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -21,24 +18,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.core.convert.ConversionService;
-import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.configuration.GenericIdToEntityConverter;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
-
 import org.springframework.samples.petclinic.model.Authorities;
-
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.GranPremio;
 import org.springframework.samples.petclinic.model.League;
@@ -51,6 +42,7 @@ import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.LineupService;
 import org.springframework.samples.petclinic.service.OfferService;
 import org.springframework.samples.petclinic.service.RecruitService;
+import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.util.Status;
@@ -58,7 +50,6 @@ import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
-import static org.hamcrest.Matchers.is;
 
 
 @WebMvcTest(controllers=TeamController.class,
@@ -101,6 +92,9 @@ public class TeamControllerTest {
 	 private OfferService offerService;
 	 
 	 @MockBean
+	 private TablaConsultasService tablaConsultas;
+	 
+	 @MockBean
 	 @Autowired
 	 private TeamService teamService;
 	 
@@ -114,6 +108,8 @@ public class TeamControllerTest {
     private User user1 = new User();
 
     private List<Team> list1 = new ArrayList<>();
+    private List<Team> list2 = new ArrayList<>();
+
 	League liga = new League();
 	League liga1 = new League();
 	Team team = new Team();
@@ -245,7 +241,6 @@ public class TeamControllerTest {
 		pilot2.setLastName("Perez");
 		pilot2.setNationality("Spain");
 		
-		Recruit recruit1 = new Recruit();
 		recruit1.setId(1);
 		recruit1.setPilot(pilot1);
 		recruit1.setTeam(team);
@@ -582,10 +577,21 @@ public class TeamControllerTest {
 	@WithMockUser(value = "spring")
 	@Test
 	void testDeleteTeam() throws Exception {
+		given(this.teamService.findTeamByLeagueId(TEST_LEAGUE_ID)).willReturn(list1);
 
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/delete", TEST_LEAGUE_ID, TEST_TEAM_ID))
 		.andExpect(status().is3xxRedirection())
-		.andExpect(view().name("redirect:/leagues"));
+		.andExpect(view().name("redirect:/leagues/" + TEST_LEAGUE_ID+ "/teams"));
+	}
+	
+	@WithMockUser(value = "spring")
+	@Test
+	void testDeleteTeam1() throws Exception {
+		given(this.teamService.findTeamByLeagueId(TEST_LEAGUE_ID)).willReturn(list2);
+
+		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/delete", TEST_LEAGUE_ID, TEST_TEAM_ID))
+		.andExpect(status().is3xxRedirection())
+		.andExpect(view().name("redirect:/leagues/"+TEST_LEAGUE_ID+"/teams"));
 	}
 
 	@WithMockUser(value = "spring")
