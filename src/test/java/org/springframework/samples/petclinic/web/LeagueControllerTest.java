@@ -176,7 +176,7 @@ public class LeagueControllerTest {
     	@WithMockUser(value = "spring")
     	@Test
     	void testShowMyLeagues() throws Exception {
-    		given(leagueService.obtenerListaIntegerToTeams(teamService.findTeamsByUsername(user.getUsername()))).willReturn(lista);
+    		given(leagueService.obtenerListaDeLigasDeUnaListaDeIntegers(teamService.findTeamsByUsername(user.getUsername()))).willReturn(lista);
     		mockMvc.perform(get("/leagues/myLeagues")).andExpect(status().isOk())
     		.andExpect(model().attribute("noTengoLigas", is(false)))
     		.andExpect(model().attribute("misLigas", Matchers.hasItem(Matchers.<League> hasProperty("leagueCode", is(liga.getLeagueCode())))))
@@ -188,7 +188,7 @@ public class LeagueControllerTest {
     	@WithMockUser(value = "spring")
     	@Test
     	void testDontParticipatesInAnyLeagues() throws Exception {
-    		given(leagueService.obtenerListaIntegerToTeams(teamService.findTeamsByUsername(user.getUsername()))).willReturn(new ArrayList<League>());
+    		given(leagueService.obtenerListaDeLigasDeUnaListaDeIntegers(teamService.findTeamsByUsername(user.getUsername()))).willReturn(new ArrayList<League>());
     		mockMvc.perform(get("/leagues/myLeagues")).andExpect(status().isOk())
     		.andExpect(model().attribute("noTengoLigas", is(true)))
     		.andExpect(view().name("leagues/myLeagues"));
@@ -198,7 +198,7 @@ public class LeagueControllerTest {
     	@WithMockUser(value = "spring")
     	@Test
     	void testAlreadyParticipatesInLeague() throws Exception {
-    		given(leagueService.obtenerListaIntegerToTeams(teamService.findTeamsByUsername(user.getUsername()))).willReturn(lista);
+    		given(leagueService.obtenerListaDeLigasDeUnaListaDeIntegers(teamService.findTeamsByUsername(user.getUsername()))).willReturn(lista);
     		mockMvc.perform(get("/leagues/myLeagues").flashAttr("yaTienesEquipo", true).flashAttr("leagueYaEquipoId", 1))
     		.andExpect(status().isOk())
     		.andExpect(model().attribute("yaTienesEquipo", is(true)))
