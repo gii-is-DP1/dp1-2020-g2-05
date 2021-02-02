@@ -62,31 +62,24 @@ public class LineupControllerTest {
 	private static final Integer TEST_LEAGUE_ID = 1;
 	
 	@MockBean
-	@Autowired
 	TablaConsultasService TCService;
 	
 	@MockBean
-	@Autowired
 	LineupService lineupService;
 	
 	@MockBean
-	@Autowired
 	LeagueService leagueService;
 	
 	@MockBean
-	@Autowired
 	TeamService teamService;
 	
 	@MockBean
-	@Autowired
 	RecruitService recruitService;
 	
 	@MockBean
-	@Autowired
 	GranPremioService granPremioService;
 	
 	@MockBean
-	@Autowired
 	UserService userService;
 	
 	@Autowired
@@ -270,7 +263,7 @@ public class LineupControllerTest {
 				.with(csrf())
 				.param("id", lineup.getId().toString())
 				.param("category", lineup.getCategory().toString())
-				.param("league", TEST_LEAGUE_ID.toString())
+//				.param("league", TEST_LEAGUE_ID.toString())
 				.param("team", lineup.getTeam().getId().toString())
 				.param("gp.id", lineup.getGp().getId().toString())
 //				.param("gp.calendar", lineup.getGp().getCalendar().toString())

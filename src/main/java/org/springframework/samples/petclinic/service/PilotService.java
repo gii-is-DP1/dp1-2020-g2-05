@@ -16,6 +16,7 @@ UserRepository.java * Copyright 2002-2013 the original author or authors.
 package org.springframework.samples.petclinic.service;
 
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -212,7 +213,7 @@ public class PilotService {
 
 				pilot.setCategory(resultado_k.getCategory());
 
-				Random random = new Random();
+				SecureRandom random = new SecureRandom();
 				pilot.setBaseValue(random.nextInt(3000) + 1000);//Valores arbitrarios, pueden cambiar
 
 				Result result = new Result();
