@@ -1,7 +1,9 @@
 package org.springframework.samples.petclinic.service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -38,7 +40,7 @@ public class LineupService {
 	}
 	
 	public List<Lineup> findByTeam(int team_id) {
-		return this.lineupRepository.findByTeam(team_id);
+		return this.lineupRepository.findByTeam(team_id).stream().sorted(Comparator.comparing(x -> x.getGp().getDate0())).collect(Collectors.toList());
 	}
 	
 	
