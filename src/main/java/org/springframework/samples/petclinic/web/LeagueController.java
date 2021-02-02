@@ -115,6 +115,8 @@ public class LeagueController {
 		} else {
 			modelMap.addAttribute("noTengoLigas", false);
 
+			modelMap.addAttribute("nombreUsuarioDeLaSesion",usuarioSesion.getUsername());
+			
 			modelMap.addAttribute("misLigas", ligasDelUsuarioDeLaSesion);
 
 			return "leagues/myLeagues";

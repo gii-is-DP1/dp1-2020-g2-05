@@ -132,7 +132,6 @@ public class ResultService {
 	
 	public  Integer calculaPuntos(Integer pos) {
 		switch (pos) {
-		case 0:return 0;
 		case 1:	return 25;
 		case 2:	return 20;
 		case 3:	return 16;
@@ -148,58 +147,28 @@ public class ResultService {
 		case 13:return 3;
 		case 14:return 2;
 		case 15:return 1;
-		case 16:return 1;
-		case 17:return 1;
-		case 18:return 1;
-		case 19:return 1;
-		case 20:return 1;
-		case 21:return 1;
-		case 22:return 1;
-		case 23:return 1;
-		case 24:return 1;
-		case 25:return 1;
-		case 26:return 1;
-		case 27:return 1;
-		case 28:return 1;
-		case 29:return 1;
-		case 30:return 1;
 		default:return 0;
 		}
 	}
+	
 	public  Integer calculaMoney(Integer pos) {
 		switch (pos) {
-		case 0:return 0;
-		case 1:	return 2500;
-		case 2:	return 2000;
-		case 3:	return 1600;
-		case 4:	return 1300;
-		case 5:	return 1100;
-		case 6:	return 1000;
-		case 7:	return 900;
-		case 8:	return 800;
-		case 9:	return 700;
-		case 10:return 600;
-		case 11:return 500;
-		case 12:return 400;
-		case 13:return 300;
-		case 14:return 200;
-		case 15:return 100;
-		case 16:return 100;
-		case 17:return 100;
-		case 18:return 100;
-		case 19:return 100;
-		case 20:return 100;
-		case 21:return 100;
-		case 22:return 100;
-		case 23:return 100;
-		case 24:return 100;
-		case 25:return 100;
-		case 26:return 100;
-		case 27:return 100;
-		case 28:return 100;
-		case 29:return 100;
-		case 30:return 100;
-		default:return 0;
+		case 1:	return 3000;
+		case 2:	return 2500;
+		case 3:	return 2000;
+		case 4:	return 1500;
+		case 5:	return 1400;
+		case 6:	return 1300;
+		case 7:	return 1200;
+		case 8:	return 1100;
+		case 9:	return 1000;
+		case 10:return 1000;
+		case 11:return 1000;
+		case 12:return 1000;
+		case 13:return 1000;
+		case 14:return 1000;
+		case 15:return 1000;
+		default:return 500;
 		}
 	}
 	
