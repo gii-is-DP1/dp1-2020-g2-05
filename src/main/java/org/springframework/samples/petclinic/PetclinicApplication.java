@@ -29,7 +29,7 @@ public class PetclinicApplication {
 	
 	
 	//Ajustar a lunes (0 00 00 ? * 1)
-	@Scheduled(cron = "0 06 19 ? * * ")
+	@Scheduled(cron = "0 51 18 ? * * ")
     public void validarCarreras() throws Exception {
 		log.info("Validando la ultima carrera completada" );
 		System.out.println("VALIDANDO");

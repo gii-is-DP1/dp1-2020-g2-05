@@ -170,7 +170,7 @@ public class LeagueServiceTest {
 			newLeague.setTeam(conj);
 			leagues.add(newLeague);
 			
-			Boolean noTeams = this.leagueService.comprobarLigaVacia(leagues);
+			Boolean noTeams = this.leagueService.comprobarSiHayLigasVacias(leagues);
 			assertThat(noTeams).isTrue();
 		}
 
@@ -195,7 +195,7 @@ public class LeagueServiceTest {
 			newLeague.setTeam(equipos);
 			leagues.add(newLeague);
 			Set<Team> eq = newLeague.getTeam();
-			 Boolean noTeams = this.leagueService.comprobarLigaVacia(leagues);
+			 Boolean noTeams = this.leagueService.comprobarSiHayLigasVacias(leagues);
 			assertThat(noTeams).isFalse();
 		}
 	 
@@ -215,7 +215,7 @@ public class LeagueServiceTest {
 			newLeague.setTeam(equipos);
 			leagues.add(newLeague);
 			Set<Team> eq = newLeague.getTeam();
-			 Boolean noTeams = this.leagueService.comprobarLigaVacia(leagues);
+			 Boolean noTeams = this.leagueService.comprobarSiHayLigasVacias(leagues);
 			assertThat(noTeams).isTrue();
 		}
 	 @Test

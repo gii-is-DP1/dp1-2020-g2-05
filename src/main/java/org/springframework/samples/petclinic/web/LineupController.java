@@ -88,6 +88,8 @@ public class LineupController {
 		}
 		return view;
 	}
+	
+//	Estos metodos son los que usan jsp, los que no estan comentados usan Thymeleaf
 
 //	@GetMapping(path = "/newLineup/petclinic")
 //	public String crearAlineacionGetPetclinic(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
@@ -211,9 +213,15 @@ public class LineupController {
 		Optional<Lineup> lineup = this.lineupService.findLineup(lineupId);
 
 		if (lineup.isPresent()) {
-			view = "thymeleaf/lineupsEdit";
-			log.info("Editing lineup with ID: " + lineupId + "\nLineup info: " + lineup.get());
-			model.addAttribute("lineup", lineup.get());
+			// Si ya se ha disputado el GP, no permite editar
+			Optional<Boolean> condition = Optional.of(lineup.get().getGp().getHasBeenRun());
+			if (condition.isPresent() && condition.get()) {
+				return view;
+			} else {
+				view = "thymeleaf/lineupsEdit";
+				log.info("Editing lineup with ID: " + lineupId + "\nLineup info: " + lineup.get());
+				model.addAttribute("lineup", lineup.get());
+			}
 		} else {
 			model.addAttribute("message", "Lineup not found!");
 			log.info("The lineup was not found!");
@@ -225,6 +233,11 @@ public class LineupController {
 	@PostMapping(value = "/editLineup/{lineupId}")
 	public String editarLineupPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
 			@Valid Lineup lineup, BindingResult result, ModelMap model) {
+		
+//		Optional<Boolean> condition = Optional.of(lineup.getGp().getHasBeenRun());
+//		if (condition.isPresent() && condition.get()) {
+//			return "redirect:/leagues/{leagueId}/teams/{teamId}/details";
+//		}
 		if (result.hasErrors()) {
 			log.info("The lineup edit form has errors!");
 			log.warn("Errors: " + result);
@@ -250,14 +263,20 @@ public class LineupController {
 
 
 	@GetMapping(path = "/delete/{lineupId}")
-	public String borrarLineup(@RequestHeader(name = "Referer") String referer, @PathVariable("lineupId") int lineupId,
+	public String borrarLineup(@RequestHeader(name = "Referer", defaultValue = "/leagues/{leagueId}/teams/{teamId}/details") String referer, @PathVariable("lineupId") int lineupId,
 			ModelMap model) {
 		Optional<Lineup> lineup = lineupService.findLineup(lineupId);
 		log.info("Deleting lineup with id: (" + lineupId + ")");
 		if (lineup.isPresent()) {
-			log.info("Lineup: " + lineup.get());
-			lineupService.delete(lineup.get());
-			model.addAttribute("message", "Lineup successfully deleted!");
+			// Si ya se ha disputado el GP, no permite borrar
+			Optional<Boolean> condition = Optional.of(lineup.get().getGp().getHasBeenRun());
+			if (condition.isPresent() && condition.get()) {
+				return "redirect:/leagues/{leagueId}/teams/{teamId}/details";
+			} else {
+				log.info("Lineup: " + lineup.get());
+				lineupService.delete(lineup.get());
+				model.addAttribute("message", "Lineup successfully deleted!");
+			}
 		} else {
 			model.addAttribute("message", "Lineup not found!");
 			log.warn("The lineup with id (" + lineupId + ") was not found!");

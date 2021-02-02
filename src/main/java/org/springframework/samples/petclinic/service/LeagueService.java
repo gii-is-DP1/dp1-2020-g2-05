@@ -37,19 +37,17 @@ public class LeagueService {
 //	}
 
 	@Transactional
-	public Boolean saveLeague(League league) throws DataAccessException, duplicatedLeagueNameException {
-		log.info("Intentando guardar liga : " + league);
-//		Iterable<League> ligas = leagueRepository.findAll();
-		List<League> listLigas = this.findAll();
-//		ligas.forEach(listLigas::add);
-		for (int i = 0; i < listLigas.size(); i++) {
-			if (listLigas.get(i).getName().equals(league.getName())) {
-				log.warn("No se ha podido guardar la liga " + league);
+	public Boolean saveLeague(League ligaAGuardar) throws DataAccessException, duplicatedLeagueNameException {
+		log.info("Intentando guardar liga : " + ligaAGuardar);
+		List<League> todasLasLigas = this.findAll();
+		for (int i = 0; i < todasLasLigas.size(); i++) {
+			if (todasLasLigas.get(i).getName().equals(ligaAGuardar.getName())) {
+				log.warn("No se ha podido guardar la liga " + ligaAGuardar);
 				throw new duplicatedLeagueNameException("Duplicated league name");
 			}
 		}
-		log.info("La liga '" + league + "' se ha guardado correctamente");
-		leagueRepository.save(league);
+		log.info("La liga '" + ligaAGuardar + "' se ha guardado correctamente");
+		leagueRepository.save(ligaAGuardar);
 		return true;
 	}
 	
@@ -102,33 +100,33 @@ public class LeagueService {
 	}
 
 	@Transactional
-	public boolean comprobarLigaVacia(List<League> result) {
-		Boolean ret = false;
+	public boolean comprobarSiHayLigasVacias(List<League> todasLasLigas) {
+		Boolean resultado = false;
 
-		for (League league : result) {
-			Set<Team> equipos = league.getTeam();
-			if (equipos.size() == 1) {
-				if (equipos.stream().collect(Collectors.toList()).get(0).getName().equals("Sistema")) {
-					this.deleteLeague(league);
-					ret = true;
-					log.warn("Se ha detectado una liga sin equipos : " + league);
+		for (League liga_i : todasLasLigas) {
+			Set<Team> equiposDeLaLiga_i = liga_i.getTeam();
+			if (equiposDeLaLiga_i.size() == 1) {
+				if (equiposDeLaLiga_i.stream().collect(Collectors.toList()).get(0).getName().equals("Sistema")) {
+					this.deleteLeague(liga_i);
+					resultado = true;
+					log.warn("Se ha detectado una liga sin equipos : " + liga_i);
 
 				}
-			}else if(equipos.isEmpty()) {
-				this.deleteLeague(league);
-				ret = true;
-				log.warn("Se ha detectado una liga sin equipos : " + league);
+			}else if(equiposDeLaLiga_i.isEmpty()) {
+				this.deleteLeague(liga_i);
+				resultado = true;
+				log.warn("Se ha detectado una liga sin equipos : " + liga_i);
 			}
 
 		}
-		return ret;
+		return resultado;
 	}
 	
-	public List<League> obtenerListaIntegerToTeams(Collection<Integer> collect) {
+	public List<League> obtenerListaDeLigasDeUnaListaDeIntegers(Collection<Integer> listaIntegers) {
 
-		List<League> myLeaguesList = collect.stream().map(x -> this.findLeague(x).get()).collect(Collectors.toList());
+		List<League> listaLigas = listaIntegers.stream().map(integer_i -> this.findLeague(integer_i).get()).collect(Collectors.toList());
 
-		return myLeaguesList;
+		return listaLigas;
 	}
 
 	public List<League> findAll() {
@@ -142,7 +140,7 @@ public class LeagueService {
 	}
 
 	
-	public ModelMap descifraUri(String pth,String code,ModelMap model) {
+	public ModelMap descifraUri(String stringADescifrar,String code,ModelMap model) {
 		//dependiendo del path descifro lo que la api no ha podido encontrar
 		// el index 0 significa cuantos no ha podido encontrar(1 a 3)
 		//los sigiuentes significan, 3 moto3,2 moto2,GP motoGP
@@ -150,35 +148,35 @@ public class LeagueService {
 		// el path 23G que no ha encontrado 2 y que es moto3 y moto gp
 		//el path  332G que no ha encontrado 3 y que son moto3,moto2 y motogp
 		//...	
-		if(pth.charAt(0)=='1'){
-			if(pth.charAt(1)=='3') {
+		if(stringADescifrar.charAt(0)=='1'){
+			if(stringADescifrar.charAt(1)=='3') {
 				model.addAttribute("messageMoto3NotFound",
 						"API has not found any result to code " + code + " for moto3");
-			}else if(pth.charAt(1)=='2') {
+			}else if(stringADescifrar.charAt(1)=='2') {
 				model.addAttribute("messageMoto2NotFound",
 						"API has not found any result to code " + code + " for moto2");
-			}else if(pth.charAt(1)=='G') {
+			}else if(stringADescifrar.charAt(1)=='G') {
 				model.addAttribute("messageMotogpNotFound",
 						"API has not found any result to code " + code + " for motogp");
 			}
-		}else if(pth.charAt(0)=='2') {
-			if(pth.charAt(1)=='3' && pth.charAt(2)=='2') {
+		}else if(stringADescifrar.charAt(0)=='2') {
+			if(stringADescifrar.charAt(1)=='3' && stringADescifrar.charAt(2)=='2') {
 				model.addAttribute("messageMoto3NotFound",
 						"API has not found any result to code " + code + " for moto3");
 				model.addAttribute("messageMoto2NotFound",
 						"API has not found any result to code " + code + " for moto2");
-			}else if(pth.charAt(1)=='3' && pth.charAt(2)=='G') {
+			}else if(stringADescifrar.charAt(1)=='3' && stringADescifrar.charAt(2)=='G') {
 				model.addAttribute("messageMoto3NotFound",
 						"API has not found any result to code " + code + " for moto3");
 				model.addAttribute("messageMotogpNotFound",
 						"API has not found any result to code " + code + " for motogp");
-			}else if(pth.charAt(1)=='2' && pth.charAt(2)=='G') {
+			}else if(stringADescifrar.charAt(1)=='2' && stringADescifrar.charAt(2)=='G') {
 				model.addAttribute("messageMoto2NotFound",
 						"API has not found any result to code " + code + " for moto2");
 				model.addAttribute("messageMotogpNotFound",
 						"API has not found any result to code " + code + " for motogp");
 			}
-		}else if(pth.charAt(0)=='3') {
+		}else if(stringADescifrar.charAt(0)=='3') {
 			model.addAttribute("messageMoto2NotFound",
 					"API has not found any result to code " + code + " for moto2");
 			model.addAttribute("messageMotogpNotFound",
