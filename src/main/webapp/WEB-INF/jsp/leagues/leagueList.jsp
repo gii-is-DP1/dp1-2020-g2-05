@@ -40,21 +40,8 @@
 							
 						</ul>
 					</div>
-
-<!-- 					<tr>	 onclick="window.location='/leagues/${league.id}/details'"  -->
-<%-- 					<td><c:out value="${league.name} " /></td> --%>
-<%-- 					<c:if test="${admin==true}"><td><c:out value="${league.leagueCode} " /></td></c:if> --%>
-<%-- 					<td><c:out value="${league.leagueDate}" /></td> --%>
-<!-- 					<td> -->
-<%-- 					<spring:url value="/leagues/{leagueId}/teams" var="leagueUrl"> --%>
-<%-- 							<spring:param name="leagueId" value="${league.id}" /> --%>
-<%-- 						</spring:url> <a href="${fn:escapeXml(leagueUrl)}">Teams</a> --%>
-<!-- 					</td> -->
-					
-<!-- 				</tr> -->
 			</c:forEach>
-<!-- 		</tbody> -->
-<!-- 	</table> -->
+
 	</div>
 	
 				<div>
