@@ -15,10 +15,12 @@ import org.springframework.samples.petclinic.model.BDCarrera;
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.FormRellenarBD;
 import org.springframework.samples.petclinic.model.GranPremio;
+import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.service.GranPremioService;
 import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.PilotService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
+import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -38,6 +40,7 @@ import motogpAPI.Session;
 public class PoblarBaseDeDatosController {
 
 	LeagueService leagueService;
+	TeamService teamService;
 	UserService userService;
 	GranPremioService GPService;
 	PilotService pilotService;
@@ -46,12 +49,13 @@ public class PoblarBaseDeDatosController {
 	@Autowired
 	public PoblarBaseDeDatosController(LeagueService leagueService, UserService userService, PilotService pilotService,
 	 GranPremioService GPService,
-			TablaConsultasService TCService) {
+			TablaConsultasService TCService, TeamService teamService) {
 		this.leagueService = leagueService;
 		this.userService = userService;
 		this.pilotService = pilotService;
 		this.GPService = GPService;
 		this.TCService = TCService;
+		this.teamService = teamService;
 	}
 
 	private Boolean messageNullPointerException = false;
@@ -223,9 +227,27 @@ public class PoblarBaseDeDatosController {
 		} catch (Exception e) {
 
 		}
+		Category category = TCService.getTabla().get().getCurrentCategory();
+		
 		this.TCService.actualizarTabla(Category.MOTO2);
 		this.TCService.actualizarTabla(Category.MOTO3);
 		this.TCService.actualizarTabla(Category.MOTOGP);
+		
+		Category newCategory = TCService.getTabla().get().getCurrentCategory();
+		
+		if(!category.equals(newCategory)) {
+			List<Team> teams = new ArrayList<Team>();
+			teamService.findAllTeams().forEach(teams::add);
+			log.info("Se ha detectado el cambio de categoria, se procede a vender todos los pilotos y configurar el mercado");
+			for(int i = 0; i<teams.size();i++) {
+				Team team = teams.get(i);
+				teamService.sellAllTeamRecruits(team);
+				if(team.getName().equals("Sistema")) {
+					teamService.recruitAndOfferAll(team,newCategory);
+				}
+			}
+		}
+		
 		return "redirect:/controlPanel/"+contador+notFound+"/"+code;
 	}
 
