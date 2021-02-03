@@ -33,7 +33,7 @@
 			<th>Name</th>
 			<th>Last Name</th>
 			<th>Category</th>
-			<th>Dorsal</th>
+			<th>Points</th>
 			<th>Nationality</th>
 			<th>Actions</th>
 		</tr>
@@ -42,7 +42,7 @@
 				<td><c:out value="${recruit.pilot.name}" /></td>
 				<td><c:out value="${recruit.pilot.lastName}" /></td>
 				<td><c:out value="${recruit.pilot.category}" /></td>
-				<td><c:out value="${recruit.pilot.dorsal}" /></td>
+				<td><c:out value="${recruit.pilot.points}" /></td>
 				<td><c:out value="${recruit.pilot.nationality}" /></td>
 				<c:choose>
 					<c:when test="${recruit.id == recruitToSale.id}">
@@ -68,7 +68,7 @@
 				<td><c:out value="${recruit.pilot.name}" /></td>
 				<td><c:out value="${recruit.pilot.lastName}" /></td>
 				<td><c:out value="${recruit.pilot.category}" /></td>
-				<td><c:out value="${recruit.pilot.dorsal}" /></td>
+				<td><c:out value="${recruit.pilot.points}" /></td>
 				<td><c:out value="${recruit.pilot.nationality}" /></td>
 			</tr>
 		</c:forEach>

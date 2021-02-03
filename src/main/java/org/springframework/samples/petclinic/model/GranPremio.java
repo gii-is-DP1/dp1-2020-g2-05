@@ -137,6 +137,6 @@ public class GranPremio extends BaseEntity {
 	@Override
 	public String toString() {
 		return "GranPremio [site=" + site + ", date0=" + date0 + ", circuit=" + circuit + ", raceCode=" + raceCode
-				+ ", results=" + results + "]";
+				+ "]";
 	}
 }

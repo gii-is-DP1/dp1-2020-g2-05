@@ -53,7 +53,7 @@ public class TablaConsultasServiceTest {
 		 	Category cat = Category.MOTO2;
 		 	TablaConsultas TC = this.TCService.getTabla().get();
 		 	TC.setCurrentCategory(cat);
-		 	TC.setRacesCompleted(13);
+		 	TC.setRacesCompleted(7);
 		 	this.TCService.actualizarTabla(TC.getCurrentCategory());
 		 	TC = this.TCService.getTabla().get();
 			assertThat(cat).isEqualTo(TC.getCurrentCategory());

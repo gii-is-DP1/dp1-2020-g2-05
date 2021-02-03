@@ -29,7 +29,6 @@ public class PetclinicApplication {
         TCservice.actualizarTablaAutomatica();
     }
 	
-	
 	//Ajustar a lunes (0 00 00 ? * MON)
 	@Scheduled(cron = "0 0 12 ? * MON")
     public void validarCarreras() throws Exception {
@@ -39,4 +38,5 @@ public class PetclinicApplication {
     }
 	
 
+	
 }
