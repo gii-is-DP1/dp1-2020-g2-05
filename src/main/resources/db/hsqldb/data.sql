@@ -32,32 +32,98 @@ INSERT INTO authorities(id,username,authority) VALUES (10,'xnegis','user');
 
 INSERT INTO messages (id,asunto,cuerpo,usernamesend,usernamereceive) VALUES (1,'Prueba1','Prueba1','serrojjim','martorsan13');
 
-INSERT INTO pilot(id,name,lastname,nationality,dorsal,category,base_value) VALUES (1,'Sergio','Rojas','Espanola',93,1,2000);
-INSERT INTO pilot(id,name,lastname,nationality,dorsal,category,base_value) VALUES (2,'Antonio','Rojas','Espanola',43,0,2100);
-INSERT INTO pilot(id,name,lastname,nationality,dorsal,category,base_value) VALUES (3,'Miguel','Rojas','Espanola',234,1,1700);
-INSERT INTO pilot(id,name,lastname,nationality,dorsal,category,base_value) VALUES (4,'Mariano','Rojas','Espanola',45,1,3000);
-INSERT INTO pilot(id,name,lastname,nationality,dorsal,category,base_value) VALUES (5,'Alvaro','Rojas','Espanola',73,1,1900);
-INSERT INTO pilot(id,name,lastname,nationality,dorsal,category,base_value) VALUES (6,'Alejandro','Rojas','Espanola',83,2,2700);
-
-
-INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run,calendar) VALUES (1,'Grand Prix Of Qatar','2020-03-08','Losail','QAT',false,true);
-INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run,calendar) VALUES (2,'GP Spain','2020-07-19','Jerez','ESP',false,true);
-INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run,calendar) VALUES (3,'GP Andalusia','2020-07-26','Jerez','ESP',false,true);
-INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run,calendar) VALUES (4,'Grand Czech Republic','2020-08-09','BRNO','CZE',false,true);
-INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run,calendar) VALUES (5,'Grand Prix Of Austria','2020-08-16', 'Red Bull Ring','AUT',false,true);
-INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run,calendar) VALUES (6,'Grand Prix Of Estiria','2020-08-23', 'Red Bull Ring','AUT',false,true);
-INSERT INTO granpremio(id,site,date0,circuit,racecode,has_been_run,calendar) VALUES (7,'Grand Prix San Marino','2020-09-13', 'Misano','SMR',false,true);
-
-
-INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (1,1,true,false,1,1);
-INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (7,1,true,false,1,2);
-INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (2,2,false,false,2,1);
-INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (3,3,false,true,3,1);
-INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (4,4,false,false,4,1);
-INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (5,5,false,false,5,1);
-INSERT INTO results(id,position,pole,lap,pilot_id,granpremio_id) VALUES (6,6,false,false,6,1);
-
-
+INSERT INTO "PUBLIC"."PILOT" VALUES
+(1, 2000, 1, 'Rojas', 'Sergio', 'Espanola', '0'),
+(2, 2100, 0, 'Rojas', 'Antonio', 'Espanola', '0'),
+(3, 1700, 1, 'Rojas', 'Miguel', 'Espanola', '0'),
+(4, 3000, 1, 'Rojas', 'Mariano', 'Espanola', '0'),
+(5, 1900, 1, 'Rojas', 'Alvaro', 'Espanola', '0'),
+(6, 2700, 2, 'Rojas', 'Alejandro', 'Espanola', '0'),
+(7, 1738, 2, 'Toba', 'Kaito', 'Japan', '0'),
+(8, 1760, 2, 'Dalla Porta', 'Lorenzo', 'Italy', '0'),
+(9, 1330, 2, 'Canet', 'Aron', 'Spain', '0'),
+(10, 1210, 2, 'Ramirez', 'Marcos', 'Spain', '0'),
+(11, 1026, 2, 'Vietti', 'Celestino', 'Italy', '0'),
+(12, 3056, 2, 'Arenas', 'Albert', 'Spain', '0'),
+(13, 2768, 2, 'Fernandez', 'Raul', 'Spain', '0'),
+(14, 3718, 2, 'Antonelli', 'Niccolo', 'Italy', '0'),
+(15, 3240, 2, 'Fenati', 'Romano', 'Italy', '0'),
+(16, 3148, 2, 'Kornfeil', 'Jakub', 'Czech Republic', '0'),
+(17, 1659, 2, 'Ogura', 'Ai', 'Japan', '0'),
+(18, 3386, 2, 'Lopez', 'Alonso', 'Spain', '0'),
+(19, 3689, 2, 'Mcphee', 'John', 'Great Britain', '0'),
+(20, 2007, 2, 'Migno', 'Andrea', 'Italy', '0'),
+(21, 1647, 2, 'Rodrigo', 'Gabriel', 'Argentina', '0'),
+(22, 2661, 2, 'Arbolino', 'Tony', 'Italy', '0'),
+(23, 1502, 2, 'Perez', 'Vicente', 'Spain', '0'),
+(24, 2395, 2, 'Oncu', 'Can', 'Turkey', '0'),
+(25, 2815, 2, 'Masaki', 'Kazuki', 'Japan', '0'),
+(26, 1135, 2, 'Yamanaka', 'Ryusei', 'Japan', '0'),
+(27, 3095, 2, 'Salac', 'Filip', 'Czech Republic', '0'),
+(28, 3255, 2, 'Rossi', 'Riccardo', 'Italy', '0'),
+(29, 2820, 2, 'Yurchenko', 'Makar', 'Kazakhstan', '0'),
+(30, 1074, 2, 'Booth-Amos', 'Tom', 'Mexico', '0'),
+(31, 1947, 2, 'Suzuki', 'Tatsuki', 'Japan', '0'),
+(32, 2672, 2, 'Foggia', 'Dennis', 'Italy', '0'),
+(33, 2679, 2, 'Binder', 'Darryn', 'South Africa', '0'),
+(34, 3568, 2, 'Sasaki', 'Ayumu', 'Japan', '0'),
+(35, 1900, 2, 'Masia', 'Jaume', 'Spain', '0'),
+(36, 2920, 1, 'Baldassarri', 'Lorenzo', 'Italy', '0'),
+(37, 1081, 1, 'Luthi', 'Thomas', 'Switzerland', '0'),
+(38, 1543, 1, 'Schrotter', 'Marcel', 'Germany', '0'),
+(39, 3611, 1, 'Gardner', 'Remy', 'Australia', '0'),
+(40, 1066, 1, 'Fernandez', 'Augusto', 'Spain', '0'),
+(41, 2840, 1, 'Lowes', 'Sam', 'Great Britain', '0'),
+(42, 3297, 1, 'Marquez', 'Alex', 'Spain', '0'),
+(43, 2275, 1, 'Marini', 'Luca', 'Italy', '0'),
+(44, 1587, 1, 'Bastianini', 'Enea', 'Italy', '0'),
+(45, 2870, 1, 'Vierge', 'Xavi', 'Spain', '0'),
+(46, 3187, 1, 'Di Giannantonio', 'Fabio', 'Italy', '0'),
+(47, 1094, 1, 'Binder', 'Brad', 'South Africa', '0'),
+(48, 1892, 1, 'Locatelli', 'Andrea', 'Italy', '0'),
+(49, 3523, 1, 'Raffin', 'Jesko', 'Switzerland', '0'),
+(50, 3380, 1, 'Martin', 'Jorge', 'Spain', '0'),
+(51, 3076, 1, 'Bendsneyder', 'BO', 'Netherlands', '0'),
+(52, 2730, 1, 'Pawi', 'Khairul Idham', 'Malaysia', '0'),
+(53, 1952, 1, 'Aegerter', 'Dominique', 'Switzerland', '0'),
+(54, 1148, 1, 'Corsi', 'Simone', 'Italy', '0'),
+(55, 1084, 1, 'Manzi', 'Stefano', 'Italy', '0'),
+(56, 2288, 1, 'Tulovic', 'Lukas', 'Germany', '0'),
+(57, 2144, 1, 'Roberts', 'Joe', 'USA', '0'),
+(58, 2007, 1, 'Oettl', 'Philipp', 'Germany', '0'),
+(59, 2331, 1, 'Ekky Pratama', 'Dimas', 'Indonesia', '0'),
+(60, 1444, 1, 'Cardelus', 'Xavi', 'Andorra', '0'),
+(61, 3231, 1, 'Bezzecchi', 'Marco', 'Italy', '0'),
+(62, 1902, 1, 'Nagashima', 'Tetsuta', 'Japan', '0'),
+(63, 1504, 1, 'Dixon', 'Jake', 'Great Britain', '0'),
+(64, 2996, 1, 'Chantra', 'Somkiat', 'Thailand', '0'),
+(65, 3682, 1, 'Navarro', 'Jorge', 'Spain', '0'),
+(66, 1153, 1, 'Bulega', 'Nicolo', 'Italy', '0'),
+(67, 3696, 1, 'Lecuona', 'Iker', 'Spain', '0'),
+(68, 2760, 0, 'Dovizioso', 'Andrea', 'Italy', '0'),
+(69, 1032, 0, 'Marquez', 'Marc', 'Spain', '0'),
+(70, 3647, 0, 'Crutchlow', 'Cal', 'Great Britain', '0'),
+(71, 3959, 0, 'Rins', 'Alex', 'Spain', '0'),
+(72, 3274, 0, 'Rossi', 'Valentino', 'Italy', '0'),
+(73, 1786, 0, 'Petrucci', 'Danilo', 'Italy', '0'),
+(74, 2580, 0, 'Vinales', 'Maverick', 'Spain', '0'),
+(75, 3941, 0, 'Mir', 'Joan', 'Spain', '0'),
+(76, 2998, 0, 'Nakagami', 'Takaaki', 'Japan', '0'),
+(77, 3250, 0, 'Espargaro', 'Aleix', 'Spain', '0'),
+(78, 1615, 0, 'Morbidelli', 'Franco', 'Italy', '0'),
+(79, 1935, 0, 'Espargaro', 'Pol', 'Spain', '0'),
+(80, 2480, 0, 'Lorenzo', 'Jorge', 'Spain', '0');       
+INSERT INTO "PUBLIC"."PILOT" VALUES
+(81, 2720, 0, 'Iannone', 'Andrea', 'Italy', '0'),
+(82, 1814, 0, 'Zarco', 'Johann', 'France', '0'),
+(83, 1173, 0, 'Quartararo', 'Fabio', 'France', '0'),
+(84, 3756, 0, 'Oliveira', 'Miguel', 'Portugal', '0'),
+(85, 2398, 0, 'Abraham', 'Karel', 'Czech Republic', '0'),
+(86, 2635, 0, 'Rabat', 'Esteve', 'Spain', '0'),
+(87, 1236, 0, 'Syahrin Abdullah', 'Hafizh', 'Malaysia', '0'),
+(88, 1864, 0, 'Smith', 'Bradley', 'Great Britain', '0'),
+(89, 3770, 0, 'Miller', 'Jack', 'Australia', '0'),
+(90, 2139, 0, 'Bagnaia', 'Francesco', 'Italy', '0'); 
 --Cada liga con su escudería sistema que tiene todos los pilotos que nadie posee
 INSERT INTO league(id,name,league_code,league_date) VALUES (1,'Liga 1','QWEASDFRGT','2019/02/01');
 INSERT INTO team(id,name,points,money,league_id, username) VALUES (8,'Sistema',0,0,1, 'admin1');
@@ -85,101 +151,32 @@ INSERT INTO recruit(id,for_sale,pilot_id,team_id) VALUES (5,false,5,11);
 
 INSERT INTO offer(id,price,status,recruit_id,team_id) VALUES (1,2000,2,1,1);
 
+INSERT INTO "PUBLIC"."GRANPREMIO" VALUES
+(1, TRUE, 'Losail International Circuit', DATE '2019-03-08', FALSE, 'QAT', 'Doha', NULL),
+(2, TRUE, 'Autodromo Termas de Rio Hondo', DATE '2019-03-29', FALSE, 'ARG', 'Santiago del Estero', NULL),
+(3, TRUE, 'Circuit of The Americas', DATE '2019-04-12', FALSE, 'USA', 'Austin', NULL),
+(4, TRUE, 'Circuit de Jerez', DATE '2019-05-03', FALSE, 'ESP', 'Jerez', NULL),
+(5, TRUE, 'Le Mans Bugatti Circuit', DATE '2019-05-17', FALSE, 'FRA', 'Le Mans', NULL),
+(6, TRUE, 'Autodromo Internazionale del Mugello', DATE '2019-05-31', FALSE, 'ITA', 'Scarperia Firenze', NULL),
+(7, TRUE, 'Circuit de Catalunya', DATE '2019-06-14', FALSE, 'ESP', 'Barcelona', NULL),
+(8, TRUE, 'TT Circuit Assen', DATE '2019-06-28', FALSE, 'NLD', 'Assen', NULL),
+(9, TRUE, 'Sachsenring', DATE '2019-07-05', FALSE, 'DEU', 'Oberlungwitz', NULL),
+(10, TRUE, 'Automotodrom Brno', DATE '2019-08-02', FALSE, 'CZE', 'Brno', NULL),
+(11, TRUE, 'Red Bull Ring', DATE '2019-08-09', FALSE, 'AUT', 'Spielberg', NULL),
+(12, TRUE, 'Silverstone Circuit', DATE '2019-08-23', FALSE, 'ENG', 'Silverstone', NULL),
+(13, TRUE, 'Misano World Circuit', DATE '2019-09-13', FALSE, 'ITA', 'Misano Adriatico', NULL),
+(14, TRUE, 'Motorland Aragon', DATE '2019-09-20', FALSE, 'ESP', 'Alcaniz', NULL),
+(15, TRUE, 'Chang International Circuit', DATE '2019-10-04', FALSE, 'THA', 'Buriram', NULL),
+(16, TRUE, 'Twin Ring Motegi', DATE '2019-10-18', FALSE, 'JPN', 'Hiyama', NULL),
+(17, TRUE, 'Phillip Island Circuit', DATE '2019-10-24', FALSE, 'AUS', 'Phillip Island', NULL),
+(18, TRUE, 'Sepang International Circuit', DATE '2019-11-01', FALSE, 'MYS', 'Sepang', NULL),
+(19, TRUE, 'Circuit de la Comunitat Valenciana Ricardo Tormo', DATE '2019-11-15', FALSE, 'ESP', 'Valencia', NULL);  
+
+
+INSERT INTO tabla_consultas(actual_race,races_completed,categoria_actual,time_message,num_users,num_equipos,num_ligas,races_validated) VALUES(1,0,'MOTO3',null,10,0,2,0);
+
 INSERT INTO lineup(id,category,gp_id,recruit1_id,recruit2_id,team_id) VALUES (1,1,1,2,2,1); 
 INSERT INTO lineup(id,category,gp_id,recruit1_id,recruit2_id,team_id) VALUES (2,1,2,2,1,1); 
 INSERT INTO lineup(id,category,gp_id,recruit1_id,recruit2_id,team_id) VALUES (3,1,3,2,2,1); 
 INSERT INTO lineup(id,category,gp_id,recruit1_id,recruit2_id,team_id) VALUES (4,1,3,1,2,1); 
 INSERT INTO lineup(id,category,gp_id,recruit1_id,recruit2_id,team_id) VALUES (5,1,3,1,2,1); 
-
-INSERT INTO tabla_consultas(actual_race,races_completed,categoria_actual,time_message,num_users,num_equipos,num_ligas,races_validated) VALUES(1,0,'MOTO3',null,10,0,2,0);
-
-INSERT INTO "PUBLIC"."PILOT" VALUES
-
-(7, 1497, 2, '75', 'Arenas', 'Albert', 'Spain'),
-(8, 2409, 2, '17', 'McPhee', 'John', 'Great Britain'),
-(9, 3566, 2, '79', 'Ogura', 'Ai', 'Japan'),
-(10, 1582, 2, '5', STRINGDECODE('Masi\u00e1'), 'Jaume', 'Spain'),
-(11, 2502, 2, '24', 'Suzuki', 'Tatsuki', 'Japan'),
-(12, 3686, 2, '2', 'Rodrigo', 'Gabriel', 'Argentina'),
-(13, 1776, 2, '52', 'Alcoba', 'Jeremy', 'Spain'),
-(14, 3189, 2, '12', 'Salac', 'Filip', 'Czech Republic'),
-(15, 2752, 2, '7', 'Foggia', 'Dennis', 'Italy'),
-(16, 3395, 2, '25', STRINGDECODE('Fern\u00e1ndez'), STRINGDECODE('Ra\u00fal'), 'Spain'),
-(17, 3227, 2, '11', 'Garcia', 'Sergio', 'Spain'),
-(18, 3424, 2, '53', STRINGDECODE('\u00d6nc\u00fc'), 'Deniz', 'Andorra'),
-(19, 2200, 2, '21', STRINGDECODE('L\u00f3pez'), 'Alonso', 'Spain'),
-(20, 3212, 2, '27', 'Toba', 'Kaito', 'Japan'),
-(21, 2094, 2, '14', 'Arbolino', 'Tony', 'Italy'),
-(22, 1698, 2, '16', 'Migno', 'Andrea', 'Italy'),
-(23, 2861, 2, '55', 'Fenati', 'Romano', 'Italy'),
-(24, 3913, 2, '92', 'Kunii', 'Yuki', 'Japan'),
-(25, 2568, 2, '71', 'Sasaki', 'Ayumu', 'Japan'),
-(26, 3017, 2, '6', 'Yamanaka', 'Ryusei', 'Andorra'),
-(27, 3582, 2, '99', 'Tatay', 'Carlos', 'Spain'),
-(28, 2579, 2, '82', 'Nepa', 'Stefano', 'Italy'),
-(29, 1564, 2, '9', 'Pizzoli', 'Davide', 'Andorra'),
-(30, 1826, 2, '54', 'Rossi', 'Riccardo', 'Italy'),
-(31, 2770, 2, '50', 'Dupasquier', 'Jason', 'Andorra'),
-(32, 1895, 2, '89', 'Idham', 'Khairul', 'Malaysia'),
-(33, 1540, 2, '73', 'Kofler', 'Maximilian', 'Austria'),
-(34, 3033, 2, '13', 'Vietti', 'Celestino', 'Italy'),
-(35, 1433, 2, '60', 'Geiger', 'Dirk', 'Germany'),
-(36, 2338, 2, '40', 'Binder', 'Darryn', 'South Africa'),
-(37, 2425, 2, '20', STRINGDECODE('Garc\u00eda'), STRINGDECODE('Jos\u00e9'), 'Andorra'),
-(38, 3143, 1, '45', 'Nagashima', 'Tetsuta', 'Japan'),
-(39, 2982, 1, '7', 'Baldassarri', 'Lorenzo', 'Italy'),
-(40, 3106, 1, '33', 'Bastianini', 'Enea', 'Italy'),
-(41, 2534, 1, '16', 'Roberts', 'Joe', 'USA'),
-(42, 3002, 1, '87', 'Gardner', 'Remy', 'Australia'),
-(43, 2220, 1, '9', 'Navarro', 'Jorge', 'Spain'),
-(44, 3218, 1, '23', STRINGDECODE('Schr\u00f6tter'), 'Marcel', 'Germany'),
-(45, 1066, 1, '44', 'Canet', STRINGDECODE('Ar\u00f2n'), 'Spain'),
-(46, 1847, 1, '97', 'Vierge', 'Xavi', 'Spain'),
-(47, 2038, 1, '12', 'Luthi', 'Thomas', 'Switzerland'),
-(48, 1624, 1, '64', 'Bendsneyder', 'Bo', 'Netherlands'),
-(49, 3758, 1, '72', 'Bezzecchi', 'Marco', 'Italy'),
-(50, 1697, 1, '21', 'Di', 'Fabio', 'Italy'),
-(51, 2785, 1, '96', 'Dixon', 'Jake', 'Great Britain'),
-(52, 2086, 1, '62', 'Manzi', 'Stefano', 'Italy'),
-(53, 1653, 1, '57', 'Pons', 'Edgar', 'Spain'),
-(54, 3541, 1, '40', STRINGDECODE('Garz\u00f3'), STRINGDECODE('H\u00e9ctor'), 'Spain'),
-(55, 2841, 1, '11', 'Bulega', STRINGDECODE('Nicol\u00f2'), 'Italy'),
-(56, 3468, 1, '55', 'Syahrin', 'Hafizh', 'Malaysia'),
-(57, 3302, 1, '88', STRINGDECODE('Mart\u00edn'), 'Jorge', 'Spain'),
-(58, 1407, 1, '24', 'Corsi', 'Simone', 'Italy'),
-(59, 2871, 1, '2', 'Raffin', 'Jesko', 'Switzerland'),
-(60, 3789, 1, '19', 'Dalla', 'Lorenzo', 'Italy'),
-(61, 2483, 1, '35', 'Chantra', 'Somkiat', 'Thailand'),
-(62, 2221, 1, '10', 'Marini', 'Luca', 'Italy'),
-(63, 1688, 1, '99', 'Kasmayudin', 'Kasma', 'Malaysia'),
-(64, 1952, 1, '37', STRINGDECODE('Fern\u00e1ndez'), 'Augusto', 'Spain'),
-(65, 1983, 1, '42', STRINGDECODE('Ram\u00edrez'), 'Marcos', 'Spain'),
-(66, 3162, 1, '22', 'Lowes', 'Sam', 'Great Britain'),
-(67, 1935, 2, '23', 'Antonelli', STRINGDECODE('Niccol\u00f2'), 'Italy'),
-(68, 2630, 2, '70', 'Baltus', 'Barry', 'Andorra'),
-(69, 3046, 0, '20', 'Quartararo', 'Fabio', 'France'),
-(70, 1823, 0, '12', STRINGDECODE('Vi\u00f1ales'), 'Maverick', 'Spain'),
-(71, 2734, 0, '4', 'Dovizioso', 'Andrea', 'Italy'),
-(72, 2210, 0, '43', 'Miller', 'Jack', 'Australia'),
-(73, 2263, 0, '21', 'Morbidelli', 'Franco', 'Italy');   
-INSERT INTO "PUBLIC"."PILOT" VALUES
-(74, 1928, 0, '44', STRINGDECODE('Espargar\u00f3'), 'Pol', 'Spain'),
-(75, 2784, 0, '63', 'Bagnaia', 'Francesco', 'Italy'),
-(76, 3137, 0, '88', 'Oliveira', 'Miguel', 'Portugal'),
-(77, 2457, 0, '9', 'Petrucci', 'Danilo', 'Italy'),
-(78, 1210, 0, '30', 'Nakagami', 'Takaaki', 'Japan'),
-(79, 2460, 0, '5', 'Zarco', 'Johann', 'France'),
-(80, 3729, 0, '73', STRINGDECODE('M\u00e1rquez'), STRINGDECODE('\u00c1lex'), 'Spain'),
-(81, 2638, 0, '33', 'Binder', 'Brad', 'South Africa'),
-(82, 3559, 0, '53', 'Rabat', 'Tito', 'Spain'),
-(83, 1765, 0, '38', 'Smith', 'Bradley', 'Great Britain'),
-(84, 3761, 0, '93', STRINGDECODE('M\u00e1rquez'), 'Marc', 'Spain'),
-(85, 2742, 0, '27', 'Lecuona', 'Iker', 'Spain'),
-(86, 3071, 0, '46', 'Rossi', 'Valentino', 'Italy'),
-(87, 2725, 0, '41', STRINGDECODE('Espargar\u00f3'), 'Aleix', 'Spain'),
-(88, 2534, 0, '36', 'Mir', 'Joan', 'Spain'),
-(89, 2336, 0, '35', 'Crutchlow', 'Cal', 'Great Britain'),
-(90, 2866, 0, '42', 'Rins', STRINGDECODE('\u00c1lex'), 'Spain'),
-(91, 2380, 1, '77', 'Aegerter', 'Dominique', 'Switzerland'),
-(92, 1658, 0, '6', 'Bradl', 'Stefan', 'Germany'),
-(93, 3897, 0, '51', 'Pirro', 'Michele', 'Italy');    

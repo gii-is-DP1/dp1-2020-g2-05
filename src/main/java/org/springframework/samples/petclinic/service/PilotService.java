@@ -27,13 +27,12 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 
-import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.samples.petclinic.model.BDCarrera;
-import org.springframework.samples.petclinic.model.FormRellenarBD;
+import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.GranPremio;
 import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Result;
@@ -42,10 +41,14 @@ import org.springframework.samples.petclinic.web.ResultFormatter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+
 import lombok.extern.slf4j.Slf4j;
-import motogpAPI.PeticionesGet;
-import motogpAPI.Session;
-import motogpAPI.model.InfoCarrera;
+//import motogpAPI.PeticionesGet;
+
+import motogpApiV2.results.Competitor;
+import motogpApiV2.testing.testing;
 
 /**
  * Mostly used as a facade for all Petclinic controllers Also a placeholder
@@ -105,138 +108,217 @@ public class PilotService {
 	}
 	
 	@Transactional
-	public void poblarBD(FormRellenarBD form) throws JSONException, IOException, ParseException {
-//		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MMM-dd");		
-		for(int i=form.getAnyoInicial(); i < form.getAnyoFinal(); i++) {
-			for (int j=0;j<MAXIMO_CARRERAS;j++) {
-				GranPremio gp = new GranPremio(); //entidad de una carrera
-				List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceNumberCampu(form.getCategory(), i, j, Session.RACE);
-//				if(todosLosResultadosDeUnaCarrera.size()==0) {
-//					throw new NotFoundException("No se han encontrado carreras para los anyos dados");
-//				}else {
-					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-					LocalDate date = LocalDate.parse(todosLosResultadosDeUnaCarrera.get(0).getFecha(), formatter);				
-					gp.setSite(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
-					gp.setCircuit(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
-					gp.setDate0(date);
-					gp.setRaceCode(todosLosResultadosDeUnaCarrera.get(0).getRaceCode());
-					gp.setCalendar(false);
-					this.gpService.saveGP(gp);
-
-					for (int k=0;k<todosLosResultadosDeUnaCarrera.size();k++) {
-						InfoCarrera resultado_k = todosLosResultadosDeUnaCarrera.get(k);
-						gp.setCircuit(resultado_k.getLugar());
-						gp.setSite(resultado_k.getNombreEvento());
-
-						Pilot pilot = new Pilot();
-						pilot.setName(resultado_k.getPiloto().split(" ")[0]);
-						pilot.setLastName(resultado_k.getPiloto().split(" ")[1]);
-						pilot.setDorsal(resultado_k.getNumeros().toString());
-
-						if (resultado_k.getPais().isEmpty()) {pilot.setNationality("Andorra");} 
-						else {pilot.setNationality(resultado_k.getPais());}
-
-						pilot.setCategory((form.getCategory()));
-
-						Random random = new Random();
-						pilot.setBaseValue(random.nextInt(3000) + 1000);//Valores arbitrarios, pueden cambiar
-
-						Result result = new Result();
-
-						if (this.countByName(pilot.getLastName(), pilot.getName())!=0) {
-							result.setPilot(this.pilotRepository.findByName(pilot.getLastName(), pilot.getName()).get());
-						} else {
-							result.setPilot(pilot);
-						}
-						result.setPosition(resultado_k.getPosicion());
-						result.setGp(gp);
-						result.setLap(false);
-						result.setPole(false);
-						this.resultService.saveResult(result);
-						savePilot(pilot);
-					}
-				}
-			}			
-		}
-//	}
+//	public void poblarBD(FormRellenarBD form) throws JSONException, IOException, ParseException {
+////		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MMM-dd");		
+//		for(int i=form.getAnyoInicial(); i < form.getAnyoFinal(); i++) {
+//			for (int j=0;j<MAXIMO_CARRERAS;j++) {
+//				GranPremio gp = new GranPremio(); //entidad de una carrera
+//				List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceNumberCampu(form.getCategory(), i, j, Session.RACE);
+////				if(todosLosResultadosDeUnaCarrera.size()==0) {
+////					throw new NotFoundException("No se han encontrado carreras para los anyos dados");
+////				}else {
+//					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//					LocalDate date = LocalDate.parse(todosLosResultadosDeUnaCarrera.get(0).getFecha(), formatter);				
+//					gp.setSite(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
+//					gp.setCircuit(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
+//					gp.setDate0(date);
+//					gp.setRaceCode(todosLosResultadosDeUnaCarrera.get(0).getRaceCode());
+//					gp.setCalendar(false);
+//					this.gpService.saveGP(gp);
+//
+//					for (int k=0;k<todosLosResultadosDeUnaCarrera.size();k++) {
+//						InfoCarrera resultado_k = todosLosResultadosDeUnaCarrera.get(k);
+//						gp.setCircuit(resultado_k.getLugar());
+//						gp.setSite(resultado_k.getNombreEvento());
+//
+//						Pilot pilot = new Pilot();
+//						pilot.setName(resultado_k.getPiloto().split(" ")[0]);
+//						pilot.setLastName(resultado_k.getPiloto().split(" ")[1]);
+//						pilot.setDorsal(resultado_k.getNumeros().toString());
+//
+//						if (resultado_k.getPais().isEmpty()) {pilot.setNationality("Andorra");} 
+//						else {pilot.setNationality(resultado_k.getPais());}
+//
+//						pilot.setCategory((form.getCategory()));
+//
+//						Random random = new Random();
+//						pilot.setBaseValue(random.nextInt(3000) + 1000);//Valores arbitrarios, pueden cambiar
+//
+//						Result result = new Result();
+//
+//						if (this.countByName(pilot.getLastName(), pilot.getName())!=0) {
+//							result.setPilot(this.pilotRepository.findByName(pilot.getLastName(), pilot.getName()).get());
+//						} else {
+//							result.setPilot(pilot);
+//						}
+//						result.setPosition(resultado_k.getPosicion());
+//						result.setGp(gp);
+//						result.setLap(false);
+//						result.setPole(false);
+//						this.resultService.saveResult(result);
+//						savePilot(pilot);
+//					}
+//				}
+//			}			
+//		}
+////	}
+//	
+//	@Transactional
+//	//	2016, RaceCode.AUT, Session.RACE
+//	public void poblarBDCarreraACarrera(BDCarrera form,GranPremio gp,Boolean GpEstaEnCalendario) throws JSONException, IOException, ParseException {
+//
+//		//EL GP QUE SE PASA COMO PARAMETRO, O ESTA VACIO, O ESTA EN EL CALENDARIO
+//		//				GranPremio gp = new GranPremio(); //entidad de una carrera
+//		List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceCodeCampu(form.getCategory(), form.getYear(), form.getRacecode(), form.getSession());
+//		log.info("La api ha obtenido los resultados satisfactoriamente para year :" + form.getYear()+", category:" + form.getCategory());
+//
+//		//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//
+////		if (todosLosResultadosDeUnaCarrera.size()==0) {
+////			throw new NotFoundException("No se han encontrado carreras para los parametros dados");
+////		} else {
+//			
+//			if (GpEstaEnCalendario==false) {
+//				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//				LocalDate date = LocalDate.parse(todosLosResultadosDeUnaCarrera.get(0).getFecha(), formatter);			
+//				gp.setSite(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
+//				gp.setCircuit(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
+//				gp.setDate0(date);
+//				gp.setRaceCode(todosLosResultadosDeUnaCarrera.get(0).getRaceCode());
+//				gp.setHasBeenRun(true);
+//				gp.setCalendar(true);
+//				try {
+//					this.gpService.populateRecord(gp);
+//				} catch (Exception e) {
+//					System.out.println("Sorry, records are unavailable for this GP!"); // Provisional
+//				}
+//				this.gpService.saveGP(gp);	
+//			}
+//
+//			for (int k=0;k<todosLosResultadosDeUnaCarrera.size();k++) {
+//				InfoCarrera resultado_k = todosLosResultadosDeUnaCarrera.get(k);
+//				if (GpEstaEnCalendario==false) {
+//					gp.setCircuit(resultado_k.getLugar());
+//					gp.setSite(resultado_k.getNombreEvento());
+//				}
+//
+//				Pilot pilot = new Pilot();
+//				pilot.setName(resultado_k.getPiloto().split(" ")[0]);
+//				pilot.setLastName(resultado_k.getPiloto().split(" ")[1]);
+//				pilot.setDorsal(resultado_k.getNumeros().toString());
+//
+//				if (resultado_k.getPais().isEmpty()) {
+//					pilot.setNationality("Andorra");
+//				} else {
+//					pilot.setNationality(resultado_k.getPais());
+//				}
+//
+//				pilot.setCategory(resultado_k.getCategory());
+//
+//				Random random = new Random();
+//				pilot.setBaseValue(random.nextInt(3000) + 1000);//Valores arbitrarios, pueden cambiar
+//
+//				Result result = new Result();
+//
+//				if (this.countByName(pilot.getLastName(), pilot.getName())!=0) {
+//					result.setPilot(this.pilotRepository.findByName(pilot.getLastName(), pilot.getName()).get());
+//				} else {
+//					result.setPilot(pilot);
+//				}
+//				
+//				result.setPosition(resultado_k.getPosicion());
+//				result.setGp(gp);
+//				result.setLap(false);
+//				result.setPole(false);
+//				this.resultService.saveResult(result);
+//				Set<Result> results = new HashSet<Result>();
+//				results.add(result);
+//				pilot.setResults(results);
+//				savePilot(pilot);
+//			}
+//			log.info("La api ha asociado los resultados al gp : " + gp.getSite());
+////		}
+//	}			
+//		
 	
-	@Transactional
-	//	2016, RaceCode.AUT, Session.RACE
-	public void poblarBDCarreraACarrera(BDCarrera form,GranPremio gp,Boolean GpEstaEnCalendario) throws JSONException, IOException, ParseException {
-
-		//EL GP QUE SE PASA COMO PARAMETRO, O ESTA VACIO, O ESTA EN EL CALENDARIO
-		//				GranPremio gp = new GranPremio(); //entidad de una carrera
-		List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceCodeCampu(form.getCategory(), form.getYear(), form.getRacecode(), form.getSession());
-		log.info("La api ha obtenido los resultados satisfactoriamente para year :" + form.getYear()+", category:" + form.getCategory());
-
-		//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-//		if (todosLosResultadosDeUnaCarrera.size()==0) {
-//			throw new NotFoundException("No se han encontrado carreras para los parametros dados");
-//		} else {
+	
+	public void poblarUnaCarreraYSusResultados(BDCarrera form,GranPremio gp) throws JsonMappingException, JsonProcessingException, IOException, InterruptedException {
+		List<Competitor> listaDeRiders =testing.findCompetitorAndItsResultsByCategoryRaceCodeAndYear(form.getYear(), form.getRacecode(), form.getCategory());
+		
+		Integer numeroDeRiders = listaDeRiders.size();
+		
+		for(int i=0;i<numeroDeRiders;i++) {
+			Competitor rider_i = listaDeRiders.get(i);
 			
-			if (GpEstaEnCalendario==false) {
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-				LocalDate date = LocalDate.parse(todosLosResultadosDeUnaCarrera.get(0).getFecha(), formatter);			
-				gp.setSite(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
-				gp.setCircuit(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
-				gp.setDate0(date);
-				gp.setRaceCode(todosLosResultadosDeUnaCarrera.get(0).getRaceCode());
-				gp.setHasBeenRun(true);
-				gp.setCalendar(true);
-				try {
-					this.gpService.populateRecord(gp);
-				} catch (Exception e) {
-					System.out.println("Sorry, records are unavailable for this GP!"); // Provisional
-				}
-				this.gpService.saveGP(gp);	
+			if(rider_i.getResult()==null) {
+				motogpApiV2.results.Result resultNull = new motogpApiV2.results.Result();
+				resultNull.setPosition(0);
+				resultNull.setPoints(0);
+				rider_i.setResult(resultNull);
 			}
+			
 
-			for (int k=0;k<todosLosResultadosDeUnaCarrera.size();k++) {
-				InfoCarrera resultado_k = todosLosResultadosDeUnaCarrera.get(k);
-				if (GpEstaEnCalendario==false) {
-					gp.setCircuit(resultado_k.getLugar());
-					gp.setSite(resultado_k.getNombreEvento());
+			Result result = new Result();
+			result.setGp(gp);
+			result.setLap(false);
+			result.setPole(false);
+			if(rider_i.getResult().getPosition()==null) {
+				result.setPosition(0);
+
+			}else {
+				result.setPosition(rider_i.getResult().getPosition());
+			}
+			this.resultService.saveResult(result);
+			
+			
+			if (this.countByName(rider_i.getName().split(", ")[0], rider_i.getName().split(", ")[1])!=0) {
+			
+				this.updatePilotResults(rider_i, result);
+				if(rider_i.getResult().getPoints()==null) {
+					this.updatePilot(rider_i, 0);
+				}else {
+					this.updatePilot(rider_i, rider_i.getResult().getPoints());
 				}
-
-				Pilot pilot = new Pilot();
-				pilot.setName(resultado_k.getPiloto().split(" ")[0]);
-				pilot.setLastName(resultado_k.getPiloto().split(" ")[1]);
-				pilot.setDorsal(resultado_k.getNumeros().toString());
-
-				if (resultado_k.getPais().isEmpty()) {
-					pilot.setNationality("Andorra");
-				} else {
-					pilot.setNationality(resultado_k.getPais());
-				}
-
-				pilot.setCategory(resultado_k.getCategory());
-
-				Random random = new Random();
-				pilot.setBaseValue(random.nextInt(3000) + 1000);//Valores arbitrarios, pueden cambiar
-
-				Result result = new Result();
-
-				if (this.countByName(pilot.getLastName(), pilot.getName())!=0) {
-					result.setPilot(this.pilotRepository.findByName(pilot.getLastName(), pilot.getName()).get());
-				} else {
-					result.setPilot(pilot);
+							
+			} else {
+				this.createNewPilot(rider_i,form.getCategory());
+				
+				
+				
+				this.assignResultToAPilot(rider_i, result);
+				
+				if(rider_i.getResult().getPoints()==null) {
+					this.updatePilot(rider_i, 0);
+				}else {
+					this.updatePilot(rider_i, rider_i.getResult().getPoints());
 				}
 				
-				result.setPosition(resultado_k.getPosicion());
-				result.setGp(gp);
-				result.setLap(false);
-				result.setPole(false);
-				this.resultService.saveResult(result);
-				Set<Result> results = new HashSet<Result>();
-				results.add(result);
-				pilot.setResults(results);
-				savePilot(pilot);
 			}
-			log.info("La api ha asociado los resultados al gp : " + gp.getSite());
-//		}
-	}			
-		
+
+			
+
+//			pilotAGuardar.setDorsal(puntosCarreraActual.toString());
+
+			
+//			Integer puntosCarreraActual =0;
+			
+			
+				
+			
+			
+			
+//			result.setGp(gp);
+//			result.setLap(false);
+//			result.setPole(false);
+//			this.resultService.saveResult(result);
+//			Set<Result> results = new HashSet<Result>();
+//			results.add(result);
+//			pilotAGuardar.setResults(results);
+//			this.savePilot(pilotAGuardar);
+		}
+	}
+	
+	
 	@Transactional
 	public Optional<Pilot> findPilotById(int pilotId) {
 		return pilotRepository.findById(pilotId);
@@ -244,9 +326,7 @@ public class PilotService {
 
 	@Transactional
 	public void savePilot(Pilot pilot) throws DataAccessException {
-		if(this.countByName(pilot.getLastName(), pilot.getName())==0) {
 			pilotRepository.save(pilot);
-		}
 	}
 	
 	public Optional<Pilot> findByName(String lastName,String name) {
@@ -268,5 +348,47 @@ public class PilotService {
 	
 	public List<Pilot> getRecruits(int teamID) throws DataAccessException {
 		return this.pilotRepository.findAllRecruits(teamID);
+	}
+	
+	public void createNewPilot(Competitor rider_i,Category categoryFromForm) {
+		Pilot pilotAGuardar = new Pilot();
+		
+		pilotAGuardar.setName(rider_i.getName().split(", ")[1]);
+		pilotAGuardar.setLastName(rider_i.getName().split(", ")[0]);
+		pilotAGuardar.setNationality(rider_i.getNationality());
+		pilotAGuardar.setCategory(categoryFromForm);
+		pilotAGuardar.setPoints("0");
+		Random random = new Random();
+		pilotAGuardar.setBaseValue(random.nextInt(3000) + 1000);//Valores arbitrarios, pueden cambiar
+		this.savePilot(pilotAGuardar);
+	}
+	public void updatePilot(Competitor rider_i,Integer puntos) {
+		Pilot pilotAGuardar = this.findByName(rider_i.getName().split(", ")[0], rider_i.getName().split(", ")[1]).get();
+		Integer suma=Integer.parseInt(pilotAGuardar.getPoints())+puntos;
+		pilotAGuardar.setPoints(suma.toString());
+		this.savePilot(pilotAGuardar);
+	}
+	
+	public void assignResultToAPilot(Competitor rider_i,Result result) {
+		
+		
+		Pilot pilotAGuardar = this.findByName(rider_i.getName().split(", ")[0], rider_i.getName().split(", ")[1]).get();
+		
+		Set<Result> results = new HashSet<Result>();
+		results.add(result);
+		result.setPilot(pilotAGuardar);
+		pilotAGuardar.setResults(results);
+		this.savePilot(pilotAGuardar);
+		this.resultService.saveResult(result);
+	}
+	
+	
+	public void updatePilotResults(Competitor rider_i,Result result) {
+		Pilot pilotAGuardar = this.findByName(rider_i.getName().split(", ")[0], rider_i.getName().split(", ")[1]).get();
+		pilotAGuardar.addResult(result);
+		result.setPilot(pilotAGuardar);
+		this.savePilot(pilotAGuardar);
+		this.resultService.saveResult(result);
+
 	}
 }
