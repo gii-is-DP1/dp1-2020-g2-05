@@ -124,6 +124,11 @@ INSERT INTO "PUBLIC"."PILOT" VALUES
 (88, 1864, 0, 'Smith', 'Bradley', 'Great Britain', '0'),
 (89, 3770, 0, 'Miller', 'Jack', 'Australia', '0'),
 (90, 2139, 0, 'Bagnaia', 'Francesco', 'Italy', '0'); 
+
+
+
+
+
 --Cada liga con su escudería sistema que tiene todos los pilotos que nadie posee
 INSERT INTO league(id,name,league_code,league_date) VALUES (1,'Liga 1','QWEASDFRGT','2019/02/01');
 INSERT INTO team(id,name,points,money,league_id, username) VALUES (8,'Sistema',0,0,1, 'admin1');

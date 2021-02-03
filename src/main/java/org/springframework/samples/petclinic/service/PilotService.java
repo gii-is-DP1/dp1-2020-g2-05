@@ -16,6 +16,7 @@ UserRepository.java * Copyright 2002-2013 the original author or authors.
 package org.springframework.samples.petclinic.service;
 
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -107,7 +108,6 @@ public class PilotService {
 		return res;
 	}
 	
-	@Transactional
 //	public void poblarBD(FormRellenarBD form) throws JSONException, IOException, ParseException {
 ////		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MMM-dd");		
 //		for(int i=form.getAnyoInicial(); i < form.getAnyoFinal(); i++) {
@@ -274,6 +274,7 @@ public class PilotService {
 			if (this.countByName(rider_i.getName().split(", ")[0], rider_i.getName().split(", ")[1])!=0) {
 			
 				this.updatePilotResults(rider_i, result);
+				
 				if(rider_i.getResult().getPoints()==null) {
 					this.updatePilot(rider_i, 0);
 				}else {
@@ -283,39 +284,19 @@ public class PilotService {
 			} else {
 				this.createNewPilot(rider_i,form.getCategory());
 				
-				
-				
 				this.assignResultToAPilot(rider_i, result);
 				
 				if(rider_i.getResult().getPoints()==null) {
 					this.updatePilot(rider_i, 0);
 				}else {
 					this.updatePilot(rider_i, rider_i.getResult().getPoints());
-				}
+
 				
+
 			}
-
-			
-
-//			pilotAGuardar.setDorsal(puntosCarreraActual.toString());
-
-			
-//			Integer puntosCarreraActual =0;
-			
-			
-				
-			
-			
-			
-//			result.setGp(gp);
-//			result.setLap(false);
-//			result.setPole(false);
-//			this.resultService.saveResult(result);
-//			Set<Result> results = new HashSet<Result>();
-//			results.add(result);
-//			pilotAGuardar.setResults(results);
-//			this.savePilot(pilotAGuardar);
+			}
 		}
+
 	}
 	
 	
