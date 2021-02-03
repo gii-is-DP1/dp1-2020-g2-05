@@ -33,11 +33,11 @@ INSERT INTO authorities(id,username,authority) VALUES (10,'xnegis','user');
 INSERT INTO messages (id,asunto,cuerpo,usernamesend,usernamereceive) VALUES (1,'Prueba1','Prueba1','serrojjim','martorsan13');
 
 INSERT INTO "PUBLIC"."PILOT" VALUES
-(1, 2000, 1, 'Rojas', 'Sergio', 'Espanola', '0'),
-(2, 2100, 0, 'Rojas', 'Antonio', 'Espanola', '0'),
-(3, 1700, 1, 'Rojas', 'Miguel', 'Espanola', '0'),
-(4, 3000, 1, 'Rojas', 'Mariano', 'Espanola', '0'),
-(5, 1900, 1, 'Rojas', 'Alvaro', 'Espanola', '0'),
+(1, 2000, 2, 'Rojas', 'Sergio', 'Espanola', '0'),
+(2, 2100, 2, 'Rojas', 'Antonio', 'Espanola', '0'),
+(3, 1700, 2, 'Rojas', 'Miguel', 'Espanola', '0'),
+(4, 3000, 2, 'Rojas', 'Mariano', 'Espanola', '0'),
+(5, 1900, 2, 'Rojas', 'Alvaro', 'Espanola', '0'),
 (6, 2700, 2, 'Rojas', 'Alejandro', 'Espanola', '0'),
 (7, 1738, 2, 'Toba', 'Kaito', 'Japan', '0'),
 (8, 1760, 2, 'Dalla Porta', 'Lorenzo', 'Italy', '0'),
