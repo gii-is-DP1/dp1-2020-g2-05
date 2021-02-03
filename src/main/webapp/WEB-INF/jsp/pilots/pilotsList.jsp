@@ -13,7 +13,7 @@
 			<tr>
 				<th>Name</th>
 				<th>Lastname</th>
-				<th>Dorsal</th>
+				<th>Points</th>
 				<th>Nationality</th>
 				<th>Category</th>
 				<th>Actions</th>
@@ -24,7 +24,7 @@
 				<tr>
 					<td><c:out value="${pilot.name} " /></td>
 					<td><c:out value="${pilot.lastName}" /></td>
-					<td><c:out value="${pilot.dorsal}" /></td>
+					<td><c:out value="${pilot.points}" /></td>
 					<td><c:out value="${pilot.nationality}" /></td>
 					<td><c:out value="${pilot.category}" /></td>
 					<td>

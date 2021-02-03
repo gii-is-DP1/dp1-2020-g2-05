@@ -17,7 +17,7 @@
         	<input type="hidden" name="id" value="${pilot.id}"/>
             <petclinic:inputField label="Name" name="name"/>
             <petclinic:inputField label="Last Name" name="lastName"/>
-            <petclinic:inputField label="Dorsal" name="dorsal"/>
+            <petclinic:inputField label="Points" name="points"/>
             <petclinic:inputField label="Category" name="category"/>
             <petclinic:inputField label="Nationality" name="nationality"/>
         </div>

@@ -74,7 +74,7 @@ class ResultControllerTests {
 	@BeforeEach
 	void setup() {
 		pilot.setCategory(CAT);
-		pilot.setDorsal("27");
+		pilot.setPoints("27");
 		pilot.setName("Ale");
 		pilot.setLastName("Ruiz");
 		pilot.setNationality("Spain");

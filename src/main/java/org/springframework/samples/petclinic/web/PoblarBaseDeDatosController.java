@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.web;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -85,26 +86,26 @@ public class PoblarBaseDeDatosController {
 		return "/BD/BD";
 	}
 
-	@PostMapping(path = "/BD/pilotsBD")
-	public String Poblar(@Valid FormRellenarBD form, BindingResult result, ModelMap model)
-			throws JSONException, IOException, ParseException {
-		System.out.println(result);
-
-		if (result.hasErrors()) {
-			System.out.println(result);
-			model.put("FormRellenarBD", form);
-			model.put("message", result.getAllErrors());
-			return "/BD/BD";
-		} else {
-			try {
-				this.pilotService.poblarBD(form);
-			} catch (NullPointerException e) {
-				return "redirect:/BD/pilotsBD";
-			}
-			return "redirect:/pilots";
-		}
-
-	}
+//	@PostMapping(path = "/BD/pilotsBD")
+//	public String Poblar(@Valid FormRellenarBD form, BindingResult result, ModelMap model)
+//			throws JSONException, IOException, ParseException {
+//		System.out.println(result);
+//
+//		if (result.hasErrors()) {
+//			System.out.println(result);
+//			model.put("FormRellenarBD", form);
+//			model.put("message", result.getAllErrors());
+//			return "/BD/BD";
+//		} else {
+//			try {
+//				this.pilotService.poblarBD(form);
+//			} catch (NullPointerException e) {
+//				return "redirect:/BD/pilotsBD";
+//			}
+//			return "redirect:/pilots";
+//		}
+//
+//	}
 
 	@GetMapping(path = "/BD/carrerasBD")
 	public String PoblarBDCarreras(ModelMap model) {
@@ -145,33 +146,33 @@ public class PoblarBaseDeDatosController {
 		return "/BD/BDCarrera";
 	}
 
-	@PostMapping(path = "/BD/carrerasBD")
-	public String PoblarBDcarrera(@Valid BDCarrera form, BindingResult result, ModelMap model)
-			throws JSONException, IOException, DataAccessException, duplicatedLeagueNameException, ParseException {
-
-		if (result.hasErrors()) {
-			System.out.println(result);
-			model.put("BDCarrera", form);
-			model.put("message", result.getAllErrors());
-			return "/BD/BD";
-		} else {
-			try {
-				this.pilotService.poblarBDCarreraACarrera(form, new GranPremio(), false);
-			} catch (NullPointerException e) {
-				messageNullPointerException = true;
-				formError = form;
-				return "redirect:/BD/carrerasBD";
-
-			}
-			model.addAttribute("category", form.getCategory());
-			return "redirect:/leagues/increase/"+form.getCategory();
-		}
-
-	}
+//	@PostMapping(path = "/BD/carrerasBD")
+//	public String PoblarBDcarrera(@Valid BDCarrera form, BindingResult result, ModelMap model)
+//			throws JSONException, IOException, DataAccessException, duplicatedLeagueNameException, ParseException {
+//
+//		if (result.hasErrors()) {
+//			System.out.println(result);
+//			model.put("BDCarrera", form);
+//			model.put("message", result.getAllErrors());
+//			return "/BD/BD";
+//		} else {
+//			try {
+//				this.pilotService.poblarBDCarreraACarrera(form, new GranPremio(), false);
+//			} catch (NullPointerException e) {
+//				messageNullPointerException = true;
+//				formError = form;
+//				return "redirect:/BD/carrerasBD";
+//
+//			}
+//			model.addAttribute("category", form.getCategory());
+//			return "redirect:/leagues/increase/"+form.getCategory();
+//		}
+//
+//	}
 
 	@GetMapping(path = "/BD/carrerasBD/{date}/{code}/{id}")
 	public String actualizarTablaGPs(@PathVariable("date") String date, @PathVariable("code") String code,
-			@PathVariable("id") String id, ModelMap model) throws JSONException, IOException, ParseException {
+			@PathVariable("id") String id, ModelMap model) throws JSONException, IOException, ParseException, InterruptedException {
 		GranPremio gp = this.GPService.findGPById(Integer.parseInt(id)).get();
 		gp.setHasBeenRun(true);
 		return PoblarBDCarreras(date, code, model, gp);
@@ -179,7 +180,7 @@ public class PoblarBaseDeDatosController {
 
 	@GetMapping(path = "/BD/carrerasBD/{date}/{code}")
 	public String PoblarBDCarreras(@PathVariable("date") String date, @PathVariable("code") String code, ModelMap model,
-			GranPremio gp) throws JSONException, IOException, ParseException {
+			GranPremio gp) throws JSONException, IOException, ParseException, InterruptedException {
 		BDCarrera form = new BDCarrera();
 		form.setCategory(Category.MOTO3);
 		form.setRacecode(RaceCode.valueOf(code));
@@ -188,9 +189,48 @@ public class PoblarBaseDeDatosController {
 		log.info("Intentando obtener resultados para gp :" + gp);
 		Integer contador=0;
 		String notFound ="";
+//		try {
+//			this.pilotService.poblarBDCarreraACarrera(form, gp, true);
+//		} catch (Exception e) {
+//			model.addAttribute("messageMoto3NotFound",
+//					"API has not found any result to date " + date + " and code " + code + " for moto3 ");
+//			log.warn("API has not found any result to date " + date + " and code " + code + " for moto3 ");
+//			contador++;
+//			notFound+="3";
+//		}
+//		log.info("Resultados obtenidos :" + gp);
+//
+//		try {
+//			form.setCategory(Category.MOTO2);
+//			this.pilotService.poblarBDCarreraACarrera(form, gp, true);
+//		} catch (Exception e) {
+//			model.addAttribute("messageMoto2NotFound",
+//					"API has not found any result to date " + date + " and code " + code + " for moto2");
+//			log.warn("API has not found any result to date " + date + " and code " + code + " for moto2 ");
+//			contador++;
+//			notFound+="2";
+//
+//		}
+//
+//		try {
+//			form.setCategory(Category.MOTOGP);
+//			this.pilotService.poblarBDCarreraACarrera(form, gp, true);
+//		} catch (Exception e) {
+//			model.addAttribute("messageMotogpNotFound",
+//					"API has not found any result to date " + date + " and code " + code + " for motogp");
+//			log.warn("API has not found any result to date " + date + " and code " + code + " for motogp ");
+//			contador++;
+//			notFound+="G";
+//
+//		}
+//		try {
+//			this.GPService.populateRecord(gp);
+//		} catch (Exception e) {
+//
+//		}
 		try {
-			this.pilotService.poblarBDCarreraACarrera(form, gp, true);
-		} catch (Exception e) {
+			this.pilotService.poblarUnaCarreraYSusResultados(form, gp);
+		} catch (FileNotFoundException e) {
 			model.addAttribute("messageMoto3NotFound",
 					"API has not found any result to date " + date + " and code " + code + " for moto3 ");
 			log.warn("API has not found any result to date " + date + " and code " + code + " for moto3 ");
@@ -201,8 +241,8 @@ public class PoblarBaseDeDatosController {
 
 		try {
 			form.setCategory(Category.MOTO2);
-			this.pilotService.poblarBDCarreraACarrera(form, gp, true);
-		} catch (Exception e) {
+			this.pilotService.poblarUnaCarreraYSusResultados(form, gp);
+		} catch (FileNotFoundException e) {
 			model.addAttribute("messageMoto2NotFound",
 					"API has not found any result to date " + date + " and code " + code + " for moto2");
 			log.warn("API has not found any result to date " + date + " and code " + code + " for moto2 ");
@@ -213,7 +253,7 @@ public class PoblarBaseDeDatosController {
 
 		try {
 			form.setCategory(Category.MOTOGP);
-			this.pilotService.poblarBDCarreraACarrera(form, gp, true);
+			this.pilotService.poblarUnaCarreraYSusResultados(form, gp);
 		} catch (Exception e) {
 			model.addAttribute("messageMotogpNotFound",
 					"API has not found any result to date " + date + " and code " + code + " for motogp");
@@ -222,6 +262,11 @@ public class PoblarBaseDeDatosController {
 			notFound+="G";
 
 		}
+//		try {
+//			this.GPService.populateRecord(gp);
+//		} catch (FileNotFoundException e) {
+//
+//		}
 		try {
 			this.GPService.populateRecord(gp);
 		} catch (Exception e) {

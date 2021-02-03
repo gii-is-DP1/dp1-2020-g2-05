@@ -29,7 +29,7 @@ class RecruitServiceTest {
 		Recruit recruit = recruitService.getRecruitByPilotId(1, 2).get();
 
 		assertThat(recruit.getTeam().getId().equals(1));
-		assertThat(recruit.getPilot().getDorsal().equals("93"));
+		assertThat(recruit.getPilot().getPoints().equals("93"));
 	}
 
 	@Test
@@ -39,7 +39,7 @@ class RecruitServiceTest {
 
 		assertThat(recruitsTeam1.size() == 2);
 		assertThat(recruitsTeam2.size() == 0);
-		assertThat(recruitsTeam1.get(0).getPilot().getDorsal().equals("93"));
+		assertThat(recruitsTeam1.get(0).getPilot().getPoints().equals("93"));
 	}
 
 	@Test

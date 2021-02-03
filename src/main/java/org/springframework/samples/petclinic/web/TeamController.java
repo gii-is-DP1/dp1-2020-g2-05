@@ -187,7 +187,7 @@ public class TeamController {
 //		} catch (Exception e) {
 //			return "redirect:/leagues";
 //		}
-		System.out.println("dentro details");
+ 
 		if (team.isPresent()) {
 			model.addAttribute("message", "Team found!");
 			model.addAttribute("team", team.get());

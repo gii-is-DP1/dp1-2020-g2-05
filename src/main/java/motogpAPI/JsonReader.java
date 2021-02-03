@@ -6,6 +6,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import motogpAPI.model.Example;
+
 public class JsonReader {
 
 	/**
@@ -41,5 +45,6 @@ public class JsonReader {
 		in.close();
 
 		return response.toString();
+	
 	}
 }
