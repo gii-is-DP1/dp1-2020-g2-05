@@ -56,17 +56,17 @@ public class TablaConsultasService {
 		tabla.setActualRace(tabla.getRacesCompleted()+1);
 	
 		
-			if(tabla.getRacesCompleted()<10) {
-				tabla.setCurrentCategory(Category.MOTO3); //activar moto3 si las carreras son > que 10
+			if(tabla.getRacesCompleted()<5) {
+				tabla.setCurrentCategory(Category.MOTO3); //activar moto3 si las carreras son > que 5
 				log.info("TABLA CONSULTA SET CATEGORY:" + Category.MOTO3  );
 
 			}
-		else if(tabla.getRacesCompleted()>=10 && tabla.getRacesCompleted()<15 ) {
+		else if(tabla.getRacesCompleted()>=5 && tabla.getRacesCompleted()<10 ) {
 				tabla.setCurrentCategory(Category.MOTO2);	 //activar moto2 si las carreras son >= que 10 y < 15
 				log.info("TABLA CONSULTA SET CATEGORY:" + Category.MOTO2  );
 
 			}
-		else if(tabla.getRacesCompleted()>=15 ) {
+		else if(tabla.getRacesCompleted()>=10 ) {
 			tabla.setCurrentCategory(Category.MOTOGP); //activar motogp si las carreras son >= 15
 			log.info("TABLA CONSULTA SET CATEGORY:" + Category.MOTOGP  );
 
