@@ -35,8 +35,12 @@ public class OfferService {
 	
 	@Transactional
 	public List<Offer> findOffersByLeague(int leagueId) throws DataAccessException {
-		System.out.println(offerRepository.findOffersByLeague(leagueId));
 		return offerRepository.findOffersByLeague(leagueId);
+	}
+	
+	@Transactional
+	public List<Offer> findOffersByRecruit(int recruitId) throws DataAccessException {
+		return offerRepository.findOffersByRecruit(recruitId);
 	}
 	
 	@Transactional

@@ -84,7 +84,7 @@ public class OfferController {
 				return "redirect:/leagues/{leagueId}/teams/" + purchaserTeam.getId() + "/details";
 			} else if (recruitService.getRecruitsByTeam(purchaserTeam.getId()).size() >= 4) {// RN-07: Máximo de
 																								// fichajes
-				modelMap.addAttribute("message", "You already own 4 riders on this league");
+				modelMap.addAttribute("message", "You already own 4 riders in this league");
 			} else if (purchaserTeam.getMoney() >= price) {
 				teamService.saveTeamMoney(purchaserTeam, -price);// Restar dinero al comprador
 				teamService.saveTeamMoney(offer.getRecruit().getTeam(), price);// Dar dinero al vendedor

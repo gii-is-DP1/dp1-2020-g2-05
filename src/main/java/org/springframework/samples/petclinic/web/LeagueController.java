@@ -51,7 +51,7 @@ public class LeagueController {
 	}
 
 	@InitBinder("league")
-	public void initPetBinder(WebDataBinder dataBinder) {
+	public void initLeagueBinder(WebDataBinder dataBinder) {
 		dataBinder.setValidator(new LeagueValidator());
 	}
 
@@ -202,6 +202,14 @@ public class LeagueController {
 				// asignados le asignamos un equipo con el nombre del usuario + teams
 
 				log.info("Equipo " + nuevoEquipoEnLaNuevaLiga + " guardado correctamente.");
+				
+				log.debug("Creando el equipo sistema");
+				teamService.saveSystemTeam(nuevaLiga);
+				log.info("Equipo sistema creado correctamente");
+				
+				log.debug("Se procede asignar aleatoriamente los 2 pilotos al equipo " + nuevoEquipoEnLaNuevaLiga);
+				teamService.randomRecruit2Pilots(nuevoEquipoEnLaNuevaLiga);
+				log.info("2 pilotos iniciales asignados al equipo " + nuevoEquipoEnLaNuevaLiga);
 
 			} catch (duplicatedLeagueNameException e) {
 				log.warn("Fallo al intentar crear la nueva liga : " + nuevaLiga + ", el nombre '" + nuevaLiga.getName()
@@ -210,10 +218,6 @@ public class LeagueController {
 				model.put("message", results.getAllErrors());
 				return "/leagues/createLeagueName";
 			}
-
-			log.debug("Creando el equipo sistema");
-			teamService.saveSystemTeam(nuevaLiga);
-			log.info("Equipo sistema creado correctamente");
 
 			return "redirect:/leagues/myLeagues";
 		}

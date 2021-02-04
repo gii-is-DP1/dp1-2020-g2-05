@@ -5,17 +5,18 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.Team;
 
 public interface TeamRepository extends CrudRepository<Team, Integer> {
 
-	@Query(value="SELECT * FROM TEAM WHERE TEAM.USERNAME = ?1", nativeQuery = true)
-	public List<Team> findTeamByUsername(String username);
+	@Query(value="SELECT t FROM Team t WHERE t.user.username = :teamUsername")
+	public List<Team> findTeamByUsername(@Param("teamUsername") String teamUsername);
 	
-	@Query(value = "SELECT * FROM TEAM WHERE TEAM.USERNAME = ?1 AND TEAM.LEAGUE_ID = ?2", nativeQuery = true)
-	public Optional<Team> findTeamByUsernameAndLeagueId(String username, Integer id);
+	@Query(value = "SELECT t FROM Team t WHERE t.user.username = :teamUsername AND t.league.id = :teamLeague")
+	public Optional<Team> findTeamByUsernameAndLeagueId(@Param("teamUsername") String teamUsername, @Param("teamLeague") Integer teamLeague);
 	
-	@Query(value = "SELECT * FROM TEAM WHERE TEAM.LEAGUE_ID = ?1", nativeQuery = true)
-	public List<Team> findTeamByLeagueId(Integer id);
+	@Query(value = "SELECT t FROM Team t  WHERE t.league.id = :teamLeague")
+	public List<Team> findTeamByLeagueId(@Param("teamLeague") Integer teamLeague);
 	
 }

@@ -66,6 +66,11 @@ public class RecruitService {
 	}
 
 	@Transactional
+	public void saveRecruit(Recruit recruit) throws DataAccessException {
+		this.recruitRepository.save(recruit);
+	}
+	
+	@Transactional
 	public void deleteRecruit(Recruit recruit) throws DataAccessException { // Para borrar fichajes de la BBDD
 																			// al
 		this.recruitRepository.deleteById(recruit.getId());
@@ -88,6 +93,7 @@ public class RecruitService {
 		return this.recruitRepository.findAll();
 	}
 
+	@Transactional
 	public void trade(Recruit recruit, Team sellerTeam, Team purchaserTeam) {
 		// Primero elimino el recruit del equipo que vende
 		deleteRecruit(recruit);

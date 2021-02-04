@@ -10,4 +10,7 @@ public interface OfferRepository extends CrudRepository<Offer,Integer>{
 	
 	@Query("SELECT offer FROM Offer offer WHERE offer.recruit.team.league.id = ?1")
 	public List<Offer> findOffersByLeague(int leagueId);
+	
+	@Query("SELECT offer FROM Offer offer WHERE offer.recruit.id = ?1")
+	public List<Offer> findOffersByRecruit(int recruitId);
 }

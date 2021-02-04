@@ -286,7 +286,7 @@ public class TeamControllerTest {
 //	public String mostrarDetallesEscuderia(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamID,
 //			ModelMap model) {
 //		Optional<Team> team = this.teamService.findTeamById(teamID);
-
+//
 //			model.addAttribute("message", "Team found!");
 //			model.addAttribute("team", team.get());
 //			List<Recruit> fichajesEnVenta = recruitService.getRecruitsOnSaleByTeam(teamID);
@@ -484,13 +484,29 @@ public class TeamControllerTest {
 	}
 
 
-//	@WithMockUser(value = "spring")
-//	@Test
-//	void testProcessUpdateFormHasErrors() throws Exception {
-//		given(this.userService.findUser(user.getUsername())).willReturn(Optional.of(user));
-//		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
-//		given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
-//
+	@WithMockUser(value = "spring")
+	@Test
+	void testProcessUpdateFormHasErrors() throws Exception {
+		given(this.userService.findUser(user.getUsername())).willReturn(Optional.of(user));
+		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
+		given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
+		given(this.leagueService.findAuthoritiesByUsername(user.getUsername())).willReturn(user.getAuthorities().toString());
+		
+		mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/edit", TEST_LEAGUE_ID, TEST_TEAM_ID)
+				.with(csrf())
+				.param("name", "125")
+				.param("points", "aaa")
+				.param("money", "aaa")
+				.param("user.username" , user.getUsername())
+				.param("league.id", TEST_LEAGUE_ID.toString()))
+	.andExpect(model().attributeHasErrors("team"))
+	.andExpect(model().attributeHasFieldErrors("team", "points"))
+	.andExpect(model().attributeHasFieldErrors("team", "name"))
+	.andExpect(model().attributeHasFieldErrors("team", "money"))
+	.andExpect(status().isOk())
+	.andExpect(view().name("/leagues/TeamsEdit"));
+	}
+
 
 	@WithMockUser(value = "spring")
 	@Test
@@ -561,17 +577,7 @@ public class TeamControllerTest {
 			.andExpect(view().name("/leagues/teamDetails"));
 	} 
 
-//		mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/edit", TEST_LEAGUE_ID, TEST_TEAM_ID)
-//				.with(csrf())
-//				.param("name", "125")
-//				.param("points", team.getPoints().toString())
-//				.param("money", team.getMoney().toString())
-//				.param("team.id", TEST_TEAM_ID.toString())
-//				.param("user.username" , user.getUsername())
-//				.param("league.id", TEST_LEAGUE_ID.toString()))
-//		.andExpect(status().is3xxRedirection())
-//		.andExpect(view().name("leagues/TeamsEdit"));
-//	}
+	
 
 
 	@WithMockUser(value = "spring")
@@ -617,7 +623,7 @@ public class TeamControllerTest {
 		.andExpect(status().isOk())
 		.andExpect(model().attributeExists("teams"))
 		.andExpect(model().attribute("teams", Matchers.hasItem(Matchers.<Team> hasProperty("name", is(team.getName())))))
-		.andExpect(view().name("leagues/myTeams"));
+		.andExpect(view().name("Perfil/Perfil"));
 	}
 
 	@WithMockUser(value = "spring")
