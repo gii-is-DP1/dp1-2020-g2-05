@@ -260,7 +260,6 @@ public class PoblarBaseDeDatosController {
 			log.warn("API has not found any result to date " + date + " and code " + code + " for motogp ");
 			contador++;
 			notFound+="G";
-
 		}
 //		try {
 //			this.GPService.populateRecord(gp);

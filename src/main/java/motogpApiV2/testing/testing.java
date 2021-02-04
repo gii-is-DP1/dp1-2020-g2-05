@@ -166,7 +166,7 @@ public class testing {
 		List<GranPremio> granPremiosToReturn = new ArrayList<GranPremio>();
 		for(int i=0;i<allSeasons.getNumOfSeasons();i++) {
 			Season stage = allSeasons.getStages().get(i);
-			String idToObtainGPDetails =stage.getId();
+			String idToObtainGPDetails = stage.getId();
 			String uri =rootUrl+idToObtainGPDetails+urlToObtainResults+API_KEY;
 			TimeUnit.SECONDS.sleep(1);
 			GranPremio gp = new GranPremio();
@@ -183,9 +183,6 @@ public class testing {
 			gp.setHasBeenRun(false);
 			gp.setRaceCode(detailsOfGP_i.getStage().getVenue().getCountryCode());
 
-			
-			//SET RECORDS
-			
 			granPremiosToReturn.add(gp);
 			
 			log.info("Gp creado correctamente :"+gp);

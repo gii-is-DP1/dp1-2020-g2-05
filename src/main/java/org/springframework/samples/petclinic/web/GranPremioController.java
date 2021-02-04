@@ -66,11 +66,11 @@ public class GranPremioController {
 		} else {
 			granpremio.setCalendar(true);
 			granpremio.setHasBeenRun(false);
-			try {
-				this.GPService.populateRecord(granpremio);
-			} catch (Exception e) {
-				log.warn("Sorry, records are unavailable for this GP!"); // Provisional
-			}
+//			try {
+//				this.GPService.populateRecord(granpremio);
+//			} catch (Exception e) {
+//				log.warn("Sorry, records are unavailable for this GP!"); // Provisional
+//			}
 			this.GPService.saveGP(granpremio);
 			log.info("GP succesfully created!: " + granpremio);
 			model.addAttribute("message","Gran Premio loaded succesfully!");
@@ -95,21 +95,21 @@ public class GranPremioController {
 		return "redirect:/controlPanelSP";
 	}
 	
-	@RequestMapping(path="/granPremios/setRecords/{gpId}")
-	public String populateRecords(@PathVariable("gpId") int gpId, ModelMap model) throws IOException {
-		Optional<GranPremio> gp = this.GPService.findGPById(gpId);
-		log.info("Populating GP with id: (" + gpId + ")");
-		if (gp.isPresent()) {
-			log.info("GP: " + gp.get());
-			this.GPService.populateRecord(gp.get());
-			this.GPService.saveGP(gp.get());
-			model.addAttribute("message", "GP successfully populated!");
-		} else {
-			model.addAttribute("message", "GP not found!");
-			log.warn("The GP with id (" + gpId + ") was not found!");
-		}
-		
-		return "gp/gpList";
-	}
+//	@RequestMapping(path="/granPremios/setRecords/{gpId}")
+//	public String populateRecords(@PathVariable("gpId") int gpId, ModelMap model) throws IOException {
+//		Optional<GranPremio> gp = this.GPService.findGPById(gpId);
+//		log.info("Populating GP with id: (" + gpId + ")");
+//		if (gp.isPresent()) {
+//			log.info("GP: " + gp.get());
+//			this.GPService.populateRecord(gp.get());
+//			this.GPService.saveGP(gp.get());
+//			model.addAttribute("message", "GP successfully populated!");
+//		} else {
+//			model.addAttribute("message", "GP not found!");
+//			log.warn("The GP with id (" + gpId + ") was not found!");
+//		}
+//		
+//		return "gp/gpList";
+//	}
 	
 }

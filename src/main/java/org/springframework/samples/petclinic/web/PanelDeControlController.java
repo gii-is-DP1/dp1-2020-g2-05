@@ -12,29 +12,35 @@ import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.GranPremio;
 import org.springframework.samples.petclinic.service.GranPremioService;
 import org.springframework.samples.petclinic.service.LeagueService;
+import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import lombok.extern.slf4j.Slf4j;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import motogpApiV2.testing.testing;
 
 @Controller
+@Slf4j
 public class PanelDeControlController {
 	
 	GranPremioService GPService;
 	LeagueService leagueService;
 	UserService userService;
+	TablaConsultasService TCService;
 	
 	@Autowired
-	public PanelDeControlController(GranPremioService GPService,LeagueService leagueService,UserService userService) {
+	public PanelDeControlController(GranPremioService GPService, LeagueService leagueService, UserService userService, 
+			TablaConsultasService TCService) {
 		this.GPService = GPService;
 		this.leagueService=leagueService;
 		this.userService=userService;
+		this.TCService=TCService;
 	}
 
 
@@ -62,7 +68,21 @@ public class PanelDeControlController {
 		return "/panelControl/panelDeControl";
 		
 	}
+	
+	@GetMapping(path="/controlPanelSP/actualizaVariables")
+	public String actualizaVariables(ModelMap model) {	
+		log.info("Actualizando variables del sistema");
+        TCService.actualizarTablaAutomatica();
+		return "redirect:/controlPanelSP";
+	}
 
+	@GetMapping(path="/controlPanelSP/validaCarreras")
+	public String validaCarreras(ModelMap model) throws Exception {
+		log.info("Validando la ultima carrera completada");
+		System.out.println("VALIDANDO");
+        TCService.comprobandoCarrerasCompletadas();
+		return "redirect:/controlPanelSP";
+	}
 	
 	@GetMapping(path={"/poblarConCalendario"})
 	public String muestraPanel(ModelMap model) throws ParseException, JsonMappingException, JsonProcessingException, IOException, InterruptedException {	

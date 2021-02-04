@@ -49,8 +49,16 @@ public class GranPremio extends BaseEntity {
 	private Boolean calendar;
 	
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "record_id")
-	private Record record;
+    @JoinColumn(name = "recordMotoGp_id")
+	private Record recordMotoGP;
+    
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "recordMoto2_id")
+	private Record recordMoto2;
+    
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "recordMoto3_id")
+	private Record recordMoto3;
 	
 	
 	public Boolean getCalendar() {
@@ -125,18 +133,49 @@ public class GranPremio extends BaseEntity {
 		this.lineups = lineups;
 	}
 
-	public Record getRecord() {
-		return record;
+	public Record getRecordMotoGP() {
+		return recordMotoGP;
 	}
 
-	public void setRecord(Record record) {
-		this.record = record;
+	public void setRecordMotoGP(Record recordMotoGP) {
+		this.recordMotoGP = recordMotoGP;
 	}
 
+	public Record getRecordMoto2() {
+		return recordMoto2;
+	}
+
+	public void setRecordMoto2(Record recordMoto2) {
+		this.recordMoto2 = recordMoto2;
+	}
+
+	public Record getRecordMoto3() {
+		return recordMoto3;
+	}
+
+	public void setRecordMoto3(Record recordMoto3) {
+		this.recordMoto3 = recordMoto3;
+	}
 
 	@Override
 	public String toString() {
 		return "GranPremio [site=" + site + ", date0=" + date0 + ", circuit=" + circuit + ", raceCode=" + raceCode
 				+ "]";
+	}
+
+	public Record getRecord(Category category) {
+		Record res = new Record();
+		switch (category) {
+		case MOTOGP:
+			 res = this.getRecordMotoGP();
+			 break;
+		case MOTO2:
+			 res = this.getRecordMoto2();
+			 break;
+		case MOTO3:
+			 res = this.getRecordMoto3();
+			 break;
+		}
+		return res;
 	}
 }

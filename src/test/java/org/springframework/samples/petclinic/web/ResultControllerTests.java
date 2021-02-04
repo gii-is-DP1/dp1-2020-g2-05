@@ -110,7 +110,9 @@ class ResultControllerTests {
 		gp.setRaceCode(RACE_CODE);
 		gp.setCircuit("Gran Circuito Jerez");
 		gp.setSite("Jerez");
-		gp.setRecord(record);
+		gp.setRecordMotoGP(record);
+		gp.setRecordMoto2(record);
+		gp.setRecordMoto3(record);
 		
 		result.setGp(gp);
 		result.setPilot(pilot);
