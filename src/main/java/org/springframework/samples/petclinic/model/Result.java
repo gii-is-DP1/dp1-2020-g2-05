@@ -3,6 +3,7 @@ package org.springframework.samples.petclinic.model;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -26,7 +27,7 @@ public class Result extends BaseEntity implements Comparable<Result> {
 	@NotNull
 	private Boolean lap; //0-> false , 1-> true
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "pilot_id")
 	private Pilot pilot;
 	

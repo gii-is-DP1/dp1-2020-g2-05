@@ -37,23 +37,22 @@ import motogpAPI.Session;
 @Service
 public class TablaConsultasService {
 	
-	@Autowired
+
 	private ResultService resultService;
-	private GranPremioRepository granPremioRepository;
 	private TablaConsultasRepository TCRepository;
 	private UserService userService;
 	private TeamRepository teamRepository;
 	private LeagueRepository leagueRepository;
-	private PoblarBaseDeDatosController pbdc;
+
 	
 	@Autowired
 	public TablaConsultasService(TablaConsultasRepository TCRepository, UserService userService,
-			TeamRepository teamRepository, LeagueRepository leagueRepository,GranPremioRepository granPremioRepository) {
+			TeamRepository teamRepository, LeagueRepository leagueRepository) {
 		this.TCRepository = TCRepository;
 		this.userService = userService;
 		this.teamRepository = teamRepository;
 		this.leagueRepository = leagueRepository;
-		this.granPremioRepository = granPremioRepository;
+
 	
 	}
 
@@ -167,26 +166,6 @@ public class TablaConsultasService {
 		}
 	}
 
-	public void poblandoUltimaCarreraCompletada() throws Exception {
-//		Integer mesactual = LocalDate.now().getMonthValue();
-//		Integer añoactual = LocalDate.now().getYear();
-//		Integer diaactual = LocalDate.now().getDayOfMonth();
-		Integer mesactual = 3;
-		Integer añoactual = 2019;
-		Integer diaactual = 8;
-		LocalDate fecha = LocalDate.of(añoactual, mesactual, diaactual);
-		GranPremio gp = null;
-		System.out.println(fecha);
-		try {
-			gp =this.granPremioRepository.ultimoGpCompletado(fecha);
-		} catch (Exception e) {
-			throw new Exception("No se ha encontrado gp sin completar con la fecha de hoy.");
-		}
-		System.out.println(gp);
-		
-	
-		
-	}
 	
 	
 	

@@ -25,12 +25,11 @@ public class GranPremioService {
 
 	
 	private GranPremioRepository GPRepository;
-	private TablaConsultasService TCService;
 	
 	@Autowired
-	public GranPremioService(GranPremioRepository GPRepository,TablaConsultasService TCService) {
+	public GranPremioService(GranPremioRepository GPRepository) {
 		this.GPRepository = GPRepository;		
-		this.TCService=TCService;
+	
 	}
 	
 	
@@ -189,8 +188,8 @@ public class GranPremioService {
 		return GPRepository.findUltimoGpSinValidar().get(0);
 	}
 	
-	public GranPremio ultimoGpCorrido(Integer day, Integer year, Integer mes) {
-		LocalDate fecha = LocalDate.of(year, mes, day);
+	public GranPremio ultimoGpCorrido(LocalDate fecha) {
+		
 		return GPRepository.ultimoGpCompletado(fecha);
 	}
 }
