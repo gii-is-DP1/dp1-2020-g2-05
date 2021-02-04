@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -219,7 +220,7 @@ public class TeamController {
 	}
 
 	@GetMapping(path = "/leagues/{leagueId}/teams/{teamId}/delete")
-	public String borrarEscuderia(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
+	public String borrarEscuderia(@RequestHeader(name = "Referer", defaultValue = "/leagues/{leagueId}/teams") String referer,@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
 			ModelMap model) {
 
 		Optional<Team> team = this.teamService.findTeamById(teamId);
@@ -234,7 +235,7 @@ public class TeamController {
 			if(t.size()==1 && t.get(0).getName().equals("Sistema")) {
 				return "redirect:/leagues";
 			}else {
-				return "redirect:/leagues/" + leagueId + "/teams";
+				return "redirect:" + referer;
 
 			
 		}
@@ -245,7 +246,6 @@ public class TeamController {
 		}
 
 	}
-
 	@GetMapping(path = "/leagues/{leagueId}/teams/{teamId}/edit")
 	public String editarPiloto(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
 			ModelMap model) {
@@ -271,7 +271,7 @@ public class TeamController {
 	}
 
 	@PostMapping(value = "/leagues/{leagueId}/teams/{teamId}/edit")
-	public String editarPilotoPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
+	public String editarPilotoPost( @PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
 			@Valid Team team,  BindingResult result, ModelMap model) {
 		
 		System.out.println(team);
