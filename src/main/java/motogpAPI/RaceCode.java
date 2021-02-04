@@ -15,6 +15,7 @@ public enum RaceCode {
 	DEU, // Sachsenring      
 	ESP, // Jerez
 //	EUR, // Europe			    
+	ENG, // Europe			    
 	FIN, // Finland
 	FRA, // Le Mans
 //	FRG, // West Germany	    // No esta en Pais
@@ -27,9 +28,9 @@ public enum RaceCode {
 	ITA, // Mugello
 	JPN, // Motegi from 2004, Suzuka until 2003
 	MAD, // Madrid
-//	MYL, // Sepang              // No esta en Pais
+	MYS, 
 //	NAT, // Nations			    // No esta en Pais
-//	NLD, // Assen		        // No esta en Pais
+	NLD, // Assen		        // No esta en Pais
 	PAC, // Motegi until 2003
 	PRT, // Estoril
 	QAT, // Qatar

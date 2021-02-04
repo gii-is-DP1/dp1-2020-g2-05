@@ -187,7 +187,7 @@ public class TeamController {
 //		} catch (Exception e) {
 //			return "redirect:/leagues";
 //		}
-		System.out.println("dentro details");
+ 
 		if (team.isPresent()) {
 			model.addAttribute("message", "Team found!");
 			model.addAttribute("team", team.get());
@@ -233,10 +233,10 @@ public class TeamController {
 				log.info("Fichaje: " + opRecruit.get().getId() + " a un precio de: " + offer.getPrice());
 				offerService.putOnSale(opRecruit.get(), offer.getPrice());
 				recruitService.putOnSale(opRecruit.get());
-				return "redirect:/leagues/{leagueId}/market";
+				return mostrarDetallesEscuderia(leagueId,teamId,modelMap);
 			} else {
 				modelMap.addAttribute("message", "Recruit not found or you only own 2 riders!");
-				return "/leagues/teamDetails";
+				return mostrarDetallesEscuderia(leagueId,teamId,modelMap);
 			}
 		}
 	}

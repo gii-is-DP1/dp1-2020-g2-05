@@ -98,35 +98,35 @@ class OfferControllerTests {
 	@BeforeEach
 	void setup() {
 		pilot1.setCategory(Category.MOTOGP);
-		pilot1.setDorsal("27");
+		pilot1.setPoints("27");
 		pilot1.setName("Ale");
 		pilot1.setLastName("Ruiz");
 		pilot1.setNationality("Spain");
 		pilot1.setBaseValue(200);
 
 		pilot2.setCategory(Category.MOTOGP);
-		pilot2.setDorsal("7");
+		pilot2.setPoints("7");
 		pilot2.setName("Juan");
 		pilot2.setLastName("Perez");
 		pilot2.setNationality("Spain");
 		pilot2.setBaseValue(400);
 
 		pilot3.setCategory(Category.MOTOGP);
-		pilot3.setDorsal("3");
+		pilot3.setPoints("3");
 		pilot3.setName("Rodri");
 		pilot3.setLastName("Perez");
 		pilot3.setNationality("Spain");
 		pilot3.setBaseValue(500);
 
 		pilot4.setCategory(Category.MOTOGP);
-		pilot4.setDorsal("2");
+		pilot4.setPoints("2");
 		pilot4.setName("Omar");
 		pilot4.setLastName("Perez");
 		pilot4.setNationality("Spain");
 		pilot4.setBaseValue(2000);
 
 		pilot5.setCategory(Category.MOTOGP);
-		pilot5.setDorsal("5");
+		pilot5.setPoints("5");
 		pilot5.setName("Pepe");
 		pilot5.setLastName("Perez");
 		pilot5.setNationality("Spain");

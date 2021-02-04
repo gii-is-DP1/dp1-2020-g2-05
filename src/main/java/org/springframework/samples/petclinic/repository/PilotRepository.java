@@ -71,7 +71,7 @@ public interface PilotRepository extends CrudRepository<Pilot, Integer> {
 //	public Pilot findById(@Param("id")int id);
 	
 	@Override
-	@Query(value="SELECT * FROM PILOT order by category, name, lastname, dorsal, nationality", nativeQuery=true)
+	@Query(value="SELECT * FROM PILOT order by category, name, lastname, points, nationality", nativeQuery=true)
 	public List<Pilot> findAll();
 	
 	@Query("SELECT COUNT(pilot) FROM Pilot pilot WHERE pilot.name LIKE :name AND pilot.lastName LIKE :lastName")

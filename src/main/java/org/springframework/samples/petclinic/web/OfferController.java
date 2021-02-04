@@ -81,6 +81,7 @@ public class OfferController {
 				offerService.saveOffer(offer);
 				recruitService.quitOnSale(offer.getRecruit());
 				modelMap.addAttribute("message", "Offer cancelled!");
+				return "redirect:/leagues/{leagueId}/teams/" + purchaserTeam.getId() + "/details";
 			} else if (recruitService.getRecruitsByTeam(purchaserTeam.getId()).size() >= 4) {// RN-07: Máximo de
 																								// fichajes
 				modelMap.addAttribute("message", "You already own 4 riders on this league");

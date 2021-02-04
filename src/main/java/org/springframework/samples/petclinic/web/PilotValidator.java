@@ -29,7 +29,7 @@ public class PilotValidator implements Validator{
 		 boolean resultado;
 
 	        try {
-	            Integer.parseInt(pilot.getDorsal());
+	            Integer.parseInt(pilot.getPoints());
 	            resultado = true;
 	        } catch (NumberFormatException excepcion) {
 	            resultado = false;
@@ -57,7 +57,7 @@ public class PilotValidator implements Validator{
 //		}
 		
 		if(resultado == false) {
-			errors.rejectValue("Dorsal", REQUIRED + "shoudl be Integer");
+			errors.rejectValue("points", REQUIRED + "shoudl be Integer");
 		}
 	}
 

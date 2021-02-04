@@ -15,6 +15,12 @@
 <c:if test="${messageMoto3NotFound!=null}"><c:out value="${messageMoto3NotFound}"/><br></c:if>	
 <h2>This is the control panel</h2>
         <div class="form-group has-feedback">
+        
+        <spring:url value="/controlPanelSP/actualizaVariables" var="actualizaVariables">
+		</spring:url> <a href="${fn:escapeXml(actualizaVariables)}"> Update Variables</a><br>
+		
+		<spring:url value="/controlPanelSP/validaCarreras" var="validaCarreras">
+		</spring:url> <a href="${fn:escapeXml(validaCarreras)}"> Validate Races</a><br>
 		        	
 		<spring:url value="/granPremios/new" var="leagueUrl">
 		</spring:url> <a href="${fn:escapeXml(leagueUrl)}">new GP (Calendar)</a>
@@ -42,13 +48,6 @@
 			</spring:url> 			 			 
 			<a href="${fn:escapeXml(deleteGranPremioUrl)}"> Delete</a>
 			
-<%-- 		    <c:if test="${res.hasBeenRun==true}"> --%>
-<%-- 			<spring:url value="/granPremios/{id}/validateResults/{code}" var="deleteGranPremioUrl"> --%>
-<%-- 			<spring:param name="id" value="${res.id}" /> --%>
-<%-- 			<spring:param name="code" value="${res.raceCode}" /> --%>
-<%-- 			</spring:url> 			 			  --%>
-<%-- 			<a href="${fn:escapeXml(deleteGranPremioUrl)}"> Validate Results</a> --%>
-<%-- 			</c:if> --%>
 			 </h5>
 			
 				

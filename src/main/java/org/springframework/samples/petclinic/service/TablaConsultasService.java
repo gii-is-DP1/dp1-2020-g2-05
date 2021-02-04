@@ -22,32 +22,23 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class TablaConsultasService {
-
-	
-	@Autowired
-	private TablaConsultasRepository TCRepository;
-
-	@Autowired
-	private UserService userService;
 	
 	@Autowired
 	private ResultService resultService;
-	
-	@Autowired
+
+	private TablaConsultasRepository TCRepository;
+	private UserService userService;
 	private TeamRepository teamRepository;
-	
-	@Autowired
 	private LeagueRepository leagueRepository;
 	
-
-
-//	@Autowired
-//	private TeamService teamService;
-//	@Autowired
-//	private LeagueService leagueService;
-	  
-
-
+	@Autowired
+	public TablaConsultasService(TablaConsultasRepository TCRepository, UserService userService,
+			TeamRepository teamRepository, LeagueRepository leagueRepository) {
+		this.TCRepository = TCRepository;
+		this.userService = userService;
+		this.teamRepository = teamRepository;
+		this.leagueRepository = leagueRepository;
+	}
 
 	public Optional<TablaConsultas> getTabla() throws DataAccessException {
 		return TCRepository.findById(1);
@@ -65,17 +56,17 @@ public class TablaConsultasService {
 		tabla.setActualRace(tabla.getRacesCompleted()+1);
 	
 		
-			if(tabla.getRacesCompleted()<5) {
+			if(tabla.getRacesCompleted()<10) {
 				tabla.setCurrentCategory(Category.MOTO3); //activar moto3 si las carreras son > que 10
 				log.info("TABLA CONSULTA SET CATEGORY:" + Category.MOTO3  );
 
 			}
-		else if(tabla.getRacesCompleted()>=5 && tabla.getRacesCompleted()<10 ) {
+		else if(tabla.getRacesCompleted()>=10 && tabla.getRacesCompleted()<15 ) {
 				tabla.setCurrentCategory(Category.MOTO2);	 //activar moto2 si las carreras son >= que 10 y < 15
 				log.info("TABLA CONSULTA SET CATEGORY:" + Category.MOTO2  );
 
 			}
-		else if(tabla.getRacesCompleted()>=10 ) {
+		else if(tabla.getRacesCompleted()>=15 ) {
 			tabla.setCurrentCategory(Category.MOTOGP); //activar motogp si las carreras son >= 15
 			log.info("TABLA CONSULTA SET CATEGORY:" + Category.MOTOGP  );
 
@@ -160,3 +151,4 @@ public class TablaConsultasService {
 	}
 	
 }
+
