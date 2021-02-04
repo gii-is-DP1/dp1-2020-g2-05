@@ -120,6 +120,15 @@ public class Record extends BaseEntity {
 	public void setMejorVuelta(RecordMejorVuelta mejorVuelta) {
 		this.mejorVuelta = mejorVuelta;
 	}
+	
+	public List<String> getPilotsWithRecords() {
+		List<String> res = new ArrayList<String>();
+		res.add(this.getMejorVuelta().getNombrePiloto());
+		res.add(this.getRecordDelCircuito().getNombrePiloto());
+		res.add(this.getVueltaDePole().getNombrePiloto());
+		res.add(this.getVueltaRapida().getNombrePiloto());
+		return res;
+	}
 
 
 	@Override

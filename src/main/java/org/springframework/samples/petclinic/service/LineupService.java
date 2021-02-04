@@ -43,5 +43,8 @@ public class LineupService {
 		return this.lineupRepository.findByTeam(team_id).stream().sorted(Comparator.comparing(x -> x.getGp().getDate0())).collect(Collectors.toList());
 	}
 	
+	public List<Lineup> findByGpId(Integer gpId) {
+		return this.lineupRepository.findByGp(gpId);
+	}
 	
 }

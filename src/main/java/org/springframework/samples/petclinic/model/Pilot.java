@@ -115,6 +115,10 @@ public class Pilot extends BaseEntity implements Comparable<Pilot> {
 		return this.results;
 	}
 	
+	public String getFullName() {
+		return this.getName() + " " + this.getLastName();
+	}
+	
 	
 
 //	@Override
