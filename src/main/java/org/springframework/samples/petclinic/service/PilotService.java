@@ -242,57 +242,57 @@ public class PilotService {
 //		
 	
 	
-	public void poblarUnaCarreraYSusResultados(BDCarrera form,GranPremio gp) throws JsonMappingException, JsonProcessingException, IOException, InterruptedException {
-		List<Competitor> listaDeRiders =testing.findCompetitorAndItsResultsByCategoryRaceCodeAndYear(form.getYear(), form.getRacecode(), form.getCategory());
-
-		Integer numeroDeRiders = listaDeRiders.size();
-
-		for (int i=0;i<numeroDeRiders;i++) {
-			Competitor rider_i = listaDeRiders.get(i);
-
-			if (rider_i.getResult()==null) {
-				motogpApiV2.results.Result resultNull = new motogpApiV2.results.Result();
-				resultNull.setPosition(0);
-				resultNull.setPoints(0);
-				rider_i.setResult(resultNull);
-			}
-
-			Result result = new Result();
-			result.setGp(gp);
-			result.setLap(false);
-			result.setPole(false);
-			
-			if (rider_i.getResult().getPosition()==null) {
-				result.setPosition(0);
-			} else {
-				result.setPosition(rider_i.getResult().getPosition());
-			}
-			
-			this.resultService.saveResult(result);
-			
-			if (this.countByName(rider_i.getName().split(", ")[0], rider_i.getName().split(", ")[1])!=0) {
-
-				this.updatePilotResults(rider_i, result);
-
-				if (rider_i.getResult().getPoints()==null) {
-					this.updatePilot(rider_i, 0);
-				} else {
-					this.updatePilot(rider_i, rider_i.getResult().getPoints());
-				}
-
-			} else {
-				this.createNewPilot(rider_i,form.getCategory());
-
-				this.assignResultToAPilot(rider_i, result);
-
-				if (rider_i.getResult().getPoints()==null) {
-					this.updatePilot(rider_i, 0);
-				} else {
-					this.updatePilot(rider_i, rider_i.getResult().getPoints());
-				}
-			}
-		}
-	}
+//	public void poblarUnaCarreraYSusResultados(BDCarrera form,GranPremio gp) throws JsonMappingException, JsonProcessingException, IOException, InterruptedException {
+//		List<Competitor> listaDeRiders =testing.findCompetitorAndItsResultsByCategoryRaceCodeAndYear(form.getYear(), form.getRacecode(), form.getCategory());
+//
+//		Integer numeroDeRiders = listaDeRiders.size();
+//
+//		for (int i=0;i<numeroDeRiders;i++) {
+//			Competitor rider_i = listaDeRiders.get(i);
+//
+//			if (rider_i.getResult()==null) {
+//				motogpApiV2.results.Result resultNull = new motogpApiV2.results.Result();
+//				resultNull.setPosition(0);
+//				resultNull.setPoints(0);
+//				rider_i.setResult(resultNull);
+//			}
+//
+//			Result result = new Result();
+//			result.setGp(gp);
+//			result.setLap(false);
+//			result.setPole(false);
+//			
+//			if (rider_i.getResult().getPosition()==null) {
+//				result.setPosition(0);
+//			} else {
+//				result.setPosition(rider_i.getResult().getPosition());
+//			}
+//			
+//			this.resultService.saveResult(result);
+//			
+//			if (this.countByName(rider_i.getName().split(", ")[0], rider_i.getName().split(", ")[1])!=0) {
+//
+//				this.updatePilotResults(rider_i, result);
+//
+//				if (rider_i.getResult().getPoints()==null) {
+//					this.updatePilot(rider_i, 0);
+//				} else {
+//					this.updatePilot(rider_i, rider_i.getResult().getPoints());
+//				}
+//
+//			} else {
+//				this.createNewPilot(rider_i,form.getCategory());
+//
+//				this.assignResultToAPilot(rider_i, result);
+//
+//				if (rider_i.getResult().getPoints()==null) {
+//					this.updatePilot(rider_i, 0);
+//				} else {
+//					this.updatePilot(rider_i, rider_i.getResult().getPoints());
+//				}
+//			}
+//		}
+//	}
 	
 	
 	@Transactional

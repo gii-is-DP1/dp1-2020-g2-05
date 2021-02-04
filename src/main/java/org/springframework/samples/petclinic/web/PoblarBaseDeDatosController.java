@@ -20,6 +20,7 @@ import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.service.GranPremioService;
 import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.PilotService;
+import org.springframework.samples.petclinic.service.PoblarBaseDeDatosService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserService;
@@ -44,19 +45,22 @@ public class PoblarBaseDeDatosController {
 	TeamService teamService;
 	UserService userService;
 	GranPremioService GPService;
-	PilotService pilotService;
+//	PilotService pilotService;
 	TablaConsultasService TCService;
-
+	PoblarBaseDeDatosService poblarBaseDeDatosService;
 	@Autowired
-	public PoblarBaseDeDatosController(LeagueService leagueService, UserService userService, PilotService pilotService,
+	public PoblarBaseDeDatosController(LeagueService leagueService, UserService userService, 
+			//PilotService pilotService,
 	 GranPremioService GPService,
-			TablaConsultasService TCService, TeamService teamService) {
+			TablaConsultasService TCService, TeamService teamService
+			,PoblarBaseDeDatosService poblarBaseDeDatosService) {
 		this.leagueService = leagueService;
 		this.userService = userService;
-		this.pilotService = pilotService;
+//		this.pilotService = pilotService;
 		this.GPService = GPService;
 		this.TCService = TCService;
 		this.teamService = teamService;
+		this.poblarBaseDeDatosService=poblarBaseDeDatosService;
 	}
 
 	private Boolean messageNullPointerException = false;
@@ -229,7 +233,7 @@ public class PoblarBaseDeDatosController {
 //
 //		}
 		try {
-			this.pilotService.poblarUnaCarreraYSusResultados(form, gp);
+			this.poblarBaseDeDatosService.poblarUnaCarreraYSusResultados(form, gp);
 		} catch (FileNotFoundException e) {
 			model.addAttribute("messageMoto3NotFound",
 					"API has not found any result to date " + date + " and code " + code + " for moto3 ");
@@ -241,7 +245,7 @@ public class PoblarBaseDeDatosController {
 
 		try {
 			form.setCategory(Category.MOTO2);
-			this.pilotService.poblarUnaCarreraYSusResultados(form, gp);
+			this.poblarBaseDeDatosService.poblarUnaCarreraYSusResultados(form, gp);
 		} catch (FileNotFoundException e) {
 			model.addAttribute("messageMoto2NotFound",
 					"API has not found any result to date " + date + " and code " + code + " for moto2");
@@ -253,7 +257,7 @@ public class PoblarBaseDeDatosController {
 
 		try {
 			form.setCategory(Category.MOTOGP);
-			this.pilotService.poblarUnaCarreraYSusResultados(form, gp);
+			this.poblarBaseDeDatosService.poblarUnaCarreraYSusResultados(form, gp);
 		} catch (Exception e) {
 			model.addAttribute("messageMotogpNotFound",
 					"API has not found any result to date " + date + " and code " + code + " for motogp");
