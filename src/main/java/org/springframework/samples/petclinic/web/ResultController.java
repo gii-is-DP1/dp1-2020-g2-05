@@ -85,7 +85,8 @@ public class ResultController {
 		log.info("Showing results for GP with id (" + gpId + ").");
 		GranPremio gp = this.GPService.findGPById(gpId).get();
 		List<Result> listaResultados = this.resultService.findResultsByCategoryAndId(gpId, raceCode, Category.valueOf(category));
-		Record record = gp.getRecord();
+		Category categoria = Category.valueOf(category);
+		Record record = gp.getRecord(categoria);
 		log.debug("Results: " + listaResultados);
 		log.debug("Records: " + record);
 		model.addAttribute("gp", gp);

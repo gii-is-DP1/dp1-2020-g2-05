@@ -157,25 +157,25 @@ INSERT INTO recruit(id,for_sale,pilot_id,team_id) VALUES (5,false,5,11);
 INSERT INTO offer(id,price,status,recruit_id,team_id) VALUES (1,2000,2,1,1);
 
 INSERT INTO "PUBLIC"."GRANPREMIO" VALUES
-(1, TRUE, 'Losail International Circuit', DATE '2019-03-08', FALSE, 'QAT', 'Doha', NULL),
-(2, TRUE, 'Autodromo Termas de Rio Hondo', DATE '2019-03-29', FALSE, 'ARG', 'Santiago del Estero', NULL),
-(3, TRUE, 'Circuit of The Americas', DATE '2019-04-12', FALSE, 'USA', 'Austin', NULL),
-(4, TRUE, 'Circuit de Jerez', DATE '2019-05-03', FALSE, 'ESP', 'Jerez', NULL),
-(5, TRUE, 'Le Mans Bugatti Circuit', DATE '2019-05-17', FALSE, 'FRA', 'Le Mans', NULL),
-(6, TRUE, 'Autodromo Internazionale del Mugello', DATE '2019-05-31', FALSE, 'ITA', 'Scarperia Firenze', NULL),
-(7, TRUE, 'Circuit de Catalunya', DATE '2019-06-14', FALSE, 'ESP', 'Barcelona', NULL),
-(8, TRUE, 'TT Circuit Assen', DATE '2019-06-28', FALSE, 'NLD', 'Assen', NULL),
-(9, TRUE, 'Sachsenring', DATE '2019-07-05', FALSE, 'DEU', 'Oberlungwitz', NULL),
-(10, TRUE, 'Automotodrom Brno', DATE '2019-08-02', FALSE, 'CZE', 'Brno', NULL),
-(11, TRUE, 'Red Bull Ring', DATE '2019-08-09', FALSE, 'AUT', 'Spielberg', NULL),
-(12, TRUE, 'Silverstone Circuit', DATE '2019-08-23', FALSE, 'ENG', 'Silverstone', NULL),
-(13, TRUE, 'Misano World Circuit', DATE '2019-09-13', FALSE, 'ITA', 'Misano Adriatico', NULL),
-(14, TRUE, 'Motorland Aragon', DATE '2019-09-20', FALSE, 'ESP', 'Alcaniz', NULL),
-(15, TRUE, 'Chang International Circuit', DATE '2019-10-04', FALSE, 'THA', 'Buriram', NULL),
-(16, TRUE, 'Twin Ring Motegi', DATE '2019-10-18', FALSE, 'JPN', 'Hiyama', NULL),
-(17, TRUE, 'Phillip Island Circuit', DATE '2019-10-24', FALSE, 'AUS', 'Phillip Island', NULL),
-(18, TRUE, 'Sepang International Circuit', DATE '2019-11-01', FALSE, 'MYS', 'Sepang', NULL),
-(19, TRUE, 'Circuit de la Comunitat Valenciana Ricardo Tormo', DATE '2019-11-15', FALSE, 'ESP', 'Valencia', NULL);  
+(1, TRUE, 'Losail International Circuit', DATE '2019-03-08', FALSE, 'QAT', 'Doha', NULL, NULL, NULL),
+(2, TRUE, 'Autodromo Termas de Rio Hondo', DATE '2019-03-29', FALSE, 'ARG', 'Santiago del Estero', NULL, NULL, NULL),
+(3, TRUE, 'Circuit of The Americas', DATE '2019-04-12', FALSE, 'USA', 'Austin', NULL, NULL, NULL),
+(4, TRUE, 'Circuit de Jerez', DATE '2019-05-03', FALSE, 'ESP', 'Jerez', NULL, NULL, NULL),
+(5, TRUE, 'Le Mans Bugatti Circuit', DATE '2019-05-17', FALSE, 'FRA', 'Le Mans', NULL, NULL, NULL),
+(6, TRUE, 'Autodromo Internazionale del Mugello', DATE '2019-05-31', FALSE, 'ITA', 'Scarperia Firenze', NULL, NULL, NULL),
+(7, TRUE, 'Circuit de Catalunya', DATE '2019-06-14', FALSE, 'ESP', 'Barcelona', NULL, NULL, NULL),
+(8, TRUE, 'TT Circuit Assen', DATE '2019-06-28', FALSE, 'NLD', 'Assen', NULL, NULL, NULL),
+(9, TRUE, 'Sachsenring', DATE '2019-07-05', FALSE, 'DEU', 'Oberlungwitz', NULL, NULL, NULL),
+(10, TRUE, 'Automotodrom Brno', DATE '2019-08-02', FALSE, 'CZE', 'Brno', NULL, NULL, NULL),
+(11, TRUE, 'Red Bull Ring', DATE '2019-08-09', FALSE, 'AUT', 'Spielberg', NULL, NULL, NULL),
+(12, TRUE, 'Silverstone Circuit', DATE '2019-08-23', FALSE, 'ENG', 'Silverstone', NULL, NULL, NULL),
+(13, TRUE, 'Misano World Circuit', DATE '2019-09-13', FALSE, 'ITA', 'Misano Adriatico', NULL, NULL, NULL),
+(14, TRUE, 'Motorland Aragon', DATE '2019-09-20', FALSE, 'ESP', 'Alcaniz', NULL, NULL, NULL),
+(15, TRUE, 'Chang International Circuit', DATE '2019-10-04', FALSE, 'THA', 'Buriram', NULL, NULL, NULL),
+(16, TRUE, 'Twin Ring Motegi', DATE '2019-10-18', FALSE, 'JPN', 'Hiyama', NULL, NULL, NULL),
+(17, TRUE, 'Phillip Island Circuit', DATE '2019-10-24', FALSE, 'AUS', 'Phillip Island', NULL, NULL, NULL),
+(18, TRUE, 'Sepang International Circuit', DATE '2019-11-01', FALSE, 'MYS', 'Sepang', NULL, NULL, NULL),
+(19, TRUE, 'Circuit de la Comunitat Valenciana Ricardo Tormo', DATE '2019-11-15', FALSE, 'ESP', 'Valencia', NULL, NULL, NULL);  
 
 
 INSERT INTO tabla_consultas(actual_race,races_completed,categoria_actual,time_message,num_users,num_equipos,num_ligas,races_validated) VALUES(1,0,'MOTO3',null,10,0,2,0);
