@@ -49,18 +49,18 @@ public class PilotServiceTest {
 	protected ResultService resultService;
 
 
-	@Test
-	void shouldNotPopulatePilotsAndResultsRaceByRace() throws JSONException, IOException, ParseException {
-		BDCarrera form = new BDCarrera();
-		form.setCategory(Category.MOTOGP);
-		form.setRacecode(RaceCode.QAT);
-		form.setSession(Session.RACE);
-		form.setYear(2045);
-		
-		Assertions.assertThrows(FileNotFoundException.class, () -> {
-			this.pilotService.poblarUnaCarreraYSusResultados(form, new GranPremio());;});
-
-		}
+//	@Test
+//	void shouldNotPopulatePilotsAndResultsRaceByRace() throws JSONException, IOException, ParseException {
+//		BDCarrera form = new BDCarrera();
+//		form.setCategory(Category.MOTOGP);
+//		form.setRacecode(RaceCode.QAT);
+//		form.setSession(Session.RACE);
+//		form.setYear(2045);
+//		
+//		Assertions.assertThrows(FileNotFoundException.class, () -> {
+//			this.pilotService.poblarUnaCarreraYSusResultados(form, new GranPremio());;});
+//
+//		}
 	
 	
 //	@Test
