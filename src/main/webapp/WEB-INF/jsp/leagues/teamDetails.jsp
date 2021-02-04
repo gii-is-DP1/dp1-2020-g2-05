@@ -4,6 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
+<%@ page import="org.springframework.samples.petclinic.util.Status" %>
 
 <petclinic:layout pageName="teamDetails">
 
@@ -70,6 +71,15 @@
 				<td><c:out value="${recruit.pilot.category}" /></td>
 				<td><c:out value="${recruit.pilot.points}" /></td>
 				<td><c:out value="${recruit.pilot.nationality}" /></td>
+				<td>
+					<spring:url value="/leagues/{leagueId}/market/{offerId}" var="offerUrl">
+						<spring:param name="offerId" value="${recruit.offer.stream()
+							.filter(o->o.getStatus() == Status.Outstanding).findFirst().get().id}" />
+						<spring:param name="leagueId" value="${leagueId}" />
+					</spring:url> <a href="${fn:escapeXml(offerUrl)}">
+						<span aria-hidden="true">Cancelar venta</span>
+					</a>
+				</td>
 			</tr>
 		</c:forEach>
 	</table>
