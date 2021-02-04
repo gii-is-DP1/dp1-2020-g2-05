@@ -17,6 +17,7 @@ public class PetclinicApplication {
 	@Autowired
 	private TablaConsultasService TCservice;
 	
+	
 	public static void main(String[] args) {
 		SpringApplication.run(PetclinicApplication.class, args);
 	}
@@ -35,6 +36,14 @@ public class PetclinicApplication {
 		log.info("Validando la ultima carrera completada");
 		System.out.println("VALIDANDO");
         TCservice.comprobandoCarrerasCompletadas();
+    }
+	
+	//Ajustar a Domingo (0 00 00 ? * 7)
+	@Scheduled(cron = "0 08 20 ? * *")
+    public void PoblarUltimaCarrera() throws Exception {
+		log.info("Poblando la ultima carrera completada");
+		System.out.println("Poblando");
+        TCservice.poblandoUltimaCarreraCompletada();
     }
 	
 
