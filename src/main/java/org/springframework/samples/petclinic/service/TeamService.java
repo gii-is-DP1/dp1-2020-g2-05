@@ -1,6 +1,7 @@
 
 package org.springframework.samples.petclinic.service;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -175,7 +176,7 @@ public class TeamService {
 	@Transactional
 	public void randomRecruit2Pilots(Team t) {
 		Team syst = findTeamByUsernameAndLeagueId("admin1", t.getLeague().getId()).get();
-		Random rand = new Random();
+		SecureRandom rand = new SecureRandom();
 		for(int i = 0; i<2; i++) {
 			List<Recruit> recruitSys = recruitService.getRecruitsByTeam(syst.getId());
 			Integer recruitId = rand.nextInt(recruitSys.size());

@@ -271,20 +271,7 @@ class OfferControllerTests {
 		given(offerService.findOfferById(TEST_OFFER1_ID)).willReturn(Optional.of(offer1));
 
 		mockMvc.perform(get("/leagues/{leagueId}/market/{offerId}", TEST_LEAGUE_ID, TEST_OFFER1_ID))
-				.andExpect(status().is2xxSuccessful()).andExpect(view().name("offers/offersList"))
-				.andExpect(model().attribute("offers",
-						Matchers.hasItem(Matchers.<Offer>hasProperty("price", is(offer1.getPrice())))))
-				.andExpect(model().attribute("offers",
-						Matchers.hasItem(Matchers.<Offer>hasProperty("status", is(Status.Denied)))))
-				.andExpect(model().attribute("offers",
-						Matchers.hasItem(Matchers.<Offer>hasProperty("recruit", is(offer1.getRecruit())))))
-				.andExpect(model().attribute("offers",
-						Matchers.hasItem(Matchers.<Offer>hasProperty("price", is(offer2.getPrice())))))
-				.andExpect(model().attribute("offers",
-						Matchers.hasItem(Matchers.<Offer>hasProperty("status", is(offer2.getStatus())))))
-				.andExpect(model().attribute("offers",
-						Matchers.hasItem(Matchers.<Offer>hasProperty("recruit", is(offer2.getRecruit())))))
-				.andExpect(model().attribute("message", is("Offer cancelled!")));
+				.andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/leagues/{leagueId}/teams/"+team1.getId()+"/details"));
 	}
 
 	@WithMockUser(value = "spring")
