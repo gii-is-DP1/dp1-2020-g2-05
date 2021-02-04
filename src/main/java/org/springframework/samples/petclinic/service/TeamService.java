@@ -1,12 +1,18 @@
 
 package org.springframework.samples.petclinic.service;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Offer;
@@ -20,6 +26,7 @@ import org.springframework.samples.petclinic.util.Status;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -131,10 +138,19 @@ public class TeamService {
 		List<Pilot> pilots = pilotService.findAll();
 		for (int i=0;i<pilots.size();i++) {
 			if(pilots.get(i).getCategory().equals(cat)) {
-				recruitService.saveRecruit(pilots.get(i),t);
-				Pilot p = pilots.get(i);
-				offerService.putOnSale(recruitService.getRecruitByPilotId(p.getId(),
-						t.getLeague().getId()).get(), p.getBaseValue());
+				Recruit r = new Recruit();
+				r.setPilot(pilots.get(i));
+				r.setForSale(false);
+				r.setTeam(t);
+				recruitService.saveRecruit(r);
+				offerService.putOnSale(r, r.getPilot().getBaseValue());
+				
+				//Por si luego este fichaje tiene que ser asignado al primer equipo, se pueda borrar sin problemas con la base de datos, le añadimos la oferta a mano
+				Offer offer = offerService.findOffersByRecruit(r.getId()).get(0);
+				Set<Offer> offers = new HashSet<>();
+				offers.add(offer);
+				r.setOffer(offers);
+				recruitService.saveRecruit(r);
 			}
 		}
 	}
@@ -157,6 +173,22 @@ public class TeamService {
 		saveTeamMoney(t, valor);
 	}
 
+	@Transactional
+	public void randomRecruit2Pilots(Team t) {
+		Team syst = findTeamByUsernameAndLeagueId("admin1", t.getLeague().getId()).get();
+		SecureRandom rand = new SecureRandom();
+		for(int i = 0; i<2; i++) {
+			List<Recruit> recruitSys = recruitService.getRecruitsByTeam(syst.getId());
+			Integer recruitId = rand.nextInt(recruitSys.size());
+			Recruit newR = recruitSys.get(recruitId);
+			Offer offer = newR.getOffer().stream()
+					.filter(o->o.getStatus().equals(Status.Outstanding)).findAny().get();
+			offer.setStatus(Status.Denied);
+			offerService.saveOffer(offer);
+			recruitService.trade(newR, syst, t);
+		}
+	}
+	
 }
 
 

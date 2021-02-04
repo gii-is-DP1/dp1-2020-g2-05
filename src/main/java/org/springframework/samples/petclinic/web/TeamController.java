@@ -149,6 +149,10 @@ public class TeamController {
 				log.info("Equipo " + team + " guardado correctamente.");
 				EquipoSi = true;
 
+				log.debug("Se procede asignar aleatoriamente los 2 pilotos al equipo " + team);
+				teamService.randomRecruit2Pilots(team);
+				log.info("2 pilotos iniciales asignados al equipo " + team);
+				
 				return "redirect:/leagues/{leagueId}/teams";
 
 			}
