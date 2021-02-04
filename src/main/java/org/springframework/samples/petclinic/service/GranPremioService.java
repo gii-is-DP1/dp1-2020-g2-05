@@ -168,19 +168,20 @@ public class GranPremioService {
 	}
 	
 	public void populateRecord(GranPremio gp) throws IOException {
-		Category categoria = this.TCService.getTabla().get().getCurrentCategory();
 		Integer anyo = gp.getDate0().getYear();
 		Pais pais = parseRaceCodeToPais(RaceCode.valueOf(gp.getRaceCode()));
-		System.out.println("Categoria: " + categoria);
 		System.out.println("Anyo: " + anyo);
 		System.out.println("Pais: " + pais);
 		if (!pais.equals(Pais.NOTFOUND) && anyo > 2004 && anyo < 2021) {
-			String urlBuilder = "https://www.motogp.com/es/ajax/results/parse/" + anyo + "/" + pais + "/" + categoria + "/";
-			System.out.println("URL: " + urlBuilder);
-			gp.setRecord(new Record(urlBuilder));
-//			this.GPRepository.save(gp);
-			System.out.println("Gp_Record: " + gp.getRecord());
+			String urlBuilderMotoGP = "https://www.motogp.com/es/ajax/results/parse/" + anyo + "/" + pais + "/" + Category.MOTOGP + "/";
+			String urlBuilderMoto2 = "https://www.motogp.com/es/ajax/results/parse/" + anyo + "/" + pais + "/" + Category.MOTO2 + "/";
+			String urlBuilderMoto3 = "https://www.motogp.com/es/ajax/results/parse/" + anyo + "/" + pais + "/" + Category.MOTO3 + "/";
+			gp.setRecordMotoGP(new Record(urlBuilderMotoGP));
+			gp.setRecordMoto2(new Record(urlBuilderMoto2));
+			gp.setRecordMoto3(new Record(urlBuilderMoto3));
 		}
+		//			this.GPRepository.save(gp);
+		//			System.out.println("Gp_Record: " + gp.getRecord());
 	}
 	
 	public GranPremio ultimoGPSinValidar() {

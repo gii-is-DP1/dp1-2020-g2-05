@@ -29,9 +29,9 @@ public class Pilot extends BaseEntity implements Comparable<Pilot> {
 	@NotEmpty
 	private String nationality;
 
-	@Column(name = "dorsal")
+	@Column(name = "points")
 	@NotEmpty
-	private String dorsal;
+	private String points;
 
 	@Column(name = "category")
 	@NotNull
@@ -72,12 +72,12 @@ public class Pilot extends BaseEntity implements Comparable<Pilot> {
 		this.nationality = nationality;
 	}
 
-	public String getDorsal() {
-		return dorsal;
+	public String getPoints() {
+		return points;
 	}
 
-	public void setDorsal(String dorsal) {
-		this.dorsal = dorsal;
+	public void setPoints(String points) {
+		this.points = points;
 	}
 
 	public Category getCategory() {
@@ -144,8 +144,8 @@ public class Pilot extends BaseEntity implements Comparable<Pilot> {
 			return this.lastName.compareTo(o.lastName);
 //		if (sinAcentos.compare(this.lastName, o.lastName)!=0)
 //			return sinAcentos.compare(this.lastName, o.lastName);
-		if (!this.dorsal.equalsIgnoreCase(o.dorsal))
-			return this.dorsal.compareTo(o.dorsal);
+		if (!this.points.equalsIgnoreCase(o.points))
+			return this.points.compareTo(o.points);
 		return this.nationality.compareTo(o.nationality);
 	}
 

@@ -32,8 +32,14 @@ public class Record extends BaseEntity {
     @JoinColumn(name = "mejorVuelta_id")
 	private RecordMejorVuelta mejorVuelta;
 	
-	@OneToOne(cascade = CascadeType.ALL, mappedBy="record")
-    private GranPremio gp;
+	@OneToOne(cascade = CascadeType.ALL, mappedBy="recordMotoGP")
+    private GranPremio gpMotoGP;
+	
+	@OneToOne(cascade = CascadeType.ALL, mappedBy="recordMoto2")
+    private GranPremio gpMoto2;
+	
+	@OneToOne(cascade = CascadeType.ALL, mappedBy="recordMoto3")
+    private GranPremio gpMoto3;
 	
 
 	public Record(String entrada) throws IOException {

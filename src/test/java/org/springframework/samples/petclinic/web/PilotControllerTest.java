@@ -159,7 +159,7 @@ public class PilotControllerTest {
 			
 			pilot.setBaseValue(2000);
 			pilot.setCategory(Category.MOTO2);
-			pilot.setDorsal("2");
+			pilot.setPoints("2");
 			pilot.setId(PILOT_TEST_ID);
 			pilot.setLastName("Nieva");
 			pilot.setName("Migue");
@@ -202,7 +202,7 @@ public class PilotControllerTest {
 								.with(csrf())
 								.param("name", "aaa")
 								.param("lastName", "aaa")
-								.param("dorsal", "!!")
+								.param("points", "!!")
 								.param("category", "h")
 								.param("nationality" , "@@@" ))
 					.andExpect(model().attributeHasErrors("pilot"))
@@ -223,7 +223,7 @@ public class PilotControllerTest {
 								.with(csrf())
 								.param("name", "Antonio")
 								.param("lastName", "Perez")
-								.param("dorsal", "123")
+								.param("points", "123")
 								.param("baseValue", pilot.getBaseValue().toString())
 								.param("category", pilot.getCategory().toString())
 								.param("nationality" , "Spain" ))
