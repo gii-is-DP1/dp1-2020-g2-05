@@ -12,7 +12,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-
 @Entity
 @Table(name = "pilot")
 public class Pilot extends BaseEntity implements Comparable<Pilot> {
@@ -36,7 +35,7 @@ public class Pilot extends BaseEntity implements Comparable<Pilot> {
 	@Column(name = "category")
 	@NotNull
 	private Category category;
-	
+
 	@Column(name = "base_value")
 	@NotNull
 	@Min(0)
@@ -64,6 +63,10 @@ public class Pilot extends BaseEntity implements Comparable<Pilot> {
 		this.lastName = lastname;
 	}
 
+	public String getFullName() {
+		return this.getName() + " " + this.getLastName();
+	}
+
 	public String getNationality() {
 		return nationality;
 	}
@@ -87,7 +90,7 @@ public class Pilot extends BaseEntity implements Comparable<Pilot> {
 	public void setCategory(Category category) {
 		this.category = category;
 	}
-	
+
 	public Integer getBaseValue() {
 		return baseValue;
 	}
@@ -114,8 +117,6 @@ public class Pilot extends BaseEntity implements Comparable<Pilot> {
 		}
 		return this.results;
 	}
-	
-	
 
 //	@Override
 //	public String toString() {
@@ -130,10 +131,10 @@ public class Pilot extends BaseEntity implements Comparable<Pilot> {
 
 	@Override
 	public int compareTo(Pilot o) {
-		
+
 //		 final Collator sinAcentos = Collator.getInstance();
 //		 sinAcentos.setStrength(Collator.PRIMARY); //Comparador para ignorar acentos
-		    
+
 		if (!this.category.equals(o.category))
 			return this.category.compareTo(o.category);
 		if (!this.name.equalsIgnoreCase(o.name))
@@ -149,6 +150,4 @@ public class Pilot extends BaseEntity implements Comparable<Pilot> {
 		return this.nationality.compareTo(o.nationality);
 	}
 
-
 }
-

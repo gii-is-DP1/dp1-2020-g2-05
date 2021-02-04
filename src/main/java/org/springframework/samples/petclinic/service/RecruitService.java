@@ -93,6 +93,7 @@ public class RecruitService {
 		return this.recruitRepository.findAll();
 	}
 
+	@Transactional
 	public void trade(Recruit recruit, Team sellerTeam, Team purchaserTeam) {
 		// Primero elimino el recruit del equipo que vende
 		deleteRecruit(recruit);

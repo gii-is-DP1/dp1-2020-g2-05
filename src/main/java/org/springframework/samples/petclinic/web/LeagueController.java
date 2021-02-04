@@ -51,7 +51,7 @@ public class LeagueController {
 	}
 
 	@InitBinder("league")
-	public void initPetBinder(WebDataBinder dataBinder) {
+	public void initLeagueBinder(WebDataBinder dataBinder) {
 		dataBinder.setValidator(new LeagueValidator());
 	}
 
