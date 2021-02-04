@@ -66,6 +66,11 @@ public class RecruitService {
 	}
 
 	@Transactional
+	public void saveRecruit(Recruit recruit) throws DataAccessException {
+		this.recruitRepository.save(recruit);
+	}
+	
+	@Transactional
 	public void deleteRecruit(Recruit recruit) throws DataAccessException { // Para borrar fichajes de la BBDD
 																			// al
 		this.recruitRepository.deleteById(recruit.getId());
