@@ -31,10 +31,10 @@
 				</petclinic:menuItem>
 			
 				
-				<petclinic:menuItem active="${name eq 'myTeams'}" url="/myTeams"
+				<petclinic:menuItem active="${name eq 'Perfil'}" url="/myTeams"
 					title="leads to /myTeams">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-					<span>myTeams</span>
+					<span>Perfil</span>
 				</petclinic:menuItem>
 				
 				<petclinic:menuItem active="${name eq 'leagues'}" url="/leagues"
