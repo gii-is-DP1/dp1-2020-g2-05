@@ -200,11 +200,20 @@ public class LineupController {
 	
 	@PostMapping(value = "/newLineup")
 	public String crearAlineacionPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
-			@Valid Lineup lineup, BindingResult result, ModelMap model) {
+			@Valid Lineup lineup, BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
+		
+		List<Integer> gpsConLineupsDeEsteEquipo = this.lineupService.findByTeam(teamId).stream().map(x -> x.getGp().getId()).collect(Collectors.toList());
+		Integer currentGPId = this.TCService.getTabla().get().getActualRace();
+		
+		if (gpsConLineupsDeEsteEquipo.contains(currentGPId)) {
+			log.warn("Solo puedes tener un lineup para cada GP!");
+			redirectAttributes.addFlashAttribute("message", "Solo puedes tener un lineup para cada GP!");
+			return "redirect:/leagues/{leagueId}/teams/{teamId}/details";
+		}
+		
 		if (result.hasErrors()) {
 			log.warn("The lineup creation form has errors!");
 			log.warn("Errors: " + result);
-			Integer currentGPId = this.TCService.getTabla().get().getActualRace();
 			GranPremio currentGP = this.granPremioService.findGPById(currentGPId).get();
 			lineup.setGp(currentGP);
 			model.put("lineup", lineup);
@@ -219,7 +228,7 @@ public class LineupController {
 	@GetMapping(path = "/editLineup/{lineupId}")
 	public String editarLineupGet(//@RequestHeader(name = "Referer") String referer,
 			@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
-			@PathVariable("lineupId") int lineupId, ModelMap model) {
+			@PathVariable("lineupId") int lineupId, ModelMap model, RedirectAttributes redirectAttributes) {
 
 		String view = "redirect:/leagues/{leagueId}/teams/{teamId}/details";
 		Optional<Lineup> lineup = this.lineupService.findLineup(lineupId);
@@ -228,6 +237,7 @@ public class LineupController {
 			// Si ya se ha disputado el GP, no permite editar
 			Optional<Boolean> condition = Optional.of(lineup.get().getGp().getHasBeenRun());
 			if (condition.isPresent() && condition.get()) {
+				redirectAttributes.addFlashAttribute("message", "No se puede modificar una alineacion para un GP que ya se ha disputado!");
 				return view;
 			} else {
 				view = "thymeleaf/lineupsEdit";
@@ -244,12 +254,8 @@ public class LineupController {
 
 	@PostMapping(value = "/editLineup/{lineupId}")
 	public String editarLineupPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
-			@Valid Lineup lineup, BindingResult result, ModelMap model) {
+			@Valid Lineup lineup, BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
 		
-//		Optional<Boolean> condition = Optional.of(lineup.getGp().getHasBeenRun());
-//		if (condition.isPresent() && condition.get()) {
-//			return "redirect:/leagues/{leagueId}/teams/{teamId}/details";
-//		}
 		if (result.hasErrors()) {
 			log.info("The lineup edit form has errors!");
 			log.warn("Errors: " + result);
@@ -265,6 +271,13 @@ public class LineupController {
 			GranPremio gp = this.granPremioService.findGPById(lineupToUpdate.getGp().getId()).get();
 			lineupToUpdate.setGp(gp);
 			log.debug("lineupToUpdate: " + lineupToUpdate);
+			
+			Optional<Boolean> condition = Optional.of(lineupToUpdate.getGp().getHasBeenRun());
+			if (condition.isPresent() && condition.get()) {
+				redirectAttributes.addFlashAttribute("message", "No se puede modificar una alineacion para un GP que ya se ha disputado!");
+				return "redirect:/leagues/{leagueId}/teams/{teamId}/details";
+			}
+			
 			this.lineupService.saveLineup(lineupToUpdate);
 			log.info("Saving edited lineup: " + lineupToUpdate);
 //			log.info("El gp asociado es: " + lineupToUpdate.getGp().getId());
@@ -276,13 +289,14 @@ public class LineupController {
 
 	@GetMapping(path = "/delete/{lineupId}")
 	public String borrarLineup(@RequestHeader(name = "Referer", defaultValue = "/leagues/{leagueId}/teams/{teamId}/details") String referer, @PathVariable("lineupId") int lineupId,
-			ModelMap model) {
+			ModelMap model, RedirectAttributes redirectAttributes) {
 		Optional<Lineup> lineup = lineupService.findLineup(lineupId);
 		log.info("Deleting lineup with id: (" + lineupId + ")");
 		if (lineup.isPresent()) {
 			// Si ya se ha disputado el GP, no permite borrar
 			Optional<Boolean> condition = Optional.of(lineup.get().getGp().getHasBeenRun());
 			if (condition.isPresent() && condition.get()) {
+				redirectAttributes.addFlashAttribute("message", "No se puede modificar una alineacion para un GP que ya se ha disputado!");
 				return "redirect:/leagues/{leagueId}/teams/{teamId}/details";
 			} else {
 				log.info("Lineup: " + lineup.get());

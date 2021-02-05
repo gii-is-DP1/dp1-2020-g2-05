@@ -140,7 +140,7 @@
             <h2>
                <span th:if="${lineup['new']}">New </span>Lineup
             </h2>
-            <form id="add-lineup-form" class="form-horizontal" th:action="@{/leagues/}+${leagueId}+@{/teams/}+${teamId}+@{/newLineup}" th:object="${lineup}" method="post">
+            <form id="add-lineup-form" class="form-horizontal" th:action="${lineup['new']} == 'true' ? @{/leagues/}+${leagueId}+@{/teams/}+${teamId}+@{/newLineup} : @{/leagues/}+${leagueId}+@{/teams/}+${teamId}+@{/editLineup/}+${lineupId}" th:object="${lineup}" method="post">
                <div class="form-group has-feedback">
                   <input type="hidden" name="id" th:value="${lineup.id}"/>
 	            <input type="hidden" name="category" th:value="${lineup.category}"/>
