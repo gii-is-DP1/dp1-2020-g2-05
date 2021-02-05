@@ -69,7 +69,7 @@ public class OfferController {
 
 	@GetMapping(path = "{offerId}")
 	public String recruitPilot(@PathVariable("leagueId") int leagueId, @PathVariable("offerId") int offerId,
-			ModelMap modelMap) throws NotAllowedNumberOfRecruitsException {
+			ModelMap modelMap) {
 		Optional<Offer> opo = offerService.findOfferById(offerId);
 
 		if (opo.isPresent()) {
@@ -89,23 +89,20 @@ public class OfferController {
 
 			} else if (purchaserTeam.getMoney() >= price) {
 				log.info("Comprando fichaje con suficiente dinero");
-//				try {
+				try {
+					Recruit recruit = offer.getRecruit();
+					recruitService.purchaseRecruit(recruit, purchaserTeam);
+					teamService.saveTeamMoney(purchaserTeam, -price);// Restar dinero al comprador
+					teamService.saveTeamMoney(recruit.getTeam(), price);// Dar dinero al vendedor
+					transactionService.trade(price, recruit.getPilot(), sellerTeam, purchaserTeam); // su registro
+					offer.setTeam(purchaserTeam);
+					offer.setStatus(Status.Accepted);
+					offerService.saveOffer(offer);
 
-				teamService.saveTeamMoney(purchaserTeam, -price);// Restar dinero al comprador
-				teamService.saveTeamMoney(offer.getRecruit().getTeam(), price);// Dar dinero al vendedor
-				offer.setTeam(purchaserTeam);
-				offer.setStatus(Status.Accepted);
-				offerService.saveOffer(offer);
-
-				Recruit recruit = offer.getRecruit();
-				recruitService.sellRecruit(recruit);
-				recruitService.purchaseRecruit(recruit.getPilot(), purchaserTeam);
-				transactionService.trade(price, recruit.getPilot(), sellerTeam, purchaserTeam); // su registro
-
-				modelMap.addAttribute("message", "Pilot recruited!");
-//				} catch (NotAllowedNumberOfRecruitsException e) {
-//					modelMap.addAttribute("message", e.getMessage());
-//				}
+					modelMap.addAttribute("message", "Pilot recruited!");
+				} catch (NotAllowedNumberOfRecruitsException e) {
+					modelMap.addAttribute("message", "You already own 4 riders in this league!");
+				}
 
 			} else {
 				modelMap.addAttribute("message", "Not enought money to recruit this pilot");

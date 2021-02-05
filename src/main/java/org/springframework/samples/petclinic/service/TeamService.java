@@ -184,7 +184,7 @@ public class TeamService {
 					.get();
 			offer.setStatus(Status.Denied);
 			offerService.saveOffer(offer);
-//			recruitService.trade(newR, syst, t);
+			recruitService.purchaseRecruit(newR, t);
 		}
 	}
 

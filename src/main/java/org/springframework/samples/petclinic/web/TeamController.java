@@ -206,7 +206,9 @@ public class TeamController {
 					recruitService.putOnSale(opRecruit.get());
 					offerService.putOnSale(opRecruit.get(), offer.getPrice());
 				} catch (Exception e) {
-					modelMap.addAttribute("message", e.getMessage());
+					modelMap.addAttribute("message",
+							"You must own at least 2 riders not on sale to perform this action");
+					return mostrarDetallesEscuderia(leagueId, teamId, modelMap);
 				}
 
 				return "redirect:/leagues/{leagueId}/market";

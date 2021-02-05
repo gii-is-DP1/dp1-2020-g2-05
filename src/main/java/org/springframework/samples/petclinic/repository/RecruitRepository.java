@@ -3,12 +3,12 @@ package org.springframework.samples.petclinic.repository;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.Recruit;
+import org.springframework.samples.petclinic.model.Team;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface RecruitRepository extends CrudRepository<Recruit, Integer> {
@@ -43,7 +43,6 @@ public interface RecruitRepository extends CrudRepository<Recruit, Integer> {
 
 	@Transactional
 	@Modifying
-	@Override
-	void delete(Recruit recruit) throws DataAccessException;
-
+	@Query("UPDATE Recruit r SET r.team = :purchaserTeam WHERE r.id = :recruitID")
+	void transfer(@Param("recruitID") int recruitID, @Param("purchaserTeam") Team purchaserTeam);
 }

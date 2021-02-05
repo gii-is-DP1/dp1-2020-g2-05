@@ -71,16 +71,6 @@ public class RecruitService {
 		this.recruitRepository.save(recruit);
 	}
 
-	@Transactional(rollbackFor = NotAllowedNumberOfRecruitsException.class)
-	public void sellRecruit(Recruit recruit) throws DataAccessException, NotAllowedNumberOfRecruitsException {
-		Team sellerTeam = recruit.getTeam();
-		if (sellerTeam.getRecruits().size() == 2) {
-			throw new NotAllowedNumberOfRecruitsException();
-		} else {
-			this.recruitRepository.delete(recruit);
-		}
-	}
-
 	private Recruit createRecruit(Pilot pilot, Team team) {
 		Recruit recruit = new Recruit();
 		recruit.setForSale(false);
@@ -98,22 +88,11 @@ public class RecruitService {
 	}
 
 	@Transactional(rollbackFor = NotAllowedNumberOfRecruitsException.class)
-	public void purchaseRecruit(Pilot pilot, Team purchaserTeam)
-			throws DataAccessException, NotAllowedNumberOfRecruitsException {
-		if (purchaserTeam.getRecruits().size() == 4) {
-			throw new NotAllowedNumberOfRecruitsException();
-		} else {
-			// Segundo añado el recruit al equipo que compra
-			saveRecruit(pilot, purchaserTeam);
-		}
-
-	}
-
-	@Transactional(rollbackFor = NotAllowedNumberOfRecruitsException.class)
 	public void putOnSale(Recruit recruit) throws NotAllowedNumberOfRecruitsException {
-		if (getRecruitsNotOnSaleByTeam(recruit.getTeam().getId()).size() == 2)
+		if (getRecruitsNotOnSaleByTeam(recruit.getTeam().getId()).size() == 2) {
 			throw new NotAllowedNumberOfRecruitsException();
-		this.recruitRepository.putRecruitOnSale(recruit.getId());
+		} else
+			this.recruitRepository.putRecruitOnSale(recruit.getId());
 	}
 
 	@Transactional
@@ -122,16 +101,18 @@ public class RecruitService {
 	}
 
 	@Transactional
-	public void deleteRecruit(Recruit r) {
-		this.recruitRepository.delete(r);
+	public void deleteRecruit(Recruit recruit) {
+		this.recruitRepository.delete(recruit);
 	}
 
-	@Transactional
-	public void trade(Recruit recruit, Team purchaserTeam) {
-		// Primero elimino el recruit del equipo que vende
-		deleteRecruit(recruit);
-		// Segundo añado el recruit al equipo que compra
-		saveRecruit(recruit.getPilot(), purchaserTeam);
+	@Transactional(rollbackFor = NotAllowedNumberOfRecruitsException.class)
+	public void purchaseRecruit(Recruit recruit, Team purchaserTeam)
+			throws DataAccessException, NotAllowedNumberOfRecruitsException {
+		if (purchaserTeam.getRecruits().size() == 4) {
+			throw new NotAllowedNumberOfRecruitsException();
+		} else {
+			this.recruitRepository.transfer(recruit.getId(), purchaserTeam);
+		}
 	}
 
 }
