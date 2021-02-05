@@ -36,18 +36,20 @@ public class TeamService {
 	private RecruitService recruitService;
 	private TablaConsultasService TCService;
 	private OfferService offerService;
-
+	private TransactionService transactionService;
+	
 	@Autowired
-	public TeamService(LeagueRepository leagueRepository, TeamRepository teamRepository, UserService userService,
-			PilotService pilotService, RecruitService recruitService, TablaConsultasService TCService,
-			OfferService offerService) {
+	public TeamService(LeagueRepository leagueRepository, TeamRepository teamRepository,
+			UserService userService, PilotService pilotService, RecruitService recruitService,
+			TablaConsultasService TCService, OfferService offerService, TransactionService transactionService) {
 		this.leagueRepository = leagueRepository;
 		this.teamRepository = teamRepository;
 		this.userService = userService;
 		this.pilotService = pilotService;
 		this.recruitService = recruitService;
 		this.TCService = TCService;
-		this.offerService = offerService;
+		this.offerService=offerService;
+		this.transactionService =  transactionService;
 	}
 
 	public List<Integer> findTeamsByUsername(String username) throws DataAccessException {
@@ -170,6 +172,7 @@ public class TeamService {
 			recruitService.deleteRecruit(r);
 		}
 		saveTeamMoney(t, valor);
+		transactionService.saveTransaction(valor, "Has pasado a " + TCService.getTabla().get().getCurrentCategory() + " y has obtenido el valor de tus pilotos de la categoría anterior", t);
 	}
 
 	@Transactional

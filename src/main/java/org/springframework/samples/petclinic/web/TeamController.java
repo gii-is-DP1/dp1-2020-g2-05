@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -161,8 +162,8 @@ public class TeamController {
 			ModelMap model) {
 		Optional<Team> team = this.teamService.findTeamById(teamID);
 
-		System.out.println("dentro details");
 		if (team.isPresent()) {
+			if (!model.containsAttribute("message")) model.addAttribute("message", "Team found!");
 			model.addAttribute("team", team.get());
 			List<Recruit> fichajesEnVenta = recruitService.getRecruitsOnSaleByTeam(teamID);
 			List<Recruit> fichajes = recruitService.getRecruitsNotOnSaleByTeam(teamID);
@@ -170,7 +171,7 @@ public class TeamController {
 			model.addAttribute("fichajesEnVenta", fichajesEnVenta);
 			model.addAttribute("misAlineaciones", lineupService.findByTeam(teamID));
 		} else {
-			model.addAttribute("message", "Team not found!");
+			if (!model.containsAttribute("message")) model.addAttribute("message", "Team not found!");
 		}
 		return "/leagues/teamDetails";
 	}

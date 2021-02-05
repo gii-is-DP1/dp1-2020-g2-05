@@ -2,6 +2,7 @@ package org.springframework.samples.petclinic.web;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -171,13 +173,23 @@ public class LineupController {
 //	}
 	
 	@GetMapping(path = "/newLineup")
-	public String crearAlineacionGet(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, ModelMap model) {
+	public String crearAlineacionGet(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, ModelMap model,
+			RedirectAttributes redirectAttributes) {
+		
+		List<Integer> gpsConLineupsDeEsteEquipo = this.lineupService.findByTeam(teamId).stream().map(x -> x.getGp().getId()).collect(Collectors.toList());
+		Integer currentGPId = this.TCService.getTabla().get().getActualRace();
+		
+		if (gpsConLineupsDeEsteEquipo.contains(currentGPId)) {
+			log.warn("Solo puedes tener un lineup para cada GP!");
+			redirectAttributes.addFlashAttribute("message", "Solo puedes tener un lineup para cada GP!");
+			return "redirect:/leagues/{leagueId}/teams/{teamId}/details";
+		}
+		
 		log.info("Creating a lineup for the team with id: " + teamId);
 		Lineup lineup = new Lineup();
 		Category currentCategory = this.TCService.getTabla().get().getCurrentCategory();
-		lineup.setCategory(currentCategory);
-		Integer currentGPId = this.TCService.getTabla().get().getActualRace();
 		GranPremio currentGP = this.granPremioService.findGPById(currentGPId).get();
+		lineup.setCategory(currentCategory);
 		lineup.setGp(currentGP);
 		model.put("lineup", lineup);
 		model.addAttribute("leagueCategory", currentCategory);
