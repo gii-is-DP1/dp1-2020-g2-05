@@ -33,5 +33,6 @@ public interface ResultRepository extends CrudRepository<Result, Integer> {
 	@Query("SELECT r FROM Result r WHERE r.gp.id = :gpId AND r.gp.raceCode = :raceCode AND r.pilot.category = :category")
 	List<Result> findResultsByCategoryAndId(Integer gpId, String raceCode, Category category) throws DataAccessException;
 	
-
+	@Query("SELECT r FROM Result r WHERE r.pilot.id = ?1")
+	public List<Result> findByPilotId(int pilotId);
 }

@@ -223,7 +223,7 @@ public class LeagueControllerTest {
     	@Test
     	void testCreateNewLeagueGet() throws Exception {
     		given(leagueService.findLeaguesByUsername(user.getUsername())).willReturn(1);
-    		given(leagueService.convertirIterableLista(leagueService.findAll())).willReturn(lista);
+    		given(leagueService.findAll()).willReturn(lista);
     		mockMvc.perform(get("/leagues/new")).andExpect(status().isOk())
     		.andExpect(model().attribute("league",hasProperty("leagueDate", is(liga.getLeagueDate()))))
     		.andExpect(view().name("/leagues/createLeagueName"));
@@ -234,7 +234,7 @@ public class LeagueControllerTest {
     	@Test
     	void testCantCreateNewLeague() throws Exception {
     		given(leagueService.findLeaguesByUsername(user.getUsername())).willReturn(5);
-    		given(leagueService.convertirIterableLista(leagueService.findAll())).willReturn(lista);
+    		given(leagueService.findAll()).willReturn(lista);
     		mockMvc.perform(get("/leagues/new")).andExpect(status().isOk())
     		.andExpect(model().attribute("yaTieneMaxTeams",is(true)))
     		.andExpect(view().name("leagues/myLeagues"));

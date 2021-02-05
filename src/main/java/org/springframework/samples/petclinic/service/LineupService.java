@@ -39,8 +39,8 @@ public class LineupService {
 		lineupRepository.delete(lineup);
 	}
 	
-	public List<Lineup> findByTeam(int team_id) {
-		return this.lineupRepository.findByTeam(team_id).stream().sorted(Comparator.comparing(x -> x.getGp().getDate0())).collect(Collectors.toList());
+	public List<Lineup> findByTeam(int teamId) {
+		return this.lineupRepository.findByTeam(teamId).stream().sorted(Comparator.comparing(x -> x.getGp().getDate0())).collect(Collectors.toList());
 	}
 	
 	public List<Lineup> findByGpId(Integer gpId) {
