@@ -23,7 +23,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.Result;
 
-
 public interface ResultRepository extends CrudRepository<Result, Integer> {
 
 

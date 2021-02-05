@@ -24,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
 
-
 @Slf4j
 @Service
 public class ResultService {
@@ -34,15 +33,17 @@ public class ResultService {
 	private TeamRepository teamRepository;
 	private ResultRepository resultRepository;
 	private TablaConsultasService TCService;
-	
+	private TransactionService transactionService;
+
 	@Autowired
 	public ResultService(ResultRepository resultRepository, TablaConsultasService TCService, TeamRepository teamRepository,
-			GranPremioService gpService, LineupService lineupService) {
+			GranPremioService gpService, LineupService lineupService, TransactionService transactionService) {
 		this.resultRepository = resultRepository;
 		this.TCService = TCService;
 		this.teamRepository = teamRepository;
 		this.gpService = gpService;
 		this.lineupService = lineupService;
+		this.transactionService = transactionService;
 	}
 
 //	@Transactional(readOnly = true)
@@ -69,11 +70,11 @@ public class ResultService {
 //                petRepository.save(pet);                
 //	}
 	@Transactional
-	public List<Result> findResultsByCategoryAndId(Integer gpId, String raceCode,Category category) throws DataAccessException {
-		return resultRepository.findResultsByCategoryAndId(gpId, raceCode,category);
+	public List<Result> findResultsByCategoryAndId(Integer gpId, String raceCode, Category category)
+			throws DataAccessException {
+		return resultRepository.findResultsByCategoryAndId(gpId, raceCode, category);
 	}
-	
-	
+
 	public List<Result> findAll() {
 		return (List<Result>) resultRepository.findAll();
 	}
@@ -141,11 +142,12 @@ public class ResultService {
 					log.info("El equipo '" + team.getName() + "' ahora cuenta con un total de " + 
 							puntos + " (+" + gananciaPuntos + ") puntos y " + 
 							money + " (+" + gananciaMoney + ")€ correctamente");
+					this.transactionService.results(money, lineup_j, code);
 				}
 			}
 		}
-		
-		TCService.getTabla().get().setGpsValidated(TCService.getTabla().get().getGpsValidated()+1);
+
+		TCService.getTabla().get().setGpsValidated(TCService.getTabla().get().getGpsValidated() + 1);
 		this.createTimeMessage();
 	}
 	
@@ -200,39 +202,55 @@ public class ResultService {
 
 	
 	public void createTimeMessage() {
-		TablaConsultas tc=  TCService.getTabla().get();
+		TablaConsultas tc = TCService.getTabla().get();
 		LocalDate hoy = LocalDate.now();
 		LocalTime ahora = LocalTime.now();
 		LocalDate mañana = hoy.plusDays(1);
-		tc.setTimeMessage(mañana+","+ahora);
+		tc.setTimeMessage(mañana + "," + ahora);
 		this.TCService.saveTabla(tc);
-		//aqui lo que se hace es establecer la propiedad time message
-		//a mañana en la hora actual
+		// aqui lo que se hace es establecer la propiedad time message
+		// a mañana en la hora actual
 
 	}
-	
-	public  Integer calculaPuntos(Integer pos) {
+
+	public Integer calculaPuntos(Integer pos) {
 		switch (pos) {
-		case 1:	return 25;
-		case 2:	return 20;
-		case 3:	return 16;
-		case 4:	return 13;
-		case 5:	return 11;
-		case 6:	return 10;
-		case 7:	return 9;
-		case 8:	return 8;
-		case 9:	return 7;
-		case 10:return 6;
-		case 11:return 5;
-		case 12:return 4;
-		case 13:return 3;
-		case 14:return 2;
-		case 15:return 1;
-		default:return 0;
+		case 1:
+			return 25;
+		case 2:
+			return 20;
+		case 3:
+			return 16;
+		case 4:
+			return 13;
+		case 5:
+			return 11;
+		case 6:
+			return 10;
+		case 7:
+			return 9;
+		case 8:
+			return 8;
+		case 9:
+			return 7;
+		case 10:
+			return 6;
+		case 11:
+			return 5;
+		case 12:
+			return 4;
+		case 13:
+			return 3;
+		case 14:
+			return 2;
+		case 15:
+			return 1;
+		default:
+			return 0;
 		}
 	}
-	
-	public  Integer calculaMoney(Integer pos) {
+
+	public Integer calculaMoney(Integer pos) {
 		switch (pos) {
 		case 1:	return 3000;
 		case 2:	return 2500;
@@ -253,6 +271,5 @@ public class ResultService {
 		default:return 500;
 		}
 	}
-	
-	
+
 }

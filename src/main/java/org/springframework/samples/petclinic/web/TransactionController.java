@@ -1,6 +1,5 @@
 package org.springframework.samples.petclinic.web;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,15 +32,14 @@ public class TransactionController {
 	}
 
 	@GetMapping("/myTeams/{teamID}/transactions")
-	public ModelAndView getTrades(@PathVariable("teamID") int teamID) {
+	public ModelAndView getTransactions(@PathVariable("teamID") int teamID) {
 		ModelAndView mav = new ModelAndView();
 		User user = this.userService.getUserSession();
 		Optional<Team> optTeam = teamService.findTeamById(teamID);
 		if (optTeam.isPresent() && user.equals(optTeam.get().getUser())) {
 			Team team = optTeam.get();
 			mav.setViewName("leagues/transactionsList");
-			List<Transaction> transactions = transactionService.getTeamTransactions(teamID);
-			transactions.sort(Comparator.reverseOrder());
+			List<Transaction> transactions = team.getTransactions();
 			mav.addObject("transactions", transactions);
 			mav.addObject("money", team.getMoney());
 		} else {

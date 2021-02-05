@@ -50,8 +50,7 @@ class TransactionControllerTest {
 
 	@MockBean
 	private TablaConsultasService tablaConsultas;
-	
-	
+
 	@Autowired
 	private MockMvc mockMvc;
 
@@ -100,7 +99,7 @@ class TransactionControllerTest {
 
 		transactions = Stream.of(transaction).collect(Collectors.toList());
 
-		given(this.transactionService.getTeamTransactions(TEST_TEAM_ID)).willReturn(transactions);
+		given(team.getTransactions()).willReturn(transactions);
 
 		given(this.userService.getUserSession()).willReturn(user);
 
