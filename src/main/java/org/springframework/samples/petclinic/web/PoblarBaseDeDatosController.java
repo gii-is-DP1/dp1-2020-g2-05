@@ -294,6 +294,14 @@ public class PoblarBaseDeDatosController {
 					teamService.recruitAndOfferAll(team,newCategory);
 				}
 			}
+			
+			log.info("Ahora se va asignar 2 pilotos de la nueva categoria a cada equipo");
+			for(int i = 0; i<teams.size();i++) {
+				Team team = teams.get(i);
+				if(!team.getName().equals("Sistema")) {
+					teamService.randomRecruit2Pilots(team);
+				}
+			}
 		}
 		
 		return "redirect:/controlPanel/"+contador+notFound+"/"+code;

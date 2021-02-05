@@ -2,17 +2,13 @@
 package org.springframework.samples.petclinic.service;
 
 import java.security.SecureRandom;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Offer;
@@ -26,7 +22,6 @@ import org.springframework.samples.petclinic.util.Status;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -40,10 +35,12 @@ public class TeamService {
 	private RecruitService recruitService;
 	private TablaConsultasService TCService;
 	private OfferService offerService;
+	private TransactionService transactionService;
 	
 	@Autowired
 	public TeamService(LeagueRepository leagueRepository, TeamRepository teamRepository,
-			UserService userService, PilotService pilotService, RecruitService recruitService, TablaConsultasService TCService, OfferService offerService) {
+			UserService userService, PilotService pilotService, RecruitService recruitService,
+			TablaConsultasService TCService, OfferService offerService, TransactionService transactionService) {
 		this.leagueRepository = leagueRepository;
 		this.teamRepository = teamRepository;
 		this.userService = userService;
@@ -51,6 +48,7 @@ public class TeamService {
 		this.recruitService = recruitService;
 		this.TCService = TCService;
 		this.offerService=offerService;
+		this.transactionService =  transactionService;
 	}
 	
 	public List<Integer> findTeamsByUsername(String username) throws DataAccessException {
@@ -171,6 +169,7 @@ public class TeamService {
 			recruitService.deleteRecruit(r);
 		}
 		saveTeamMoney(t, valor);
+		transactionService.saveTransaction(valor, "Has pasado a " + TCService.getTabla().get().getCurrentCategory() + " y has obtenido el valor de tus pilotos de la categoría anterior", t);
 	}
 
 	@Transactional
