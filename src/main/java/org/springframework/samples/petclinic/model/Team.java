@@ -120,6 +120,22 @@ public class Team extends BaseEntity implements Comparable<Team> {
 		return Collections.unmodifiableList(t);
 	}
 
+	protected Set<Recruit> getRecruitsInternal() {
+		if (this.recruit == null) {
+			this.recruit = new HashSet<>();
+		}
+		return this.recruit;
+	}
+
+	protected void setRecruitsInternal(Set<Recruit> recruits) {
+		this.recruit = recruits;
+	}
+
+	public List<Recruit> getRecruits() {
+		List<Recruit> r = new ArrayList<>(getRecruitsInternal());
+		return Collections.unmodifiableList(r);
+	}
+
 	@Override
 	public String toString() {
 		return "Team [name =" + name + ", points=" + points + ", money=" + money + " username =" + user + "]";

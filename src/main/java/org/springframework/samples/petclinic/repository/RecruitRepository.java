@@ -3,6 +3,7 @@ package org.springframework.samples.petclinic.repository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -39,5 +40,10 @@ public interface RecruitRepository extends CrudRepository<Recruit, Integer> {
 	@Modifying
 	@Query("UPDATE Recruit r SET r.forSale = false WHERE r.id = :recruitID")
 	public void quitRecruitOnSale(@Param("recruitID") int recruitID);
+
+	@Transactional
+	@Modifying
+	@Override
+	void delete(Recruit recruit) throws DataAccessException;
 
 }

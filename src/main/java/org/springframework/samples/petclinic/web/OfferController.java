@@ -11,6 +11,7 @@ import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.TransactionService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.service.exceptions.NotAllowedNumberOfRecruitsException;
 import org.springframework.samples.petclinic.util.Status;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -19,6 +20,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 @RequestMapping("/leagues/{leagueId}/market")
 public class OfferController {
@@ -65,7 +69,7 @@ public class OfferController {
 
 	@GetMapping(path = "{offerId}")
 	public String recruitPilot(@PathVariable("leagueId") int leagueId, @PathVariable("offerId") int offerId,
-			ModelMap modelMap) {
+			ModelMap modelMap) throws NotAllowedNumberOfRecruitsException {
 		Optional<Offer> opo = offerService.findOfferById(offerId);
 
 		if (opo.isPresent()) {
@@ -82,10 +86,11 @@ public class OfferController {
 				recruitService.quitOnSale(offer.getRecruit());
 				modelMap.addAttribute("message", "Offer cancelled!");
 				return "redirect:/leagues/{leagueId}/teams/" + purchaserTeam.getId() + "/details";
-			} else if (recruitService.getRecruitsByTeam(purchaserTeam.getId()).size() >= 4) {// RN-07: Máximo de
-																								// fichajes
-				modelMap.addAttribute("message", "You already own 4 riders in this league");
+
 			} else if (purchaserTeam.getMoney() >= price) {
+				log.info("Comprando fichaje con suficiente dinero");
+//				try {
+
 				teamService.saveTeamMoney(purchaserTeam, -price);// Restar dinero al comprador
 				teamService.saveTeamMoney(offer.getRecruit().getTeam(), price);// Dar dinero al vendedor
 				offer.setTeam(purchaserTeam);
@@ -93,17 +98,15 @@ public class OfferController {
 				offerService.saveOffer(offer);
 
 				Recruit recruit = offer.getRecruit();
-				recruitService.trade(offer.getRecruit(), sellerTeam, purchaserTeam); // Eliminamos el piloto del equipo
-																						// vendedor y lo añadimos al
-																						// equipo comprador
-
-				transactionService.trade(price, recruit.getPilot(), sellerTeam, purchaserTeam); // Guardamos los
-																								// registros
-																								// de// carteras
-																								// de ambos
-																								// equipos
+				recruitService.sellRecruit(recruit);
+				recruitService.purchaseRecruit(recruit.getPilot(), purchaserTeam);
+				transactionService.trade(price, recruit.getPilot(), sellerTeam, purchaserTeam); // su registro
 
 				modelMap.addAttribute("message", "Pilot recruited!");
+//				} catch (NotAllowedNumberOfRecruitsException e) {
+//					modelMap.addAttribute("message", e.getMessage());
+//				}
+
 			} else {
 				modelMap.addAttribute("message", "Not enought money to recruit this pilot");
 			}

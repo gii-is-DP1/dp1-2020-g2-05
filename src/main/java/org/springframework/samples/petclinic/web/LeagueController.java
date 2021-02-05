@@ -21,6 +21,7 @@ import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.service.exceptions.NotAllowedNumberOfRecruitsException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -171,7 +172,7 @@ public class LeagueController {
 
 	@PostMapping(path = "/leagues/new")
 	public String processCrearLiga(@Valid League nuevaLiga, BindingResult results, ModelMap model)
-			throws DataAccessException, duplicatedLeagueNameException {
+			throws DataAccessException, duplicatedLeagueNameException, NotAllowedNumberOfRecruitsException {
 		log.debug("Obtenida la liga del form : " + nuevaLiga);
 		if (results.hasErrors()) {
 			model.put("league", nuevaLiga);
@@ -202,11 +203,11 @@ public class LeagueController {
 				// asignados le asignamos un equipo con el nombre del usuario + teams
 
 				log.info("Equipo " + nuevoEquipoEnLaNuevaLiga + " guardado correctamente.");
-				
+
 				log.debug("Creando el equipo sistema");
 				teamService.saveSystemTeam(nuevaLiga);
 				log.info("Equipo sistema creado correctamente");
-				
+
 				log.debug("Se procede asignar aleatoriamente los 2 pilotos al equipo " + nuevoEquipoEnLaNuevaLiga);
 				teamService.randomRecruit2Pilots(nuevoEquipoEnLaNuevaLiga);
 				log.info("2 pilotos iniciales asignados al equipo " + nuevoEquipoEnLaNuevaLiga);
