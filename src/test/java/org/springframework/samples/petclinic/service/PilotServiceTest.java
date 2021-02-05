@@ -1,37 +1,44 @@
 package org.springframework.samples.petclinic.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.when;
-import org.json.JSONException;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.ComponentScan;
+import java.util.Set;import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
-import org.springframework.samples.petclinic.model.BDCarrera;
-import org.springframework.samples.petclinic.model.Category;
-import org.springframework.samples.petclinic.model.FormRellenarBD;
-import org.springframework.samples.petclinic.model.GranPremio;
-import org.springframework.samples.petclinic.model.Pilot;
-import org.springframework.security.acls.model.NotFoundException;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.League;
+import org.springframework.samples.petclinic.model.Team;
+import org.springframework.samples.petclinic.web.duplicatedLeagueNameException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.ModelMap;
+import org.json.JSONException;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.samples.petclinic.model.BDCarrera;
+import org.springframework.samples.petclinic.model.Category;
+import org.springframework.samples.petclinic.model.Pilot;
+import org.springframework.stereotype.Service;
 
 import motogpAPI.RaceCode;
 import motogpAPI.Session;
@@ -40,112 +47,18 @@ import motogpApiV2.results.Result;
 import motogpApiV2.testing.testing;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-
 public class PilotServiceTest {
 	@Autowired
 	protected PilotService pilotService;
 
 	@Autowired
 	protected ResultService resultService;
-
-
-//	@Test
-//	void shouldNotPopulatePilotsAndResultsRaceByRace() throws JSONException, IOException, ParseException {
-//		BDCarrera form = new BDCarrera();
-//		form.setCategory(Category.MOTOGP);
-//		form.setRacecode(RaceCode.QAT);
-//		form.setSession(Session.RACE);
-//		form.setYear(2045);
-//		
-//		Assertions.assertThrows(FileNotFoundException.class, () -> {
-//			this.pilotService.poblarUnaCarreraYSusResultados(form, new GranPremio());;});
-//
-//		}
 	
 	
-//	@Test
-//	void shouldPopulatePilotsAndResultsRaceByRace() throws JSONException, IOException, ParseException, InterruptedException {
-//		BDCarrera form = new BDCarrera();
-//		form.setCategory(Category.MOTOGP);
-//		form.setRacecode(RaceCode.QAT);
-//		form.setYear(2019);
-//		Integer num_pilots = this.pilotService.pilotCount();
-//		Integer num_results = this.resultService.findAll().size();
-//		GranPremio granPremio = new GranPremio();
-//		this.pilotService.poblarUnaCarreraYSusResultados(form, granPremio);
-//		Integer num_pilots_updated = this.pilotService.pilotCount();
-//		Integer num_results_updated = this.resultService.findAll().size();
-//
-//		assertThat(num_pilots_updated).isGreaterThan(num_pilots);
-//		assertThat(num_results_updated).isGreaterThan(num_results);
-//		assertThat(granPremio.getHasBeenRun()).isTrue();
-//		Competitor competitor = new Competitor();
-//		competitor.setName("testing");
-//		competitor.setResult(new Result());
-//		List<Competitor> list = new ArrayList<Competitor>();
-//		list.add(competitor);
-//		when(testing.findCompetitorAndItsResultsByCategoryRaceCodeAndYear(any(),any(), any())).thenReturn(list);
-//		when(testing.getSeasonByCategoryAndYear(anyInt(),anyString())).thenReturn("test");
-//		when(testing.getScheduleByRaceCodeAndYear(any(),any(), any())).thenReturn("test");
-//		when(testing.getResultsByScheduleId(any())).thenReturn(list);
-//		
-//		this.pilotService.poblarUnaCarreraYSusResultados(form,new GranPremio());
-//	
-//	}
 	
-//	@Test
-//	void shouldPopulatePilotsAndResultsYearly() {
-//		FormRellenarBD form = new FormRellenarBD();
-//		form.setCategory(Category.MOTOGP);
-//		form.setAnyoInicial(2018);
-//		form.setAnyoFinal(2019);
-//		Integer num_pilots = this.pilotService.pilotCount();
-//		Integer num_results = this.resultService.findAll().size();
-//		
-//		Assertions.assertThrows(Exception.class, () -> {
-//				this.pilotService.poblarBD(form);
-//		});
-//		Integer num_pilots_updated = this.pilotService.pilotCount();
-//		Integer num_results_updated = this.resultService.findAll().size();
-//
-//		assertThat(num_pilots_updated).isGreaterThan(num_pilots);
-//		assertThat(num_results_updated).isGreaterThan(num_results);
-//	}
-
-//	@Test
-//	void shouldNotPopulatePilotsAndResults() throws JSONException, IOException, ParseException {
-//		FormRellenarBD form = new FormRellenarBD();
-//		form.setCategory(Category.MOTOGP);
-//		form.setAnyoInicial(2045);
-//		form.setAnyoFinal(2047);
-//		
-//		Assertions.assertThrows(NotFoundException.class, () -> {
-//				this.pilotService.poblarBD(form);
-//			});
-//
-//	}
-
-//	@Test
-//	void shouldPopulatePilotsAndResultsRaceByRace() throws JSONException, IOException, ParseException {
-//		BDCarrera form = new BDCarrera();
-//		form.setCategory(Category.MOTOGP);
-//		form.setRacecode(RaceCode.QAT);
-//		form.setSession(Session.RACE);
-//		form.setYear(2019);
-//		Integer num_pilots = this.pilotService.pilotCount();
-//		Integer num_results = this.resultService.findAll().size();
-//		GranPremio granPremio = new GranPremio();
-//		this.pilotService.poblarBDCarreraACarrera(form, granPremio, false);
-//		Integer num_pilots_updated = this.pilotService.pilotCount();
-//		Integer num_results_updated = this.resultService.findAll().size();
-//
-//		assertThat(num_pilots_updated).isGreaterThan(num_pilots);
-//		assertThat(num_results_updated).isGreaterThan(num_results);
-//		assertThat(granPremio.getHasBeenRun()).isTrue();
-//	}
-
 	
 
+	
 	@Test
 	void shouldSavePilotAndDelete() {
 		Pilot pilot = new Pilot();
@@ -236,4 +149,48 @@ public class PilotServiceTest {
 		Page<Pilot> pilotSaved = this.pilotService.findAllPage(pageable);
 		assertThat(pilotSaved.getSize()).isEqualTo(5);
 	}
+	
+	@Test
+	@Transactional
+	void shouldUpdatePilot() {
+		Result result = new Result();
+		result.setPoints(0);
+		result.setPosition(0);
+		Competitor competitorToTest = new Competitor();
+		competitorToTest.setName("Rojas, Antonio");
+		competitorToTest.setResult(result);
+		this.pilotService.updatePilot(competitorToTest, 15);
+		
+		assertThat(this.pilotService.findByName("Rojas", "Antonio").get().getPoints()).isEqualTo("15");
+	}
+	
+
+	@Test
+	@Transactional
+	void assignResultsToAPilot() {
+		org.springframework.samples.petclinic.model.Result resultModel = new org.springframework.samples.petclinic.model.Result();
+		resultModel.setPole(true);
+		resultModel.setPosition(1);
+		resultModel.setLap(true);
+		Competitor competitorToTest = new Competitor();
+		competitorToTest.setName("Rojas, Antonio");
+	
+		this.pilotService.assignResultToAPilot(competitorToTest, resultModel);
+		assertThat(this.pilotService.findByName("Rojas", "Antonio").get().getResults().stream().collect(Collectors.toList()).get(0).getPosition()).isEqualTo(1);
+	}
+	
+	@Test
+	@Transactional
+	void assingSetResultsToAPilot() {
+		org.springframework.samples.petclinic.model.Result resultModel = new org.springframework.samples.petclinic.model.Result();
+		resultModel.setPole(true);
+		resultModel.setPosition(1);
+		resultModel.setLap(true);
+		Competitor competitorToTest = new Competitor();
+		competitorToTest.setName("Rojas, Antonio");
+	
+		this.pilotService.updatePilotResults(competitorToTest, resultModel);
+		assertThat(this.pilotService.findByName("Rojas", "Antonio").get().getResults().stream().collect(Collectors.toList()).get(0).getPosition()).isEqualTo(1);
+	}
+	
 }
