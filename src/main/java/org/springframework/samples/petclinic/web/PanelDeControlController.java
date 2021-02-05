@@ -79,7 +79,6 @@ public class PanelDeControlController {
 	@GetMapping(path="/controlPanelSP/validaCarreras")
 	public String validaCarreras(ModelMap model) throws Exception {
 		log.info("Validando la ultima carrera completada");
-		System.out.println("VALIDANDO");
         TCService.comprobandoCarrerasCompletadas();
 		return "redirect:/controlPanelSP";
 	}

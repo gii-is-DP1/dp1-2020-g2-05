@@ -33,7 +33,6 @@ public class PetclinicApplication {
 	@Scheduled(cron = "0 0 12 ? * MON")
     public void validarCarreras() throws Exception {
 		log.info("Validando la ultima carrera completada");
-		System.out.println("VALIDANDO");
         TCservice.comprobandoCarrerasCompletadas();
     }
 	

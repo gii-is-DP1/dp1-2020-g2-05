@@ -78,9 +78,15 @@ public class ResultService {
 		return (List<Result>) resultRepository.findAll();
 	}
 	
+	public List<Result> findByPilotId(Integer pilotId) {
+		return resultRepository.findByPilotId(pilotId);
+	}
+	
 	@Transactional
-	@Modifying
+//	@Modifying
 	public void validateResults() {
+		
+		compruebaInactividad();
 		
 		Integer gpId = gpService.ultimoGPSinValidar().getId();
 		GranPremio gp = gpService.findGPById(gpId).get();
@@ -112,28 +118,29 @@ public class ResultService {
 					if (lineup.getRider1().equals(resultado.getPilot())) rider = lineup.getRider1();
 					else rider = lineup.getRider2();
 						
-					Integer puntos = this.calculaPuntos(resultado.getPosition()) + team.getPoints();
+					Integer puntos = team.getPoints();
 					Integer money = this.calculaMoney(resultado.getPosition()) + team.getMoney();
+					
+					Integer gananciaPuntos = this.calculaPuntos(resultado.getPosition());
+					Integer gananciaMoney = compruebaRachasPiloto(rider.getId());
 					
 					String nombrePiloto = rider.getFullName();
 					
 					if (pilotosConRecords.contains(nombrePiloto.toLowerCase())) {
 						// Realizar la valoracion que se considere oportuna
 						// Por ejemplo, +10 puntos y +2000€ independientemente del record
-						puntos += 10;
-						money += 2000;
+						gananciaPuntos += 10;
+						gananciaMoney += 2000;
 						log.info("El piloto " + nombrePiloto + " tiene un record!");
 					}
 					
-					team.setPoints(puntos);
-					team.setMoney(money);
+					team.setPoints(puntos+gananciaPuntos);
+					team.setMoney(money+gananciaMoney);
 					teamRepository.save(team);
 					
 					log.info("El equipo '" + team.getName() + "' ahora cuenta con un total de " + 
-							puntos + " (+" + (pilotosConRecords.contains(nombrePiloto.toLowerCase()) 
-									? (this.calculaPuntos(resultado.getPosition()) + 10) 
-									: this.calculaPuntos(resultado.getPosition())) + ") puntos y " + 
-							money + " (+" + this.calculaMoney(resultado.getPosition()) + ")€ correctamente");
+							puntos + " (+" + gananciaPuntos + ") puntos y " + 
+							money + " (+" + gananciaMoney + ")€ correctamente");
 				}
 			}
 		}
@@ -142,6 +149,55 @@ public class ResultService {
 		this.createTimeMessage();
 	}
 	
+	public int compruebaRachasPiloto(Integer pilotId) {
+		List<Result> resultados = this.findByPilotId(pilotId);
+		resultados = resultados.subList(resultados.size()-3, resultados.size());
+		int bonusRacha = 0;
+		int contMalaRacha = 0;
+		int contBuenaRacha = 0;
+		
+		for (Result r: resultados) {
+			Integer position = r.getPosition();
+			
+			if (position <= 5 && position > 0) {
+				contBuenaRacha++;
+			} else if(position >= 13) {
+				contMalaRacha++;
+			}
+		}
+		
+		if (contBuenaRacha == 3) bonusRacha = 750;
+		if (contMalaRacha == 3) bonusRacha = -750;
+		return bonusRacha;
+	}
+	
+	public void compruebaInactividad() {
+		try {
+			List<Team> teams = (List<Team>) this.teamRepository.findAll();
+			for (Team t:teams) {
+				compruebaInactividadTeam(t.getId());
+			}
+		} catch (Exception e) {
+			log.warn("No hay suficientes lineups como para expulsar a un equipo por inactividad!");
+		}
+	}
+
+	public void compruebaInactividadTeam(Integer teamId) {
+		List<Lineup> lineups = this.lineupService.findByTeam(teamId);
+		Integer currentGpId = this.TCService.getTabla().get().getActualRace();
+		if (lineups.isEmpty() && currentGpId >= 4) {
+			this.teamRepository.deleteById(teamId);
+		} else if (lineups.size() == 1 && currentGpId - lineups.get(0).getGp().getId()  >= 4) {
+			this.teamRepository.deleteById(teamId);
+		} else {
+			lineups = lineups.subList(lineups.size()-2, lineups.size());
+
+			Integer penultimoLineupGpId = lineups.get(0).getGp().getId();
+			Integer ultimoLineupGpId = lineups.get(1).getGp().getId();
+			if (currentGpId - ultimoLineupGpId >= 4 || ultimoLineupGpId - penultimoLineupGpId >= 4) this.teamRepository.deleteById(teamId);
+		}
+	}
+
 	
 	public void createTimeMessage() {
 		TablaConsultas tc=  TCService.getTabla().get();
@@ -193,6 +249,7 @@ public class ResultService {
 		case 13:return 1000;
 		case 14:return 1000;
 		case 15:return 1000;
+		case 0: return 0;
 		default:return 500;
 		}
 	}

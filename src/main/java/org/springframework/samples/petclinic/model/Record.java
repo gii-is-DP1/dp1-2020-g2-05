@@ -123,10 +123,13 @@ public class Record extends BaseEntity {
 	
 	public List<String> getPilotsWithRecords() {
 		List<String> res = new ArrayList<String>();
+		try {
 		res.add(this.getMejorVuelta().getNombrePiloto());
 		res.add(this.getRecordDelCircuito().getNombrePiloto());
 		res.add(this.getVueltaDePole().getNombrePiloto());
 		res.add(this.getVueltaRapida().getNombrePiloto());
+		} catch (Exception e) {
+		}
 		return res;
 	}
 

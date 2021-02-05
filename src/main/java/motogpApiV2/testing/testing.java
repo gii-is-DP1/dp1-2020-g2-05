@@ -34,7 +34,7 @@ import motogpApiV2.stage.Season;
 public class testing {
 	
 	private static String API_KEY;
-	private static final String API_KEY_GP = "ut835f9fq9vnzjkyggxhtpup";
+	private static final String API_KEY_GP = "4g2egaffth2xth2b49mt785e";
 	private static final String API_KEY_2 = "w7hkcb4ptcumtv2scrcd9hqh";
 	private static final String API_KEY_3 = "rz5ru3a4r49mwawhv634556x";
 	
