@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -236,23 +237,24 @@ public class LineupControllerTest {
 
 //	Una vez se corre un GP, entonces, ya no se podrá crear, editar o eliminar un lineup respecto a dicho GP.
 //  Esto lo implementaremos en el próximo sprint, cuando sepamos como hacer el tema de la seguridad
-
-//	@WithMockUser(value = "spring")
-//	@Test
-//	void testCantCreateLineupGet() throws Exception {
-//		given(this.TCService.getTabla()).willReturn(Optional.of(TCConsulta));
-//		given(granPremioService.findGPById(Mockito.anyInt())).willReturn(Optional.of(gp));
-//
-//		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/newLineup", TEST_LEAGUE_ID, TEST_TEAM_ID)).andExpect(status().isOk())
-//		.andExpect(model().attribute("lineup", hasProperty("category", is(lineup.getCategory()))))
-//		.andExpect(model().attribute("lineup", hasProperty("gp", is(lineup.getGp()))))
-//		.andExpect(model().attribute("leagueCategory", is(lineup.getCategory())))
-//		.andExpect(view().name("lineups/lineupsEdit"));
-//	}
+	
+	@WithMockUser(value = "spring")
+	@Test
+	void testCantCreateLineupGet() throws Exception {
+		given(this.TCService.getTabla()).willReturn(Optional.of(TCConsulta));
+		given(this.lineupService.findByTeam(Mockito.anyInt())).willReturn(lista);
+		
+		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/newLineup", TEST_LEAGUE_ID, TEST_TEAM_ID))
+		.andExpect(status().is3xxRedirection())
+		.andExpect(flash().attribute("message", is("Solo puedes tener un lineup para cada GP!")))
+		.andExpect(view().name("redirect:/leagues/{leagueId}/teams/{teamId}/details"));
+	}
+	
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testCrearAlineacionPost() throws Exception {
+		given(this.TCService.getTabla()).willReturn(Optional.of(TCConsulta));
 
 		mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/newLineup", TEST_LEAGUE_ID, TEST_TEAM_ID).with(csrf())
 				.param("id", lineup.getId().toString()).param("category", lineup.getCategory().toString())
