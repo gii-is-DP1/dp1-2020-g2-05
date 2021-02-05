@@ -271,7 +271,8 @@ class OfferControllerTests {
 		given(offerService.findOfferById(TEST_OFFER1_ID)).willReturn(Optional.of(offer1));
 
 		mockMvc.perform(get("/leagues/{leagueId}/market/{offerId}", TEST_LEAGUE_ID, TEST_OFFER1_ID))
-				.andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/leagues/{leagueId}/teams/"+team1.getId()+"/details"));
+				.andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/leagues/{leagueId}/teams/" + team1.getId() + "/details"));
 	}
 
 	@WithMockUser(value = "spring")
@@ -282,7 +283,7 @@ class OfferControllerTests {
 		given(teamService.findTeamByUsernameAndLeagueId(user1.getUsername(), TEST_LEAGUE_ID))
 				.willReturn(Optional.of(team1));
 		given(offerService.findOfferById(TEST_OFFER2_ID)).willReturn(Optional.of(offer2));
-		given(recruitService.getRecruitsByTeam(team1.getId())).willReturn(recruitTeam1List);
+		given(team1.getRecruits()).willReturn(recruitTeam1List);
 
 		mockMvc.perform(get("/leagues/{leagueId}/market/{offerId}", TEST_LEAGUE_ID, TEST_OFFER2_ID))
 				.andExpect(status().is2xxSuccessful()).andExpect(view().name("offers/offersList"))
