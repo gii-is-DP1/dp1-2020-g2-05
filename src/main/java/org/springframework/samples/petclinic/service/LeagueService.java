@@ -93,11 +93,11 @@ public class LeagueService {
 		return sb;
 	}
 
-	public <E> List<E> convertirIterableLista(Iterable<E> leagues) {
-		List<E> result = new ArrayList<E>();
-		leagues.forEach(result::add);
-		return result;
-	}
+//	public <E> List<E> convertirIterableLista(Iterable<E> leagues) {
+//		List<E> result = new ArrayList<E>();
+//		leagues.forEach(result::add);
+//		return result;
+//	}
 
 	@Transactional
 	public boolean comprobarSiHayLigasVacias(List<League> todasLasLigas) {

@@ -1,26 +1,51 @@
-package org.springframework.samples.petclinic.web;
-
+//package org.springframework.samples.petclinic.web;
+//
+//import javax.servlet.http.HttpServletRequest;
+//
+//import org.springframework.boot.web.servlet.error.ErrorController;
+//import org.springframework.stereotype.Controller;
+//import org.springframework.web.bind.annotation.RequestMapping;
+//import org.springframework.web.bind.annotation.RequestMethod;
+//import org.springframework.web.servlet.ModelAndView;
+//
 //@Controller
 //public class CustomErrorController implements ErrorController {
 //
-//	@RequestMapping("/error")
-////	@ResponseBody
-//	public String handleError(HttpServletRequest request) {
-//		Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
-//		Exception exception = (Exception) request.getAttribute("javax.servlet.error.exception");
-////		return String.format("<html><body><h2>Error Page</h2><div>Status code: <b>%s</b></div>"
-////				+ "<div>Exception Message: <b>%s</b></div><body></html>",
-////				statusCode, exception==null? "N/A": exception.getMessage());
-//		return "errors/error";
+//	@RequestMapping(value = "/error", method = RequestMethod.GET)
+//	public ModelAndView renderErrorPage(HttpServletRequest httpRequest) {
+//
+//		ModelAndView errorPage = new ModelAndView("errorPage");
+//		String errorMsg = "";
+//		int httpErrorCode = getErrorCode(httpRequest);
+//
+//		switch (httpErrorCode) {
+//		case 400: {
+//			errorMsg = "Http Error Code: 400. Bad Request";
+//			break;
+//		}
+//		case 401: {
+//			errorMsg = "Http Error Code: 401. Unauthorized";
+//			break;
+//		}
+//		case 404: {
+//			errorMsg = "Http Error Code: 404. Resource not found";
+//			break;
+//		}
+//		case 500: {
+//			errorMsg = "Http Error Code: 500. Internal Server Error";
+//			break;
+//		}
+//		}
+//		errorPage.addObject("errorMsg", errorMsg);
+//		return errorPage;
+//	}
+//
+//	private int getErrorCode(HttpServletRequest httpRequest) {
+//		return (Integer) httpRequest.getAttribute("javax.servlet.error.status_code");
 //	}
 //
 //	@Override
 //	public String getErrorPath() {
-//		return "error";
-//	}
-//
-//	@RequestMapping("/errorTest")
-//	public void handleRequest() {
-//	    throw new RuntimeException("test exception");
+//		return "/error";
 //	}
 //}
