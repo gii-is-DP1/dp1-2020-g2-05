@@ -1,18 +1,3 @@
-/*
-UserRepository.java * Copyright 2002-2013 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.springframework.samples.petclinic.service;
 
 import java.io.IOException;
@@ -242,57 +227,57 @@ public class PilotService {
 //		
 	
 	
-//	public void poblarUnaCarreraYSusResultados(BDCarrera form,GranPremio gp) throws JsonMappingException, JsonProcessingException, IOException, InterruptedException {
-//		List<Competitor> listaDeRiders =testing.findCompetitorAndItsResultsByCategoryRaceCodeAndYear(form.getYear(), form.getRacecode(), form.getCategory());
-//
-//		Integer numeroDeRiders = listaDeRiders.size();
-//
-//		for (int i=0;i<numeroDeRiders;i++) {
-//			Competitor rider_i = listaDeRiders.get(i);
-//
-//			if (rider_i.getResult()==null) {
-//				motogpApiV2.results.Result resultNull = new motogpApiV2.results.Result();
-//				resultNull.setPosition(0);
-//				resultNull.setPoints(0);
-//				rider_i.setResult(resultNull);
-//			}
-//
-//			Result result = new Result();
-//			result.setGp(gp);
-//			result.setLap(false);
-//			result.setPole(false);
-//			
-//			if (rider_i.getResult().getPosition()==null) {
-//				result.setPosition(0);
-//			} else {
-//				result.setPosition(rider_i.getResult().getPosition());
-//			}
-//			
-//			this.resultService.saveResult(result);
-//			
-//			if (this.countByName(rider_i.getName().split(", ")[0], rider_i.getName().split(", ")[1])!=0) {
-//
-//				this.updatePilotResults(rider_i, result);
-//
-//				if (rider_i.getResult().getPoints()==null) {
-//					this.updatePilot(rider_i, 0);
-//				} else {
-//					this.updatePilot(rider_i, rider_i.getResult().getPoints());
-//				}
-//
-//			} else {
-//				this.createNewPilot(rider_i,form.getCategory());
-//
-//				this.assignResultToAPilot(rider_i, result);
-//
-//				if (rider_i.getResult().getPoints()==null) {
-//					this.updatePilot(rider_i, 0);
-//				} else {
-//					this.updatePilot(rider_i, rider_i.getResult().getPoints());
-//				}
-//			}
-//		}
-//	}
+	public void poblarUnaCarreraYSusResultados(BDCarrera form,GranPremio gp) throws JsonMappingException, JsonProcessingException, IOException, InterruptedException {
+		List<Competitor> listaDeRiders =testing.findCompetitorAndItsResultsByCategoryRaceCodeAndYear(form.getYear(), form.getRacecode(), form.getCategory());
+
+		Integer numeroDeRiders = listaDeRiders.size();
+
+		for (int i=0;i<numeroDeRiders;i++) {
+			Competitor rider_i = listaDeRiders.get(i);
+
+			if (rider_i.getResult()==null) {
+				motogpApiV2.results.Result resultNull = new motogpApiV2.results.Result();
+				resultNull.setPosition(0);
+				resultNull.setPoints(0);
+				rider_i.setResult(resultNull);
+			}
+
+			Result result = new Result();
+			result.setGp(gp);
+			result.setLap(false);
+			result.setPole(false);
+			
+			if (rider_i.getResult().getPosition()==null) {
+				result.setPosition(0);
+			} else {
+				result.setPosition(rider_i.getResult().getPosition());
+			}
+			
+			this.resultService.saveResult(result);
+			
+			if (this.countByName(rider_i.getName().split(", ")[0], rider_i.getName().split(", ")[1])!=0) {
+
+				this.updatePilotResults(rider_i, result);
+
+				if (rider_i.getResult().getPoints()==null) {
+					this.updatePilot(rider_i, 0);
+				} else {
+					this.updatePilot(rider_i, rider_i.getResult().getPoints());
+				}
+
+			} else {
+				this.createNewPilot(rider_i,form.getCategory());
+
+				this.assignResultToAPilot(rider_i, result);
+
+				if (rider_i.getResult().getPoints()==null) {
+					this.updatePilot(rider_i, 0);
+				} else {
+					this.updatePilot(rider_i, rider_i.getResult().getPoints());
+				}
+			}
+		}
+	}
 	
 	
 	@Transactional
