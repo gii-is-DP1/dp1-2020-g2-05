@@ -9,6 +9,7 @@ import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Recruit;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.repository.RecruitRepository;
+import org.springframework.samples.petclinic.service.exceptions.NotAllowedNumberOfRecruitsException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,22 +60,15 @@ public class RecruitService {
 	}
 
 	@Transactional
-	public void saveRecruit(Pilot pilot, Team team) throws DataAccessException { // Para guardar nuevos fichajes en la
-																					// base de datos
+	public void saveRecruit(Pilot pilot, Team team) throws DataAccessException {
 		Recruit recruit = createRecruit(pilot, team);
 		this.recruitRepository.save(recruit);
+
 	}
 
 	@Transactional
 	public void saveRecruit(Recruit recruit) throws DataAccessException {
 		this.recruitRepository.save(recruit);
-	}
-	
-	@Transactional
-	public void deleteRecruit(Recruit recruit) throws DataAccessException { // Para borrar fichajes de la BBDD
-																			// al
-		this.recruitRepository.deleteById(recruit.getId());
-
 	}
 
 	private Recruit createRecruit(Pilot pilot, Team team) {
@@ -93,20 +87,32 @@ public class RecruitService {
 		return this.recruitRepository.findAll();
 	}
 
-	public void trade(Recruit recruit, Team sellerTeam, Team purchaserTeam) {
-		// Primero elimino el recruit del equipo que vende
-		deleteRecruit(recruit);
-		// Segundo añado el recruit al equipo que compra
-		saveRecruit(recruit.getPilot(), purchaserTeam);
-	}
-
-	@Transactional
-	public void putOnSale(Recruit recruit) {
-		this.recruitRepository.putRecruitOnSale(recruit.getId());
+	@Transactional(rollbackFor = NotAllowedNumberOfRecruitsException.class)
+	public void putOnSale(Recruit recruit) throws NotAllowedNumberOfRecruitsException {
+		if (getRecruitsNotOnSaleByTeam(recruit.getTeam().getId()).size() == 2) {
+			throw new NotAllowedNumberOfRecruitsException();
+		} else
+			this.recruitRepository.putRecruitOnSale(recruit.getId());
 	}
 
 	@Transactional
 	public void quitOnSale(Recruit recruit) {
 		this.recruitRepository.quitRecruitOnSale(recruit.getId());
 	}
+
+	@Transactional
+	public void deleteRecruit(Recruit recruit) {
+		this.recruitRepository.delete(recruit);
+	}
+
+	@Transactional(rollbackFor = NotAllowedNumberOfRecruitsException.class)
+	public void purchaseRecruit(Recruit recruit, Team purchaserTeam)
+			throws DataAccessException, NotAllowedNumberOfRecruitsException {
+		if (purchaserTeam.getRecruits().size() == 4) {
+			throw new NotAllowedNumberOfRecruitsException();
+		} else {
+			this.recruitRepository.transfer(recruit.getId(), purchaserTeam);
+		}
+	}
+
 }

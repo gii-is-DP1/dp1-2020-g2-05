@@ -15,10 +15,10 @@ public interface LineupRepository extends CrudRepository<Lineup, Integer>{
 	
 	
 
-	@Query(value="SELECT * FROM LINEUP AS l WHERE l.team_id = ?1", nativeQuery = true)
-	public List<Lineup> findByTeam(int team_id);
-
+	@Query("SELECT l FROM Lineup l WHERE l.team.id = ?1")
+	public List<Lineup> findByTeam(int teamId);
 	
-	
+	@Query("SELECT l FROM Lineup l WHERE l.gp.id = ?1")
+	public List<Lineup> findByGp(int gpId);
 	
 }

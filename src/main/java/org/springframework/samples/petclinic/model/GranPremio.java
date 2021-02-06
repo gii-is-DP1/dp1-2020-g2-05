@@ -1,6 +1,8 @@
 package org.springframework.samples.petclinic.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -155,6 +157,20 @@ public class GranPremio extends BaseEntity {
 
 	public void setRecordMoto3(Record recordMoto3) {
 		this.recordMoto3 = recordMoto3;
+	}
+	
+	public List<String> getPilotsWithRecords() {
+		Record recordGP = this.getRecordMotoGP();
+		Record record2 = this.getRecordMoto2();
+		Record record3 = this.getRecordMoto3();
+		
+		List<String> res = new ArrayList<String>();
+		
+		res.addAll(recordGP.getPilotsWithRecords());
+		res.addAll(record2.getPilotsWithRecords());
+		res.addAll(record3.getPilotsWithRecords());
+		
+		return res;
 	}
 
 	@Override

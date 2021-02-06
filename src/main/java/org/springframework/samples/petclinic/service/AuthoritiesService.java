@@ -16,13 +16,16 @@
 package org.springframework.samples.petclinic.service;
 
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Authorities;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.repository.AuthoritiesRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,5 +65,11 @@ public class AuthoritiesService {
 			throw new DataAccessException("User '"+username+"' not found!") {};
 	}
 
-
+	public List<Authorities> findByAuthority(String authority) {
+		return (List<Authorities>) this.authoritiesRepository.findByAuthority(authority);
+	}
+	
+	public Boolean isCurrentUserAdmin() {
+		return this.findByAuthority("admin").stream().map(x -> x.getUser()).collect(Collectors.toList()).contains(this.userService.getUserSession());
+	}
 }

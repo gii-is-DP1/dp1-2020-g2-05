@@ -12,7 +12,9 @@
 	<table id="offersTable" class="table table-striped">
 		<thead>
 			<tr>
-				<th style="width: 150px;">Pilot</th>
+				<th style="width: 200px;">Pilot</th>
+				<th style="width: 200px;">Nationality</th>
+				<th style="width: 150px;">Points earned</th>
 				<th>Price</th>
 				<th style="width: 150px;">Recruit</th>
 			</tr>
@@ -23,6 +25,8 @@
 				<tr>
 					<td><c:out value="${offer.recruit.pilot.name} " /> 
 					<c:out value="${offer.recruit.pilot.lastName}" /></td>
+					<td><c:out value="${offer.recruit.pilot.nationality} " /></td>
+					<td><c:out value="${offer.recruit.pilot.points} " /></td>
 					<td><c:out value="${offer.price} " /></td>
 					<c:choose>
 					<c:when test="${offer.recruit.team == userTeam}">

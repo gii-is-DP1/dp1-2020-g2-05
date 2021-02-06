@@ -1,5 +1,10 @@
 package org.springframework.samples.petclinic.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -19,30 +24,29 @@ import org.hibernate.annotations.OnDeleteAction;
 @Entity
 @Table(name = "team")
 public class Team extends BaseEntity implements Comparable<Team> {
-	
+
 	@Column(name = "name")
 	@NotEmpty
 	private String name;
-	
-	
+
 	@Column(name = "points")
 	@NotNull
 	@Min(0)
 	private Integer points;
-	
+
 	@Column(name = "money")
 	@NotNull
 	@Min(0)
 	private Integer money;
-	
+
 	@ManyToOne()
 	@JoinColumn(name = "league_id")
 	private League league;
-	
+
 	@ManyToOne()
 	@JoinColumn(name = "username")
 	private User user;
-	
+
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "team")
 	private Set<Lineup> lineups;
@@ -50,11 +54,15 @@ public class Team extends BaseEntity implements Comparable<Team> {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "team")
 	private Set<Offer> offer;
-	
+
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "team")
 	private Set<Recruit> recruit;
-	
+
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "team")
+	private Set<Transaction> transactions;
+
 	public Integer getPoints() {
 		return points;
 	}
@@ -62,7 +70,7 @@ public class Team extends BaseEntity implements Comparable<Team> {
 	public void setPoints(Integer points) {
 		this.points = points;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -70,7 +78,7 @@ public class Team extends BaseEntity implements Comparable<Team> {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public User getUser() {
 		return user;
 	}
@@ -78,7 +86,6 @@ public class Team extends BaseEntity implements Comparable<Team> {
 	public void setUser(User user) {
 		this.user = user;
 	}
-
 
 	public Integer getMoney() {
 		return money;
@@ -95,7 +102,40 @@ public class Team extends BaseEntity implements Comparable<Team> {
 	public void setLeague(League league2) {
 		this.league = league2;
 	}
-	
+
+	protected Set<Transaction> getTransactionsInternal() {
+		if (this.transactions == null) {
+			this.transactions = new HashSet<>();
+		}
+		return this.transactions;
+	}
+
+	protected void setTransactionsInternal(Set<Transaction> transactions) {
+		this.transactions = transactions;
+	}
+
+	public List<Transaction> getTransactions() {
+		List<Transaction> t = new ArrayList<>(getTransactionsInternal());
+		t.sort(Comparator.reverseOrder());
+		return Collections.unmodifiableList(t);
+	}
+
+	protected Set<Recruit> getRecruitsInternal() {
+		if (this.recruit == null) {
+			this.recruit = new HashSet<>();
+		}
+		return this.recruit;
+	}
+
+	protected void setRecruitsInternal(Set<Recruit> recruits) {
+		this.recruit = recruits;
+	}
+
+	public List<Recruit> getRecruits() {
+		List<Recruit> r = new ArrayList<>(getRecruitsInternal());
+		return Collections.unmodifiableList(r);
+	}
+
 	@Override
 	public String toString() {
 		return "Team [name =" + name + ", points=" + points + ", money=" + money + " username =" + user + "]";
@@ -105,6 +145,5 @@ public class Team extends BaseEntity implements Comparable<Team> {
 	public int compareTo(Team o) {
 		return Integer.valueOf(this.getPoints()).compareTo(Integer.valueOf(o.getPoints()));
 	}
-	
 
 }
