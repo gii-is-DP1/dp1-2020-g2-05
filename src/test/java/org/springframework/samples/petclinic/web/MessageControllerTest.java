@@ -26,8 +26,11 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
 import org.springframework.samples.petclinic.model.Authorities;
 import org.springframework.samples.petclinic.model.Message;
+import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.MessageService;
+import org.springframework.samples.petclinic.service.PoblarBaseDeDatosService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
+import org.springframework.samples.petclinic.service.TransactionService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -48,7 +51,19 @@ public class MessageControllerTest {
 	@MockBean
 	@Autowired
 	private MessageService messageService;
-
+	
+	@MockBean
+	@Autowired
+	private PoblarBaseDeDatosService poblarBaseDeDatosService;
+	
+	@MockBean
+	@Autowired
+	private TransactionService transactionService;
+	
+	@MockBean
+	@Autowired
+	private AuthoritiesService authoritiesService;
+	
 	@Autowired
 	private MockMvc mockMvc;
 

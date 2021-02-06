@@ -17,6 +17,7 @@
 package org.springframework.samples.petclinic.web;
 
 import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -79,7 +80,7 @@ public class UserController {
 			return USER_CREATE_FORM;
 		}
 		else {
-			//creating owner, user, and authority
+			//creating  user and authority
 		
 			this.userService.saveUser(user);
 			
@@ -111,6 +112,7 @@ public class UserController {
 			List<ObjectError> errores = result.getAllErrors();
 			List<String> erroresstring = new ArrayList<String>();
 			for(int i=0;i<errores.size();i++) {
+				System.out.println(errores.get(i).getDefaultMessage());
 				erroresstring.add(errores.get(i).getDefaultMessage());
 			}
 			model.put("message",erroresstring );	

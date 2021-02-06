@@ -54,6 +54,21 @@ public class UserValidator implements Validator {
 			 errors.rejectValue("username", REQUIRED, "El nombre de usuario no puede ser null o estar vacio");
 		}
 		
+		//email validation
+		if(user.getEmail()==null || user.getEmail().trim().isEmpty()==true) {
+			 errors.rejectValue("email", REQUIRED, "El email no puede ser null ni estar vacio");
+		}
+		
+		//Password validation
+		if(user.getPassword()==null || user.getPassword().trim().isEmpty()==true) {
+			 errors.rejectValue("password", REQUIRED, "El password no puede ser null ni estar vacio");
+		}		
+		
+		//ImgPerfil validation
+		if(user.getImgperfil()==null || user.getImgperfil().trim().isEmpty()==true) {
+			 errors.rejectValue("imgperfil", REQUIRED, "La imagen de perfil no puede ser null ni estar vacio");
+		}
+		
 	} 
 
 	/**
