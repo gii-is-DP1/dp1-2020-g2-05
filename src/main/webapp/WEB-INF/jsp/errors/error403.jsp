@@ -24,6 +24,7 @@
 	 font-size: 2.5rem;
 }
  .message {
+margin:5px auto;
 	 max-width: 700px;
 	 margin: 5rem auto 0 auto;
 }
@@ -240,8 +241,10 @@
 }
 
 .center {
-  position: absolute;
-  top: 80%;
+	  margin-left: 50%;
+
+	margin-top:80px;
+	bottom:5%;
   left: 50%;
   transform: translate(-50%, -50%);
   -webkit-transform: translate(-50%, -50%);
@@ -254,6 +257,7 @@
 </head>
 <body>
 	<petclinic:layout pageName="error">
+		<div style="position:relative">
 		<div class="gandalf">
 			<div class="fireball"></div>
 			<div class="skirt"></div>
@@ -275,9 +279,11 @@
 			</p>
 		</div>
 		
-		<div class="center">
+		<div class="center" style="vertical-align: bottom;">
 			<a href="/"><button class="btn btn-default" style="font-size: xxx-large;">Home</button></a>
 		</div>
+		</div>
+		
 	</petclinic:layout>
 </body>
 </html>
