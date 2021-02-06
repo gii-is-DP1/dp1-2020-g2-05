@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.Recruit;
+import org.springframework.samples.petclinic.model.Team;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface RecruitRepository extends CrudRepository<Recruit, Integer> {
@@ -40,4 +41,8 @@ public interface RecruitRepository extends CrudRepository<Recruit, Integer> {
 	@Query("UPDATE Recruit r SET r.forSale = false WHERE r.id = :recruitID")
 	public void quitRecruitOnSale(@Param("recruitID") int recruitID);
 
+	@Transactional
+	@Modifying
+	@Query("UPDATE Recruit r SET r.team = :purchaserTeam WHERE r.id = :recruitID")
+	void transfer(@Param("recruitID") int recruitID, @Param("purchaserTeam") Team purchaserTeam);
 }

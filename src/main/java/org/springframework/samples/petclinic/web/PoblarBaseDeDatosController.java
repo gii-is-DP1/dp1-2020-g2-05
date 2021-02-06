@@ -7,11 +7,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.BDCarrera;
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.FormRellenarBD;
@@ -19,19 +16,17 @@ import org.springframework.samples.petclinic.model.GranPremio;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.service.GranPremioService;
 import org.springframework.samples.petclinic.service.LeagueService;
-import org.springframework.samples.petclinic.service.PilotService;
 import org.springframework.samples.petclinic.service.PoblarBaseDeDatosService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.service.exceptions.NotAllowedNumberOfRecruitsException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import lombok.extern.slf4j.Slf4j;
 import motogpAPI.RaceCode;
@@ -48,19 +43,19 @@ public class PoblarBaseDeDatosController {
 //	PilotService pilotService;
 	TablaConsultasService TCService;
 	PoblarBaseDeDatosService poblarBaseDeDatosService;
+
 	@Autowired
-	public PoblarBaseDeDatosController(LeagueService leagueService, UserService userService, 
-			//PilotService pilotService,
-	 GranPremioService GPService,
-			TablaConsultasService TCService, TeamService teamService
-			,PoblarBaseDeDatosService poblarBaseDeDatosService) {
+	public PoblarBaseDeDatosController(LeagueService leagueService, UserService userService,
+			// PilotService pilotService,
+			GranPremioService GPService, TablaConsultasService TCService, TeamService teamService,
+			PoblarBaseDeDatosService poblarBaseDeDatosService) {
 		this.leagueService = leagueService;
 		this.userService = userService;
 //		this.pilotService = pilotService;
 		this.GPService = GPService;
 		this.TCService = TCService;
 		this.teamService = teamService;
-		this.poblarBaseDeDatosService=poblarBaseDeDatosService;
+		this.poblarBaseDeDatosService = poblarBaseDeDatosService;
 	}
 
 	private Boolean messageNullPointerException = false;
@@ -176,7 +171,8 @@ public class PoblarBaseDeDatosController {
 
 	@GetMapping(path = "/BD/carrerasBD/{date}/{code}/{id}")
 	public String actualizarTablaGPs(@PathVariable("date") String date, @PathVariable("code") String code,
-			@PathVariable("id") String id, ModelMap model) throws JSONException, IOException, ParseException, InterruptedException {
+			@PathVariable("id") String id, ModelMap model) throws JSONException, IOException, ParseException,
+			InterruptedException, NotAllowedNumberOfRecruitsException {
 		GranPremio gp = this.GPService.findGPById(Integer.parseInt(id)).get();
 		gp.setHasBeenRun(true);
 		return PoblarBDCarreras(date, code, model, gp);
@@ -184,15 +180,16 @@ public class PoblarBaseDeDatosController {
 
 	@GetMapping(path = "/BD/carrerasBD/{date}/{code}")
 	public String PoblarBDCarreras(@PathVariable("date") String date, @PathVariable("code") String code, ModelMap model,
-			GranPremio gp) throws JSONException, IOException, ParseException, InterruptedException {
+			GranPremio gp) throws JSONException, IOException, ParseException, InterruptedException,
+			NotAllowedNumberOfRecruitsException {
 		BDCarrera form = new BDCarrera();
 		form.setCategory(Category.MOTO3);
 		form.setRacecode(RaceCode.valueOf(code));
 		form.setSession(Session.RACE);
 		form.setYear(Integer.parseInt((date.split("-")[0])));
 		log.info("Intentando obtener resultados para gp :" + gp);
-		Integer contador=0;
-		String notFound ="";
+		Integer contador = 0;
+		String notFound = "";
 //		try {
 //			this.pilotService.poblarBDCarreraACarrera(form, gp, true);
 //		} catch (Exception e) {
@@ -239,7 +236,7 @@ public class PoblarBaseDeDatosController {
 					"API has not found any result to date " + date + " and code " + code + " for moto3 ");
 			log.warn("API has not found any result to date " + date + " and code " + code + " for moto3 ");
 			contador++;
-			notFound+="3";
+			notFound += "3";
 		}
 		log.info("Resultados obtenidos :" + gp);
 
@@ -251,7 +248,7 @@ public class PoblarBaseDeDatosController {
 					"API has not found any result to date " + date + " and code " + code + " for moto2");
 			log.warn("API has not found any result to date " + date + " and code " + code + " for moto2 ");
 			contador++;
-			notFound+="2";
+			notFound += "2";
 
 		}
 
@@ -263,7 +260,7 @@ public class PoblarBaseDeDatosController {
 					"API has not found any result to date " + date + " and code " + code + " for motogp");
 			log.warn("API has not found any result to date " + date + " and code " + code + " for motogp ");
 			contador++;
-			notFound+="G";
+			notFound += "G";
 		}
 //		try {
 //			this.GPService.populateRecord(gp);
@@ -276,35 +273,36 @@ public class PoblarBaseDeDatosController {
 
 		}
 		Category category = TCService.getTabla().get().getCurrentCategory();
-		
+
 		this.TCService.actualizarTabla(Category.MOTO2);
 		this.TCService.actualizarTabla(Category.MOTO3);
 		this.TCService.actualizarTabla(Category.MOTOGP);
-		
+
 		Category newCategory = TCService.getTabla().get().getCurrentCategory();
-		
-		if(!category.equals(newCategory)) {
+
+		if (!category.equals(newCategory)) {
 			List<Team> teams = new ArrayList<Team>();
 			teamService.findAllTeams().forEach(teams::add);
-			log.info("Se ha detectado el cambio de categoria, se procede a vender todos los pilotos y configurar el mercado");
-			for(int i = 0; i<teams.size();i++) {
+			log.info(
+					"Se ha detectado el cambio de categoria, se procede a vender todos los pilotos y configurar el mercado");
+			for (int i = 0; i < teams.size(); i++) {
 				Team team = teams.get(i);
 				teamService.sellAllTeamRecruits(team);
-				if(team.getName().equals("Sistema")) {
-					teamService.recruitAndOfferAll(team,newCategory);
+				if (team.getName().equals("Sistema")) {
+					teamService.recruitAndOfferAll(team, newCategory);
 				}
 			}
-			
+
 			log.info("Ahora se va asignar 2 pilotos de la nueva categoria a cada equipo");
-			for(int i = 0; i<teams.size();i++) {
+			for (int i = 0; i < teams.size(); i++) {
 				Team team = teams.get(i);
-				if(!team.getName().equals("Sistema")) {
+				if (!team.getName().equals("Sistema")) {
 					teamService.randomRecruit2Pilots(team);
 				}
 			}
 		}
-		
-		return "redirect:/controlPanel/"+contador+notFound+"/"+code;
+
+		return "redirect:/controlPanel/" + contador + notFound + "/" + code;
 	}
 
 }
