@@ -25,7 +25,7 @@
 
         <jsp:doBody/>
 
-        <petclinic:pivotal/>
+<%--         <petclinic:pivotal/> --%>
     </div>
 </div>
 <petclinic:footer/>
