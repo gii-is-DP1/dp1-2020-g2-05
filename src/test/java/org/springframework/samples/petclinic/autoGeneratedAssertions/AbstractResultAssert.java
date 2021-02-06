@@ -46,22 +46,7 @@ public abstract class AbstractResultAssert<S extends AbstractResultAssert<S, A>,
    * @return this assertion object.
    * @throws AssertionError - if the actual Result's lap is not equal to the given one.
    */
-  public S hasLap(Boolean lap) {
-    // check that actual Result we want to make assertions on is not null.
-    isNotNull();
 
-    // overrides the default error message with a more explicit one
-    String assertjErrorMessage = "\nExpecting lap of:\n  <%s>\nto be:\n  <%s>\nbut was:\n  <%s>";
-
-    // null safe check
-    Boolean actualLap = actual.getLap();
-    if (!Objects.areEqual(actualLap, lap)) {
-      failWithMessage(assertjErrorMessage, actual, lap, actualLap);
-    }
-
-    // return the current assertion for method chaining
-    return myself;
-  }
 
   /**
    * Verifies that the actual Result's pilot is equal to the given one.
@@ -92,22 +77,7 @@ public abstract class AbstractResultAssert<S extends AbstractResultAssert<S, A>,
    * @return this assertion object.
    * @throws AssertionError - if the actual Result's pole is not equal to the given one.
    */
-  public S hasPole(Boolean pole) {
-    // check that actual Result we want to make assertions on is not null.
-    isNotNull();
 
-    // overrides the default error message with a more explicit one
-    String assertjErrorMessage = "\nExpecting pole of:\n  <%s>\nto be:\n  <%s>\nbut was:\n  <%s>";
-
-    // null safe check
-    Boolean actualPole = actual.getPole();
-    if (!Objects.areEqual(actualPole, pole)) {
-      failWithMessage(assertjErrorMessage, actual, pole, actualPole);
-    }
-
-    // return the current assertion for method chaining
-    return myself;
-  }
 
   /**
    * Verifies that the actual Result's position is equal to the given one.

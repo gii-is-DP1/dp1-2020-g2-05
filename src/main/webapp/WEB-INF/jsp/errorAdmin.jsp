@@ -1,0 +1,47 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page session="false" trimDirectiveWhitespaces="true" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<html>
+<head>
+<style>
+table td {
+	vertical-align: top;
+	border: solid 1px #888;
+	padding: 10px;
+}
+</style>
+</head>
+<body>
+	<petclinic:layout pageName="error">
+
+		<h1>An error has occured!</h1>
+		<table>
+			<tr>
+				<td>Date</td>
+				<td>${timestamp}</td>
+			</tr>
+			<tr>
+				<td>Error</td>
+				<td>${error}</td>
+			</tr>
+			<tr>
+				<td>Status</td>
+				<td>${status}</td>
+			</tr>
+			<tr>
+				<td>Message</td>
+				<td>${error_message}</td>
+			</tr>
+			<tr>
+				<td>Exception</td>
+				<td>${exception}</td>
+			</tr>
+			<tr>
+				<td>Trace</td>
+				<td><pre>${trace}</pre></td>
+			</tr>
+		</table>
+	</petclinic:layout>
+</body>
+</html>

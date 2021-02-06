@@ -83,6 +83,19 @@ public class PanelDeControlController {
 		return "redirect:/controlPanelSP";
 	}
 	
+	@GetMapping(path="/controlPanelSP/poblarCarreras")
+	public String vistaPoblarCarreras(ModelMap model) throws ParseException {	
+		 
+		
+		List<GranPremio> gps = GPService.findAllActualYear(2019).stream().collect(Collectors.toSet()).stream().collect(Collectors.toList());
+		Set<GranPremio> sortedGps = gps.stream().collect(Collectors.toSet());
+		model.addAttribute("listaGP",sortedGps.stream().sorted(Comparator.comparing(GranPremio::getId)).collect(Collectors.toList()));
+
+		return "/panelControl/poblarGP";
+		 
+	}
+	
+	
 	@GetMapping(path={"/poblarConCalendario"})
 	public String muestraPanel(ModelMap model) throws ParseException, JsonMappingException, JsonProcessingException, IOException, InterruptedException {	
 		List<GranPremio> gp =testing.obtainScheduleForAGivenYearAndGivenCategory(2019, Category.MOTOGP);		

@@ -6,7 +6,7 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
 <%@ page import="org.springframework.samples.petclinic.util.Status" %>
 
-<petclinic:layout pageName="leagues">
+<petclinic:layout pageName="leagues" userTeam="${userTeam.id}" userTeamName="${userTeam.name}" userLeague="${userTeam.league.id}" userLeagueName="${userTeam.league.name}" userMoney="${userTeam.money}">
 	<h2>Welcome to the Pilots Market</h2>
 
 	<table id="offersTable" class="table table-striped">

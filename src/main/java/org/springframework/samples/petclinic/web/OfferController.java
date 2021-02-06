@@ -12,6 +12,7 @@ import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.TransactionService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.NotAllowedNumberOfRecruitsException;
+import org.springframework.samples.petclinic.service.exceptions.NoTeamInThisLeagueException;
 import org.springframework.samples.petclinic.util.Status;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -51,13 +52,13 @@ public class OfferController {
 	}
 
 	@ModelAttribute("userTeam")
-	public Team getUserTeam(@PathVariable("leagueId") int leagueId) {
+	public Team getUserTeam(@PathVariable("leagueId") int leagueId) throws NoTeamInThisLeagueException {
 		Optional<Team> userTeam = teamService.findTeamByUsernameAndLeagueId(userService.getUserSession().getUsername(),
 				leagueId);
-		if (userTeam.isPresent()) {
+		if(userTeam.isPresent()){
 			return userTeam.get();
-		} else {
-			return null;// Terminar redirecionando diciendo que no tienes equipo en esta liga
+		}else {
+			throw new NoTeamInThisLeagueException();
 		}
 	}
 
@@ -69,9 +70,8 @@ public class OfferController {
 
 	@GetMapping(path = "{offerId}")
 	public String recruitPilot(@PathVariable("leagueId") int leagueId, @PathVariable("offerId") int offerId,
-			ModelMap modelMap) {
+			ModelMap modelMap) throws NoTeamInThisLeagueException {
 		Optional<Offer> opo = offerService.findOfferById(offerId);
-
 		if (opo.isPresent()) {
 			Offer offer = opo.get();
 			Team purchaserTeam = getUserTeam(leagueId);

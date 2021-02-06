@@ -16,15 +16,6 @@ public class Result extends BaseEntity implements Comparable<Result> {
 	@Column(name = "position")
 	@NotNull
 	private Integer position;
-
-
-	@Column(name = "pole")
-	@NotNull
-	private Boolean pole; //0-> false , 1-> true
-	
-	@Column(name = "lap")
-	@NotNull
-	private Boolean lap; //0-> false , 1-> true
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "pilot_id")
@@ -43,21 +34,6 @@ public class Result extends BaseEntity implements Comparable<Result> {
 		this.position = position;
 	}
 
-	public Boolean getPole() {
-		return pole;
-	}
-
-	public void setPole(Boolean pole) {
-		this.pole = pole;
-	}
-
-	public Boolean getLap() {
-		return lap;
-	}
-
-	public void setLap(Boolean fastestLapOnRace) {
-		this.lap = fastestLapOnRace;
-	}
 
 	public Pilot getPilot() {
 		return pilot;
@@ -77,7 +53,7 @@ public class Result extends BaseEntity implements Comparable<Result> {
 
 	@Override
 	public String toString() {
-		return "[Position=" + position +  ", Location=" + gp.getSite() + ", Rider=" + pilot.getName() + " " + pilot.getLastName()  + ", Pole=" + pole +", GP=" +gp.getId()+ " ]";
+		return "[Position=" + position +  ", Location=" + gp.getSite() + ", Rider=" + pilot.getName() + " " + pilot.getLastName()  +", GP=" +gp.getId()+ " ]";
 	}
 
 	@Override

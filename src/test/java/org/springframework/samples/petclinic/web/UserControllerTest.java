@@ -27,7 +27,9 @@ import org.springframework.samples.petclinic.configuration.SecurityConfiguration
 import org.springframework.samples.petclinic.model.Authorities;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
+import org.springframework.samples.petclinic.service.PoblarBaseDeDatosService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
+import org.springframework.samples.petclinic.service.TransactionService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -49,8 +51,17 @@ public class UserControllerTest {
 	private AuthoritiesService authoritiesService;
 
 	 @MockBean
+	 @Autowired
 	 private TablaConsultasService tablaConsultas;
-	
+	 
+	@MockBean
+	@Autowired
+	private PoblarBaseDeDatosService poblarBaseDeDatosService;
+		
+	@MockBean
+	@Autowired
+	private TransactionService transactionService;
+		
 	@Autowired
 	private MockMvc mockMvc;
 	
@@ -72,12 +83,17 @@ public class UserControllerTest {
 		user.setPassword("123456");
 		user.setEmail("prueba@gmail.com");
 		user.setEnabled(true);
+		user.setImgperfil("userimg");
 		
 		amigo1.setUsername("amigo1");
 		amigo1.setEnabled(true);
+		amigo1.setImgperfil("amigo1");
+		amigo1.setEmail("email1");
+		amigo1.setPassword("pass1");
 		
 		amigo2.setUsername("amigo2");
 		amigo2.setEnabled(true);
+		amigo2.setImgperfil("amigo2");
 		
 		Set<Authorities> auth = new HashSet<Authorities>();
 		Authorities autho = new Authorities();
@@ -137,7 +153,9 @@ void testCrearUser2SinErrores() throws Exception {
 			.param("username", user.getUsername() )
 			.param("email", user.getEmail())
 			.param("password", user.getPassword())
+			.param("imgperfil", user.getImgperfil())
 			.param("enabled","True"))
+			
 			.andExpect(status().is3xxRedirection())		
 			.andExpect(view().name("redirect:/"));
 }
@@ -197,6 +215,7 @@ void testSeguirSinErrores() throws Exception {
 			.param("username", amigo1.getUsername())
 			.param("email", amigo1.getEmail())
 			.param("password", amigo1.getPassword())
+			.param("imgperfil", amigo1.getImgperfil())
 			.param("enabled","True"))
 			.andExpect(status().is3xxRedirection())		
 			.andExpect(view().name("redirect:/friends"));
@@ -214,6 +233,7 @@ void testSeguirConErrores() throws Exception {
 			.param("email", user.getEmail())
 			.param("password", user.getPassword())
 			.param("enabled","True"))
+		
 			.andExpect(status().isOk())		
 			.andExpect(view().name("friends/friendsList"));
 }

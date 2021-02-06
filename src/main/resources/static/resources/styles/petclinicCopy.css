@@ -3041,7 +3041,7 @@ fieldset[disabled] a.btn {
 .btn-default {
   color: #f1f1f1;
   background-color: #34302D;
-  border-color: #6db33f;
+  border-color: #a43939;
 }
 .btn-default:focus,
 .btn-default.focus {
@@ -3089,7 +3089,7 @@ fieldset[disabled] .btn-default:focus,
 .btn-default[disabled].focus,
 fieldset[disabled] .btn-default.focus {
   background-color: #34302D;
-  border-color: #6db33f;
+  border-color: #a43939;
 }
 .btn-default .badge {
   color: #34302D;
@@ -4488,13 +4488,13 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .navbar-default .navbar-nav > li > a:hover,
 .navbar-default .navbar-nav > li > a:focus {
   color: #f1f1f1;
-  background-color: #6db33f;
+  background-color: #a43939;
 }
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .active > a:focus {
   color: #f1f1f1;
-  background-color: #6db33f;
+  background-color: #a43939;
 }
 .navbar-default .navbar-nav > .disabled > a,
 .navbar-default .navbar-nav > .disabled > a:hover,
@@ -4519,7 +4519,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .navbar-default .navbar-nav > .open > a,
 .navbar-default .navbar-nav > .open > a:hover,
 .navbar-default .navbar-nav > .open > a:focus {
-  background-color: #6db33f;
+  background-color: #a43939;
   color: #f1f1f1;
 }
 @media (max-width: 767px) {
@@ -4529,13 +4529,13 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
   .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
     color: #f1f1f1;
-    background-color: #6db33f;
+    background-color: #a43939;
   }
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
     color: #f1f1f1;
-    background-color: #6db33f;
+    background-color: #a43939;
   }
   .navbar-default .navbar-nav .open .dropdown-menu > .disabled > a,
   .navbar-default .navbar-nav .open .dropdown-menu > .disabled > a:hover,
@@ -4733,7 +4733,7 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
   z-index: 3;
   color: #fff;
   background-color: #34302D;
-  border-color: #6db33f;
+  border-color: #a43939;
   cursor: default;
 }
 .pagination > .disabled > span,
@@ -6765,7 +6765,7 @@ strong {
   font-family: "montserratregular", sans-serif;
 }
 .navbar {
-  border-top: 4px solid #6db33f;
+  border-top: 4px solid #a43939;
   background-color: #34302d;
   margin-bottom: 0px;
   border-bottom: 0;
@@ -6815,7 +6815,7 @@ strong {
 }
 .navbar li:hover > a {
   color: #eeeeee;
-  background-color: #6db33f;
+  background-color: #a43939;
 }
 .navbar-toggle {
   border-width: 0;
@@ -6927,7 +6927,7 @@ h1 {
   display: none;
 }
 .splash {
-  background: #6db33f;
+  background: #a43939;
   color: #34302D;
   display: none;
 }

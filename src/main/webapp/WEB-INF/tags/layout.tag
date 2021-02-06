@@ -4,6 +4,11 @@
 
 <%@ attribute name="pageName" required="true" %>
 <%@ attribute name="customScript" required="false" fragment="true"%>
+<%@ attribute name="userTeam" required="false"%>
+<%@ attribute name="userTeamName" required="false"%>
+<%@ attribute name="userLeague" required="false" %>
+<%@ attribute name="userLeagueName" required="false" %>
+<%@ attribute name="userMoney" required="false" %>
 
 <!doctype html>
 <html>
@@ -11,6 +16,10 @@
 
 <body>
 <petclinic:bodyHeader menuName="${pageName}"/>
+
+<c:if test="${not empty userTeam}">
+	<petclinic:leagueMenu userTeam="${userTeam}" userTeamName="${userTeamName}" userLeague="${userLeague}" userLeagueName="${userLeagueName}" userMoney="${userMoney}"/>
+</c:if>
 
 <div class="container-fluid">
     <div class="container xd-container">
@@ -25,7 +34,7 @@
 
         <jsp:doBody/>
 
-        <petclinic:pivotal/>
+<%--         <petclinic:pivotal/> --%>
     </div>
 </div>
 <petclinic:footer/>
