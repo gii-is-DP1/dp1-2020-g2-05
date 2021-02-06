@@ -90,7 +90,7 @@ public class LeagueController {
 
 		if (Optional.of(usuarioSesion).isPresent()) {
 			ligasDelUsuarioDeLaSesion = leagueService.obtenerListaDeLigasDeUnaListaDeIntegers(
-					teamService.findTeamsByUsername(usuarioSesion.getUsername()));
+					teamService.findTeamsIntByUsername(usuarioSesion.getUsername()));
 			// se obtienen las ligas en las que un usuario participa
 			// consultando la id de las ligas en las que tiene sus equipos
 		}
@@ -261,7 +261,7 @@ public class LeagueController {
 		User usuarioSesion = this.userService.getUserSession();
 
 		List<Integer> idsDeLasLigasDelUsuarioDeLaSesion = this.teamService
-				.findTeamsByUsername(usuarioSesion.getUsername());
+				.findTeamsIntByUsername(usuarioSesion.getUsername());
 
 		Optional<League> ligaObtenidaDelCodigoIntroducido = this.leagueService
 				.findLeagueByLeagueCode(league.getLeagueCode().trim());

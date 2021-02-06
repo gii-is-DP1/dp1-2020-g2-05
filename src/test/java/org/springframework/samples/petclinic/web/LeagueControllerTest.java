@@ -177,7 +177,7 @@ public class LeagueControllerTest {
     	@WithMockUser(value = "spring")
     	@Test
     	void testShowMyLeagues() throws Exception {
-    		given(leagueService.obtenerListaDeLigasDeUnaListaDeIntegers(teamService.findTeamsByUsername(user.getUsername()))).willReturn(lista);
+    		given(leagueService.obtenerListaDeLigasDeUnaListaDeIntegers(teamService.findTeamsIntByUsername(user.getUsername()))).willReturn(lista);
     		mockMvc.perform(get("/leagues/myLeagues")).andExpect(status().isOk())
     		.andExpect(model().attribute("noTengoLigas", is(false)))
     		.andExpect(model().attribute("misLigas", Matchers.hasItem(Matchers.<League> hasProperty("leagueCode", is(liga.getLeagueCode())))))
@@ -189,7 +189,7 @@ public class LeagueControllerTest {
     	@WithMockUser(value = "spring")
     	@Test
     	void testDontParticipatesInAnyLeagues() throws Exception {
-    		given(leagueService.obtenerListaDeLigasDeUnaListaDeIntegers(teamService.findTeamsByUsername(user.getUsername()))).willReturn(new ArrayList<League>());
+    		given(leagueService.obtenerListaDeLigasDeUnaListaDeIntegers(teamService.findTeamsIntByUsername(user.getUsername()))).willReturn(new ArrayList<League>());
     		mockMvc.perform(get("/leagues/myLeagues")).andExpect(status().isOk())
     		.andExpect(model().attribute("noTengoLigas", is(true)))
     		.andExpect(view().name("leagues/myLeagues"));
@@ -199,7 +199,7 @@ public class LeagueControllerTest {
     	@WithMockUser(value = "spring")
     	@Test
     	void testAlreadyParticipatesInLeague() throws Exception {
-    		given(leagueService.obtenerListaDeLigasDeUnaListaDeIntegers(teamService.findTeamsByUsername(user.getUsername()))).willReturn(lista);
+    		given(leagueService.obtenerListaDeLigasDeUnaListaDeIntegers(teamService.findTeamsIntByUsername(user.getUsername()))).willReturn(lista);
     		mockMvc.perform(get("/leagues/myLeagues").flashAttr("yaTienesEquipo", true).flashAttr("leagueYaEquipoId", 1))
     		.andExpect(status().isOk())
     		.andExpect(model().attribute("yaTienesEquipo", is(true)))
@@ -302,7 +302,7 @@ public class LeagueControllerTest {
     	void testJoinAlreadyTeamInLeaguePost() throws Exception {
     		List<Integer> lista = new ArrayList<Integer>();
     		lista.add(liga.getId());
-    		given(this.teamService.findTeamsByUsername(user.getUsername())).willReturn(lista);
+    		given(this.teamService.findTeamsIntByUsername(user.getUsername())).willReturn(lista);
     		given(this.leagueService.findLeagueByLeagueCode(liga.getLeagueCode())).willReturn(Optional.of(liga));
     		given(this.teamService.findTeamsByLeagueId(liga.getId())).willReturn(1);
     		mockMvc.perform(post("/leagues/join")
@@ -323,7 +323,7 @@ public class LeagueControllerTest {
     	@Test
     	void testJoinNoLeagueFoundPost() throws Exception {
     		List<Integer> lista = new ArrayList<Integer>();
-    		given(this.teamService.findTeamsByUsername(user.getUsername())).willReturn(lista);
+    		given(this.teamService.findTeamsIntByUsername(user.getUsername())).willReturn(lista);
     		given(this.leagueService.findLeagueByLeagueCode(liga.getLeagueCode())).willReturn(Optional.empty());
     		mockMvc.perform(post("/leagues/join")
     				.with(csrf())
@@ -342,7 +342,7 @@ public class LeagueControllerTest {
     	@Test
     	void testJoinToFullLeaguePost() throws Exception {
     		List<Integer> lista = new ArrayList<Integer>();
-    		given(this.teamService.findTeamsByUsername(user.getUsername())).willReturn(lista);
+    		given(this.teamService.findTeamsIntByUsername(user.getUsername())).willReturn(lista);
     		given(this.leagueService.findLeagueByLeagueCode(liga.getLeagueCode())).willReturn(Optional.of(liga));
     		given(this.teamService.findTeamsByLeagueId(liga.getId())).willReturn(6);
     		mockMvc.perform(post("/leagues/join")
@@ -379,7 +379,7 @@ public class LeagueControllerTest {
     	@Test
     	void testJoinToLeaguePost() throws Exception {
     		List<Integer> lista = new ArrayList<Integer>();
-    		given(this.teamService.findTeamsByUsername(user.getUsername())).willReturn(lista);
+    		given(this.teamService.findTeamsIntByUsername(user.getUsername())).willReturn(lista);
     		given(this.leagueService.findLeagueByLeagueCode(liga.getLeagueCode())).willReturn(Optional.of(liga));
     		given(this.teamService.findTeamsByLeagueId(liga.getId())).willReturn(1);
     		mockMvc.perform(post("/leagues/join")

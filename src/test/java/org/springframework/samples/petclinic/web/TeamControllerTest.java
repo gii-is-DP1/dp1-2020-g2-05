@@ -315,7 +315,7 @@ public class TeamControllerTest {
 	@Test
 	void testInitCreationForm() throws Exception {
 
-		mockMvc.perform(get("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID))
+		mockMvc.perform(get("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID).header("Referer", "http://localhost:8090/leagues/join"))
 		.andExpect(status()
 				.isOk())
 		.andExpect(view().name("/leagues/TeamsEdit"))
@@ -327,11 +327,18 @@ public class TeamControllerTest {
 	void testInitCreationFormNegative() throws Exception {
 		given(this.teamService.findTeamsByLeagueId(TEST_LEAGUE_ID)).willReturn(6);
 
-		mockMvc.perform(get("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID))
+		mockMvc.perform(get("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID).header("Referer", "http://localhost:8090/leagues/join"))
 		.andExpect(status().is3xxRedirection())
 		.andExpect(view().name("redirect:/leagues/{leagueId}/teams"));
 	}	
 
+	@WithMockUser(value = "spring")
+	@Test
+	void testInitCreationFormException() throws Exception {
+		mockMvc.perform(get("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID).header("Referer", "http://localhost:8090/leagues"))
+		.andExpect(status().is3xxRedirection())
+		.andExpect(view().name("redirect:/leagues"));
+	}	
 
 	@WithMockUser(value = "spring")
 	@Test
@@ -443,8 +450,8 @@ public class TeamControllerTest {
 				.param("team.id", TEST_TEAM_ID.toString())
 				.param("user.username" , user.getUsername())
 				.param("league.id", TEST_LEAGUE_ID.toString()))
-		.andExpect(status().is3xxRedirection())
-		.andExpect(view().name("redirect: Perfil/Perfil"));
+		.andExpect(status().isOk())
+		.andExpect(view().name("Perfil/Perfil"));
 	}
 
 	@WithMockUser(value = "spring")
@@ -536,6 +543,7 @@ public class TeamControllerTest {
 				.param("status", Status.Outstanding.toString())
 				.param("price", "1500"))
 			.andExpect(status().isOk())
+			.andExpect(model().attribute("message",is("You must own at least 2 riders not on sale to perform this action")))
 			.andExpect(view().name("/leagues/teamDetails"));
 	}
 	

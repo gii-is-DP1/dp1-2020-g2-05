@@ -17,6 +17,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Team;
+import org.springframework.samples.petclinic.service.exceptions.NotAllowedNumberOfRecruitsException;
 import org.springframework.samples.petclinic.web.duplicatedLeagueNameException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,13 +63,13 @@ public class TeamServiceTest {
 		}
 	 
 	 @Test
-		void shouldFindTeamsByUsername() {
-			Collection<Integer> teams = this.teamService.findTeamsByUsername("migniearj");
+		void shouldFindTeamsIntByUsername() {
+			Collection<Integer> teams = this.teamService.findTeamsIntByUsername("migniearj");
 			assertThat(teams.size()> 0).isTrue();
 			
 
 			
-			Collection<Integer> teams_fail = this.teamService.findTeamsByUsername("negative_test");
+			Collection<Integer> teams_fail = this.teamService.findTeamsIntByUsername("negative_test");
 			assertThat(teams_fail.size()).isEqualTo(0);
 		}
 	 
@@ -210,4 +211,27 @@ public class TeamServiceTest {
 		assertThat(recruitService.getRecruitsByTeam(team.getId()).size()).isGreaterThan(0);
 	}
 	
+	@Test
+	@Transactional
+	void shouldSellAllTeamRecruits() {
+		Team team = teamService.findTeamById(1).get();
+		Integer money = team.getMoney();
+		
+		teamService.sellAllTeamRecruits(team);
+		
+		assertThat(recruitService.getRecruitsByTeam(team.getId()).size()).isEqualTo(0);
+		assertThat(team.getMoney()).isGreaterThanOrEqualTo(money);
+	}
+	
+	@Test
+	@Transactional
+	void shouldRandomRecruit2Pilots() throws NotAllowedNumberOfRecruitsException {
+		Team team = teamService.findTeamById(3).get();
+		Team sysTeam = teamService.findTeamById(8).get();
+		teamService.recruitAndOfferAll(sysTeam, Category.MOTO3);
+		
+		teamService.randomRecruit2Pilots(team);
+		
+		assertThat(recruitService.getRecruitsByTeam(team.getId()).size()).isEqualTo(2);
+	}
 }
