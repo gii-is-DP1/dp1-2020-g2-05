@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
+import org.springframework.samples.petclinic.service.exceptions.JoinWithoutCodeException;
 import org.springframework.samples.petclinic.service.exceptions.NoTeamInThisLeagueException;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -76,9 +78,14 @@ public class CustomErrorController implements ErrorController {
 	}
 	
 	@ExceptionHandler(NoTeamInThisLeagueException.class)
-	public String NoTeamErrorHandler(HttpServletRequest request,  Exception ex)  {
-		
-		
+	public String NoTeamErrorHandler(HttpServletRequest request,  Exception ex, RedirectAttributes redirectAttributes)  {
+		redirectAttributes.addFlashAttribute("message", "No tienes equipo en esta liga!");
+		return "redirect:/leagues";
+	}
+	
+	@ExceptionHandler(JoinWithoutCodeException.class)
+	public String joinWithoutCodeErrorHandler(HttpServletRequest request,  Exception ex, RedirectAttributes redirectAttributes)  {
+		redirectAttributes.addFlashAttribute("message", "Necesitas un código de invitación para entrar en una liga");
 		return "redirect:/leagues";
 	}
 	
