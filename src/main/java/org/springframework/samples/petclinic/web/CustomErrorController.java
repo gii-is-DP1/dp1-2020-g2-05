@@ -30,7 +30,7 @@ public class CustomErrorController implements ErrorController {
 	
 	@Autowired
 	private ErrorAttributes errorAttributes;
-	
+	@Autowired
 	private AuthoritiesService authoritiesService;
 
 	public static HttpStatus getStatus(HttpServletRequest request) {
@@ -46,16 +46,12 @@ public class CustomErrorController implements ErrorController {
 		}
 	}
 	
-//	@ExceptionHandler(Exception.class)
 	@ExceptionHandler(NoTeamInThisLeagueException.class)
 	public String NoTeamErrorHandler(HttpServletRequest request,  Exception ex)  {
-		
-		
 		return "redirect:/leagues";
 	}
 	
-//	@ExceptionHandler(Exception.class)
-	@RequestMapping
+//	@RequestMapping
 	public String defaultErrorHandler(HttpServletRequest request,  Exception ex)  {
 
 		ServletWebRequest servletWebRequest = new ServletWebRequest(request);
@@ -82,7 +78,8 @@ public class CustomErrorController implements ErrorController {
 		return "errorAdmin";
 	}
 	
-	@GetMapping()
+	@RequestMapping
+//	@ExceptionHandler(Exception.class)
 	public String handleError(HttpServletRequest request, Exception ex) {
 		String res = "errorUser";
 		if (this.authoritiesService.isCurrentUserAdmin()) {
@@ -95,10 +92,10 @@ public class CustomErrorController implements ErrorController {
 				
 				switch (statusCode) {
 				case 400: 
-					request.setAttribute("error_message", "Http Error Code: 400. Bad Request");
+					request.setAttribute("error_message", "Error 400: You made a bad request");
 					break;
 				case 401: 
-					request.setAttribute("error_message", "Http Error Code: 401. Unauthorized");
+					request.setAttribute("error_message", "Error 401: You're not authorized to access this content!");
 					break;
 				case 403: 
 					request.setAttribute("error_message", "Http Error Code: 403. Forbidden");
@@ -106,15 +103,16 @@ public class CustomErrorController implements ErrorController {
 					break;
 				case 404: 
 					request.setAttribute("error_message", "Http Error Code: 404. Resource not found");
+					res = "errors/error404";
 					break;
 				case 500: 
 					request.setAttribute("error_message", "Http Error Code: 500. Internal Server Error");
 					res = "errors/error500";
 					break;
+				default: 
+					res = "errorUser";
+					request.setAttribute("error_mensaje", "¡Oops! Looks like something went wrong...");
 				}
-				
-			} else {
-				request.setAttribute("error_mensaje", "¡Ups! Parece que algo ha ido mal...");
 			}
 		}
 		return res;
