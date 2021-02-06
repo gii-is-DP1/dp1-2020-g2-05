@@ -169,9 +169,7 @@ public class PilotServiceTest {
 	@Transactional
 	void assignResultsToAPilot() {
 		org.springframework.samples.petclinic.model.Result resultModel = new org.springframework.samples.petclinic.model.Result();
-		resultModel.setPole(true);
 		resultModel.setPosition(1);
-		resultModel.setLap(true);
 		Competitor competitorToTest = new Competitor();
 		competitorToTest.setName("Rojas, Antonio");
 	
@@ -182,10 +180,8 @@ public class PilotServiceTest {
 	@Test
 	@Transactional
 	void assingSetResultsToAPilot() {
-		org.springframework.samples.petclinic.model.Result resultModel = new org.springframework.samples.petclinic.model.Result();
-		resultModel.setPole(true);
+	org.springframework.samples.petclinic.model.Result resultModel = new org.springframework.samples.petclinic.model.Result();
 		resultModel.setPosition(1);
-		resultModel.setLap(true);
 		Competitor competitorToTest = new Competitor();
 		competitorToTest.setName("Rojas, Antonio");
 	

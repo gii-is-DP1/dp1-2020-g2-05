@@ -244,8 +244,7 @@ public class PilotService {
 
 			Result result = new Result();
 			result.setGp(gp);
-			result.setLap(false);
-			result.setPole(false);
+
 			
 			if (rider_i.getResult().getPosition()==null) {
 				result.setPosition(0);
