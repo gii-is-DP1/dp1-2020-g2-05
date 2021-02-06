@@ -19,12 +19,7 @@ public class PetclinicApplication {
 
 	@Autowired
 	private TablaConsultasService TCservice;
-	
-	@Autowired
 	private PoblarBaseDeDatosService PBDService;
-
-
-	@Autowired
 	private TransactionService transactionService;
 
 	public static void main(String[] args) {
