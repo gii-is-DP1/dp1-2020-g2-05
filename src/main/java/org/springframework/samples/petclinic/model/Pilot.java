@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
@@ -41,7 +42,7 @@ public class Pilot extends BaseEntity implements Comparable<Pilot> {
 	@Min(0)
 	private Integer baseValue;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pilot")
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "pilot")
 	private Set<Result> results;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pilot")

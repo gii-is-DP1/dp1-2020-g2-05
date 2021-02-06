@@ -1,8 +1,10 @@
 package org.springframework.samples.petclinic;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.samples.petclinic.service.PoblarBaseDeDatosService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.TransactionService;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -17,6 +19,10 @@ public class PetclinicApplication {
 
 	@Autowired
 	private TablaConsultasService TCservice;
+	
+	@Autowired
+	private PoblarBaseDeDatosService PBDService;
+
 
 	@Autowired
 	private TransactionService transactionService;
@@ -38,8 +44,20 @@ public class PetclinicApplication {
 	public void validarCarreras() throws Exception {
 		log.info("Validando la ultima carrera completada");
 		System.out.println("VALIDANDO");
-		TCservice.comprobandoCarrerasCompletadas();
-	}
+
+        TCservice.comprobandoCarrerasCompletadas();
+    }
+	
+	//Ajustar a Domingo (0 00 00 ? * 7)
+	@Scheduled(cron = "0 04 22 ? * *") 
+    public void PoblarUltimaCarrera() throws Exception {
+		log.info("Poblando la ultima carrera completada");
+		System.out.println("Poblando");
+		this.PBDService.poblandoUltimaCarreraCompletada();
+		
+    }
+	
+
 
 	// Cada quince dias
 	@Scheduled(cron = "0 0 0 1,15 * ?")
