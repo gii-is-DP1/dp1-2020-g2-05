@@ -43,23 +43,18 @@ public class UserControllerTest {
 	
 
 	@MockBean
-	@Autowired
 	private UserService userService;
 	
 	@MockBean
-	@Autowired
 	private AuthoritiesService authoritiesService;
 
-	 @MockBean
-	 @Autowired
-	 private TablaConsultasService tablaConsultas;
+	@MockBean
+	private TablaConsultasService tablaConsultas;
 	 
 	@MockBean
-	@Autowired
 	private PoblarBaseDeDatosService poblarBaseDeDatosService;
 		
 	@MockBean
-	@Autowired
 	private TransactionService transactionService;
 		
 	@Autowired

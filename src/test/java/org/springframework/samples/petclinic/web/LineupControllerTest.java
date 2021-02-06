@@ -41,12 +41,14 @@ import org.springframework.samples.petclinic.model.Recruit;
 import org.springframework.samples.petclinic.model.TablaConsultas;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.User;
+import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.GranPremioService;
 import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.LineupService;
 import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.TeamService;
+import org.springframework.samples.petclinic.service.TransactionService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -69,19 +71,22 @@ public class LineupControllerTest {
 	LineupService lineupService;
 	
 	@MockBean
-	LeagueService leagueService;
-	
-	@MockBean
 	TeamService teamService;
-	
-	@MockBean
-	RecruitService recruitService;
 	
 	@MockBean
 	GranPremioService granPremioService;
 	
 	@MockBean
 	UserService userService;
+	
+	@MockBean
+	RecruitService recruitService;
+	
+	@MockBean
+	private TransactionService transactionService;
+	
+	@MockBean
+	private AuthoritiesService authoritiesService;
 	
 	@Autowired
 	private MockMvc mockMvc;

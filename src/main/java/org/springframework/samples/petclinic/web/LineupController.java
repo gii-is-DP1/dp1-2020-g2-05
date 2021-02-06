@@ -44,15 +44,13 @@ public class LineupController {
 
 	TablaConsultasService TCService;
 	LineupService lineupService;
-	LeagueService leagueService;
 	RecruitService recruitService;
 	GranPremioService granPremioService;
 
 	@Autowired
-	public LineupController(LeagueService leagueService, LineupService lineupService, TablaConsultasService TCService,
-			RecruitService recruitService, GranPremioService granPremioService) {
+	public LineupController(LineupService lineupService, TablaConsultasService TCService, RecruitService recruitService,
+			GranPremioService granPremioService) {
 		this.lineupService = lineupService;
-		this.leagueService = leagueService;
 		this.TCService = TCService;
 		this.recruitService = recruitService;
 		this.granPremioService = granPremioService;
