@@ -18,10 +18,16 @@
 </head>
 <body>
 	<petclinic:layout pageName="error">
-		<p class="center">Space Invadors destroyed this page! Take revenge on them!
-			<br/> Use <span class="label label-danger">Space</span> to shoot and <span class="label label-danger"><-</span>&#160;<span class="label label-danger">-></span> to move!&#160;&#160;&#160;<button class="btn btn-default btn-xs" id="restart">Restart</button>
-		</p>
-		<canvas id="space-invaders"/>
+		<div style="position:relative">
+			<p class="center">Space Invadors destroyed this page! Take revenge on them!
+				<br/> Use <span class="label label-danger">Space</span> to shoot and <span class="label label-danger"><-</span>&#160;<span class="label label-danger">-></span> to move!&#160;&#160;&#160;<button class="btn btn-default btn-xs" id="restart">Restart</button>
+			</p>
+			<canvas id="space-invaders"></canvas>
+			
+			<div class="center" style="vertical-align: bottom;">
+				<a href="/"><button class="btn btn-default" style="font-size: xxx-large;">Home</button></a>
+			</div>
+		</div>
 	</petclinic:layout>
 	
 	<script>

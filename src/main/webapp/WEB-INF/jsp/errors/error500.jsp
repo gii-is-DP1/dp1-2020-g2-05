@@ -133,7 +133,7 @@ fork{
 
 .center {
   position: absolute;
-  top: 80%;
+  top: 90%;
   left: 50%;
   transform: translate(-50%, -50%);
   -webkit-transform: translate(-50%, -50%);
@@ -146,13 +146,14 @@ fork{
 </head>
 <body>
 	<petclinic:layout pageName="error">
-
-		<div class="error-500" data-text="Oh no! Our spaghetti code is not working properly. We will be back soon!">
-			<spaguetti> <fork></fork> <meat></meat> <pasta></pasta> <plate></plate></spaguetti>
-		</div>
-		<div class="center">
-			<a href="/"><button class="btn btn-default" style="font-size: xxx-large;">Home</button></a>
-		</div>
+<!-- 		<div style="position:relative"> -->
+			<div class="error-500" data-text="Oh no! Our spaghetti code is not working properly. We will be back soon!">
+				<spaguetti> <fork></fork> <meat></meat> <pasta></pasta> <plate></plate></spaguetti>
+			</div>
+			<div class="center">
+				<a href="/"><button class="btn btn-default" style="font-size: xx-large;">Home</button></a>
+			</div>
+<!-- 		</div> -->
 	</petclinic:layout>
 
 	<script>

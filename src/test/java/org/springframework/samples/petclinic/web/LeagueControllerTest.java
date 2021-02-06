@@ -38,9 +38,11 @@ import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.TablaConsultas;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.User;
+import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.TeamService;
+import org.springframework.samples.petclinic.service.TransactionService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -64,25 +66,25 @@ public class LeagueControllerTest {
     	private static final int TEST_TEAM_ID = 1;
     	
     	@MockBean
-    	@Autowired
     	TablaConsultasService TCService;
     	
     	@MockBean
-    	@Autowired	
     	TeamController teamController;
 
-    	
     	@MockBean
-    	@Autowired	
     	LeagueService leagueService;
     	
     	@MockBean
-    	@Autowired
     	UserService userService;
     	
     	@MockBean
-    	@Autowired
     	TeamService teamService;
+    	
+    	@MockBean
+    	private TransactionService transactionService;
+    	
+    	@MockBean
+    	private AuthoritiesService authoritiesService;
     	
     	@Autowired
     	private MockMvc mockMvc;
@@ -399,26 +401,28 @@ public class LeagueControllerTest {
 
 
 	 }
-	 @MockBean
- 	@Autowired
+	 
+	@MockBean
  	TablaConsultasService TCService;
  	
  	@MockBean
- 	@Autowired	
  	TeamController teamController;
 
  	
  	@MockBean
- 	@Autowired	
  	LeagueService leagueService;
  	
  	@MockBean
- 	@Autowired
  	UserService userService;
  	
  	@MockBean
- 	@Autowired
  	TeamService teamService;
+ 	
+ 	@MockBean
+	private TransactionService transactionService;
+	
+	@MockBean
+	private AuthoritiesService authoritiesService;
  	
  	@Autowired
  	private MockMvc mockMvc;

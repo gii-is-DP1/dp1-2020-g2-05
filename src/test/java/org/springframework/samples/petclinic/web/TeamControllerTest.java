@@ -35,6 +35,7 @@ import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Recruit;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.User;
+import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.LineupService;
 import org.springframework.samples.petclinic.service.OfferService;
@@ -60,42 +61,38 @@ public class TeamControllerTest {
 	private static final Integer TEST_TEAM1_ID = 2;
 	
 	private static final Integer TEST_RECRUIT_ID = 1;
-	
-	 @Autowired
-	 private WebApplicationContext context;
-	 
-	 @MockBean
-	 @Autowired
-	 private UserService userService;
-	 
-	
-	 private GenericIdToEntityConverter converter;
-	 
-	 @MockBean
-	 @Autowired
-	 private RecruitService recruitService;
-	 
-	 @MockBean
-	 @Autowired
-	 private LineupService lineupService;
-	 
-	 @MockBean
-	 @Autowired
-	 private OfferService offerService;
-	 
-	 @MockBean
+
 	@Autowired
+	private WebApplicationContext context;
+
+	@MockBean
+	private UserService userService;
+
+	private GenericIdToEntityConverter converter;
+
+	@MockBean
+	private RecruitService recruitService;
+
+	@MockBean
+	private LineupService lineupService;
+
+	@MockBean
+	private OfferService offerService;
+
+	@MockBean
 	private TransactionService transactionService;
-	 
-	 @MockBean
-	 private TablaConsultasService tablaConsultas;
-	 
-	 @MockBean
-	 @Autowired
-	 private TeamService teamService;
+
+	@MockBean
+	private TablaConsultasService tablaConsultas;
+
+	@MockBean
+	private TeamService teamService;
 	 
 	@MockBean
 	private LeagueService leagueService;
+	
+	@MockBean
+	private AuthoritiesService authoritiesService;
 	
 	@Autowired
 	private MockMvc mockMvc;
