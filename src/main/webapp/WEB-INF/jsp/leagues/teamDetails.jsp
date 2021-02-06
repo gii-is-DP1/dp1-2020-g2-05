@@ -6,7 +6,7 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
 <%@ page import="org.springframework.samples.petclinic.util.Status"%>
 
-<petclinic:layout pageName="teamDetails">
+<petclinic:layout pageName="teamDetails" userTeam="${team.id}" userTeamName="${team.name}" userLeague="${team.league.id}" userLeagueName="${team.league.name}" userMoney="${team.money}">
 
 	<h2>Team Information</h2>
 
@@ -28,12 +28,6 @@
 	</table>
 
 	<h2>Riders Information</h2>
-	<spring:url value="/leagues/{leagueId}/market/" var="marketUrl">
-		<spring:param name="leagueId" value="${leagueId}" />
-	</spring:url>
-	<a href="${fn:escapeXml(marketUrl)}"> <span aria-hidden="true">Go
-			to market</span>
-	</a>
 	<table class="table table-striped">
 		<tr>
 			<th>Name</th>
