@@ -21,6 +21,7 @@ import org.springframework.samples.petclinic.service.OfferService;
 import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.service.exceptions.NoTeamInThisLeagueException;
 import org.springframework.samples.petclinic.service.exceptions.NotAllowedNumberOfRecruitsException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -76,7 +77,16 @@ public class TeamController {
 
 	
 	@GetMapping(path = "/leagues/{leagueId}/teams/new")
-	public String crearEquipo(@PathVariable("leagueId") int leagueId, ModelMap model) {
+	public String crearEquipo(@PathVariable("leagueId") int leagueId, @RequestHeader(name = "Referer", defaultValue = "/") String referer,
+			ModelMap model) throws NoTeamInThisLeagueException {
+		
+		String r = referer.split(":")[2];
+		String[] rr =  r.split("/");
+		Boolean l = r.split("/")[1].equalsIgnoreCase("leagues");
+		Boolean j = r.split("/")[2].equalsIgnoreCase("join");
+		if(!(l && j) && rr.length==3) {
+			throw new NoTeamInThisLeagueException();
+		}
 		
 		log.info("Abriendo el formulario para crear un equipo");
 		
