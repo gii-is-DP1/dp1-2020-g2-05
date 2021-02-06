@@ -7,16 +7,16 @@
 	padding: 30px;
 	overflow-y: scroll;
 	background-color: #F1F1F1;
-	white-space: nowrap;
+	white-space: nowrap; 
 }
-
+  
 .columns {
 	width: 300px; padding : 8px;
 	display: inline-block;
 	padding: 8px;
 }
 
-.price {
+.price { 
 	list-style-type: none;
 	border: 1px solid #eee;
 	margin: 0;
