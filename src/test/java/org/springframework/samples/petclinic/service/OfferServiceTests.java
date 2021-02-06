@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.model.Offer;
+import org.springframework.samples.petclinic.model.Recruit;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.util.Status;
 import org.springframework.stereotype.Service;
@@ -57,37 +58,27 @@ class OfferServiceTests {
 		assertThat(offersFail).isEmpty();
 	}
 	
-//	Necesita estar Logueado!!
-//	@Test
-//	void shouldFindTeamByUsernameLeague() {
-//		Team team = offerService.findTeamByUsernameLeague(1).get();
-//		assertThat(team.getName()).startsWith("Miguelito");
-//	}
-//	
-//	@Test
-//	@Transactional
-//	void shouldSaveTeamMoney() {
-//		Team team = leagueService.findTeamById(9).get();
-//		Double initialMoney = Double.parseDouble(team.getMoney());
-//		
-//		offerService.saveTeamMoney(team, 200);
-//		
-//		Double actualMoney = Double.parseDouble(team.getMoney());
-//		assertThat(actualMoney).isEqualTo(initialMoney + 200);
-//	}
-//	
-//	@Test
-//	@Transactional
-//	void shouldPutOnSale() {
-//		Recruit recruit = recruitService.findRecruit(2).get();
-//		
-//		offerService.putOnSale(recruit, 300);
-//		
-//		Offer offer = offerService.findOfferById(2).get();// La nueva oferta creada
-//		assertThat(offer.getRecruit()).isEqualTo(recruit);
-//		assertThat(offer.getPrice()).isEqualTo(300);
-//		assertThat(offer.getStatus()).isEqualTo(Status.Outstanding);
-//	}
+	@Test
+	void shouldFindOffersByRecruit() {
+		Collection<Offer> offers = offerService.findOffersByRecruit(1);
+		assertThat(offers.size()).isEqualTo(1);
+		
+		Collection<Offer> offersFail = offerService.findOffersByRecruit(0);
+		assertThat(offersFail).isEmpty();
+	}
+	
+	@Test
+	@Transactional
+	void shouldPutOnSale() {
+		Recruit recruit = recruitService.findRecruit(2).get();
+		
+		offerService.putOnSale(recruit, 300);
+		
+		Offer offer = offerService.findOfferById(2).get();// La nueva oferta creada
+		assertThat(offer.getRecruit()).isEqualTo(recruit);
+		assertThat(offer.getPrice()).isEqualTo(300);
+		assertThat(offer.getStatus()).isEqualTo(Status.Outstanding);
+	}
 	
 	@Test
 	@Transactional
