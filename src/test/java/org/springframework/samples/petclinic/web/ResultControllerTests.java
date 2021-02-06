@@ -116,8 +116,6 @@ class ResultControllerTests {
 		
 		result.setGp(gp);
 		result.setPilot(pilot);
-		result.setPole(false);
-		result.setLap(false);
 		result.setPosition(2);
 		resultList.add(result);
 	}

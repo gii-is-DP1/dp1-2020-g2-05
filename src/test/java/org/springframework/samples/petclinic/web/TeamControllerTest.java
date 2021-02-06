@@ -1,5 +1,4 @@
-	package org.springframework.samples.petclinic.web;
-
+package org.springframework.samples.petclinic.web;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -8,7 +7,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -17,7 +15,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,30 +41,25 @@ import org.springframework.samples.petclinic.service.OfferService;
 import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.TeamService;
+import org.springframework.samples.petclinic.service.TransactionService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.util.Status;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
-
-
 @WebMvcTest(controllers=TeamController.class,
 		excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class),
 		excludeAutoConfiguration= SecurityConfiguration.class)
-
 public class TeamControllerTest {
 	
 	private static final Integer TEST_LEAGUE_ID = 1;
 	private static final Integer TEST_LEAGUE1_ID = 3;
-
-
 	private static final Integer TEST_TEAM_ID = 1;
 	
 	private static final Integer TEST_TEAM1_ID = 2;
 	
 	private static final Integer TEST_RECRUIT_ID = 1;
-
 	
 	 @Autowired
 	 private WebApplicationContext context;
@@ -92,6 +84,10 @@ public class TeamControllerTest {
 	 private OfferService offerService;
 	 
 	 @MockBean
+	@Autowired
+	private TransactionService transactionService;
+	 
+	 @MockBean
 	 private TablaConsultasService tablaConsultas;
 	 
 	 @MockBean
@@ -106,30 +102,23 @@ public class TeamControllerTest {
 	
     private User user = new User();
     private User user1 = new User();
-
     private List<Team> list1 = new ArrayList<>();
     private List<Team> list2 = new ArrayList<>();
-
 	League liga = new League();
 	League liga1 = new League();
 	Team team = new Team();
 	Team team1 = new Team();
-
 	Recruit recruit1 = new Recruit();
 	Recruit recruit2 = new Recruit();
 	Recruit recruit3 = new Recruit();
 	Recruit recruit4 = new Recruit();
 	List<Recruit> listRecruits = new ArrayList<>();
 	List<Recruit> listRecruits2 = new ArrayList<>();
-
 	
     private Lineup lineup = new Lineup();
     private List<Lineup> listaLineups = new ArrayList<Lineup>();
     private List<Recruit> listaRecruitsNoEnVenta = new ArrayList<Recruit>();
     private List<Recruit> listaRecruitsEnVenta = new ArrayList<Recruit>();
-
-
-
 	
 	@BeforeEach
 	void setup() throws DataAccessException, duplicatedLeagueNameException {
@@ -146,7 +135,6 @@ public class TeamControllerTest {
 		autho1.setId(1);
 		auth1.add(autho1);
 		user1.setAuthorities(auth1);
-
 		user.setUsername("migue");
 		user.setPassword("asd");
 		user.setEmail("migue@mail.com");
@@ -166,13 +154,10 @@ public class TeamControllerTest {
 		liga1.setLeagueCode("IOKASXISAX");
 		liga1.setName("Ligue2");
 		liga1.setLeagueDate(formatter.format(date));
-
 		liga.setId(TEST_LEAGUE_ID);
 		liga.setLeagueCode("IOKASXISAU");
 		liga.setName("Ligue1");
 		liga.setLeagueDate(formatter.format(date));
-
-
 		team.setId(TEST_TEAM_ID);
 		team.setName("Migue");
 		team.setLeague(liga);
@@ -190,13 +175,11 @@ public class TeamControllerTest {
 		
 		Set<Team> teams = new HashSet<>();
 		Set<Team> teams2 = new HashSet<>();
-
 		Set<Team> teams1 = new HashSet<>();
 		teams.add(team);
 		teams1.add(team1);
 		list1.add(team);
 		list1.add(team1);
-
 		
 		liga.setTeam(teams);
 		liga1.setTeam(teams2);
@@ -204,14 +187,11 @@ public class TeamControllerTest {
 		
 		this.leagueService.saveLeague(liga);
 		this.leagueService.saveLeague(liga1);
-
 		this.teamService.saveTeam(team);
 		this.userService.saveUser(user);
-
         List<League> list = new ArrayList<League>();
 		list.add(liga);
 		
-
 		recruit1.setTeam(team);
 		listRecruits.add(recruit1);
 		
@@ -221,7 +201,6 @@ public class TeamControllerTest {
 		listRecruits2.add(recruit2);
 		listRecruits2.add(recruit3);
 		listRecruits2.add(recruit4);
-
 		user.setUsername("antcammar4");
 		user.setEnabled(true);
 	
@@ -272,8 +251,6 @@ public class TeamControllerTest {
 		listaLineups.add(lineup);
 		listaRecruitsEnVenta.add(recruit1);
 		listaRecruitsNoEnVenta.add(recruit2);
-
-
 		given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
 		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
 		given(this.userService.findUser(user.getUsername())).willReturn(Optional.of(user));
@@ -467,7 +444,7 @@ public class TeamControllerTest {
 				.param("user.username" , user.getUsername())
 				.param("league.id", TEST_LEAGUE_ID.toString()))
 		.andExpect(status().is3xxRedirection())
-		.andExpect(view().name("redirect:/leagues/{leagueId}/teams"));
+		.andExpect(view().name("redirect: Perfil/Perfil"));
 	}
 
 	@WithMockUser(value = "spring")
