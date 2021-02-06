@@ -241,10 +241,9 @@ margin:5px auto;
 }
 
 .center {
-	  margin-left: 50%;
-
-	margin-top:80px;
-	bottom:5%;
+  margin-left: 50%;
+  margin-top:80px;
+  bottom:5%;
   left: 50%;
   transform: translate(-50%, -50%);
   -webkit-transform: translate(-50%, -50%);
@@ -258,30 +257,30 @@ margin:5px auto;
 <body>
 	<petclinic:layout pageName="error">
 		<div style="position:relative">
-		<div class="gandalf">
-			<div class="fireball"></div>
-			<div class="skirt"></div>
-			<div class="sleeves"></div>
-			<div class="shoulders">
-				<div class="hand left"></div>
-				<div class="hand right"></div>
+			<div class="gandalf">
+				<div class="fireball"></div>
+				<div class="skirt"></div>
+				<div class="sleeves"></div>
+				<div class="shoulders">
+					<div class="hand left"></div>
+					<div class="hand right"></div>
+				</div>
+				<div class="head">
+					<div class="hair"></div>
+					<div class="beard"></div>
+				</div>
 			</div>
-			<div class="head">
-				<div class="hair"></div>
-				<div class="beard"></div>
+			<div class="message">
+				<h1>403 - You Shall Not Pass</h1>
+				<p>
+					Uh oh, Gandalf is blocking the way!<br />Maybe you have a typo in the
+					url? Or you meant to go to a different location? Like...Hobbiton?
+				</p>
 			</div>
-		</div>
-		<div class="message">
-			<h1>403 - You Shall Not Pass</h1>
-			<p>
-				Uh oh, Gandalf is blocking the way!<br />Maybe you have a typo in the
-				url? Or you meant to go to a different location? Like...Hobbiton?
-			</p>
-		</div>
-		
-		<div class="center" style="vertical-align: bottom;">
-			<a href="/"><button class="btn btn-default" style="font-size: xxx-large;">Home</button></a>
-		</div>
+			
+			<div class="center" style="vertical-align: bottom;">
+				<a href="/"><button class="btn btn-default" style="font-size: xxx-large;">Home</button></a>
+			</div>
 		</div>
 		
 	</petclinic:layout>

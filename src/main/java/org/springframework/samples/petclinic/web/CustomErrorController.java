@@ -37,29 +37,6 @@ public class CustomErrorController implements ErrorController {
 	
 	private AuthoritiesService authoritiesService;
 
-//	@RequestMapping("/error")
-////	@ResponseBody
-//	public ResponseEntity<Map<String, Object>> error(HttpServletRequest request) {
-//		ServletWebRequest servletWebRequest = new ServletWebRequest(request);
-//		HttpStatus status = getStatus(request);
-//		if (status == HttpStatus.NO_CONTENT) {
-//			return new ResponseEntity<>(status);
-//		}
-//		Map<String, Object> body = this.errorAttributes.getErrorAttributes(servletWebRequest, true);
-//		return new ResponseEntity<>(body, status);
-////		final StringBuilder errorDetails = new StringBuilder();
-////		errorAttributes.forEach((attribute, value) -> {
-////			errorDetails.append("<tr><td>")
-////			.append(attribute)
-////			.append("</td><td><pre>")
-////			.append(value)
-////			.append("</pre></td></tr>");
-////		});
-////
-////		return String.format("<html><head><style>td{vertical-align:top;border:solid 1px #666;}</style>"
-////				+ "</head><body><h2>Error Page</h2><table>%s</table></body></html>", errorDetails.toString());
-//	}
-	
 	public static HttpStatus getStatus(HttpServletRequest request) {
 		Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
 		if (statusCode == null) {
@@ -73,7 +50,7 @@ public class CustomErrorController implements ErrorController {
 		}
 	}
 	
-//	   @ExceptionHandler(Exception.class)
+//	@ExceptionHandler(Exception.class)
 	@RequestMapping
 	public String defaultErrorHandler(HttpServletRequest request,  Exception ex)  {
 
