@@ -39,12 +39,15 @@ public class GranPremio extends BaseEntity {
     @Size(min = 3, max = 50)
 	private String circuit;
 	
+	@Column(name = "imagen")
+	private String imagen;
+	
 	@Column(name = "racecode")
 	@NotEmpty
     @Size(min = 3, max = 3)
 	private String raceCode;
 	
-	@Column(name = "has_been_run")
+	@Column(name = "has_been_run") 
 	private Boolean hasBeenRun;
 	
 	@Column(name = "calendar")
@@ -63,6 +66,16 @@ public class GranPremio extends BaseEntity {
 	private Record recordMoto3;
 	
 	
+    
+    
+	public String getImagen() {
+		return imagen;
+	}
+
+	public void setImagen(String imagen) {
+		this.imagen = imagen;
+	}
+
 	public Boolean getCalendar() {
 		return calendar;
 	}

@@ -47,13 +47,14 @@
 }
 
 .button {
-	background-color: #4CAF50;
-	border: none;
+	background-color: #a43939;
+	border: 1px solid #a43939;
 	color: white;
 	padding: 10px 25px;
 	text-align: center;
 	text-decoration: none;
 	font-size: 18px;
+	
 }
 
 ::-webkit-scrollbar {
