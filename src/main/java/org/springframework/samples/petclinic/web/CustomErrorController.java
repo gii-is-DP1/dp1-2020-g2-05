@@ -35,8 +35,7 @@ public class CustomErrorController implements ErrorController {
 	@Autowired
 	private ErrorAttributes errorAttributes;
 	
-	@Autowired
-	AuthoritiesService authoritiesService;
+	private AuthoritiesService authoritiesService;
 
 //	@RequestMapping("/error")
 ////	@ResponseBody

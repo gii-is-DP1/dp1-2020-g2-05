@@ -24,7 +24,6 @@ public class PetclinicApplication {
 	private PoblarBaseDeDatosService PBDService;
 
 
-	@Autowired
 	private TransactionService transactionService;
 
 	public static void main(String[] args) {
