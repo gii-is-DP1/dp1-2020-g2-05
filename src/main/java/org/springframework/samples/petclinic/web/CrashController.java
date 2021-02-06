@@ -17,6 +17,9 @@ package org.springframework.samples.petclinic.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.http.HttpStatus;
 
 /**
  * Controller used to showcase what happens when an exception is thrown
@@ -26,18 +29,50 @@ import org.springframework.web.bind.annotation.GetMapping;
  * Also see how the bean of type 'SimpleMappingExceptionResolver' has been declared inside
  * /WEB-INF/mvc-core-config.xml
  */
+
 @Controller
+@RequestMapping("/oups")
 public class CrashController {
 
-	@GetMapping(value = "/oups/runtime")
+	@RequestMapping(value = "/runtime")
 	public String triggerException() {
 		throw new RuntimeException("Expected: controller used to showcase what happens when an exception is thrown");
 	}
 	
-	@GetMapping("/oups/arithmetic")
+	@RequestMapping("/arithmetic")
 	public Integer triggerArithmeticException() {
 		return 5/0;
 //	    throw new ArithmeticException("test exception");
 	}
+	
+	@RequestMapping("/400")
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String badRequest() {
+        return "errors/error400";
+    }
+	
+	@RequestMapping("/401")
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public String unauthorized() {
+        return "errors/error401";
+    }
+	
+	@RequestMapping("/403")
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public String forbidden() {
+        return "errors/error403";
+    }
+	
+	@RequestMapping("/404")
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String notFound() {
+        return "errors/error404";
+    }
+
+	@RequestMapping("/500")
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public String internalServerError() {
+        return "errors/error500";
+    }
 
 }

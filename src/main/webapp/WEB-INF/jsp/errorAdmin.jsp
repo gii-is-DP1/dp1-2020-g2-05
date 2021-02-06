@@ -31,7 +31,7 @@ table td {
 			</tr>
 			<tr>
 				<td>Message</td>
-				<td>${message}</td>
+				<td>${error_message}</td>
 			</tr>
 			<tr>
 				<td>Exception</td>
