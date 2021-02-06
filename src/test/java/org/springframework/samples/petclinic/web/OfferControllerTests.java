@@ -2,6 +2,7 @@ package org.springframework.samples.petclinic.web;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -35,6 +36,7 @@ import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.TransactionService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.service.exceptions.NotAllowedNumberOfRecruitsException;
 import org.springframework.samples.petclinic.util.Status;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -138,6 +140,13 @@ class OfferControllerTests {
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 		Date date = new Date();
 		league.setLeagueDate(formatter.format(date));
+		
+		league.setId(2);
+		league.setLeagueCode("ADTQCGGOND");
+		league.setName("exception");
+		SimpleDateFormat formatter2 = new SimpleDateFormat("dd/MM/yyyy");
+		Date date2 = new Date();
+		league.setLeagueDate(formatter2.format(date2));
 
 		user1.setUsername("migue");
 		user1.setPassword("asd");
@@ -216,6 +225,7 @@ class OfferControllerTests {
 	void testGetOffers() throws Exception {
 		given(userService.getUserSession()).willReturn(user1);
 		given(offerService.findOffersByLeague(TEST_LEAGUE_ID)).willReturn(offersList);
+		given(teamService.findTeamByUsernameAndLeagueId("migue", TEST_LEAGUE_ID)).willReturn(Optional.of(team1));
 
 		mockMvc.perform(get("/leagues/{leagueId}/market", TEST_LEAGUE_ID)).andExpect(status().isOk())
 				.andExpect(view().name("offers/offersList"))
@@ -231,6 +241,17 @@ class OfferControllerTests {
 						Matchers.hasItem(Matchers.<Offer>hasProperty("status", is(offer2.getStatus())))))
 				.andExpect(model().attribute("offers",
 						Matchers.hasItem(Matchers.<Offer>hasProperty("recruit", is(offer2.getRecruit())))));
+	}
+	
+	@WithMockUser(value = "spring")
+	@Test
+	void testNoTeamInThisLeagueException() throws Exception {
+		given(userService.getUserSession()).willReturn(user1);
+		given(offerService.findOffersByLeague(TEST_LEAGUE_ID)).willReturn(offersList);
+		given(teamService.findTeamByUsernameAndLeagueId("migue", 2)).willReturn(Optional.empty());
+
+		mockMvc.perform(get("/leagues/{leagueId}/market", 2)).andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/leagues"));
 	}
 
 	@WithMockUser(value = "spring")
@@ -283,10 +304,11 @@ class OfferControllerTests {
 				.willReturn(Optional.of(team1));
 		given(offerService.findOfferById(TEST_OFFER2_ID)).willReturn(Optional.of(offer2));
 		given(recruitService.getRecruitsByTeam(team1.getId())).willReturn(recruitTeam1List);
+		doThrow(new NotAllowedNumberOfRecruitsException()).when(recruitService).purchaseRecruit(recruit5, team1);
 
 		mockMvc.perform(get("/leagues/{leagueId}/market/{offerId}", TEST_LEAGUE_ID, TEST_OFFER2_ID))
 				.andExpect(status().is2xxSuccessful()).andExpect(view().name("offers/offersList"))
-				.andExpect(model().attribute("message", is("You already own 4 riders on this league")));
+				.andExpect(model().attribute("message", is("You already own 4 riders in this league!")));
 	}
 
 	@WithMockUser(value = "spring")
