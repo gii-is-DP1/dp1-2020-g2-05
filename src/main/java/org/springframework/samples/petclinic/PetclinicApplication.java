@@ -18,7 +18,6 @@ public class PetclinicApplication {
 	@Autowired
 	private TablaConsultasService TCservice;
 
-	@Autowired
 	private TransactionService transactionService;
 
 	public static void main(String[] args) {
