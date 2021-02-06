@@ -1,35 +1,49 @@
 package org.springframework.samples.petclinic.service;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.sql.Date;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.Month;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.samples.petclinic.model.BDCarrera;
 import org.springframework.samples.petclinic.model.Category;
+import org.springframework.samples.petclinic.model.GranPremio;
 import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.TablaConsultas;
 import org.springframework.samples.petclinic.model.Team;
+import org.springframework.samples.petclinic.repository.GranPremioRepository;
 import org.springframework.samples.petclinic.repository.LeagueRepository;
 import org.springframework.samples.petclinic.repository.TablaConsultasRepository;
 import org.springframework.samples.petclinic.repository.TeamRepository;
+import org.springframework.samples.petclinic.web.PoblarBaseDeDatosController;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.ModelMap;
 
 import lombok.extern.slf4j.Slf4j;
+import motogpAPI.RaceCode;
+import motogpAPI.Session;
 
 @Slf4j
 @Service
 public class TablaConsultasService {
 	
-	@Autowired
-	private ResultService resultService;
 
+	private ResultService resultService;
 	private TablaConsultasRepository TCRepository;
 	private UserService userService;
 	private TeamRepository teamRepository;
 	private LeagueRepository leagueRepository;
+
 	
 	@Autowired
 	public TablaConsultasService(TablaConsultasRepository TCRepository, UserService userService,
@@ -38,6 +52,8 @@ public class TablaConsultasService {
 		this.userService = userService;
 		this.teamRepository = teamRepository;
 		this.leagueRepository = leagueRepository;
+
+	
 	}
 
 	public Optional<TablaConsultas> getTabla() throws DataAccessException {
@@ -149,6 +165,11 @@ public class TablaConsultasService {
 			log.info("No hay grandes premios por validar.");
 		}
 	}
+
+	
+	
+	
+	
 	
 }
 

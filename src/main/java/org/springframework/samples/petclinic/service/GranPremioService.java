@@ -3,6 +3,7 @@ package org.springframework.samples.petclinic.service;
 import java.io.IOException;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
@@ -24,12 +25,11 @@ public class GranPremioService {
 
 	
 	private GranPremioRepository GPRepository;
-	private TablaConsultasService TCService;
 	
 	@Autowired
-	public GranPremioService(GranPremioRepository GPRepository,TablaConsultasService TCService) {
+	public GranPremioService(GranPremioRepository GPRepository) {
 		this.GPRepository = GPRepository;		
-		this.TCService=TCService;
+	
 	}
 	
 	
@@ -188,4 +188,8 @@ public class GranPremioService {
 		return GPRepository.findUltimoGpSinValidar().get(0);
 	}
 	
+	public GranPremio ultimoGpCorrido(LocalDate fecha) {
+		
+		return GPRepository.ultimoGpCompletado(fecha);
+	}
 }
