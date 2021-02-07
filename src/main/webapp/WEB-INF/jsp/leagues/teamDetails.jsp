@@ -75,15 +75,11 @@
 				<td><c:out value="${recruit.pilot.category}" /></td>
 				<td><c:out value="${recruit.pilot.points}" /></td>
 				<td><c:out value="${recruit.pilot.nationality}" /></td>
-				<td><spring:url value="/leagues/{leagueId}/market/{offerId}"
-						var="offerUrl">
-						<spring:param name="offerId"
-							value="${recruit.offer.stream()
-							.filter(o->o.getStatus() == Status.Outstanding).findFirst().get().id}" />
+				<td><spring:url value="/leagues/{leagueId}/market/{offerId}" var="offerUrl">
+<%-- 						<spring:param name="offerId" value="${recruit.offer --%>
+<%-- 							.stream().filter(o->o.getStatus() == Status.Outstanding).findFirst().get().id}" /> --%>
 						<spring:param name="leagueId" value="${leagueId}" />
-					</spring:url> <a href="${fn:escapeXml(offerUrl)}"> <span aria-hidden="true">Cancelar
-							venta</span>
-				</a></td>
+					</spring:url> <a href="${fn:escapeXml(offerUrl)}"> <span aria-hidden="true">Cancelar venta</span></a></td>
 			</tr>
 		</c:forEach>
 	</table>
@@ -110,25 +106,22 @@
 			</tr>
 		</thead>
 		<tbody>
-			<%-- 			<c:forEach items="${misAlineaciones}" var="lineup"> --%>
-			<!-- 				<tr> -->
-			<%-- 					<td>${lineup.category}</td> --%>
-			<%-- 					<td><c:out value="${lineup.gp.date0}, ${lineup.gp.site}, ${lineup.gp.circuit}" /></td> --%>
-			<%-- 					<td><c:out value="${lineup.recruit1.pilot.name} ${lineup.recruit1.pilot.lastName}" /></td> --%>
-			<%-- 					<td><c:out value="${lineup.recruit2.pilot.name} ${lineup.recruit2.pilot.lastName}" /></td> --%>
-			<%-- 					<c:if test="${!lineup.gp.hasBeenRun}"> --%>
-			<!-- 						<td> -->
-			<%-- 							<spring:url value="editLineup/{lineupId}" var="lineupUrl"> --%>
-			<%-- 								<spring:param name="lineupId" value="${lineup.id}" /> --%>
-			<%-- 							</spring:url> <a href="${fn:escapeXml(lineupUrl)}">Edit</a> --%>
-
-			<%-- 							<spring:url value="delete/{lineupId}" var="lineupUrl"> --%>
-			<%-- 								<spring:param name="lineupId" value="${lineup.id}" /> --%>
-			<%-- 							</spring:url> <a href="${fn:escapeXml(lineupUrl)}">Delete</a> --%>
-			<!-- 						</td> -->
-			<%-- 					</c:if> --%>
-			<!-- 				</tr> -->
-			<%-- 			</c:forEach> --%>
+			<c:forEach items="${misAlineaciones}" var="lineup">
+				<tr>
+					<td>${lineup.category}</td>
+					<td><c:out value="${lineup.gp.date0}, ${lineup.gp.site}, ${lineup.gp.circuit}" /></td>
+					<td><c:out value="${lineup.recruit1.pilot.name} ${lineup.recruit1.pilot.lastName}" /></td>
+					<td><c:out value="${lineup.recruit2.pilot.name} ${lineup.recruit2.pilot.lastName}" /></td>
+					<c:if test="${!lineup.gp.hasBeenRun}">
+						<td><spring:url value="editLineup/{lineupId}" var="lineupUrl">
+								<spring:param name="lineupId" value="${lineup.id}" />
+							</spring:url> <a href="${fn:escapeXml(lineupUrl)}">Edit</a> <spring:url
+								value="delete/{lineupId}" var="lineupUrl">
+								<spring:param name="lineupId" value="${lineup.id}" />
+							</spring:url> <a href="${fn:escapeXml(lineupUrl)}">Delete</a></td>
+					</c:if>
+				</tr>
+			</c:forEach>
 		</tbody>
 	</table>
 </petclinic:layout>
