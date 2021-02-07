@@ -44,6 +44,7 @@ import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.TransactionService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedRiderOnLineupException;
 import org.springframework.samples.petclinic.util.Status;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -118,7 +119,7 @@ public class TeamControllerTest {
     private List<Recruit> listaRecruitsEnVenta = new ArrayList<Recruit>();
 	
 	@BeforeEach
-	void setup() throws DataAccessException, duplicatedLeagueNameException {
+	void setup() throws DataAccessException, duplicatedLeagueNameException, DuplicatedRiderOnLineupException {
 		
 	
 		user1.setUsername("miguel");

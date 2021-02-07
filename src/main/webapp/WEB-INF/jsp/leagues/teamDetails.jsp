@@ -76,8 +76,7 @@
 				<td><c:out value="${recruit.pilot.points}" /></td>
 				<td><c:out value="${recruit.pilot.nationality}" /></td>
 				<td><spring:url value="/leagues/{leagueId}/market/{offerId}" var="offerUrl">
-<%-- 						<spring:param name="offerId" value="${recruit.offer --%>
-<%-- 							.stream().filter(o->o.getStatus() == Status.Outstanding).findFirst().get().id}" />  --%>
+						<spring:param name="offerId" value="${recruit.offer.stream().filter(o->o.getStatus() == Status.Outstanding).findFirst().get().id}" /> 
 						<spring:param name="leagueId" value="${leagueId}" />
 					</spring:url> <a href="${fn:escapeXml(offerUrl)}"> <span aria-hidden="true">Cancelar venta</span></a></td>
 			</tr>
