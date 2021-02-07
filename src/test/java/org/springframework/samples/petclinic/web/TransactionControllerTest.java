@@ -27,6 +27,7 @@ import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.Transaction;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
+import org.springframework.samples.petclinic.service.PoblarBaseDeDatosService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.TransactionService;
@@ -54,6 +55,11 @@ class TransactionControllerTest {
 	
 	@MockBean
 	private AuthoritiesService authoritiesService;
+	
+	@MockBean
+	private PoblarBaseDeDatosService PBDService;
+	
+	
 
 	@Autowired
 	private MockMvc mockMvc;

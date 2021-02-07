@@ -23,10 +23,14 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Message;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.MessageService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.service.exceptions.EmptyAsuntoCuerpoMessageException;
+import org.springframework.samples.petclinic.service.exceptions.EmptyUserMessageException;
+import org.springframework.samples.petclinic.service.exceptions.ReceiveEqualSendMessageException;
 import org.springframework.samples.petclinic.web.validator.MessageValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -136,7 +140,7 @@ public class MessageController {
 	
 	
 	@PostMapping(value = "/messages/new")
-	public String processCreationForm(@Valid Message message, BindingResult result,ModelMap model) {
+	public String processCreationForm(@Valid Message message, BindingResult result,ModelMap model) throws DataAccessException, ReceiveEqualSendMessageException, EmptyAsuntoCuerpoMessageException, EmptyUserMessageException {
 	
 		
 		if (result.hasErrors()) {
@@ -166,7 +170,7 @@ public class MessageController {
 	}
 	
 	@PostMapping(value = "/messages/new/{username}")
-	public String processCreationFormPredefinido(@Valid Message message, BindingResult result,ModelMap model) {
+	public String processCreationFormPredefinido(@Valid Message message, BindingResult result,ModelMap model) throws DataAccessException, ReceiveEqualSendMessageException, EmptyAsuntoCuerpoMessageException, EmptyUserMessageException {
 		
 		if (result.hasErrors()) {
 			List<ObjectError> errores = result.getAllErrors();
