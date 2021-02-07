@@ -43,8 +43,8 @@ import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.GranPremioService;
-import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.LineupService;
+import org.springframework.samples.petclinic.service.PoblarBaseDeDatosService;
 import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.TeamService;
@@ -84,10 +84,13 @@ public class LineupControllerTest {
 	RecruitService recruitService;
 	
 	@MockBean
-	private TransactionService transactionService;
+	TransactionService transactionService;
 	
 	@MockBean
-	private AuthoritiesService authoritiesService;
+	AuthoritiesService authoritiesService;
+	
+	@MockBean
+	PoblarBaseDeDatosService poblarBaseDeDatosService;
 	
 	@Autowired
 	private MockMvc mockMvc;
@@ -98,6 +101,7 @@ public class LineupControllerTest {
 	private	Lineup lineup = new Lineup();
 	TablaConsultas TCConsulta = new TablaConsultas();
 	private GranPremio gp = new GranPremio();
+	Team team = new Team();
 	private List<Recruit> listaPilotos = new ArrayList<Recruit>();
 	Recruit recruit1 = new Recruit();
 	Recruit recruit2 = new Recruit();
@@ -130,7 +134,6 @@ public class LineupControllerTest {
 	    liga.setLeagueDate(formatter.format(date));
 		
 		Set<Team> teams = new HashSet<Team>();
-		Team team = new Team();
 		team.setId(TEST_TEAM_ID);
 		team.setLeague(liga);
 		team.setMoney(2);
@@ -232,6 +235,8 @@ public class LineupControllerTest {
 	@WithMockUser(value = "spring")
 	@Test
 	void testCreateLineupGet() throws Exception {
+		given(userService.getUserSession()).willReturn(user);
+		given(teamService.findTeamById(Mockito.anyInt())).willReturn(Optional.of(team));
 		given(this.TCService.getTabla()).willReturn(Optional.of(TCConsulta));
 		given(granPremioService.findGPById(Mockito.anyInt())).willReturn(Optional.of(gp));
 
@@ -247,8 +252,11 @@ public class LineupControllerTest {
 	@WithMockUser(value = "spring")
 	@Test
 	void testCantCreateLineupGet() throws Exception {
+		given(userService.getUserSession()).willReturn(user);
+		given(teamService.findTeamById(Mockito.anyInt())).willReturn(Optional.of(team));
 		given(this.TCService.getTabla()).willReturn(Optional.of(TCConsulta));
 		given(this.lineupService.findByTeam(Mockito.anyInt())).willReturn(lista);
+
 		
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/newLineup", TEST_LEAGUE_ID, TEST_TEAM_ID))
 		.andExpect(status().is3xxRedirection())
@@ -259,6 +267,8 @@ public class LineupControllerTest {
 	@WithMockUser(value = "spring")
 	@Test
 	void testCantCreateLineupPost() throws Exception {
+		given(userService.getUserSession()).willReturn(user);
+		given(teamService.findTeamById(Mockito.anyInt())).willReturn(Optional.of(team));
 		given(this.TCService.getTabla()).willReturn(Optional.of(TCConsulta));
 		given(this.lineupService.findByTeam(1)).willReturn(lista);
 		
@@ -280,6 +290,8 @@ public class LineupControllerTest {
 	@WithMockUser(value = "spring")
 	@Test
 	void testCrearAlineacionPost() throws Exception {
+		given(userService.getUserSession()).willReturn(user);
+		given(teamService.findTeamById(Mockito.anyInt())).willReturn(Optional.of(team));
 		given(this.TCService.getTabla()).willReturn(Optional.of(TCConsulta));
 
 		mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/newLineup", TEST_LEAGUE_ID, TEST_TEAM_ID)
@@ -320,7 +332,8 @@ public class LineupControllerTest {
 	@WithMockUser(value = "spring")
 	@Test
 	void testCrearAlineacionPostHasErrors() throws Exception {
-		
+		given(userService.getUserSession()).willReturn(user);
+		given(teamService.findTeamById(Mockito.anyInt())).willReturn(Optional.of(team));
 		given(this.TCService.getTabla()).willReturn(Optional.of(TCConsulta));
 		given(granPremioService.findGPById(Mockito.anyInt())).willReturn(Optional.of(gp));
 
@@ -345,6 +358,8 @@ public class LineupControllerTest {
 	@WithMockUser(value = "spring")
 	@Test
 	void testEditLineupGet() throws Exception {
+		given(userService.getUserSession()).willReturn(user);
+		given(teamService.findTeamById(Mockito.anyInt())).willReturn(Optional.of(team));
 		given(this.lineupService.findLineup(lineup.getId())).willReturn(Optional.of(lineup));
 
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/editLineup/{lineupId}", TEST_LEAGUE_ID, TEST_TEAM_ID, TEST_LINEUP_ID)
@@ -381,6 +396,8 @@ public class LineupControllerTest {
 		gpAlreadyRun.setHasBeenRun(true);
 		lineupAlreadyRun.setGp(gp);
 		
+		given(userService.getUserSession()).willReturn(user);
+		given(teamService.findTeamById(Mockito.anyInt())).willReturn(Optional.of(team));
 		given(lineupService.findLineup(TEST_LINEUP_ID)).willReturn(Optional.of(lineupAlreadyRun));
 
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/editLineup/{lineupId}", TEST_LEAGUE_ID, TEST_TEAM_ID, TEST_LINEUP_ID)
@@ -401,6 +418,8 @@ public class LineupControllerTest {
 	@WithMockUser(value = "spring")
 	@Test
 	void testEditLineupGetError() throws Exception {
+		given(userService.getUserSession()).willReturn(user);
+		given(teamService.findTeamById(Mockito.anyInt())).willReturn(Optional.of(team));
 		given(this.lineupService.findLineup(lineup.getId())).willReturn(Optional.empty());
 
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/editLineup/{lineupId}", TEST_LEAGUE_ID, TEST_TEAM_ID, TEST_LINEUP_ID)
@@ -414,6 +433,8 @@ public class LineupControllerTest {
 	@WithMockUser(value = "spring")
 	@Test
 	void testEditLineupPost() throws Exception {
+		given(userService.getUserSession()).willReturn(user);
+		given(teamService.findTeamById(Mockito.anyInt())).willReturn(Optional.of(team));
 		given(this.lineupService.findLineup(lineup.getId())).willReturn(Optional.of(lineup));
 		given(this.granPremioService.findGPById(Mockito.anyInt())).willReturn(Optional.of(gp));
 	   
@@ -446,6 +467,8 @@ public class LineupControllerTest {
 		gpAlreadyRun.setHasBeenRun(true);
 		lineupAlreadyRun.setGp(gp);
 		
+		given(userService.getUserSession()).willReturn(user);
+		given(teamService.findTeamById(Mockito.anyInt())).willReturn(Optional.of(team));
 		given(lineupService.findLineup(TEST_LINEUP_ID)).willReturn(Optional.of(lineupAlreadyRun));
 		given(granPremioService.findGPById(Mockito.anyInt())).willReturn(Optional.of(gp));
 	   
@@ -466,6 +489,8 @@ public class LineupControllerTest {
 	@WithMockUser(value = "spring")
 	@Test
 	void testEditLineupPostHasErrors() throws Exception {
+		given(userService.getUserSession()).willReturn(user);
+		given(teamService.findTeamById(Mockito.anyInt())).willReturn(Optional.of(team));
 		given(this.lineupService.findLineup(Mockito.any())).willReturn(Optional.of(lineup));
 	   
 		mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/editLineup/{lineupId}", TEST_LEAGUE_ID, TEST_TEAM_ID, TEST_LINEUP_ID)
@@ -483,6 +508,8 @@ public class LineupControllerTest {
 	@WithMockUser(value = "spring")
 	@Test
 	void testDeleteLineup() throws Exception {
+		given(userService.getUserSession()).willReturn(user);
+		given(teamService.findTeamById(Mockito.anyInt())).willReturn(Optional.of(team));
 		given(lineupService.findLineup(TEST_LINEUP_ID)).willReturn(Optional.of(lineup));
 		
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/delete/{lineupId}", TEST_LEAGUE_ID, TEST_TEAM_ID, TEST_LINEUP_ID)
@@ -495,6 +522,8 @@ public class LineupControllerTest {
 	@WithMockUser(value = "spring")
 	@Test
 	void testDeleteNonExistingLineup() throws Exception {
+		given(userService.getUserSession()).willReturn(user);
+		given(teamService.findTeamById(Mockito.anyInt())).willReturn(Optional.of(team));
 		given(lineupService.findLineup(TEST_LINEUP_ID)).willReturn(Optional.empty());
 		
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/delete/{lineupId}", TEST_LEAGUE_ID, TEST_TEAM_ID, TEST_LINEUP_ID)
@@ -513,6 +542,8 @@ public class LineupControllerTest {
 		gpAlreadyRun.setHasBeenRun(true);
 		lineupAlreadyRun.setGp(gp);
 		
+		given(userService.getUserSession()).willReturn(user);
+		given(teamService.findTeamById(Mockito.anyInt())).willReturn(Optional.of(team));
 		given(lineupService.findLineup(TEST_LINEUP_ID)).willReturn(Optional.of(lineupAlreadyRun));
 		
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/delete/{lineupId}", TEST_LEAGUE_ID, TEST_TEAM_ID, TEST_LINEUP_ID)
