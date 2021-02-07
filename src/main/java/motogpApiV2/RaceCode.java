@@ -1,4 +1,4 @@
-package motogpAPI;
+package motogpApiV2;
 
 public enum RaceCode {
 	AME, // Austin

@@ -6,8 +6,8 @@ import java.util.GregorianCalendar;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-import motogpAPI.RaceCode;
-import motogpAPI.Session;
+import motogpApiV2.RaceCode;
+import motogpApiV2.Session;
 
 
 

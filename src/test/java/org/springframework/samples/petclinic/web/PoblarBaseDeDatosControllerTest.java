@@ -1,70 +1,126 @@
 package org.springframework.samples.petclinic.web;
 
-public class PoblarBaseDeDatosControllerTest {
-	
-//	private static final Integer TEST_ACTUAL_YEAR = 2021;
-//
-//
-//	 @MockBean
-//	 @Autowired
-//	 private UserService userService;
-//	 
-//	 @MockBean
-//	 @Autowired
-//	 private LeagueService leagueService;
-//	 
-//	 @MockBean
-//	 @Autowired
-//	 private GranPremioService GPService;
-//	 
-//
-//	 @Autowired
-//	private MockMvc mockMvc;
-//	 
-//	 GranPremio gp = new GranPremio();
-//	 List<GranPremio>  gps = new ArrayList<GranPremio>();
-//	 Set<Lineup> lineups = new HashSet<>();
-//	 Record record = new Record();
-//	 Lineup lineup = new Lineup();
-//	 Set<Result> results = new HashSet<>();
-//	 Result result = new Result();
-//
-//		@BeforeEach
-//		void setup() throws DataAccessException, duplicatedLeagueNameException, ParseException {
-//			
-//			gp.setCalendar(true);
-//			gp.setCircuit("LUCENA");
-//			gp.setDate0(LocalDate.of(2021, 06, 12));
-//			gp.setHasBeenRun(false);
-////			gp.setId(1234567);
-//			gp.setRaceCode("QAT");
-//			gp.setSite("España");
-////			gp.setRecord(record);
-////			lineups.add(lineup);
-////			gp.setLineups(lineups);
-////			results.add(result);
-////			gp.setResults(results);
-//			System.out.println("awidnawd");
-//			System.out.println(gp);
-////			this.GPService.saveGP(gp);
-//			this.GPService.findAllActualYear(2021);
-//			gps.add(gp);
-//			System.out.println(gps);
-//			
-//			given(GPService.findAllActualYear(2021)).willReturn(gps);
-//		}
-//	  @WithMockUser(value = "spring")
-//	  @Test
-//		void testPoblar() throws Exception {
-//		  
-//		 
-//		  given(this.GPService.findAllActualYear(TEST_ACTUAL_YEAR)).willReturn(gps);
-//			mockMvc.perform(get("/controlPanel"))
-//					.andExpect(status().isOk())
-//					.andExpect(model().attributeExists("listaGP"))
-//					.andExpect(model().attribute("listaGP", Matchers.hasItem(Matchers.<GranPremio> hasProperty("site", is(gp.getSite())))))
-//					.andExpect(view().name("/panelControl/panelDeControl"));
-//		}
-}
-		
+import java.io.FileNotFoundException;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
+import org.springframework.samples.petclinic.model.BDCarrera;
+import org.springframework.samples.petclinic.model.Category;
+import org.springframework.samples.petclinic.model.GranPremio;
+import org.springframework.samples.petclinic.model.Lineup;
+import org.springframework.samples.petclinic.service.AuthoritiesService;
+import org.springframework.samples.petclinic.service.GranPremioService;
+import org.springframework.samples.petclinic.service.PoblarBaseDeDatosService;
+import org.springframework.samples.petclinic.service.TablaConsultasService;
+import org.springframework.samples.petclinic.service.TeamService;
+import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
+
+import motogpApiV2.RaceCode;
+import motogpApiV2.Session;
+
+import org.springframework.samples.petclinic.model.Record;
+import org.springframework.samples.petclinic.model.Result;
+import org.springframework.samples.petclinic.model.TablaConsultas;
+
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.mockito.ArgumentMatchers.anyObject;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.doThrow;
+//import static org.mockito.Mockito.any;
+
+@WebMvcTest(controllers = PoblarBaseDeDatosController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
+public class PoblarBaseDeDatosControllerTest {
+
+	@MockBean
+	TeamService teamService;
+
+	@MockBean
+	GranPremioService GPService;
+
+	@MockBean
+	TablaConsultasService TCService;
+
+	@MockBean
+	PoblarBaseDeDatosService poblarBaseDeDatosService;
+
+	@MockBean
+	private AuthoritiesService authoritiesService;
+
+	@Autowired
+	private MockMvc mockMvc;
+
+	GranPremio gp = new GranPremio();
+	List<GranPremio> gps = new ArrayList<GranPremio>();
+	Set<Lineup> lineups = new HashSet<>();
+	Record record = new Record();
+	Lineup lineup = new Lineup();
+	Set<Result> results = new HashSet<>();
+	Result result = new Result();
+	TablaConsultas TCConsulta = new TablaConsultas();
+	BDCarrera form = new BDCarrera();
+
+	@BeforeEach
+	void setup() throws DataAccessException, duplicatedLeagueNameException, ParseException {
+		TCConsulta.setCurrentCategory(Category.MOTO3);
+		TCConsulta.setRacesCompleted(0);
+
+		form.setCategory(Category.MOTO3);
+		form.setRacecode(RaceCode.valueOf("QAT"));
+		form.setSession(Session.RACE);
+		form.setYear(2021);
+		
+		gp.setCalendar(true);
+		gp.setCircuit("LUCENA");
+		gp.setDate0(LocalDate.of(2021, 06, 12));
+		gp.setHasBeenRun(false);
+		gp.setRaceCode("QAT");
+		gp.setSite("Espana");
+		gps.add(gp);
+		given( this.TCService.getTabla()).willReturn(Optional.of(this.TCConsulta));
+
+	}
+
+	@WithMockUser(value = "spring")
+	@Test
+	void testPoblarSinProblemas() throws Exception {
+
+		mockMvc.perform(get("/BD/carrerasBD/{date}/{code}", gp.getDate0().toString(), 				gp.getRaceCode().toString())
+				.with(csrf()).param("date", gp.getDate0().toString()).param("code", 				gp.getRaceCode().toString()))
+
+				.andExpect(status().is3xxRedirection())
+				
+				.andExpect(view().name("redirect:/controlPanel/0/QAT"));
+	}
+
+	
+	
+}
