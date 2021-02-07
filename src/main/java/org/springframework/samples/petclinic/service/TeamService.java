@@ -35,7 +35,7 @@ public class TeamService {
 	private TablaConsultasService TCService;
 	private OfferService offerService;
 	private TransactionService transactionService;
-	
+
 	@Autowired
 	public TeamService(TeamRepository teamRepository, UserService userService,
 			PilotService pilotService, RecruitService recruitService, TablaConsultasService TCService, OfferService offerService, TransactionService transactionService) {
@@ -44,8 +44,8 @@ public class TeamService {
 		this.pilotService = pilotService;
 		this.recruitService = recruitService;
 		this.TCService = TCService;
-		this.offerService=offerService;
-		this.transactionService =  transactionService;
+		this.offerService = offerService;
+		this.transactionService = transactionService;
 	}
 
 	public List<Integer> findTeamsIntByUsername(String username) throws DataAccessException {
@@ -153,7 +153,7 @@ public class TeamService {
 
 	@Transactional
 	public void sellAllTeamRecruits(Team t) {
-		List<Recruit> recruits = recruitService.getRecruitsByTeam(t.getId());
+		List<Recruit> recruits = t.getRecruits();
 		Integer valor = 0;
 		for (int i = 0; i < recruits.size(); i++) {
 			Recruit r = recruits.get(i);
@@ -168,7 +168,8 @@ public class TeamService {
 			recruitService.deleteRecruit(r);
 		}
 		saveTeamMoney(t, valor);
-		transactionService.saveTransaction(valor, "Has pasado a " + TCService.getTabla().get().getCurrentCategory() + " y has obtenido el valor de tus pilotos de la categoría anterior", t);
+		transactionService.saveTransaction(valor, "Has pasado a " + TCService.getTabla().get().getCurrentCategory()
+				+ " y has obtenido el valor de tus pilotos de la categoría anterior", t);
 	}
 
 	@Transactional
@@ -176,7 +177,7 @@ public class TeamService {
 		Team syst = findTeamByUsernameAndLeagueId("admin1", t.getLeague().getId()).get();
 		SecureRandom rand = new SecureRandom();
 		for (int i = 0; i < 2; i++) {
-			List<Recruit> recruitSys = recruitService.getRecruitsByTeam(syst.getId());
+			List<Recruit> recruitSys = syst.getRecruits();
 			Integer recruitId = rand.nextInt(recruitSys.size());
 			Recruit newR = recruitSys.get(recruitId);
 			Offer offer = newR.getOffer().stream().filter(o -> o.getStatus().equals(Status.Outstanding)).findAny()

@@ -2,7 +2,6 @@ package org.springframework.samples.petclinic.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,8 +57,8 @@ public class LineupServiceTests {
 		Lineup newLineup = new Lineup();
 		newLineup.setCategory(Category.MOTOGP);
 		newLineup.setGp(this.lineupService.findLineup(GP_ID).get().getGp());
-		newLineup.setRecruit1(this.recruitService.findRecruit(1).get());
-		newLineup.setRecruit2(this.recruitService.findRecruit(2).get());
+		newLineup.setRecruit1(this.recruitService.findRecruitById(1).get());
+		newLineup.setRecruit2(this.recruitService.findRecruitById(2).get());
 		newLineup.setTeam(this.teamService.findTeamById(1).get());
 		
 		List<Lineup> lineupsByGpId = this.lineupService.findByGpId(GP_ID);
@@ -78,8 +77,8 @@ public class LineupServiceTests {
 		Lineup newLineup = new Lineup();
 		newLineup.setCategory(Category.MOTOGP);
 		newLineup.setGp(this.lineupService.findLineup(1).get().getGp());
-		newLineup.setRecruit1(this.recruitService.findRecruit(RECRUIT_ID).get());
-		newLineup.setRecruit2(this.recruitService.findRecruit(RECRUIT_ID+1).get());
+		newLineup.setRecruit1(this.recruitService.findRecruitById(RECRUIT_ID).get());
+		newLineup.setRecruit2(this.recruitService.findRecruitById(RECRUIT_ID+1).get());
 		newLineup.setTeam(this.teamService.findTeamById(1).get());
 		
 		List<Lineup> lineupsByGpId = this.lineupService.findByRecruit(RECRUIT_ID);
@@ -99,8 +98,8 @@ public class LineupServiceTests {
 		Lineup newLineup = new Lineup();
 		newLineup.setCategory(Category.MOTOGP);
 		newLineup.setGp(this.lineupService.findLineup(1).get().getGp());
-		newLineup.setRecruit1(this.recruitService.findRecruit(1).get());
-		newLineup.setRecruit2(this.recruitService.findRecruit(2).get());
+		newLineup.setRecruit1(this.recruitService.findRecruitById(1).get());
+		newLineup.setRecruit2(this.recruitService.findRecruitById(2).get());
 		newLineup.setTeam(this.teamService.findTeamById(1).get());
 
 		this.lineupService.saveLineup(newLineup);
@@ -117,8 +116,8 @@ public class LineupServiceTests {
 		Lineup newLineup = new Lineup();
 		newLineup.setCategory(Category.MOTOGP);
 		newLineup.setGp(this.lineupService.findLineup(1).get().getGp());
-		newLineup.setRecruit1(this.recruitService.findRecruit(1).get());
-		newLineup.setRecruit2(this.recruitService.findRecruit(2).get());
+		newLineup.setRecruit1(this.recruitService.findRecruitById(1).get());
+		newLineup.setRecruit2(this.recruitService.findRecruitById(2).get());
 		newLineup.setTeam(this.teamService.findTeamById(1).get());
 
 		this.lineupService.saveLineup(newLineup);

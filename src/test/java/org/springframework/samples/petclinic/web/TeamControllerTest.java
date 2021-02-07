@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,8 +46,8 @@ import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.TransactionService;
 import org.springframework.samples.petclinic.service.UserService;
-import org.springframework.samples.petclinic.service.exceptions.duplicatedLeagueNameException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedRiderOnLineupException;
+import org.springframework.samples.petclinic.service.exceptions.duplicatedLeagueNameException;
 import org.springframework.samples.petclinic.util.Status;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -55,41 +57,47 @@ import org.springframework.web.context.WebApplicationContext;
 		excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class),
 		excludeAutoConfiguration= SecurityConfiguration.class)
 public class TeamControllerTest {
-	
+
 	private static final Integer TEST_LEAGUE_ID = 1;
 	private static final Integer TEST_LEAGUE1_ID = 3;
 	private static final Integer TEST_TEAM_ID = 1;
-	
+
 	private static final Integer TEST_TEAM1_ID = 2;
-	
+
 	private static final Integer TEST_RECRUIT_ID = 1;
 
 	@Autowired
 	private WebApplicationContext context;
-
+	
 	@MockBean
+	@Autowired
 	private UserService userService;
 
 	private GenericIdToEntityConverter converter;
 
 	@MockBean
+	@Autowired
 	private RecruitService recruitService;
 
 	@MockBean
+	@Autowired
 	private LineupService lineupService;
 
 	@MockBean
-	private OfferService offerService;
+	@Autowired
+	private TransactionService transactionService;
 
 	@MockBean
-	private TransactionService transactionService;
+	@Autowired
+	private OfferService offerService;
 
 	@MockBean
 	private TablaConsultasService tablaConsultas;
 
 	@MockBean
+	@Autowired
 	private TeamService teamService;
-	 
+
 	@MockBean
 	private LeagueService leagueService;
 	
@@ -145,8 +153,7 @@ public class TeamControllerTest {
 		autho.setId(1);
 		auth.add(autho);
 		user.setAuthorities(auth);
-		
-		
+
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 		Date date = new Date();
 		liga1.setId(TEST_LEAGUE_ID);
@@ -163,15 +170,14 @@ public class TeamControllerTest {
 		team.setMoney(200);
 		team.setPoints(100);
 		team.setUser(user);
-		
+
 		team1.setId(TEST_TEAM1_ID);
 		team1.setName("Miguel");
 		team1.setLeague(liga);
 		team1.setMoney(200);
 		team1.setPoints(100);
 		team1.setUser(user1);
-		
-		
+
 		Set<Team> teams = new HashSet<>();
 		Set<Team> teams2 = new HashSet<>();
 		Set<Team> teams1 = new HashSet<>();
@@ -183,7 +189,7 @@ public class TeamControllerTest {
 		liga.setTeam(teams);
 		liga1.setTeam(teams2);
 		user.setTeam(teams);
-		
+
 		this.leagueService.saveLeague(liga);
 		this.leagueService.saveLeague(liga1);
 		this.teamService.saveTeam(team);
@@ -193,7 +199,9 @@ public class TeamControllerTest {
 		
 		recruit1.setTeam(team);
 		listRecruits.add(recruit1);
-		
+		recruit1.setTeam(team);
+		listRecruits.add(recruit1);
+
 		recruit2.setTeam(team1);
 		recruit3.setTeam(team1);
 		recruit4.setTeam(team1);
@@ -202,7 +210,7 @@ public class TeamControllerTest {
 		listRecruits2.add(recruit4);
 		user.setUsername("antcammar4");
 		user.setEnabled(true);
-	
+
 		Pilot pilot1 = new Pilot();
 		pilot1.setId(1);
 		pilot1.setCategory(Category.MOTO3);
@@ -210,7 +218,7 @@ public class TeamControllerTest {
 		pilot1.setName("Ale");
 		pilot1.setLastName("Ruiz");
 		pilot1.setNationality("Spain");
-		
+
 		Pilot pilot2 = new Pilot();
 		pilot2.setId(2);
 		pilot2.setCategory(Category.MOTO3);
@@ -218,16 +226,16 @@ public class TeamControllerTest {
 		pilot2.setName("Juan");
 		pilot2.setLastName("Perez");
 		pilot2.setNationality("Spain");
-		
+
 		recruit1.setId(1);
 		recruit1.setPilot(pilot1);
 		recruit1.setTeam(team);
-		
+
 		Recruit recruit2 = new Recruit();
 		recruit2.setId(2);
 		recruit2.setPilot(pilot2);
 		recruit2.setTeam(team);
-		
+
 		GranPremio gp = new GranPremio();
 		gp.setId(1);
 		gp.setCalendar(true);
@@ -236,17 +244,16 @@ public class TeamControllerTest {
 		gp.setHasBeenRun(false);
 		gp.setRaceCode("QAT");
 		gp.setSite("Grand Prix Of Qatar");
-		
-	    lineup.setId(1);
-	    lineup.setCategory(Category.MOTO3);
-	    lineup.setGp(gp);
-	    lineup.setRecruit1(recruit1);
-	    lineup.setRecruit2(recruit2);
-	    lineup.setTeam(team);
-	    
-		
-		this.lineupService.saveLineup(lineup); 
-		
+
+		lineup.setId(1);
+		lineup.setCategory(Category.MOTO3);
+		lineup.setGp(gp);
+		lineup.setRecruit1(recruit1);
+		lineup.setRecruit2(recruit2);
+		lineup.setTeam(team);
+
+		this.lineupService.saveLineup(lineup);
+
 		listaLineups.add(lineup);
 		listaRecruitsEnVenta.add(recruit1);
 		listaRecruitsNoEnVenta.add(recruit2);
@@ -257,7 +264,7 @@ public class TeamControllerTest {
 		given(this.teamService.findTeamById(TEST_TEAM1_ID)).willReturn(Optional.of(team1));
 //		given(this.teamService.findTeamByUsernameAndLeagueId(user.getUsername(), TEST_LEAGUE_ID)).willReturn(Optional.of(team));
 	}
-	
+
 //	@GetMapping(path = "/leagues/{leagueId}/teams/{teamId}/details")
 //	public String mostrarDetallesEscuderia(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamID,
 //			ModelMap model) {
@@ -272,7 +279,7 @@ public class TeamControllerTest {
 //			model.addAttribute("misAlineaciones", lineupService.findByTeam(teamID));
 //		return "/leagues/teamDetails";
 //	}
-	
+
 	@WithMockUser(value = "spring")
 	@Test
 	void testShowExistentTeamDetails() throws Exception {
@@ -284,18 +291,15 @@ public class TeamControllerTest {
 		given(recruitService.getRecruitsNotOnSaleByTeam(TEST_TEAM_ID)).willReturn(listaRecruitsNoEnVenta);
 		given(lineupService.findByTeam(TEST_TEAM_ID)).willReturn(listaLineups);
 
-		
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/details", TEST_LEAGUE_ID, TEST_TEAM_ID))
-		.andExpect(model().attribute("team", is(team)))
-		.andExpect(model().attribute("misFichajes", is(listaRecruitsNoEnVenta)))
-		.andExpect(model().attribute("fichajesEnVenta", is(listaRecruitsEnVenta)))
-		.andExpect(model().attribute("misAlineaciones", is(listaLineups)))
-		.andExpect(status().isOk())
-		.andExpect(model().attribute("message", is("Team found!")))
-		.andExpect(view().name("/leagues/teamDetails"));
+				.andExpect(model().attribute("team", is(team)))
+				.andExpect(model().attribute("misFichajes", is(listaRecruitsNoEnVenta)))
+				.andExpect(model().attribute("fichajesEnVenta", is(listaRecruitsEnVenta)))
+				.andExpect(model().attribute("misAlineaciones", is(listaLineups))).andExpect(status().isOk())
+				.andExpect(model().attribute("message", is("Team found!")))
+				.andExpect(view().name("/leagues/teamDetails"));
 	}
 
-	
 	@WithMockUser(value = "spring")
 	@Test
 	void testShowNonExistentTeamDetails() throws Exception {
@@ -303,11 +307,9 @@ public class TeamControllerTest {
 		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.empty());
 		given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
 
-
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/details", TEST_LEAGUE_ID, TEST_TEAM_ID))
-		.andExpect(status().isOk())
-		.andExpect(model().attribute("message", is("Team not found!")))
-		.andExpect(view().name("/leagues/teamDetails"));
+				.andExpect(status().isOk()).andExpect(model().attribute("message", is("Team not found!")))
+				.andExpect(view().name("/leagues/teamDetails"));
 	}
 
 	@WithMockUser(value = "spring")
@@ -342,19 +344,13 @@ public class TeamControllerTest {
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessCreationFormHasErrors() throws Exception {
-		given(this.userService.getUserSession())
-		.willReturn(user);
+		given(this.userService.getUserSession()).willReturn(user);
 
-		mockMvc.perform(post("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID)
-				.with(csrf())
-				.param("name", "Betty")
-				.param("points", "aaa")
-				.param("money", "!!"))
-		.andExpect(model().attributeHasErrors("team"))
-		.andExpect(model().attributeHasFieldErrors("team", "points"))
-		.andExpect(model().attributeHasFieldErrors("team", "money"))
-		.andExpect(status().isOk())
-		.andExpect(view().name("/leagues/TeamsEdit"));
+		mockMvc.perform(post("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID).with(csrf()).param("name", "Betty")
+				.param("points", "aaa").param("money", "!!")).andExpect(model().attributeHasErrors("team"))
+				.andExpect(model().attributeHasFieldErrors("team", "points"))
+				.andExpect(model().attributeHasFieldErrors("team", "money")).andExpect(status().isOk())
+				.andExpect(view().name("/leagues/TeamsEdit"));
 	}
 
 	@WithMockUser(value = "spring")
@@ -363,39 +359,26 @@ public class TeamControllerTest {
 		given(this.userService.getUserSession()).willReturn(user);
 		given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
 
-
-		mockMvc.perform(post("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID)
-				.with(csrf())
-				.param("name", team.getName())
-				.param("points", team.getPoints().toString())
-				.param("money", team.getMoney().toString())
-				.param("user.username" , user.getUsername())
-				.param("league.id", TEST_LEAGUE_ID.toString()))
-		.andExpect(status().is3xxRedirection())
-		.andExpect(view().name("redirect:/leagues/{leagueId}/teams"	));
+		mockMvc.perform(post("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID).with(csrf()).param("name", team.getName())
+				.param("points", team.getPoints().toString()).param("money", team.getMoney().toString())
+				.param("user.username", user.getUsername()).param("league.id", TEST_LEAGUE_ID.toString()))
+				.andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/leagues/{leagueId}/teams"));
 
 	}
-
-
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testExistsATeamWithThisName() throws Exception {
 		given(this.userService.getUserSession()).willReturn(user1);
 		given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
-		given(this.teamService.findTeamByUsernameAndLeagueId(user.getUsername(), TEST_LEAGUE_ID)).willReturn(Optional.of(team));
+		given(this.teamService.findTeamByUsernameAndLeagueId(user.getUsername(), TEST_LEAGUE_ID))
+				.willReturn(Optional.of(team));
 		given(this.teamService.findTeamByLeagueId(TEST_LEAGUE_ID)).willReturn(list1);
 
-
-		mockMvc.perform(post("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID)
-				.with(csrf())
-				.param("name", team.getName())
-				.param("points", team1.getPoints().toString())
-				.param("money", team1.getMoney().toString())
-				.param("user.username" , user.getUsername())
-				.param("league.id", TEST_LEAGUE_ID.toString()))
-		.andExpect(status().is3xxRedirection())
-		.andExpect(view().name("redirect:/leagues/{leagueId}/teams"	));
+		mockMvc.perform(post("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID).with(csrf()).param("name", team.getName())
+				.param("points", team1.getPoints().toString()).param("money", team1.getMoney().toString())
+				.param("user.username", user.getUsername()).param("league.id", TEST_LEAGUE_ID.toString()))
+				.andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/leagues/{leagueId}/teams"));
 
 	}
 
@@ -404,19 +387,14 @@ public class TeamControllerTest {
 	void testUserHaveATeamInThisLeague() throws Exception {
 		given(this.userService.getUserSession()).willReturn(user);
 		given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
-		given(this.teamService.findTeamByUsernameAndLeagueId(user.getUsername(), TEST_LEAGUE_ID)).willReturn(Optional.of(team));
+		given(this.teamService.findTeamByUsernameAndLeagueId(user.getUsername(), TEST_LEAGUE_ID))
+				.willReturn(Optional.of(team));
 		given(this.teamService.findTeamByLeagueId(TEST_LEAGUE_ID)).willReturn(list1);
 
-
-		mockMvc.perform(post("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID)
-				.with(csrf())
-				.param("name", team.getName())
-				.param("points", team.getPoints().toString())
-				.param("money", team.getMoney().toString())
-				.param("user.username" , user.getUsername())
-				.param("league.id", TEST_LEAGUE_ID.toString()))
-		.andExpect(status().is3xxRedirection())
-		.andExpect(view().name("redirect:/leagues/{leagueId}/teams"	));
+		mockMvc.perform(post("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID).with(csrf()).param("name", team.getName())
+				.param("points", team.getPoints().toString()).param("money", team.getMoney().toString())
+				.param("user.username", user.getUsername()).param("league.id", TEST_LEAGUE_ID.toString()))
+				.andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/leagues/{leagueId}/teams"));
 
 	}
 
@@ -429,9 +407,8 @@ public class TeamControllerTest {
 		given(this.userService.findUser(user.getUsername())).willReturn(Optional.of(user));
 
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/edit", TEST_LEAGUE_ID, TEST_TEAM_ID))
-		.andExpect(status().isOk()).andExpect(model().attributeExists("team"))
-		.andExpect(model().attributeExists("Editar"))
-		.andExpect(view().name("leagues/TeamsEdit"));
+				.andExpect(status().isOk()).andExpect(model().attributeExists("team"))
+				.andExpect(model().attributeExists("Editar")).andExpect(view().name("leagues/TeamsEdit"));
 	}
 
 	@WithMockUser(value = "spring")
@@ -461,11 +438,9 @@ public class TeamControllerTest {
 		given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
 		given(this.leagueService.findAuthoritiesByUsername(user1.getUsername())).willReturn("user");
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/edit", TEST_LEAGUE_ID, TEST_TEAM_ID))
-		.andExpect(status().isOk()).andExpect(model().attributeExists("team"))
-		.andExpect(model().attributeExists("Editar"))
-		.andExpect(view().name("leagues/TeamsEdit"));
+				.andExpect(status().isOk()).andExpect(model().attributeExists("team"))
+				.andExpect(model().attributeExists("Editar")).andExpect(view().name("leagues/TeamsEdit"));
 	}
-
 
 	@WithMockUser(value = "spring")
 	@Test
@@ -473,54 +448,48 @@ public class TeamControllerTest {
 		given(this.userService.findUser(user.getUsername())).willReturn(Optional.of(user));
 		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
 		given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
-		given(this.leagueService.findAuthoritiesByUsername(user.getUsername())).willReturn(user.getAuthorities().toString());
-		
-		mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/edit", TEST_LEAGUE_ID, TEST_TEAM_ID)
-				.with(csrf())
-				.param("name", "125")
-				.param("points", "aaa")
-				.param("money", "aaa")
-				.param("user.username" , user.getUsername())
-				.param("league.id", TEST_LEAGUE_ID.toString()))
-	.andExpect(model().attributeHasErrors("team"))
-	.andExpect(model().attributeHasFieldErrors("team", "points"))
-	.andExpect(model().attributeHasFieldErrors("team", "name"))
-	.andExpect(model().attributeHasFieldErrors("team", "money"))
-	.andExpect(status().isOk())
-	.andExpect(view().name("/leagues/TeamsEdit"));
-	}
+		given(this.leagueService.findAuthoritiesByUsername(user.getUsername()))
+				.willReturn(user.getAuthorities().toString());
 
+		mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/edit", TEST_LEAGUE_ID, TEST_TEAM_ID).with(csrf())
+				.param("name", "125").param("points", "aaa").param("money", "aaa")
+				.param("user.username", user.getUsername()).param("league.id", TEST_LEAGUE_ID.toString()))
+				.andExpect(model().attributeHasErrors("team"))
+				.andExpect(model().attributeHasFieldErrors("team", "points"))
+				.andExpect(model().attributeHasFieldErrors("team", "name"))
+				.andExpect(model().attributeHasFieldErrors("team", "money")).andExpect(status().isOk())
+				.andExpect(view().name("/leagues/TeamsEdit"));
+	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testSetPriceSuccess() throws Exception {
 		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
-		given(this.recruitService.findRecruit(TEST_RECRUIT_ID)).willReturn(Optional.of(recruit1));
-		
-		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/details/{recruitId}", TEST_LEAGUE_ID, TEST_TEAM_ID, TEST_RECRUIT_ID)).andExpect(status().isOk())
-			.andExpect(model().attributeExists("offer"))
-			.andExpect(model().attributeExists("recruitToSale"))
-			.andExpect(view().name("/leagues/teamDetails"));
+		given(this.recruitService.findRecruitById(TEST_RECRUIT_ID)).willReturn(Optional.of(recruit1));
+
+		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/details/{recruitId}", TEST_LEAGUE_ID, TEST_TEAM_ID,
+				TEST_RECRUIT_ID)).andExpect(status().isOk()).andExpect(model().attributeExists("offer"))
+				.andExpect(model().attributeExists("recruitToSale")).andExpect(view().name("/leagues/teamDetails"));
 	}
-	
+
 	@WithMockUser(value = "spring")
 	@Test
 	void testSetPriceError() throws Exception {
 		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
-		given(this.recruitService.findRecruit(10)).willReturn(Optional.empty());
-		
-		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/details/{recruitId}", TEST_LEAGUE_ID, TEST_TEAM_ID, 10)).andExpect(status().isOk())
-			.andExpect(model().attributeExists("message"))
-			.andExpect(model().attribute("message",is("Recruit not found!")))
-			.andExpect(view().name("/leagues/teamDetails"));
+		given(this.recruitService.findRecruitById(10)).willReturn(Optional.empty());
+
+		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/details/{recruitId}", TEST_LEAGUE_ID, TEST_TEAM_ID, 10))
+				.andExpect(status().isOk()).andExpect(model().attributeExists("message"))
+				.andExpect(model().attribute("message", is("Recruit not found!")))
+				.andExpect(view().name("/leagues/teamDetails"));
 	}
-	
+
 	@WithMockUser(value = "spring")
 	@Test
 	void testPutOnSaleSuccess() throws Exception {
-		given(this.recruitService.getRecruitsByTeam(TEST_TEAM1_ID)).willReturn(listRecruits2);
+		given(team1.getRecruits()).willReturn(listRecruits2);
 		given(this.teamService.findTeamById(TEST_TEAM1_ID)).willReturn(Optional.of(team1));
-		given(this.recruitService.findRecruit(2)).willReturn(Optional.of(recruit2));
+		given(this.recruitService.findRecruitById(2)).willReturn(Optional.of(recruit2));
 
 		mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/details/{recruitId}", TEST_LEAGUE_ID, TEST_TEAM1_ID, 2)
 				.with(csrf())
@@ -529,13 +498,13 @@ public class TeamControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(view().name("/leagues/teamDetails"));
 	}
-	
+
 	@WithMockUser(value = "spring")
 	@Test
 	void testPutOnSaleWith2RecruitsOrLess() throws Exception {
-		given(this.recruitService.getRecruitsByTeam(TEST_TEAM_ID)).willReturn(listRecruits);
+		given(this.recruitService.getRecruitsNotOnSaleByTeam(TEST_TEAM_ID)).willThrow(Exception.class);
 		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
-		given(this.recruitService.findRecruit(TEST_RECRUIT_ID)).willReturn(Optional.of(recruit1));
+		given(this.recruitService.findRecruitById(TEST_RECRUIT_ID)).willReturn(Optional.of(recruit1));
 
 		mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/details/{recruitId}", TEST_LEAGUE_ID, TEST_TEAM_ID, TEST_RECRUIT_ID)
 				.with(csrf())
@@ -545,24 +514,17 @@ public class TeamControllerTest {
 			.andExpect(model().attribute("message",is("You must own at least 2 riders not on sale to perform this action")))
 			.andExpect(view().name("/leagues/teamDetails"));
 	}
-	
+
 	@WithMockUser(value = "spring")
 	@Test
 	void testPutOnSaleError() throws Exception {
 		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
-		given(this.recruitService.findRecruit(TEST_RECRUIT_ID)).willReturn(Optional.of(recruit1));
+		given(this.recruitService.findRecruitById(TEST_RECRUIT_ID)).willReturn(Optional.of(recruit1));
 
-		mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/details/{recruitId}", TEST_LEAGUE_ID, TEST_TEAM_ID, TEST_RECRUIT_ID)
-				.with(csrf())
-				.param("status", "")
-				.param("price", ""))
-			.andExpect(status().isOk())
-			.andExpect(model().attributeExists("message"))
-			.andExpect(view().name("/leagues/teamDetails"));
-	} 
-
-	
-
+		mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/details/{recruitId}", TEST_LEAGUE_ID, TEST_TEAM_ID,
+				TEST_RECRUIT_ID).with(csrf()).param("status", "").param("price", "")).andExpect(status().isOk())
+				.andExpect(model().attributeExists("message")).andExpect(view().name("/leagues/teamDetails"));
+	}
 
 	@WithMockUser(value = "spring")
 	@Test
@@ -570,18 +532,16 @@ public class TeamControllerTest {
 		given(this.teamService.findTeamByLeagueId(TEST_LEAGUE_ID)).willReturn(list1);
 
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/delete", TEST_LEAGUE_ID, TEST_TEAM_ID))
-		.andExpect(status().is3xxRedirection())
-		.andExpect(view().name("redirect:/leagues/{leagueId}/teams"));
+				.andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/leagues/{leagueId}/teams"));
 	}
-	
+
 	@WithMockUser(value = "spring")
 	@Test
 	void testDeleteTeam1() throws Exception {
 		given(this.teamService.findTeamByLeagueId(TEST_LEAGUE_ID)).willReturn(list2);
 
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/delete", TEST_LEAGUE_ID, TEST_TEAM_ID))
-		.andExpect(status().is3xxRedirection())
-		.andExpect(view().name("redirect:/leagues/{leagueId}/teams"));
+				.andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/leagues/{leagueId}/teams"));
 	}
 
 	@WithMockUser(value = "spring")
@@ -591,23 +551,19 @@ public class TeamControllerTest {
 		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.empty());
 		given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
 
-
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/delete", TEST_LEAGUE_ID, TEST_TEAM_ID))
-		.andExpect(status().is3xxRedirection())
-		.andExpect(view().name("redirect:/leagues"));
+				.andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/leagues"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testMyTeams() throws Exception {
-		given(this.userService.getUserSession())
-		.willReturn(user);
+		given(this.userService.getUserSession()).willReturn(user);
 		given(this.teamService.findTeamByUsername(user.getUsername())).willReturn(list1);
-		mockMvc.perform(get("/myTeams"))
-		.andExpect(status().isOk())
-		.andExpect(model().attributeExists("teams"))
-		.andExpect(model().attribute("teams", Matchers.hasItem(Matchers.<Team> hasProperty("name", is(team.getName())))))
-		.andExpect(view().name("Perfil/Perfil"));
+		mockMvc.perform(get("/myTeams")).andExpect(status().isOk()).andExpect(model().attributeExists("teams"))
+				.andExpect(model().attribute("teams",
+						Matchers.hasItem(Matchers.<Team>hasProperty("name", is(team.getName())))))
+				.andExpect(view().name("Perfil/Perfil"));
 	}
 
 	@WithMockUser(value = "spring")
@@ -617,13 +573,9 @@ public class TeamControllerTest {
 		given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
 		given(this.teamService.findTeamByLeagueId(TEST_LEAGUE_ID)).willReturn(list1);
 
-
-		mockMvc.perform(get("/leagues/{leagueId}/teams", TEST_LEAGUE_ID))
-		.andExpect(status().isOk())
-		.andExpect(model().attributeExists("teams"))
-		.andExpect(model().attributeExists("league"))
-		.andExpect(model().attributeExists("user"))
-		.andExpect(view().name("/leagues/TeamList"));
+		mockMvc.perform(get("/leagues/{leagueId}/teams", TEST_LEAGUE_ID)).andExpect(status().isOk())
+				.andExpect(model().attributeExists("teams")).andExpect(model().attributeExists("league"))
+				.andExpect(model().attributeExists("user")).andExpect(view().name("/leagues/TeamList"));
 
 	}
 
@@ -633,10 +585,8 @@ public class TeamControllerTest {
 		given(this.userService.getUserSession()).willReturn(user);
 		given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.empty());
 
-
-		mockMvc.perform(get("/leagues/{leagueId}/teams", TEST_LEAGUE_ID))
-		.andExpect(status().is3xxRedirection())
-		.andExpect(view().name("redirect:/leagues"));
+		mockMvc.perform(get("/leagues/{leagueId}/teams", TEST_LEAGUE_ID)).andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/leagues"));
 
 	}
 }

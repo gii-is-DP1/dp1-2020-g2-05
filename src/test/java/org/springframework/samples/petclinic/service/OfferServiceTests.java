@@ -70,7 +70,7 @@ class OfferServiceTests {
 	@Test
 	@Transactional
 	void shouldPutOnSale() {
-		Recruit recruit = recruitService.findRecruit(2).get();
+		Recruit recruit = recruitService.findRecruitById(2).get();
 		
 		offerService.putOnSale(recruit, 300);
 		
