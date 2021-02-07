@@ -110,6 +110,7 @@ public class RecruitService {
 			throw new NotAllowedNumberOfRecruitsException();
 		} else {
 			recruit.setTeam(purchaserTeam);
+			recruit.setForSale(false);
 			this.recruitRepository.save(recruit);
 		}
 		return true;
