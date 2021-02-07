@@ -15,7 +15,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Team;
-import org.springframework.samples.petclinic.web.duplicatedLeagueNameException;
+import org.springframework.samples.petclinic.service.exceptions.duplicatedLeagueNameException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
@@ -153,26 +153,26 @@ public class LeagueServiceTest {
 		assertThat(found.size()).isEqualTo(found1);
 	 }
 	 
-	 @Test
-		void shouldBeALeagueWithNoTeams() {
-		 	Set<Team> equipos = new HashSet<Team>();
-		 	List<League> leagues = new ArrayList<League>();
-		 	Set<Team> conj = new HashSet<Team>();
-		 	League newLeague = new League();
-			newLeague.setLeagueCode("UDTQCSSOND");
-			newLeague.setLeagueDate("22/12/2222");
-			newLeague.setName("liga2222");
-			newLeague.setTeam(equipos);
-			Team team = new Team();
-			team.setName("Sistema");
-			team.setLeague(newLeague);
-			conj.add(team);
-			newLeague.setTeam(conj);
-			leagues.add(newLeague);
-			
-			Boolean noTeams = this.leagueService.comprobarSiHayLigasVacias(leagues);
-			assertThat(noTeams).isTrue();
-		}
+//	 @Test
+//		void shouldBeALeagueWithNoTeams() {
+//		 	Set<Team> equipos = new HashSet<Team>();
+//		 	List<League> leagues = new ArrayList<League>();
+//		 	Set<Team> conj = new HashSet<Team>();
+//		 	League newLeague = new League();
+//			newLeague.setLeagueCode("UDTQCSSOND");
+//			newLeague.setLeagueDate("22/12/2222");
+//			newLeague.setName("liga2222");
+//			newLeague.setTeam(equipos);
+//			Team team = new Team();
+//			team.setName("Sistema");
+//			team.setLeague(newLeague);
+//			conj.add(team);
+//			newLeague.setTeam(conj);
+//			leagues.add(newLeague);
+//			
+//			Boolean noTeams = this.leagueService.comprobarSiHayLigasVacias(leagues);
+//			assertThat(noTeams).isTrue();
+//		}
 
 	 @Test
 		void shouldBeALeagueWithTeams() {
@@ -218,6 +218,24 @@ public class LeagueServiceTest {
 			 Boolean noTeams = this.leagueService.comprobarSiHayLigasVacias(leagues);
 			assertThat(noTeams).isTrue();
 		}
+	 
+	 @Test
+		void shouldBeALeagueWithNoTeams() {
+		 	Set<Team> equipos = new HashSet<Team>();
+		 	List<League> leagues = new ArrayList<League>();
+		 	League newLeague = new League();
+			newLeague.setLeagueCode("UDTQCSSOND");
+			newLeague.setLeagueDate("22/12/2222");
+			newLeague.setName("liga2222");
+			newLeague.setTeam(equipos);
+			leagues.add(newLeague);
+			Set<Team> eq = newLeague.getTeam();
+			 Boolean noTeams = this.leagueService.comprobarSiHayLigasVacias(leagues);
+			assertThat(noTeams).isTrue();
+		}
+	 
+	 
+	 
 	 @Test
 		void shouldFindAuthorities() {
 		 	String aut = this.leagueService.findAuthoritiesByUsername("antcammar4");

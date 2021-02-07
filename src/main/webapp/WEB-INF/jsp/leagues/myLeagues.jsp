@@ -10,13 +10,12 @@
  	
 </head>
 <petclinic:layout pageName="leagues">
-	<c:if test="${noTengoLigas==true}"><h2>Your dont participate in any leagues, try to join or create one!</h2></c:if>
-	<c:if test="${noTengoLigas==false}"><h2>Your Leagues</h2></c:if>
-	<c:if test="${yaTienesEquipo}"><h2>You already have a team in this League :( ! </h2></c:if> 
-	<c:if test="${yaTieneMaxLigas}"><h2>This league already have 5 teams !/h2></c:if>
-	<c:if test="${yaTieneMaxLigas}"><h2>You have no Leagues!</h2></c:if>
-	<c:if test="${yaTieneMaxTeams}"><h2>This league already have 5 teams! :(</h2></c:if>
-	<c:if test="${noTengoLigas==false}">
+<%-- 	<c:if test="${noTengoLigas==true}"><h2>Your dont participate in any leagues, try to join or create one!</h2></c:if> --%>
+<%-- 	<c:if test="${noTengoLigas==false}"><h2>Your Leagues</h2></c:if> --%>
+<%-- 	<c:if test="${yaTienesEquipo}"><h2>You already have a team in this League :( ! </h2></c:if>  --%>
+<%-- 	<c:if test="${yaTieneMaxLigas}"><h2>This league already have 5 teams !/h2></c:if> --%>
+<%-- 	<c:if test="${yaTieneMaxLigas}"><h2>You have no Leagues!</h2></c:if> --%>
+<%-- 	<c:if test="${yaTieneMaxTeams}"><h2>This league already have 5 teams! :(</h2></c:if> --%>
 			<div id="divLeagueTable">
 		
 			<c:forEach items="${misLigas}" var="league">
@@ -87,7 +86,6 @@
 				</tr>
 			</c:forEach>
 			</div>
-	</c:if>
 	</br>
 	<spring:url value="/leagues/new" var="messageUrl">
 	</spring:url> <a href="${fn:escapeXml(messageUrl)}">New league</a>

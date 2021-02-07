@@ -26,7 +26,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Team;
-import org.springframework.samples.petclinic.web.duplicatedLeagueNameException;
+import org.springframework.samples.petclinic.service.exceptions.duplicatedLeagueNameException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
