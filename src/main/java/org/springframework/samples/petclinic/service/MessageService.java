@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Message;
@@ -91,7 +93,7 @@ public class MessageService {
 	}
 
 	@Transactional
-	public void saveMessage(Message message) throws DataAccessException {
+	public void saveMessage(@Valid Message message) throws DataAccessException {
 		
 		messageRepository.save(message);		
 	}		
