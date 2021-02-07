@@ -40,8 +40,8 @@ import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.stereotype.Service;
 
-import motogpAPI.RaceCode;
-import motogpAPI.Session;
+import motogpApiV2.RaceCode;
+import motogpApiV2.Session;
 import motogpApiV2.results.Competitor;
 import motogpApiV2.results.Result;
 import motogpApiV2.testing.testing;

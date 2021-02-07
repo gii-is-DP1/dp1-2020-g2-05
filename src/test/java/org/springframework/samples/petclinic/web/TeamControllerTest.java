@@ -525,8 +525,8 @@ public class TeamControllerTest {
 				.with(csrf())
 				.param("status", Status.Outstanding.toString())
 				.param("price", "1500"))
-			.andExpect(status().is3xxRedirection())
-			.andExpect(view().name("redirect:/leagues/{leagueId}/market"));
+			.andExpect(status().isOk())
+			.andExpect(view().name("/leagues/teamDetails"));
 	}
 	
 	@WithMockUser(value = "spring")

@@ -13,7 +13,14 @@
 </head>
 <petclinic:layout pageName="leagues">
 
-	<h2>Leagues</h2>
+	<div style="display:inline-block;margin-left:3.5%;"><h2>Leagues</h2></div>
+	
+<!-- 				<div style="display:inline-block;"> -->
+<%-- 				<h4>Current Category : <c:out value="${categoriaActual}" /></h4> --%>
+<!-- 				</div> -->
+				<div style="display:inline-block;margin-left:25%;">
+				<h4>Races to <c:out value="${siguienteCategoria}"/> : <c:out value="${carrerasParaSiguienteCategoria-carrerasCompletadas}" /></h4>
+  				</div>
 	<c:if test="${temporalMessage!=null}"><h3><c:out value="${temporalMessage}"></c:out></h3></c:if>
 	<div id="divLeagueTable">
 <!-- 	<table> -->
@@ -44,11 +51,6 @@
 
 	</div>
 	
-				<div>
-				<h4>Current Category : <c:out value="${categoriaActual}" /></h4>
-				<h4>Races Completed : <c:out value="${carrerasCompletadas}" /></h4>
-				
-  </div>
     
 
 </petclinic:layout>

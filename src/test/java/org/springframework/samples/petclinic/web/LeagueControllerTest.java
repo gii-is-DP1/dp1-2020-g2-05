@@ -152,12 +152,9 @@ public class LeagueControllerTest {
     		given(leagueService.findAll()).willReturn(lista);
     		given(this.leagueService.findAuthoritiesByUsername(user.getUsername())).willReturn("admin");
     		given( this.TCService.getTabla()).willReturn(Optional.of(this.TCConsulta));
-//    		given( this.TCService.getTabla().get().getCurrentCategory()).willReturn(Category.MOTO2);
-//    		given( this.TCService.getTabla().get().getRacesCompleted()).willReturn(0);
-    		
-    		mockMvc.perform(get("/leagues")).andExpect(status().isOk())
+
+    		mockMvc.perform(get("/leagues").flashAttr("categoriaActual", Category.MOTO3)).andExpect(status().isOk())
     			.andExpect(view().name("leagues/leagueList"))
-    			.andExpect(model().attribute("categoriaActual", is(Category.MOTO3)))
     			.andExpect(model().attribute("carrerasCompletadas", is(0)))
     			.andExpect(model().attribute("ligas", Matchers.hasItem(Matchers.<League> hasProperty("leagueCode", is(liga.getLeagueCode())))));
     					       		

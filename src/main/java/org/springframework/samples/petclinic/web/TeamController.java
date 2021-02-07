@@ -227,10 +227,10 @@ public class TeamController {
 					return mostrarDetallesEscuderia(leagueId, teamId, modelMap);
 				}
 
-				return "redirect:/leagues/{leagueId}/market";
+				return mostrarDetallesEscuderia(leagueId, teamId, modelMap);
 			} else {
 				modelMap.addAttribute("message", "Recruit not found!");
-				return "redirect:/leagues/" + leagueId + "/teams/" + teamId + "/details";
+				return mostrarDetallesEscuderia(leagueId, teamId, modelMap);
 			}
 		}
 	}
