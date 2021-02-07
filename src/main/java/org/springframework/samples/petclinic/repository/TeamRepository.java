@@ -19,4 +19,10 @@ public interface TeamRepository extends CrudRepository<Team, Integer> {
 	@Query(value = "SELECT t FROM Team t  WHERE t.league.id = :teamLeague")
 	public List<Team> findTeamByLeagueId(@Param("teamLeague") Integer teamLeague);
 	
+	@Query("SELECT COUNT(t) FROM Team t WHERE t.league.id = :id")
+	public Integer findTeamsByLeagueId(@Param("id") Integer id);
+	
+	@Query("SELECT team.league.id FROM Team team WHERE team.user.username LIKE :username")
+	public List<Integer> findTeamsByUsername(@Param("username") String username);
+	
 }

@@ -221,7 +221,7 @@ public class TeamController {
 				try {
 					recruitService.putOnSale(opRecruit.get());
 					offerService.putOnSale(opRecruit.get(), offer.getPrice());
-				} catch (Exception e) {
+				} catch (NotAllowedNumberOfRecruitsException e) {
 					modelMap.addAttribute("message",
 							"You must own at least 2 riders not on sale to perform this action");
 					return mostrarDetallesEscuderia(leagueId, teamId, modelMap);

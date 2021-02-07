@@ -1,6 +1,5 @@
 package org.springframework.samples.petclinic.repository;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Modifying;
@@ -12,12 +11,6 @@ import org.springframework.samples.petclinic.model.User;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface LeagueRepository extends Repository<League, Integer>{
-
-	@Query("SELECT team.league.id FROM Team team WHERE team.user.username LIKE :username")
-	public List<Integer> findTeamsByUsername(@Param("username") String username);
-	
-	@Query("SELECT COUNT(t) FROM Team t WHERE t.league.id = :id")
-	public Integer findTeamsByLeagueId(@Param("id") Integer id);
 	
 	@Query("SELECT user FROM User user WHERE user.username LIKE :username") //METER EN USER REPOSITORY
 	public Optional<User> findUserByUsername(@Param("username") String username);
