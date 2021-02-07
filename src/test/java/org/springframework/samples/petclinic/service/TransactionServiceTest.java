@@ -39,7 +39,7 @@ class TransactionServiceTest {
 
 		Long afterList = StreamSupport.stream(transactionService.findAll().spliterator(), false).count();
 		assertThat(beforeList.equals(afterList - 1)).isTrue();
-		assertThat(team.getTransactions().size() == 1).isTrue();
+		assertThat(this.transactionService.findTransactionsByTeamId(team.getId()).size() == 1).isTrue();
 	}
 
 	@Test

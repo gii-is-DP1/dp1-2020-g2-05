@@ -39,7 +39,7 @@ public class TransactionService {
 	public void saveTransaction(Integer amount, String concept, Team team) throws DataAccessException {
 		Transaction t = createTransaction(amount, concept, team);
 		transactionRepository.save(t);
-		List<Transaction> transacciones = team.getTransactions();
+		List<Transaction> transacciones = this.transactionRepository.findByTeamId(team.getId());
 		if (transacciones.size() == 10) {
 			this.delete(transacciones.get(0));
 		}
@@ -58,9 +58,16 @@ public class TransactionService {
 				+ alineacion.getRider2().getFullName() + " en " + RaceCode, alineacion.getTeam());
 	}
 
+	//Operaciones de Read
+	
 	@Transactional(readOnly = true)
 	public Iterable<Transaction> findAll() {
 		return this.transactionRepository.findAll();
+	}
+	
+	@Transactional(readOnly = true)
+	public List<Transaction> findTransactionsByTeamId(int teamID) {
+		return this.transactionRepository.findByTeamId(teamID);
 	}
 
 	@Transactional

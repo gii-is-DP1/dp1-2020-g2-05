@@ -91,7 +91,6 @@ public class OfferController {
 				log.info("Comprando fichaje con suficiente dinero");
 				try {
 					Recruit recruit = offer.getRecruit();
-					System.out.println(purchaserTeam.getRecruits().size());
 					recruitService.purchaseRecruit(recruit, purchaserTeam);
 					teamService.saveTeamMoney(purchaserTeam, -price);// Restar dinero al comprador
 					teamService.saveTeamMoney(recruit.getTeam(), price);// Dar dinero al vendedor

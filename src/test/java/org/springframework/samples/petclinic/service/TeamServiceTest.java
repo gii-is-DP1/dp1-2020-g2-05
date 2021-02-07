@@ -204,7 +204,7 @@ public class TeamServiceTest {
 
 		teamService.recruitAndOfferAll(team, Category.MOTO2);
 
-		assertThat(team.getRecruits().size()).isGreaterThan(0);
+		assertThat(this.recruitService.getRecruitsByTeam(team.getId()).size()).isGreaterThan(0);
 	}
 	
 	@Test
@@ -215,7 +215,7 @@ public class TeamServiceTest {
 		
 		teamService.sellAllTeamRecruits(team);
 		
-		assertThat(team.getRecruits().size()).isEqualTo(0);
+		assertThat(this.recruitService.getRecruitsByTeam(team.getId()).size()).isEqualTo(0);
 		assertThat(team.getMoney()).isGreaterThanOrEqualTo(money);
 	}
 	
@@ -228,6 +228,7 @@ public class TeamServiceTest {
 		
 		teamService.randomRecruit2Pilots(team);
 		
-		assertThat(team.getRecruits().size()).isEqualTo(2);
+		
+		assertThat(this.recruitService.getRecruitsByTeam(team.getId()).size()).isEqualTo(2);
 	}
 }

@@ -18,7 +18,6 @@ import java.util.Optional;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -225,9 +224,6 @@ class OfferControllerTests {
 		recruitTeam1List.add(recruit3);
 		recruitTeam1List.add(recruit4);
 		recruitTeam1List.add(recruit5);
-		
-		Team team4Recruits = team1;
-		team4Recruits.setRecruits(recruitTeam1List);
 	}
 
 	@WithMockUser(value = "spring")
