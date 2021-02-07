@@ -5,7 +5,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
 <%@ page import="org.springframework.samples.petclinic.model.Status"%>
-
+<%@ taglib prefix="sec"	uri="http://www.springframework.org/security/tags"%>
 <petclinic:layout pageName="teamDetails" userTeam="${team.id}" userTeamName="${team.name}" userLeague="${team.league.id}" userLeagueName="${team.league.name}" userMoney="${team.money}">
 
 	<h2>Team Information</h2>
@@ -36,6 +36,7 @@
 			<th>Points</th>
 			<th>Nationality</th>
 			<th>Actions</th>
+			
 		</tr>
 		<c:forEach items="${misFichajes}" var="recruit">
 			<tr>

@@ -62,7 +62,7 @@ import org.springframework.web.context.WebApplicationContext;
 public class TeamControllerTest {
 
 	private static final Integer TEST_LEAGUE_ID = 1;
-	private static final Integer TEST_LEAGUE1_ID = 3;
+	
 	private static final Integer TEST_TEAM_ID = 1;
 
 	private static final Integer TEST_TEAM1_ID = 2;
@@ -76,7 +76,6 @@ public class TeamControllerTest {
 	@Autowired
 	private UserService userService;
 
-	private GenericIdToEntityConverter converter;
 
 	@MockBean
 	@Autowired
