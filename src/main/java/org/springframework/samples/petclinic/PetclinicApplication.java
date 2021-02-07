@@ -55,12 +55,6 @@ public class PetclinicApplication {
 		
     }
 	
-	@Bean
-	public RestTemplate restTemplate(RestTemplateBuilder builder) {
-		return builder.build();
-	}
-	
-
 
 	// Cada quince dias
 	@Scheduled(cron = "0 0 0 1,15 * ?")
@@ -68,5 +62,14 @@ public class PetclinicApplication {
 		log.info("Eliminando transacciones hechas hace mas de quince días");
 		this.transactionService.eliminarTransaccionesAntiguas();
 	}
+
+	
+	
+	@Bean
+	public RestTemplate restTemplate(RestTemplateBuilder builder) {
+		return builder.build();
+	}
+	
+
 
 }
