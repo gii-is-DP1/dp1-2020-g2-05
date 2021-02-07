@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.samples.petclinic.web;
+package org.springframework.samples.petclinic.web.validator;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

@@ -5,6 +5,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="sec"	uri="http://www.springframework.org/security/tags"%>
 
 <petclinic:layout pageName="pilotsPaged">
 	<h2>Pilots</h2>
@@ -61,7 +62,9 @@
 				<th>Points</th>
 				<th>Nationality</th>
 				<th>Category</th>
+				<sec:authorize access="hasAuthority('admin')">
 				<th>Actions</th>
+				</sec:authorize>
 			</tr>
 		</thead>
 		<tbody>
@@ -72,6 +75,8 @@
 					<td><c:out value="${pilot.points}" /></td>
 					<td><c:out value="${pilot.nationality}" /></td>
 					<td><c:out value="${pilot.category}" /></td>
+					
+					<sec:authorize access="hasAuthority('admin')">
 					<td><spring:url value="/pilots/edit/{pilotId}" var="pilotUrl">
 							<spring:param name="pilotId" value="${pilot.id}" />
 						</spring:url> <a href="${fn:escapeXml(pilotUrl)}">Edit</a> <spring:url
@@ -81,6 +86,7 @@
 							value="/pilots/{pilotId}" var="pilotUrl">
 							<spring:param name="pilotId" value="${pilot.id}" />
 						</spring:url> <a href="${fn:escapeXml(pilotUrl)}">Details</a></td>
+						</sec:authorize>
 				</tr>
 			</c:forEach>
 		</tbody>
