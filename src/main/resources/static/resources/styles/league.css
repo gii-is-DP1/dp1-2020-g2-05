@@ -30,7 +30,7 @@
 }
 
 .price .header {
-	background-color: #111;
+	background-color: #34302d;
 	color: white;
 	font-size: 25px;
 }
@@ -57,6 +57,22 @@
 	
 }
 
+.buttonNewJoinLeague{
+	background-color:#34302d;
+	display:inline-block;
+	padding:7px;
+    border: 2px solid;
+  	border-radius: 5px;
+  	}
+.textButton{
+ 	color: white;
+	
+}
+
+.textButton:hover{
+ 	color: #a9a9a9;
+	
+}
 ::-webkit-scrollbar {
 	width: 10px;
 }
