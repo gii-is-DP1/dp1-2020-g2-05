@@ -125,7 +125,7 @@ public class TeamController {
 
 			log.debug("Asignandole el usuario actual al equipo");
 			team.setUser(this.userService.getUserSession());
-			log.info("Usuario " + this.userService.getUserSession() + "asignado correctamente");
+			log.info("Usuario " + this.userService.getUserSession() + " asignado correctamente");
 			
 			Optional<Team> tem = this.teamService.findTeamByUsernameAndLeagueId(team.getUser().getUsername(), leagueId);
 			List<Team> equipos = this.teamService.findTeamByLeagueId(league.getId());
@@ -288,7 +288,6 @@ public class TeamController {
 	public String editarTeamPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
 			@Valid Team team, BindingResult result, ModelMap model) {
 
-		
 		authority = this.leagueService.findAuthoritiesByUsername(team.getUser().getUsername());
 		if (authority.equals("admin")) {
 			model.put("admin", true);
