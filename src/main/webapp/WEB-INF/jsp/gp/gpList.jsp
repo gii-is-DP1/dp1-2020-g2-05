@@ -9,13 +9,14 @@
 	<h2>GPs calendar</h2>
 	
 	<table class="table table-striped">
+	<thead>
 		<tr>
 			<th style="text-align:center;">Site</th>
 			<th style="text-align:center;">Circuit</th>
 			<th style="text-align:center;">Date</th>
 			<th style="text-align:center;">Results</th>
 		</tr>
-		
+		</thead>
 		<c:forEach items="${listaGP}" var="res">
 			<tr>
 				<c:if test="${res.hasBeenRun==true}">

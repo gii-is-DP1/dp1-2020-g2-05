@@ -62,7 +62,7 @@
 		</c:forEach>
 		</tbody>
 		</table>
-			<spring:url value="/leagues/{leagueId}/teams/new" var="TeamUrl">
+				<spring:url value="/leagues/{leagueId}/teams/new" var="TeamUrl">
 							<spring:param name="leagueId" value="${league.id}" />
 						</spring:url> <a href="${fn:escapeXml(TeamUrl)}">New</a>
 	<spring:url value="market" var="marketUrl">
@@ -132,5 +132,6 @@
 		</tbody>
 		</table>
 	</c:if>
+
 
 </petclinic:layout>
