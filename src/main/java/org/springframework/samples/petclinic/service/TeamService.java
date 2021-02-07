@@ -135,7 +135,7 @@ public class TeamService {
 			if (pilots.get(i).getCategory().equals(cat)) {
 				Recruit r = new Recruit();
 				r.setPilot(pilots.get(i));
-				r.setForSale(false);
+				r.setForSale(true);
 				r.setTeam(t);
 				recruitService.saveRecruit(r);
 				offerService.putOnSale(r, r.getPilot().getBaseValue());
