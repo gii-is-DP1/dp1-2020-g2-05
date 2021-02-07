@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.web;
+package org.springframework.samples.petclinic.service.exceptions;
 
 public class duplicatedLeagueNameException extends Exception{
 

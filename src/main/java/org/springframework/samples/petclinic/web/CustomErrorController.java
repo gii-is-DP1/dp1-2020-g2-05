@@ -14,7 +14,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.exceptions.JoinWithoutCodeException;
+import org.springframework.samples.petclinic.service.exceptions.MaximumNumberOfLeaguesPerUserException;
+import org.springframework.samples.petclinic.service.exceptions.NoLeagueFoundException;
 import org.springframework.samples.petclinic.service.exceptions.NoTeamInThisLeagueException;
+import org.springframework.samples.petclinic.service.exceptions.YouAlreadyParticipateInALeagueException;
+import org.springframework.samples.petclinic.service.exceptions.duplicatedLeagueNameException;
+import org.springframework.samples.petclinic.service.exceptions.LeagueHasMaximumNumberOfTeamsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,6 +57,37 @@ public class CustomErrorController implements ErrorController {
 	public String NoTeamErrorHandler(HttpServletRequest request,  Exception ex, RedirectAttributes redirectAttributes)  {
 		redirectAttributes.addFlashAttribute("message", "No tienes equipo en esta liga!");
 		return "redirect:/leagues";
+	}
+	
+	@ExceptionHandler(MaximumNumberOfLeaguesPerUserException.class)
+	public String CanNotHaveMoreLeaguesHandler(HttpServletRequest request,  Exception ex, RedirectAttributes redirectAttributes)  {
+		redirectAttributes.addFlashAttribute("message", "You already participate in 5 leagues!");
+		return "redirect:/leagues/myLeagues";
+	}
+	
+	@ExceptionHandler(NoLeagueFoundException.class)
+	public String NoLeagueFoundHandler(HttpServletRequest request,  Exception ex, RedirectAttributes redirectAttributes)  {
+		redirectAttributes.addFlashAttribute("message", "No league have been found with the code provided");
+		return "redirect:/leagues/join";
+	}
+	
+	@ExceptionHandler(YouAlreadyParticipateInALeagueException.class)
+	public String AlreadyParticipateInThatLeagueHandler(HttpServletRequest request,  Exception ex, RedirectAttributes redirectAttributes)  {
+		redirectAttributes.addFlashAttribute("message", "You already participates in that league!");
+		return "redirect:/leagues/join";
+	}
+
+	@ExceptionHandler(LeagueHasMaximumNumberOfTeamsException.class)
+	public String LeagueHasMaxTeams(HttpServletRequest request,  Exception ex, RedirectAttributes redirectAttributes)  {
+		redirectAttributes.addFlashAttribute("message", "This league is currently full !");
+		return "redirect:/leagues/join";
+	}
+
+	
+	@ExceptionHandler(duplicatedLeagueNameException.class)
+	public String DuplicateNameLeagueHandler(HttpServletRequest request,  Exception ex, RedirectAttributes redirectAttributes)  {
+		redirectAttributes.addFlashAttribute("message", "Already exist a league with that name! :(  ");
+		return "redirect:/leagues/new";
 	}
 	
 	@ExceptionHandler(JoinWithoutCodeException.class)

@@ -2,6 +2,7 @@ package org.springframework.samples.petclinic.web;
 
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
@@ -44,6 +45,11 @@ import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.TransactionService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.service.exceptions.LeagueHasMaximumNumberOfTeamsException;
+import org.springframework.samples.petclinic.service.exceptions.MaximumNumberOfLeaguesPerUserException;
+import org.springframework.samples.petclinic.service.exceptions.NoLeagueFoundException;
+import org.springframework.samples.petclinic.service.exceptions.YouAlreadyParticipateInALeagueException;
+import org.springframework.samples.petclinic.service.exceptions.duplicatedLeagueNameException;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -56,11 +62,7 @@ excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classe
 excludeAutoConfiguration= SecurityConfiguration.class)
 
 public class LeagueControllerTest {
-	 @Nested
-	 @WebMvcTest(controllers=LeagueController.class,
-		excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class),
-		excludeAutoConfiguration= SecurityConfiguration.class)
-	    class TestNest{
+	
     	private static final int TEST_LEAGUE_ID = 1;
 
     	private static final int TEST_TEAM_ID = 1;
@@ -178,7 +180,6 @@ public class LeagueControllerTest {
     	void testShowMyLeagues() throws Exception {
     		given(leagueService.obtenerListaDeLigasDeUnaListaDeIntegers(teamService.findTeamsIntByUsername(user.getUsername()))).willReturn(lista);
     		mockMvc.perform(get("/leagues/myLeagues")).andExpect(status().isOk())
-    		.andExpect(model().attribute("noTengoLigas", is(false)))
     		.andExpect(model().attribute("misLigas", Matchers.hasItem(Matchers.<League> hasProperty("leagueCode", is(liga.getLeagueCode())))))
     		.andExpect(view().name("leagues/myLeagues"));
     		
@@ -194,20 +195,25 @@ public class LeagueControllerTest {
     		.andExpect(view().name("leagues/myLeagues"));
     		
     	}
+    
     	
     	@WithMockUser(value = "spring")
     	@Test
-    	void testAlreadyParticipatesInLeague() throws Exception {
-    		given(leagueService.obtenerListaDeLigasDeUnaListaDeIntegers(teamService.findTeamsIntByUsername(user.getUsername()))).willReturn(lista);
-    		mockMvc.perform(get("/leagues/myLeagues").flashAttr("yaTienesEquipo", true).flashAttr("leagueYaEquipoId", 1))
-    		.andExpect(status().isOk())
-    		.andExpect(model().attribute("yaTienesEquipo", is(true)))
-    		.andExpect(model().attribute("noTengoLigas", is(false)))
-    		.andExpect(model().attribute("leagueYaEquipoId", is(1)))
-    		.andExpect(view().name("leagues/myLeagues"));
-    		
-
-    		
+    	void testAlreadyParticipatesInLeague() throws Exception{
+    		List<Integer> lista = new ArrayList<Integer>();
+    		lista.add(TEST_LEAGUE_ID);
+    		given(this.teamService.findTeamsIntByUsername(user.getUsername())).willReturn(lista);
+    		given(this.leagueService.findLeagueByLeagueCode(liga.getLeagueCode())).willReturn(Optional.of(liga));
+    		given(this.teamService.findTeamsIntByUsername(user.getUsername())).willReturn(lista);
+    		mockMvc.perform(post("/leagues/join")
+    				.with(csrf())
+    				.param("id", liga.getId().toString())
+    				.param("name", liga.getName())
+    				.param("leagueCode", liga.getLeagueCode())
+    				.param("leagueDate", liga.getLeagueDate()))
+    				.andExpect(status().is3xxRedirection())
+    				.andExpect(result -> assertTrue(result.getResolvedException() instanceof YouAlreadyParticipateInALeagueException))
+    				.andExpect(view().name("redirect:/leagues/join"));
     	}
 
     	@WithMockUser(value = "spring")
@@ -235,9 +241,9 @@ public class LeagueControllerTest {
     	void testCantCreateNewLeague() throws Exception {
     		given(leagueService.findLeaguesByUsername(user.getUsername())).willReturn(5);
     		given(leagueService.findAll()).willReturn(lista);
-    		mockMvc.perform(get("/leagues/new")).andExpect(status().isOk())
-    		.andExpect(model().attribute("yaTieneMaxTeams",is(true)))
-    		.andExpect(view().name("leagues/myLeagues"));
+    		mockMvc.perform(get("/leagues/new")).andExpect(status().is3xxRedirection())
+			.andExpect(result -> assertTrue(result.getResolvedException() instanceof MaximumNumberOfLeaguesPerUserException))
+    		.andExpect(view().name("redirect:/leagues/myLeagues"));
     		
     	}
     	
@@ -288,9 +294,9 @@ public class LeagueControllerTest {
     	@Test
     	void testCantJoinNewLeagueGet() throws Exception {
     		given(leagueService.findLeaguesByUsername(user.getUsername())).willReturn(5);
-    		mockMvc.perform(get("/leagues/join")).andExpect(status().isOk())
-    		.andExpect(model().attribute("yaTieneMaxTeams", true))
-    		.andExpect(view().name("leagues/myLeagues"));
+    		mockMvc.perform(get("/leagues/join")).andExpect(status().is3xxRedirection())
+			.andExpect(result -> assertTrue(result.getResolvedException() instanceof MaximumNumberOfLeaguesPerUserException))
+    		.andExpect(view().name("redirect:/leagues/myLeagues"));
     		
     	}
     	
@@ -312,10 +318,9 @@ public class LeagueControllerTest {
     				.param("leagueDate", liga.getLeagueDate())
     				.param("racesCompleted", TCConsulta.getRacesCompleted().toString())
     				.param("activeCategory", TCConsulta.getCurrentCategory().toString()))
-    				.andExpect(model().attribute("yaTienesEquipo", true))
-    				.andExpect(model().attribute("leagueYaEquipoId", liga.getId()))
-    				.andExpect(status().isOk())
-    				.andExpect(view().name("leagues/myLeagues"));
+					.andExpect(result -> assertTrue(result.getResolvedException() instanceof YouAlreadyParticipateInALeagueException))
+    				.andExpect(status().is3xxRedirection())
+    				.andExpect(view().name("redirect:/leagues/join"));
     	}
     	
     	@WithMockUser(value = "spring")
@@ -332,9 +337,9 @@ public class LeagueControllerTest {
     				.param("leagueDate", liga.getLeagueDate())
     				.param("racesCompleted", TCConsulta.getRacesCompleted().toString())
     				.param("activeCategory", TCConsulta.getCurrentCategory().toString()))
-    				.andExpect(model().attribute("noLeagueFound", "Any league has been found with the code provided :("))
-    				.andExpect(status().isOk())
-    				.andExpect(view().name("/leagues/createLeague"));
+					.andExpect(result -> assertTrue(result.getResolvedException() instanceof NoLeagueFoundException))
+    				.andExpect(status().is3xxRedirection())
+    				.andExpect(view().name("redirect:/leagues/join"));
     	}
 
     	@WithMockUser(value = "spring")
@@ -352,9 +357,9 @@ public class LeagueControllerTest {
     				.param("leagueDate", liga.getLeagueDate())
     				.param("racesCompleted", TCConsulta.getRacesCompleted().toString())
     				.param("activeCategory", TCConsulta.getCurrentCategory().toString()))
-    				.andExpect(model().attribute("yaTieneMaxTeams", true))
-    				.andExpect(status().isOk())
-    				.andExpect(view().name("leagues/myLeagues"));
+					.andExpect(result -> assertTrue(result.getResolvedException() instanceof LeagueHasMaximumNumberOfTeamsException))
+    				.andExpect(status().is3xxRedirection())
+    				.andExpect(view().name("redirect:/leagues/join"));
     	}
     	
     	@Test		
@@ -368,10 +373,8 @@ public class LeagueControllerTest {
     			.param("leagueCode", liga.getLeagueCode())
     			.param("leagueDate", liga.getLeagueDate())
     			)
-    			.andExpect(model().attributeHasErrors("league"))
-    		    .andExpect(model().attributeHasFieldErrors("league", "name"))			
-    			.andExpect(view().name("/leagues/createLeagueName"))
-    			.andExpect(status().isOk());
+    			.andExpect(status().is3xxRedirection())
+    			.andExpect(view().name("redirect:/leagues/new"));
     }
 
     	@WithMockUser(value = "spring")
@@ -389,7 +392,6 @@ public class LeagueControllerTest {
     				.param("leagueDate", liga.getLeagueDate())
     				.param("racesCompleted", TCConsulta.getRacesCompleted().toString())
     				.param("activeCategory", TCConsulta.getCurrentCategory().toString()))
-//    				.andExpect(model().attribute("yaTienesEquipo", false))
     				.andExpect(status().is3xxRedirection())
     				.andExpect(view().name("redirect:/leagues/"+liga.getId()+"/teams/new"));
     	}
@@ -398,40 +400,5 @@ public class LeagueControllerTest {
 
 
 	 }
-	 
-	@MockBean
- 	TablaConsultasService TCService;
- 	
- 	@MockBean
- 	TeamController teamController;
-
- 	
- 	@MockBean
- 	LeagueService leagueService;
- 	
- 	@MockBean
- 	UserService userService;
- 	
- 	@MockBean
- 	TeamService teamService;
- 	
- 	@MockBean
-	private TransactionService transactionService;
 	
-	@MockBean
-	private AuthoritiesService authoritiesService;
- 	
- 	@Autowired
- 	private MockMvc mockMvc;
- 	
-	 @WithMockUser(value = "spring")
-		@Test
-		void testJoinNoUserFound() throws Exception {
-			mockMvc.perform(get("/leagues/join")
-					.with(csrf()))
-					.andExpect(status().isOk())
-					.andExpect(view().name("/leagues/leagueList"));
-		}
 		
-		
-}
