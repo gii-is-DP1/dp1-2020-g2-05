@@ -13,14 +13,27 @@
 	<div class="container">
 		<div class="navbar-collapse collapse" id="league-navbar">
 			<ul class="nav" >
-				<li class="navbar-inverse navbar-text">
-					<span>League: ${userLeagueName}</span>
+				<li class="navbar-inverse navbar-left">
+				<spring:url value="/leagues/{leagueId}/teams" var="leagueUrl">
+								<spring:param name="leagueId" value="${userLeague}" />
+							</spring:url> <a href="${fn:escapeXml(leagueUrl)}">
+								<span aria-hidden="true">League: ${userLeagueName}</span>
+							</a>
 				</li>
-				<li class="navbar-text">
-					<span>Team: ${userTeamName}</span>
+				<li class="navbar-left">
+				<spring:url value="/leagues/{leagueId}/teams/{teamId}/details" var="teamUrl">
+								<spring:param name="leagueId" value="${userLeague}" />
+								<spring:param name="teamId" value="${userTeam}" />
+							</spring:url> <a href="${fn:escapeXml(teamUrl)}">
+								<span aria-hidden="true">Team: ${userTeamName}</span>
+							</a>
 				</li>
-				<li class="navbar-text">
-					<span>Money: ${userMoney}</span>
+				<li class="navbar-left">
+					<spring:url value="/myTeams/{teamId}/transactions" var="transactionUrl">
+								<spring:param name="teamId" value="${userTeam}" />
+							</spring:url> <a href="${fn:escapeXml(transactionUrl)}">
+								<span aria-hidden="true">Money: ${userMoney}</span>
+							</a>
 				</li>
 			
 				<li class="navbar-right">

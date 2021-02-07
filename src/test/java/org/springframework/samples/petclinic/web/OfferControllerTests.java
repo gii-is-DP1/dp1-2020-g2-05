@@ -1,8 +1,8 @@
 package org.springframework.samples.petclinic.web;
 
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -17,6 +17,7 @@ import java.util.Optional;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -309,7 +310,7 @@ class OfferControllerTests {
 				.willReturn(Optional.of(team1));
 		given(offerService.findOfferById(TEST_OFFER2_ID)).willReturn(Optional.of(offer2));
 		given(recruitService.getRecruitsByTeam(team1.getId())).willReturn(recruitTeam1List);
-		doThrow(new NotAllowedNumberOfRecruitsException()).when(recruitService).purchaseRecruit(recruit5, team1);
+//		doThrow(new NotAllowedNumberOfRecruitsException()).when(recruitService).purchaseRecruit(recruit5, team1);
 
 		mockMvc.perform(get("/leagues/{leagueId}/market/{offerId}", TEST_LEAGUE_ID, TEST_OFFER2_ID))
 				.andExpect(status().is2xxSuccessful()).andExpect(view().name("offers/offersList"))
