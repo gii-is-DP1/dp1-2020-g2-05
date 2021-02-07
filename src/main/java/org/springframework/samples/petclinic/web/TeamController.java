@@ -195,7 +195,7 @@ public class TeamController {
 	public String setPrice(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
 			@PathVariable("recruitId") int recruitId, ModelMap modelMap) {
 
-		Optional<Recruit> opRecruit = recruitService.findRecruit(recruitId);
+		Optional<Recruit> opRecruit = recruitService.findRecruitById(recruitId);
 		if (opRecruit.isPresent()) {
 			modelMap.addAttribute("offer", new Offer());
 			modelMap.addAttribute("recruitToSale", opRecruit.get());
@@ -215,7 +215,7 @@ public class TeamController {
 			modelMap.put("message", result.getAllErrors());
 			return setPrice(leagueId, teamId, recruitId, modelMap);
 		} else {
-			Optional<Recruit> opRecruit = recruitService.findRecruit(recruitId);
+			Optional<Recruit> opRecruit = recruitService.findRecruitById(recruitId);
 			if (opRecruit.isPresent()) {
 				log.info("Fichaje: " + opRecruit.get().getId() + " a un precio de: " + offer.getPrice());
 				try {
@@ -227,10 +227,10 @@ public class TeamController {
 					return mostrarDetallesEscuderia(leagueId, teamId, modelMap);
 				}
 
-				return "redirect:/leagues/{leagueId}/market";
+				return mostrarDetallesEscuderia(leagueId, teamId, modelMap);
 			} else {
 				modelMap.addAttribute("message", "Recruit not found!");
-				return "redirect:/leagues/" + leagueId + "/teams/" + teamId + "/details";
+				return mostrarDetallesEscuderia(leagueId, teamId, modelMap);
 			}
 		}
 	}

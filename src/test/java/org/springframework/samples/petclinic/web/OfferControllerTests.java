@@ -1,8 +1,9 @@
 package org.springframework.samples.petclinic.web;
 
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.doThrow;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -17,6 +18,7 @@ import java.util.Optional;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -170,7 +172,7 @@ class OfferControllerTests {
 
 		team1.setId(1);
 		team1.setLeague(league);
-		team1.setMoney(200);
+		team1.setMoney(2000);
 		team1.setName("Team1");
 		team1.setPoints(2000);
 		team1.setUser(user1);
@@ -223,6 +225,9 @@ class OfferControllerTests {
 		recruitTeam1List.add(recruit3);
 		recruitTeam1List.add(recruit4);
 		recruitTeam1List.add(recruit5);
+		
+		Team team4Recruits = team1;
+		team4Recruits.setRecruits(recruitTeam1List);
 	}
 
 	@WithMockUser(value = "spring")
@@ -297,7 +302,8 @@ class OfferControllerTests {
 		given(offerService.findOfferById(TEST_OFFER1_ID)).willReturn(Optional.of(offer1));
 
 		mockMvc.perform(get("/leagues/{leagueId}/market/{offerId}", TEST_LEAGUE_ID, TEST_OFFER1_ID))
-				.andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/leagues/{leagueId}/teams/"+team1.getId()+"/details"));
+				.andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/leagues/{leagueId}/teams/" + team1.getId() + "/details"));
 	}
 
 	@WithMockUser(value = "spring")
@@ -308,9 +314,8 @@ class OfferControllerTests {
 		given(teamService.findTeamByUsernameAndLeagueId(user1.getUsername(), TEST_LEAGUE_ID))
 				.willReturn(Optional.of(team1));
 		given(offerService.findOfferById(TEST_OFFER2_ID)).willReturn(Optional.of(offer2));
-		given(recruitService.getRecruitsByTeam(team1.getId())).willReturn(recruitTeam1List);
-		doThrow(new NotAllowedNumberOfRecruitsException()).when(recruitService).purchaseRecruit(recruit5, team1);
-
+		when(recruitService.purchaseRecruit(any(), any())).thenThrow(NotAllowedNumberOfRecruitsException.class);
+		
 		mockMvc.perform(get("/leagues/{leagueId}/market/{offerId}", TEST_LEAGUE_ID, TEST_OFFER2_ID))
 				.andExpect(status().is2xxSuccessful()).andExpect(view().name("offers/offersList"))
 				.andExpect(model().attribute("message", is("You already own 4 riders in this league!")));

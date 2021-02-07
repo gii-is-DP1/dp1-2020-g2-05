@@ -21,4 +21,7 @@ public interface LineupRepository extends CrudRepository<Lineup, Integer>{
 	@Query("SELECT l FROM Lineup l WHERE l.gp.id = ?1")
 	public List<Lineup> findByGp(int gpId);
 	
+	@Query("SELECT l FROM Lineup l WHERE l.recruit1.id = ?1 OR l.recruit2.id = ?1")
+	public List<Lineup> findByRecruit(int recruitId);
+	
 }

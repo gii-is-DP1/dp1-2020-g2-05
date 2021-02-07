@@ -24,22 +24,22 @@ import org.springframework.transaction.annotation.Transactional;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 public class TeamServiceTest {
-	
-	 @Autowired
-	 	protected TeamService teamService;
-	 
-	 @Autowired
-		protected LeagueService leagueService;
-	 
-	 @Autowired
-	 	protected UserService userService;
-	 
-	 @Autowired
-	 	protected RecruitService recruitService;
-	 
-	 @Test
-	 void shouldCountTeamsByLeagueId() {
-		Integer positive_test= this.teamService.findTeamsByLeagueId(1);
+
+	@Autowired
+	protected TeamService teamService;
+
+	@Autowired
+	protected LeagueService leagueService;
+
+	@Autowired
+	protected UserService userService;
+
+	@Autowired
+	protected RecruitService recruitService;
+
+	@Test
+	void shouldCountTeamsByLeagueId() {
+		Integer positive_test = this.teamService.findTeamsByLeagueId(1);
 		assertThat(positive_test).isNotEqualTo(0);
 	 }
 	 
@@ -95,90 +95,86 @@ public class TeamServiceTest {
 		 
 		teams = this.teamService.findAllTeams();
 		team = new ArrayList<Team>();
-		 	 teams.forEach(team::add);
-		 
-		 		assertThat(team.size()).isEqualTo(equipo1 + 1);
-		 
-	 
-	 }
-	 
-	 @Test
-	 @Transactional
-	 void shouldDeleteTeam() {
-		 
-		 Iterable<Team> teams = this.teamService.findAllTeams();
-		 List<Team> team = new ArrayList<Team>();
-		 teams.forEach(team::add);
-		 Integer equipo1 = team.size();
-		 
-		 Team team_new = new Team();
-		 team_new.setMoney(200);
-		 team_new.setName("TEST");
-		 team_new.setPoints(222);
-		 team_new.setLeague(this.leagueService.findLeague(1).get());
-		 team_new.setUser(this.userService.findUser("migniearj").get());
-		 
-		 this.teamService.saveTeam(team_new);
-		 assertThat(team_new.getId().longValue()).isNotEqualTo(0);
-		 
-		 Iterable<Team> teams1 = this.teamService.findAllTeams();
-		 List<Team> team1 = new ArrayList<Team>();
-		 teams1.forEach(team1::add);
-		 
-		 
-		 this.teamService.delete(team_new);
-		 assertThat(team_new.getId().longValue()).isNotEqualTo(0);
-		 
-		 teams = this.teamService.findAllTeams();
-			team = new ArrayList<Team>();
-			 	 teams.forEach(team::add);
-			 	 
-		
-			 
-			 		assertThat(team.size()).isEqualTo(equipo1);
+		teams.forEach(team::add);
 
-	 }
-	 
-	 @Test
-	 @Transactional
-	 void shouldFindTeamByLeagueId() {
-		 List<Team> team = this.teamService.findTeamByLeagueId(1);
-		 Integer equipo1 = team.size();
-			 
-			 		assertThat(equipo1).isNotEqualTo(0);
+		assertThat(team.size()).isEqualTo(equipo1 + 1);
 
-	 }
-	 
-	 @Test
-	 @Transactional
-	 void shouldFindTeamByUsername() {
-		 List<Team> team = this.teamService.findTeamByUsername("migniearj");
-		 Integer equipo1 = team.size();
-			 
-			 		assertThat(equipo1).isNotEqualTo(0);
+	}
 
-	 }
-	 
-	 @Test
-	 @Transactional
-	 void shouldFindTeamByUsernameAndLeagueId() {
-		 Team team = this.teamService.findTeamByUsernameAndLeagueId("migniearj", 2).get();
-			 
-			 		assertThat(team).isNotNull();
+	@Test
+	@Transactional
+	void shouldDeleteTeam() {
 
-	 }
-	 
+		Iterable<Team> teams = this.teamService.findAllTeams();
+		List<Team> team = new ArrayList<Team>();
+		teams.forEach(team::add);
+		Integer equipo1 = team.size();
+
+		Team team_new = new Team();
+		team_new.setMoney(200);
+		team_new.setName("TEST");
+		team_new.setPoints(222);
+		team_new.setLeague(this.leagueService.findLeague(1).get());
+		team_new.setUser(this.userService.findUser("migniearj").get());
+
+		this.teamService.saveTeam(team_new);
+		assertThat(team_new.getId().longValue()).isNotEqualTo(0);
+
+		Iterable<Team> teams1 = this.teamService.findAllTeams();
+		List<Team> team1 = new ArrayList<Team>();
+		teams1.forEach(team1::add);
+
+		this.teamService.delete(team_new);
+		assertThat(team_new.getId().longValue()).isNotEqualTo(0);
+
+		teams = this.teamService.findAllTeams();
+		team = new ArrayList<Team>();
+		teams.forEach(team::add);
+
+		assertThat(team.size()).isEqualTo(equipo1);
+
+	}
+
+	@Test
+	@Transactional
+	void shouldFindTeamByLeagueId() {
+		List<Team> team = this.teamService.findTeamByLeagueId(1);
+		Integer equipo1 = team.size();
+
+		assertThat(equipo1).isNotEqualTo(0);
+
+	}
+
+	@Test
+	@Transactional
+	void shouldFindTeamByUsername() {
+		List<Team> team = this.teamService.findTeamByUsername("migniearj");
+		Integer equipo1 = team.size();
+
+		assertThat(equipo1).isNotEqualTo(0);
+
+	}
+
+	@Test
+	@Transactional
+	void shouldFindTeamByUsernameAndLeagueId() {
+		Team team = this.teamService.findTeamByUsernameAndLeagueId("migniearj", 2).get();
+
+		assertThat(team).isNotNull();
+
+	}
+
 	@Test
 	@Transactional
 	void shouldSaveTeamMoney() {
 		Team team = teamService.findTeamById(1).get();
 		Integer money = team.getMoney();
-		 
+
 		teamService.saveTeamMoney(team, 300);
 
 		assertThat(team.getMoney()).isEqualTo(money + 300);
 	}
-	
+
 	@Test
 	@Transactional
 	void shouldSaveSystemTeam() throws DataAccessException, duplicatedLeagueNameException {
@@ -189,11 +185,11 @@ public class TeamServiceTest {
 		Date date = new Date();
 		league.setLeagueDate(formatter.format(date));
 		leagueService.saveLeague(league);
-		 
+
 		teamService.saveSystemTeam(league);
-		
+
 		List<Team> teams = teamService.findTeamByLeagueId(league.getId());
-		
+
 		assertThat(teams.get(0).getName()).isEqualTo("Sistema");
 		assertThat(teams.get(0).getLeague()).isEqualTo(league);
 		assertThat(teams.get(0).getMoney()).isEqualTo(0);
@@ -205,10 +201,10 @@ public class TeamServiceTest {
 	@Transactional
 	void shouldRecruitAndOfferAll() {
 		Team team = teamService.findTeamById(8).get();
-		
+
 		teamService.recruitAndOfferAll(team, Category.MOTO2);
-		
-		assertThat(recruitService.getRecruitsByTeam(team.getId()).size()).isGreaterThan(0);
+
+		assertThat(team.getRecruits().size()).isGreaterThan(0);
 	}
 	
 	@Test
@@ -219,7 +215,7 @@ public class TeamServiceTest {
 		
 		teamService.sellAllTeamRecruits(team);
 		
-		assertThat(recruitService.getRecruitsByTeam(team.getId()).size()).isEqualTo(0);
+		assertThat(team.getRecruits().size()).isEqualTo(0);
 		assertThat(team.getMoney()).isGreaterThanOrEqualTo(money);
 	}
 	
@@ -232,6 +228,6 @@ public class TeamServiceTest {
 		
 		teamService.randomRecruit2Pilots(team);
 		
-		assertThat(recruitService.getRecruitsByTeam(team.getId()).size()).isEqualTo(2);
+		assertThat(team.getRecruits().size()).isEqualTo(2);
 	}
 }

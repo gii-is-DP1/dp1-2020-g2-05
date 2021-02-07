@@ -55,6 +55,20 @@ class TransactionServiceTest {
 
 		Long afterList = StreamSupport.stream(transactionService.findAll().spliterator(), false).count();
 		assertThat(beforeList.equals(afterList - 2)).isTrue();
+	}
 
+	@Test
+	@Transactional
+	void shouldInsertResultsByCorrectParameters() {
+		Long beforeList = StreamSupport.stream(transactionService.findAll().spliterator(), false).count();
+		Pilot pilot = pilotService.findPilotById(1).get();
+		Team purchaserTeam = teamService.findTeamById(11).get();
+		Team sellerTeam = teamService.findTeamById(1).get();
+		Integer price = 2000;
+
+		transactionService.trade(price, pilot, sellerTeam, purchaserTeam);
+
+		Long afterList = StreamSupport.stream(transactionService.findAll().spliterator(), false).count();
+		assertThat(beforeList.equals(afterList - 2)).isTrue();
 	}
 }

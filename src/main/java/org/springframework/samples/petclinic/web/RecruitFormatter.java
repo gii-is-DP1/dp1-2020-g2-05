@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class RecruitFormatter implements Formatter<Recruit> {
-	
+
 	private final RecruitService recruitService;
 
 	@Autowired
@@ -23,17 +23,18 @@ public class RecruitFormatter implements Formatter<Recruit> {
 
 	@Override
 	public String print(Recruit recruit, Locale locale) { // Provisional
-		return recruit.getPilot().getName() + " " + recruit.getPilot().getLastName() + ", " + recruit.getTeam().getLeague().getId();
+		return recruit.getPilot().getName() + " " + recruit.getPilot().getLastName() + ", "
+				+ recruit.getTeam().getLeague().getId();
 	}
 
 	@Override
 	public Recruit parse(String text, Locale locale) throws ParseException {
 		List<Pilot> findRecruits = this.recruitService.getRecruits();
 		for (Pilot pilot : findRecruits) {
-			String string = pilot.getName() + " " + pilot.getLastName();
+			String string = pilot.getFullName();
 			String[] split = text.split(",");
 			if (string.equals(split[0].trim())) {
-				Integer leagueId = Integer.parseInt(split[split.length-1].trim()); // Provisional
+				Integer leagueId = Integer.parseInt(split[split.length - 1].trim()); // Provisional
 				Recruit recruit = this.recruitService.getRecruitByPilotId(pilot.getId(), leagueId).get();
 				return recruit;
 			}
