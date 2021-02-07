@@ -63,13 +63,13 @@ public class PetclinicApplication {
 		this.transactionService.eliminarTransaccionesAntiguas();
 	}
 
-	
-	
 	@Bean
 	public RestTemplate restTemplate(RestTemplateBuilder builder) {
 		return builder.build();
 	}
 	
 
+	
+	
 
 }
