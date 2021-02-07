@@ -9,7 +9,7 @@
 <petclinic:layout pageName="users">
     <h2>
     </h2>
-    <form:form modelAttribute="userr" class="form-horizontal" id="add-user-form">
+    <form:form modelAttribute="user" class="form-horizontal" id="add-user-form">
         <div class="form-group has-feedback">
             <petclinic:inputField label="Username" name="username"/>
             <petclinic:inputField label="Email" name="email"/>
