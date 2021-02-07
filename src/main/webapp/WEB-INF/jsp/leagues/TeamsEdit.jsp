@@ -6,7 +6,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
-<petclinic:layout pageName="Team">
+<petclinic:layout pageName="teamDetails" userTeam="${team.id}" userTeamName="${team.name}" userLeague="${team.league.id}" userLeagueName="${team.league.name}" userMoney="${team.money}">
 
 
      	<c:if test="${Editar!=true}">

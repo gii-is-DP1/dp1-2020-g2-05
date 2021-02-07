@@ -212,6 +212,14 @@ public class MessageControllerTest {
 				.andExpect(model().attribute("messagee", is(messagenewpred)))
 				.andExpect(view().name("messages/messagesEdit"));
 	}
+	
+	@WithMockUser(value = "spring")
+	@Test
+	void testCrearMensajePredefinidoConErrores() throws Exception {
+		given(userService.findUser(userrec.getUsername())).willReturn(Optional.of(userrec));
+		mockMvc.perform(get("/messages/new/{username}", "testeando")).andExpect(status().isOk())
+				.andExpect(view().name("errors/exception"));
+	}
 
 	@WithMockUser(value = "spring")
 	@Test

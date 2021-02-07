@@ -11,7 +11,7 @@
 <petclinic:layout pageName="leagues">
 <h2>Enter here the League name</h2>
 <c:forEach items="${message}" var="mess">
-<h2><c:out value="${mess.getDefaultMessage()}"/></h2>
+<%-- <h2><c:out value="${mess.getDefaultMessage()}"/></h2> --%>
 </c:forEach>
      <form:form modelAttribute="league" class="form-horizontal" id="add-pilot-form" actions="/leagues/new"  > 
         <div class="form-group has-feedback">

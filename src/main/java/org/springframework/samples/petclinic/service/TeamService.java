@@ -15,7 +15,6 @@ import org.springframework.samples.petclinic.model.Offer;
 import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Recruit;
 import org.springframework.samples.petclinic.model.Team;
-import org.springframework.samples.petclinic.repository.LeagueRepository;
 import org.springframework.samples.petclinic.repository.TeamRepository;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedTeamNameException;
 import org.springframework.samples.petclinic.service.exceptions.NotAllowedNumberOfRecruitsException;
@@ -29,7 +28,6 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class TeamService {
 
-	private LeagueRepository leagueRepository;
 	private TeamRepository teamRepository;
 	private UserService userService;
 	private PilotService pilotService;
@@ -39,10 +37,8 @@ public class TeamService {
 	private TransactionService transactionService;
 
 	@Autowired
-	public TeamService(LeagueRepository leagueRepository, TeamRepository teamRepository, UserService userService,
-			PilotService pilotService, RecruitService recruitService, TablaConsultasService TCService,
-			OfferService offerService, TransactionService transactionService) {
-		this.leagueRepository = leagueRepository;
+	public TeamService(TeamRepository teamRepository, UserService userService,
+			PilotService pilotService, RecruitService recruitService, TablaConsultasService TCService, OfferService offerService, TransactionService transactionService) {
 		this.teamRepository = teamRepository;
 		this.userService = userService;
 		this.pilotService = pilotService;
@@ -52,12 +48,12 @@ public class TeamService {
 		this.transactionService = transactionService;
 	}
 
-	public List<Integer> findTeamsByUsername(String username) throws DataAccessException {
-		return leagueRepository.findTeamsByUsername(username);
+	public List<Integer> findTeamsIntByUsername(String username) throws DataAccessException {
+		return teamRepository.findTeamsByUsername(username);
 	}
-
+	
 	public Integer findTeamsByLeagueId(Integer id) throws DataAccessException {
-		return leagueRepository.findTeamsByLeagueId(id);
+		return teamRepository.findTeamsByLeagueId(id);
 	}
 
 	@Transactional
@@ -139,7 +135,7 @@ public class TeamService {
 			if (pilots.get(i).getCategory().equals(cat)) {
 				Recruit r = new Recruit();
 				r.setPilot(pilots.get(i));
-				r.setForSale(false);
+				r.setForSale(true);
 				r.setTeam(t);
 				recruitService.saveRecruit(r);
 				offerService.putOnSale(r, r.getPilot().getBaseValue());

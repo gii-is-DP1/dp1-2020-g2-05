@@ -8,27 +8,28 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.web.ErrorProperties;
-import org.springframework.boot.autoconfigure.web.ErrorProperties.IncludeStacktrace;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.boot.web.servlet.error.ErrorController;
-import org.springframework.context.annotation.Conditional;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
+import org.springframework.samples.petclinic.service.exceptions.JoinWithoutCodeException;
+import org.springframework.samples.petclinic.service.exceptions.MaximumNumberOfLeaguesPerUserException;
+import org.springframework.samples.petclinic.service.exceptions.NoLeagueFoundException;
 import org.springframework.samples.petclinic.service.exceptions.NoTeamInThisLeagueException;
-import org.springframework.util.Assert;
+import org.springframework.samples.petclinic.service.exceptions.YouAlreadyParticipateInALeagueException;
+import org.springframework.samples.petclinic.service.exceptions.duplicatedLeagueNameException;
+import org.springframework.samples.petclinic.service.exceptions.LeagueHasMaximumNumberOfTeamsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import lombok.extern.slf4j.Slf4j;
 
-//@RestControllerAdvice
 @RequestMapping("/error")
 @Slf4j
 @ControllerAdvice
@@ -36,32 +37,9 @@ public class CustomErrorController implements ErrorController {
 	
 	@Autowired
 	private ErrorAttributes errorAttributes;
-	
+	@Autowired
 	private AuthoritiesService authoritiesService;
 
-//	@RequestMapping("/error")
-////	@ResponseBody
-//	public ResponseEntity<Map<String, Object>> error(HttpServletRequest request) {
-//		ServletWebRequest servletWebRequest = new ServletWebRequest(request);
-//		HttpStatus status = getStatus(request);
-//		if (status == HttpStatus.NO_CONTENT) {
-//			return new ResponseEntity<>(status);
-//		}
-//		Map<String, Object> body = this.errorAttributes.getErrorAttributes(servletWebRequest, true);
-//		return new ResponseEntity<>(body, status);
-////		final StringBuilder errorDetails = new StringBuilder();
-////		errorAttributes.forEach((attribute, value) -> {
-////			errorDetails.append("<tr><td>")
-////			.append(attribute)
-////			.append("</td><td><pre>")
-////			.append(value)
-////			.append("</pre></td></tr>");
-////		});
-////
-////		return String.format("<html><head><style>td{vertical-align:top;border:solid 1px #666;}</style>"
-////				+ "</head><body><h2>Error Page</h2><table>%s</table></body></html>", errorDetails.toString());
-//	}
-	
 	public static HttpStatus getStatus(HttpServletRequest request) {
 		Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
 		if (statusCode == null) {
@@ -76,14 +54,49 @@ public class CustomErrorController implements ErrorController {
 	}
 	
 	@ExceptionHandler(NoTeamInThisLeagueException.class)
-	public String NoTeamErrorHandler(HttpServletRequest request,  Exception ex)  {
-		
-		
+	public String NoTeamErrorHandler(HttpServletRequest request,  Exception ex, RedirectAttributes redirectAttributes)  {
+		redirectAttributes.addFlashAttribute("message", "No tienes equipo en esta liga!");
 		return "redirect:/leagues";
 	}
 	
-//	   @ExceptionHandler(Exception.class)
-	@RequestMapping
+	@ExceptionHandler(MaximumNumberOfLeaguesPerUserException.class)
+	public String CanNotHaveMoreLeaguesHandler(HttpServletRequest request,  Exception ex, RedirectAttributes redirectAttributes)  {
+		redirectAttributes.addFlashAttribute("message", "You already participate in 5 leagues!");
+		return "redirect:/leagues/myLeagues";
+	}
+	
+	@ExceptionHandler(NoLeagueFoundException.class)
+	public String NoLeagueFoundHandler(HttpServletRequest request,  Exception ex, RedirectAttributes redirectAttributes)  {
+		redirectAttributes.addFlashAttribute("message", "No league have been found with the code provided");
+		return "redirect:/leagues/join";
+	}
+	
+	@ExceptionHandler(YouAlreadyParticipateInALeagueException.class)
+	public String AlreadyParticipateInThatLeagueHandler(HttpServletRequest request,  Exception ex, RedirectAttributes redirectAttributes)  {
+		redirectAttributes.addFlashAttribute("message", "You already participates in that league!");
+		return "redirect:/leagues/join";
+	}
+
+	@ExceptionHandler(LeagueHasMaximumNumberOfTeamsException.class)
+	public String LeagueHasMaxTeams(HttpServletRequest request,  Exception ex, RedirectAttributes redirectAttributes)  {
+		redirectAttributes.addFlashAttribute("message", "This league is currently full !");
+		return "redirect:/leagues/join";
+	}
+
+	
+	@ExceptionHandler(duplicatedLeagueNameException.class)
+	public String DuplicateNameLeagueHandler(HttpServletRequest request,  Exception ex, RedirectAttributes redirectAttributes)  {
+		redirectAttributes.addFlashAttribute("message", "Already exist a league with that name! :(  ");
+		return "redirect:/leagues/new";
+	}
+	
+	@ExceptionHandler(JoinWithoutCodeException.class)
+	public String joinWithoutCodeErrorHandler(HttpServletRequest request,  Exception ex, RedirectAttributes redirectAttributes)  {
+		redirectAttributes.addFlashAttribute("message", "Necesitas un código de invitación para entrar en una liga");
+		return "redirect:/leagues";
+	}
+	
+//	@RequestMapping
 	public String defaultErrorHandler(HttpServletRequest request,  Exception ex)  {
 
 		ServletWebRequest servletWebRequest = new ServletWebRequest(request);
@@ -110,7 +123,8 @@ public class CustomErrorController implements ErrorController {
 		return "errorAdmin";
 	}
 	
-	@GetMapping()
+	@RequestMapping
+//	@ExceptionHandler(Exception.class)
 	public String handleError(HttpServletRequest request, Exception ex) {
 		String res = "errorUser";
 		if (this.authoritiesService.isCurrentUserAdmin()) {
@@ -123,10 +137,10 @@ public class CustomErrorController implements ErrorController {
 				
 				switch (statusCode) {
 				case 400: 
-					request.setAttribute("error_message", "Http Error Code: 400. Bad Request");
+					request.setAttribute("error_message", "Error 400: You made a bad request");
 					break;
 				case 401: 
-					request.setAttribute("error_message", "Http Error Code: 401. Unauthorized");
+					request.setAttribute("error_message", "Error 401: You're not authorized to access this content!");
 					break;
 				case 403: 
 					request.setAttribute("error_message", "Http Error Code: 403. Forbidden");
@@ -134,15 +148,16 @@ public class CustomErrorController implements ErrorController {
 					break;
 				case 404: 
 					request.setAttribute("error_message", "Http Error Code: 404. Resource not found");
+					res = "errors/error404";
 					break;
 				case 500: 
 					request.setAttribute("error_message", "Http Error Code: 500. Internal Server Error");
 					res = "errors/error500";
 					break;
+				default: 
+					res = "errorUser";
+					request.setAttribute("error_mensaje", "¡Oops! Looks like something went wrong...");
 				}
-				
-			} else {
-				request.setAttribute("error_mensaje", "¡Ups! Parece que algo ha ido mal...");
 			}
 		}
 		return res;

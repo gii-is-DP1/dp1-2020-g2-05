@@ -15,8 +15,7 @@
  */
 package org.springframework.samples.petclinic.web;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 
 import org.springframework.samples.petclinic.model.Message;
 import org.springframework.samples.petclinic.model.User;
@@ -42,12 +41,7 @@ public class MessageValidator implements Validator {
 		Message message = (Message) obj;
 		User namesend = message.getUsernamesend();
 		User namerecive = message.getUsernamereceive();
-		Pattern p = Pattern.compile("\\p{Punct}");
-		Matcher m = p.matcher(namesend.getUsername());
-	    int count = 0;
-		while (m.find()) {
-           count++;
-		}
+	
 		// name validation
 		if (namesend.equals(namerecive)){
 			errors.rejectValue("usernamereceive", REQUIRED,"El destinatario no puede ser igual que el usuario que envía");
@@ -78,9 +72,7 @@ public class MessageValidator implements Validator {
 				}
 	}
 
-	/**
-	 * This Validator validates *just* League instances
-	 */
+	
 	@Override
 	public boolean supports(Class<?> clazz) {
 		return Message.class.isAssignableFrom(clazz);

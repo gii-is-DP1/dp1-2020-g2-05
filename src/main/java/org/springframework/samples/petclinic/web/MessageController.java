@@ -120,7 +120,6 @@ public class MessageController {
 
 		} catch (Exception e) {
 			log.warn("No se ha encontrado el usuario");
-
 			return "errors/exception";
 		}
 		

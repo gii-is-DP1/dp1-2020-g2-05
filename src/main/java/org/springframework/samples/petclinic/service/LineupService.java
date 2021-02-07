@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Lineup;
 import org.springframework.samples.petclinic.repository.LineupRepository;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedRiderOnLineupException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,8 +23,12 @@ public class LineupService {
 	}
 
 	@Transactional
-	public void saveLineup(Lineup lineup) throws DataAccessException {
-		lineupRepository.save(lineup);
+	public void saveLineup(Lineup lineup) throws DataAccessException, DuplicatedRiderOnLineupException {
+		if (lineup.getRecruit1().equals(lineup.getRecruit2())) {
+			throw new DuplicatedRiderOnLineupException("You can't select the same rider twice!");
+		} else {
+			lineupRepository.save(lineup);
+		}
 	}
 
 	@Transactional
@@ -47,4 +52,7 @@ public class LineupService {
 		return this.lineupRepository.findByGp(gpId);
 	}
 	
+	public List<Lineup> findByRecruit(int recruitId) {
+		return this.lineupRepository.findByRecruit(recruitId);
+	}
 }

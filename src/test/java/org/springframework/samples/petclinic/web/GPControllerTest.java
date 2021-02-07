@@ -29,8 +29,10 @@ import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.GranPremio;
 import org.springframework.samples.petclinic.model.TablaConsultas;
 import org.springframework.samples.petclinic.model.User;
+import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.GranPremioService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
+import org.springframework.samples.petclinic.service.TransactionService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -44,12 +46,16 @@ public class GPControllerTest {
 	private static final Integer TEST_GP_ID = 1;
 
 	@MockBean
-	@Autowired
 	private GranPremioService GPService;
 
 	@MockBean
-	@Autowired
 	private TablaConsultasService TCService;
+	
+	@MockBean
+	private TransactionService transactionService;
+	
+	@MockBean
+	private AuthoritiesService authoritiesService;
 
 	@Autowired
 	private MockMvc mockMvc;

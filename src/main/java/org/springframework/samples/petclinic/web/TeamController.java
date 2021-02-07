@@ -21,7 +21,7 @@ import org.springframework.samples.petclinic.service.OfferService;
 import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserService;
-import org.springframework.samples.petclinic.service.exceptions.NoTeamInThisLeagueException;
+import org.springframework.samples.petclinic.service.exceptions.JoinWithoutCodeException;
 import org.springframework.samples.petclinic.service.exceptions.NotAllowedNumberOfRecruitsException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -32,7 +32,6 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -77,15 +76,12 @@ public class TeamController {
 
 	
 	@GetMapping(path = "/leagues/{leagueId}/teams/new")
-	public String crearEquipo(@PathVariable("leagueId") int leagueId, @RequestHeader(name = "Referer", defaultValue = "/") String referer,
-			ModelMap model) throws NoTeamInThisLeagueException {
+	public String crearEquipo(@PathVariable("leagueId") int leagueId, @RequestHeader(name = "Referer", defaultValue = "http://localhost:8090/") String referer,
+			ModelMap model) throws JoinWithoutCodeException {
 		
-		String r = referer.split(":")[2];
-		String[] rr =  r.split("/");
-		Boolean l = r.split("/")[1].equalsIgnoreCase("leagues");
-		Boolean j = r.split("/")[2].equalsIgnoreCase("join");
-		if(!(l && j) && rr.length==3) {
-			throw new NoTeamInThisLeagueException();
+		String r = referer.split(":[0-9]{4}")[1];
+		if(!r.equalsIgnoreCase("/leagues/join")) {
+			throw new JoinWithoutCodeException();
 		}
 		
 		log.info("Abriendo el formulario para crear un equipo");
@@ -225,16 +221,16 @@ public class TeamController {
 				try {
 					recruitService.putOnSale(opRecruit.get());
 					offerService.putOnSale(opRecruit.get(), offer.getPrice());
-				} catch (Exception e) {
+				} catch (NotAllowedNumberOfRecruitsException e) {
 					modelMap.addAttribute("message",
 							"You must own at least 2 riders not on sale to perform this action");
 					return mostrarDetallesEscuderia(leagueId, teamId, modelMap);
 				}
 
-				return "redirect:/leagues/{leagueId}/market";
+				return mostrarDetallesEscuderia(leagueId, teamId, modelMap);
 			} else {
 				modelMap.addAttribute("message", "Recruit not found!");
-				return "redirect:/leagues/" + leagueId + "/teams/" + teamId + "/details";
+				return mostrarDetallesEscuderia(leagueId, teamId, modelMap);
 			}
 		}
 	}

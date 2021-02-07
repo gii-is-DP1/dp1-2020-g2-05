@@ -20,6 +20,9 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "granpremio")
 public class GranPremio extends BaseEntity {
@@ -49,6 +52,9 @@ public class GranPremio extends BaseEntity {
 	
 	@Column(name = "has_been_run") 
 	private Boolean hasBeenRun;
+	
+	@Column(name = "has_been_validated") 
+	private Boolean hasBeenValidated;
 	
 	@Column(name = "calendar")
 	private Boolean calendar;
@@ -92,85 +98,7 @@ public class GranPremio extends BaseEntity {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "gp")
 	private Set<Lineup> lineups;
 
-	public String getSite() {
-		return site;
-	}
-
-	public void setSite(String site) {
-		this.site = site;
-	}
 	
-	public void setHasBeenRun(Boolean hasBeenRun) {
-		this.hasBeenRun = hasBeenRun;
-	}
-	
-	public Boolean getHasBeenRun() {
-		return hasBeenRun;
-	}
-	
-	public LocalDate getDate0() {
-		return date0;
-	}
-
-	public void setDate0(LocalDate date0) {
-		this.date0 = date0;
-	}
-
-	public String getCircuit() {
-		return circuit;
-	}
-
-	public void setCircuit(String circuit) {
-		this.circuit = circuit;
-	}
-
-	public String getRaceCode() {
-		return raceCode;
-	}
-
-	public void setRaceCode(String raceCode) {
-		this.raceCode = raceCode;
-	}
-
-	public Set<Result> getResults() {
-		return results;
-	}
-
-	public void setResults(Set<Result> results) {
-		this.results = results;
-	}
-	
-	public Set<Lineup> getLineups() {
-		return lineups;
-	}
-
-	public void setLineups(Set<Lineup> lineups) {
-		this.lineups = lineups;
-	}
-
-	public Record getRecordMotoGP() {
-		return recordMotoGP;
-	}
-
-	public void setRecordMotoGP(Record recordMotoGP) {
-		this.recordMotoGP = recordMotoGP;
-	}
-
-	public Record getRecordMoto2() {
-		return recordMoto2;
-	}
-
-	public void setRecordMoto2(Record recordMoto2) {
-		this.recordMoto2 = recordMoto2;
-	}
-
-	public Record getRecordMoto3() {
-		return recordMoto3;
-	}
-
-	public void setRecordMoto3(Record recordMoto3) {
-		this.recordMoto3 = recordMoto3;
-	}
 	
 	public List<String> getPilotsWithRecords() {
 		Record recordGP = this.getRecordMotoGP();

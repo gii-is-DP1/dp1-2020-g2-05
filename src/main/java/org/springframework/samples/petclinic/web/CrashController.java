@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.http.HttpStatus;
+import org.springframework.samples.petclinic.service.exceptions.NoTeamInThisLeagueException;
 
 /**
  * Controller used to showcase what happens when an exception is thrown
@@ -45,17 +46,22 @@ public class CrashController {
 //	    throw new ArithmeticException("test exception");
 	}
 	
-	@RequestMapping("/400")
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String badRequest() {
-        return "errors/error400";
-    }
+	@RequestMapping("/NoTeamInThisLeagueException")
+	public String triggerNoTeamInThisLeagueException() throws NoTeamInThisLeagueException {
+		throw new NoTeamInThisLeagueException();
+	}
 	
-	@RequestMapping("/401")
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public String unauthorized() {
-        return "errors/error401";
-    }
+//	@RequestMapping("/400")
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    public String badRequest() {
+//        return "errors/error400";
+//    }
+//	
+//	@RequestMapping("/401")
+//    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+//    public String unauthorized() {
+//        return "errors/error401";
+//    }
 	
 	@RequestMapping("/403")
     @ResponseStatus(HttpStatus.FORBIDDEN)
@@ -73,6 +79,18 @@ public class CrashController {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String internalServerError() {
         return "errors/error500";
+    }
+	
+	@RequestMapping("/errorUser")
+    @ResponseStatus(HttpStatus.I_AM_A_TEAPOT)
+    public String errorUser() {
+        return "errorUser";
+    }
+	
+	@RequestMapping("/errorAdmin")
+    @ResponseStatus(HttpStatus.I_AM_A_TEAPOT)
+    public String errorAdmin() {
+        return "errorAdmin";
     }
 
 }

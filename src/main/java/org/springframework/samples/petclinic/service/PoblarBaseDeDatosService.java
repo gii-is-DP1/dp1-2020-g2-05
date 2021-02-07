@@ -19,8 +19,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import lombok.extern.slf4j.Slf4j;
-import motogpAPI.RaceCode;
-import motogpAPI.Session;
+import motogpApiV2.RaceCode;
+import motogpApiV2.Session;
 import motogpApiV2.results.Competitor;
 import motogpApiV2.testing.testing;
 

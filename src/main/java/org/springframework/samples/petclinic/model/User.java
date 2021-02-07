@@ -17,7 +17,7 @@ import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.validator.constraints.URL;
+
 
 import lombok.Data;
 

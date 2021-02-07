@@ -35,6 +35,7 @@ import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Recruit;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.User;
+import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.LineupService;
 import org.springframework.samples.petclinic.service.OfferService;
@@ -43,6 +44,8 @@ import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.TransactionService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.service.exceptions.duplicatedLeagueNameException;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedRiderOnLineupException;
 import org.springframework.samples.petclinic.util.Status;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -60,39 +63,32 @@ public class TeamControllerTest {
 	private static final Integer TEST_TEAM1_ID = 2;
 
 	private static final Integer TEST_RECRUIT_ID = 1;
-	
-	 @Autowired
-	 private WebApplicationContext context;
-	 
-	 @MockBean
-	 @Autowired
-	 private UserService userService;
-	 
-	
-	 private GenericIdToEntityConverter converter;
-	 
-	 @MockBean
-	 @Autowired
-	 private RecruitService recruitService;
-	 
-	 @MockBean
-	 @Autowired
-	 private LineupService lineupService;
-	 
-	 @MockBean
-	 @Autowired
-	 private OfferService offerService;
-	 
-	 @MockBean
+
 	@Autowired
+	private WebApplicationContext context;
+
+	@MockBean
+	private UserService userService;
+
+	private GenericIdToEntityConverter converter;
+
+	@MockBean
+	private RecruitService recruitService;
+
+	@MockBean
+	private LineupService lineupService;
+
+	@MockBean
+	private OfferService offerService;
+
+	@MockBean
 	private TransactionService transactionService;
-	 
-	 @MockBean
-	 private TablaConsultasService tablaConsultas;
-	 
-	 @MockBean
-	 @Autowired
-	 private TeamService teamService;
+
+	@MockBean
+	private TablaConsultasService tablaConsultas;
+
+	@MockBean
+	private TeamService teamService;
 	 
 	@MockBean
 	@Autowired
@@ -125,7 +121,10 @@ public class TeamControllerTest {
 
 	@MockBean
 	private LeagueService leagueService;
-
+	
+	@MockBean
+	private AuthoritiesService authoritiesService;
+	
 	@Autowired
 	private MockMvc mockMvc;
 	
@@ -150,8 +149,9 @@ public class TeamControllerTest {
     private List<Recruit> listaRecruitsEnVenta = new ArrayList<Recruit>();
 	
 	@BeforeEach
-	void setup() throws DataAccessException, duplicatedLeagueNameException {
-
+	void setup() throws DataAccessException, duplicatedLeagueNameException, DuplicatedRiderOnLineupException {
+		
+	
 		user1.setUsername("miguel");
 		user1.setPassword("asdd");
 		user1.setEmail("miguel@mail.com");
@@ -337,18 +337,30 @@ public class TeamControllerTest {
 	@Test
 	void testInitCreationForm() throws Exception {
 
-		mockMvc.perform(get("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID)).andExpect(status().isOk())
-				.andExpect(view().name("/leagues/TeamsEdit")).andExpect(model().attributeExists("team"));
-	}
+		mockMvc.perform(get("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID).header("Referer", "http://localhost:8090/leagues/join"))
+		.andExpect(status()
+				.isOk())
+		.andExpect(view().name("/leagues/TeamsEdit"))
+		.andExpect(model().attributeExists("team"));
+	}	
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testInitCreationFormNegative() throws Exception {
 		given(this.teamService.findTeamsByLeagueId(TEST_LEAGUE_ID)).willReturn(6);
 
-		mockMvc.perform(get("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID)).andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/leagues/{leagueId}/teams"));
-	}
+		mockMvc.perform(get("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID).header("Referer", "http://localhost:8090/leagues/join"))
+		.andExpect(status().is3xxRedirection())
+		.andExpect(view().name("redirect:/leagues/{leagueId}/teams"));
+	}	
+
+	@WithMockUser(value = "spring")
+	@Test
+	void testInitCreationFormException() throws Exception {
+		mockMvc.perform(get("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID).header("Referer", "http://localhost:8090/leagues"))
+		.andExpect(status().is3xxRedirection())
+		.andExpect(view().name("redirect:/leagues"));
+	}	
 
 	@WithMockUser(value = "spring")
 	@Test
@@ -435,8 +447,8 @@ public class TeamControllerTest {
 				.param("team.id", TEST_TEAM_ID.toString())
 				.param("user.username" , user.getUsername())
 				.param("league.id", TEST_LEAGUE_ID.toString()))
-		.andExpect(status().is3xxRedirection())
-		.andExpect(view().name("redirect: Perfil/Perfil"));
+		.andExpect(status().isOk())
+		.andExpect(view().name("Perfil/Perfil"));
 	}
 
 	@WithMockUser(value = "spring")
@@ -501,8 +513,11 @@ public class TeamControllerTest {
 		given(this.recruitService.findRecruitById(2)).willReturn(Optional.of(recruit2));
 
 		mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/details/{recruitId}", TEST_LEAGUE_ID, TEST_TEAM1_ID, 2)
-				.with(csrf()).param("status", Status.Outstanding.toString()).param("price", "1500"))
-				.andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/leagues/{leagueId}/market"));
+				.with(csrf())
+				.param("status", Status.Outstanding.toString())
+				.param("price", "1500"))
+			.andExpect(status().isOk())
+			.andExpect(view().name("/leagues/teamDetails"));
 	}
 
 	@WithMockUser(value = "spring")
@@ -512,10 +527,13 @@ public class TeamControllerTest {
 		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
 		given(this.recruitService.findRecruitById(TEST_RECRUIT_ID)).willReturn(Optional.of(recruit1));
 
-		mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/details/{recruitId}", TEST_LEAGUE_ID, TEST_TEAM_ID,
-				TEST_RECRUIT_ID).with(csrf()).param("message",
-						"You must own at least 2 riders not on sale to perform this action"))
-				.andExpect(status().isOk()).andExpect(view().name("/leagues/teamDetails"));
+		mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/details/{recruitId}", TEST_LEAGUE_ID, TEST_TEAM_ID, TEST_RECRUIT_ID)
+				.with(csrf())
+				.param("status", Status.Outstanding.toString())
+				.param("price", "1500"))
+			.andExpect(status().isOk())
+			.andExpect(model().attribute("message",is("You must own at least 2 riders not on sale to perform this action")))
+			.andExpect(view().name("/leagues/teamDetails"));
 	}
 
 	@WithMockUser(value = "spring")

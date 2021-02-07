@@ -18,6 +18,7 @@ import java.util.Optional;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -31,6 +32,7 @@ import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Recruit;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.User;
+import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.OfferService;
 import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
@@ -54,6 +56,7 @@ class OfferControllerTests {
 
 	@MockBean
 	private TablaConsultasService tablaConsultas;
+	
 	@Autowired
 	private MockMvc mockMvc;
 
@@ -68,6 +71,9 @@ class OfferControllerTests {
 
 	@MockBean
 	private TransactionService transactionService;
+	
+	@MockBean
+	private AuthoritiesService authoritiesService;
 
 	@MockBean
 	private UserService userService;
@@ -141,6 +147,13 @@ class OfferControllerTests {
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 		Date date = new Date();
 		league.setLeagueDate(formatter.format(date));
+		
+		league.setId(2);
+		league.setLeagueCode("ADTQCGGOND");
+		league.setName("exception");
+		SimpleDateFormat formatter2 = new SimpleDateFormat("dd/MM/yyyy");
+		Date date2 = new Date();
+		league.setLeagueDate(formatter2.format(date2));
 
 		user1.setUsername("migue");
 		user1.setPassword("asd");
@@ -222,6 +235,7 @@ class OfferControllerTests {
 	void testGetOffers() throws Exception {
 		given(userService.getUserSession()).willReturn(user1);
 		given(offerService.findOffersByLeague(TEST_LEAGUE_ID)).willReturn(offersList);
+		given(teamService.findTeamByUsernameAndLeagueId("migue", TEST_LEAGUE_ID)).willReturn(Optional.of(team1));
 
 		mockMvc.perform(get("/leagues/{leagueId}/market", TEST_LEAGUE_ID)).andExpect(status().isOk())
 				.andExpect(view().name("offers/offersList"))
@@ -237,6 +251,17 @@ class OfferControllerTests {
 						Matchers.hasItem(Matchers.<Offer>hasProperty("status", is(offer2.getStatus())))))
 				.andExpect(model().attribute("offers",
 						Matchers.hasItem(Matchers.<Offer>hasProperty("recruit", is(offer2.getRecruit())))));
+	}
+	
+	@WithMockUser(value = "spring")
+	@Test
+	void testNoTeamInThisLeagueException() throws Exception {
+		given(userService.getUserSession()).willReturn(user1);
+		given(offerService.findOffersByLeague(TEST_LEAGUE_ID)).willReturn(offersList);
+		given(teamService.findTeamByUsernameAndLeagueId("migue", 2)).willReturn(Optional.empty());
+
+		mockMvc.perform(get("/leagues/{leagueId}/market", 2)).andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/leagues"));
 	}
 
 	@WithMockUser(value = "spring")
