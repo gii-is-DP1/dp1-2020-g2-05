@@ -23,6 +23,11 @@
  	 	<img alt="Imagen no encontrada" src="<c:out value="${user.imgperfil}"/>" 
  	 	width="165px" height="165px" 
  	 	style="border:1px solid #414b50;align-items: center;" onerror="this.src='https://images.assetsdelivery.com/compings_v2/pxlprostudio/pxlprostudio1902/pxlprostudio190203671.jpg'" />
+ 	 	
+ 	 	<spring:url value="/users/editarPerfil" var="ChangueUrl">
+		<spring:param name="teamId" value="${team.id}" />
+		</spring:url>
+ 	 	<a href="${fn:escapeXml(ChangueUrl)}" type="bottom">Editar perfil</a>
  	</div>
  	 </div>
  	 </div>

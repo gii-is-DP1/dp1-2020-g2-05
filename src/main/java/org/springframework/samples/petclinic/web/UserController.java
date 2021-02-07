@@ -156,5 +156,37 @@ public class UserController {
 		return "friends/seefriend";
 	}
 	
+	@GetMapping("/users/editarPerfil")
+	public String cambiarImagen(ModelMap modelMap) {
+		User user = userService.getUserSession();
+	
+		modelMap.addAttribute("user",user);
+		return "Perfil/editarPerfil";
+	}
+	
+	@PostMapping(value = "/users/editarPerfil")
+	public String cambiarImagen2(@Valid User user,ModelMap modelMap, BindingResult result) {
+		if (result.hasErrors()) {
+			List<ObjectError> errores = result.getAllErrors();
+			List<String> erroresstring = new ArrayList<String>();
+			for(int i=0;i<errores.size();i++) {
+				erroresstring.add(errores.get(i).getDefaultMessage());
+			}
+			modelMap.addAttribute("message",erroresstring );	
+			modelMap.addAttribute("user", user);
+			return "Perfil/editarPerfil";
+		}
+		else {
+
+			User usuario = userService.getUserSession();
+			usuario.setEmail(user.getEmail());
+			usuario.setPassword(user.getPassword());
+			usuario.setImgperfil(user.getImgperfil());
+			userService.saveUser(usuario);
+			modelMap.addAttribute("teams",usuario.getTeam() );	
+
+			return "Perfil/Perfil";
+		}
+	}
 
 }
