@@ -21,6 +21,7 @@ import org.springframework.samples.petclinic.service.OfferService;
 import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedTeamNameException;
 import org.springframework.samples.petclinic.service.exceptions.JoinWithoutCodeException;
 import org.springframework.samples.petclinic.service.exceptions.NoTeamInThisLeagueException;
 import org.springframework.samples.petclinic.service.exceptions.NotAllowedNumberOfRecruitsException;
@@ -106,7 +107,7 @@ public class TeamController {
 
 	@PostMapping(value = "/leagues/{leagueId}/teams/new")
 	public String saveNewTeam(@PathVariable("leagueId") int leagueId, @Valid Team team, BindingResult result,
-			ModelMap model) throws NotAllowedNumberOfRecruitsException {
+			ModelMap model) throws NotAllowedNumberOfRecruitsException, DuplicatedTeamNameException {
 		
 		League league = this.leagueService.findLeague(leagueId).get();
 		log.debug("Asignandole la liga " + league);
@@ -144,9 +145,8 @@ public class TeamController {
 
 			}else if (igual != 0) {
 				log.warn("El equipo " + team + " no se ha podido crear");
-				model.addAttribute("message",
-						"Sorry, already exists a team with this name, try it with another team Name");
-				return showTeams(leagueId, model);
+				throw new DuplicatedTeamNameException();
+				
 				
 			}else {
 				

@@ -13,6 +13,7 @@ import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedTeamNameException;
 import org.springframework.samples.petclinic.service.exceptions.JoinWithoutCodeException;
 import org.springframework.samples.petclinic.service.exceptions.MaximumNumberOfLeaguesPerUserException;
 import org.springframework.samples.petclinic.service.exceptions.NoLeagueFoundException;
@@ -101,6 +102,12 @@ public class CustomErrorController implements ErrorController {
 	public String NotUserTeam(HttpServletRequest request,  Exception ex, RedirectAttributes redirectAttributes)  {
 		redirectAttributes.addFlashAttribute("message", "You are not the Owner of this team!");
 		return "redirect:/myTeams";
+	}
+	
+	@ExceptionHandler(DuplicatedTeamNameException.class)
+	public String DuplicatedTeamNameException(HttpServletRequest request,  Exception ex, RedirectAttributes redirectAttributes)  {
+		redirectAttributes.addFlashAttribute("message", "Already exists a team with this name");
+		return "redirect:/leagues/{leagueId}/teams";
 	}
 	
 //	@RequestMapping
