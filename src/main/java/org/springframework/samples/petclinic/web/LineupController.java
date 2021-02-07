@@ -13,10 +13,10 @@ import org.springframework.samples.petclinic.model.GranPremio;
 import org.springframework.samples.petclinic.model.Lineup;
 import org.springframework.samples.petclinic.model.Recruit;
 import org.springframework.samples.petclinic.service.GranPremioService;
-import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.LineupService;
 import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedRiderOnLineupException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -130,15 +130,25 @@ public class LineupController {
 			model.put("lineup", lineup);
 			return "thymeleaf/lineupsEdit";
 		} else {
-			this.lineupService.saveLineup(lineup);
+			try {
+				this.lineupService.saveLineup(lineup);
+			}  catch (DuplicatedRiderOnLineupException e) {
+				log.warn("Fallo al intentar crear un nuevo lineup: Se ha seleccionado dos veces a :" + lineup.getRecruit1());
+				result.rejectValue("recruit1", "duplicatedRider", "selected the same rider twice");
+				result.rejectValue("recruit2", "duplicatedRider", "selected the same rider twice");
+				redirectAttributes.addFlashAttribute("message", result.getAllErrors());
+				GranPremio currentGP = this.granPremioService.findGPById(currentGPId).get();
+				lineup.setGp(currentGP);
+				model.put("lineup", lineup);
+				return "thymeleaf/lineupsEdit";
+			}
 			log.info("Lineup succesfully created!: " + lineup);
 			return "redirect:/leagues/{leagueId}/teams/{teamId}/details";
 		}
 	}
 	
 	@GetMapping(path = "/editLineup/{lineupId}")
-	public String editarLineupGet(//@RequestHeader(name = "Referer") String referer,
-			@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
+	public String editarLineupGet(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
 			@PathVariable("lineupId") int lineupId, ModelMap model, RedirectAttributes redirectAttributes) {
 
 		String view = "redirect:/leagues/{leagueId}/teams/{teamId}/details";
@@ -156,7 +166,7 @@ public class LineupController {
 				model.addAttribute("lineup", lineup.get());
 			}
 		} else {
-			model.addAttribute("message", "Lineup not found!");
+			redirectAttributes.addFlashAttribute("message", "Lineup not found!");
 			log.info("The lineup was not found!");
 		}
 
@@ -166,7 +176,7 @@ public class LineupController {
 	@PostMapping(value = "/editLineup/{lineupId}")
 	public String editarLineupPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
 			@Valid Lineup lineup, BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
-		
+
 		if (result.hasErrors()) {
 			log.info("The lineup edit form has errors!");
 			log.warn("Errors: " + result);
@@ -182,17 +192,26 @@ public class LineupController {
 			GranPremio gp = this.granPremioService.findGPById(lineupToUpdate.getGp().getId()).get();
 			lineupToUpdate.setGp(gp);
 			log.debug("lineupToUpdate: " + lineupToUpdate);
-			
+
 			Optional<Boolean> condition = Optional.of(lineupToUpdate.getGp().getHasBeenRun());
 			if (condition.isPresent() && condition.get()) {
 				redirectAttributes.addFlashAttribute("message", "No se puede modificar una alineacion para un GP que ya se ha disputado!");
 				return "redirect:/leagues/{leagueId}/teams/{teamId}/details";
 			}
-			
-			this.lineupService.saveLineup(lineupToUpdate);
+			try {
+				this.lineupService.saveLineup(lineupToUpdate);
+			}  catch (DuplicatedRiderOnLineupException e) {
+				log.warn("Fallo al intentar crear un nuevo lineup: Se ha seleccionado dos veces a :" + lineupToUpdate.getRecruit1());
+				result.rejectValue("recruit1", "duplicatedRider", "selected the same rider twice");
+				result.rejectValue("recruit2", "duplicatedRider", "selected the same rider twice");
+				redirectAttributes.addFlashAttribute("message", result.getAllErrors());
+				GranPremio currentGP = this.lineupService.findLineup(lineup.getId()).get().getGp();
+				lineup.setGp(currentGP);
+				model.put("lineup", lineup);
+				return "thymeleaf/lineupsEdit";
+			}
 			log.info("Saving edited lineup: " + lineupToUpdate);
-//			log.info("El gp asociado es: " + lineupToUpdate.getGp().getId());
-			model.addAttribute("message", "Lineup successfully saved!");
+			redirectAttributes.addFlashAttribute("message", "Lineup successfully saved!");
 			return "redirect:/leagues/{leagueId}/teams/{teamId}/details";
 		}
 	}
@@ -212,10 +231,10 @@ public class LineupController {
 			} else {
 				log.info("Lineup: " + lineup.get());
 				lineupService.delete(lineup.get());
-				model.addAttribute("message", "Lineup successfully deleted!");
+				redirectAttributes.addFlashAttribute("message", "Lineup successfully deleted!");
 			}
 		} else {
-			model.addAttribute("message", "Lineup not found!");
+			redirectAttributes.addFlashAttribute("message", "Lineup not found!");
 			log.warn("The lineup with id (" + lineupId + ") was not found!");
 		}
 

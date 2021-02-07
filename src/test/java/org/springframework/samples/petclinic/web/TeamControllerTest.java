@@ -45,6 +45,7 @@ import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.TransactionService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.duplicatedLeagueNameException;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedRiderOnLineupException;
 import org.springframework.samples.petclinic.util.Status;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -119,7 +120,7 @@ public class TeamControllerTest {
     private List<Recruit> listaRecruitsEnVenta = new ArrayList<Recruit>();
 	
 	@BeforeEach
-	void setup() throws DataAccessException, duplicatedLeagueNameException {
+	void setup() throws DataAccessException, duplicatedLeagueNameException, DuplicatedRiderOnLineupException {
 		
 	
 		user1.setUsername("miguel");
@@ -525,8 +526,8 @@ public class TeamControllerTest {
 				.with(csrf())
 				.param("status", Status.Outstanding.toString())
 				.param("price", "1500"))
-			.andExpect(status().is3xxRedirection())
-			.andExpect(view().name("redirect:/leagues/{leagueId}/market"));
+			.andExpect(status().isOk())
+			.andExpect(view().name("/leagues/teamDetails"));
 	}
 	
 	@WithMockUser(value = "spring")

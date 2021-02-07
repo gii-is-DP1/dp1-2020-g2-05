@@ -95,5 +95,7 @@ public class UserServiceTest {
 			assertThat(friends.contains(userService.findUser("admin1").get())).isFalse();
 		
 		}
+	 
+
 
 }
