@@ -156,25 +156,25 @@ INSERT INTO offer(id,price,status,recruit_id,team_id) VALUES (1,2000,2,1,1);
 
 
 INSERT INTO "PUBLIC"."GRANPREMIO" VALUES
-(1, TRUE, 'Losail International Circuit', DATE '2019-03-08',FALSE, 'https://cdn1.snaplap.net/wp-content/uploads/2016/11/22114232/losail-night.jpg','QAT', 'Doha', NULL, NULL, NULL),
-(2, TRUE, 'Autodromo Termas de Rio Hondo', DATE '2019-03-29', FALSE, 'https://cdn-1.motorsport.com/images/mgl/6zMgllJY/s8/motogp-argentinian-gp-2017-autodromo-termas-de-rio-hondo.jpg','ARG', 'Santiago del Estero', NULL, NULL, NULL),
-(3, TRUE, 'Circuit of The Americas', DATE '2019-04-12', FALSE,'https://www.racefans.net/wp-content/uploads/2018/09/racefansdotnet-20180904-160658-1.jpg', 'USA', 'Austin', NULL, NULL, NULL),
-(4, TRUE, 'Circuit de Jerez', DATE '2019-05-03', FALSE,'https://multimedia.andalucia.org/fotos/image_201037.jpeg', 'ESP', 'Jerez', NULL, NULL, NULL),
-(5, TRUE, 'Le Mans Bugatti Circuit', DATE '2019-05-17', FALSE,'https://www.giornalemotori.com/wp-content/uploads//2014/05/NCA08GPF_300_2700.jpg', 'FRA', 'Le Mans', NULL, NULL, NULL),
-(6, TRUE, 'Autodromo Internazionale del Mugello', DATE '2019-05-31', FALSE,'https://media-cdn.tripadvisor.com/media/photo-s/0f/1b/0f/b9/autodromo-del-mugello.jpg', 'ITA', 'Scarperia Firenze', NULL, NULL, NULL),
-(7, TRUE, 'Circuit de Catalunya', DATE '2019-06-14', FALSE,'https://upload.wikimedia.org/wikipedia/commons/e/e7/Circuit_de_Barcelona-Catalunya%2C_April_19%2C_2018_SkySat_%28cropped%29.jpg', 'ESP', 'Barcelona', NULL, NULL, NULL),
-(8, TRUE, 'TT Circuit Assen', DATE '2019-06-28', FALSE,'https://i.pinimg.com/originals/83/fb/65/83fb656e66c5f42fd2ec935e7690d35c.jpg', 'NLD', 'Assen', NULL, NULL, NULL),
-(9, TRUE, 'Sachsenring', DATE '2019-07-05', FALSE,'https://www.zdf.de/assets/sachsenring-von-oben-100~1920x1080?cb=1498821325377', 'DEU', 'Oberlungwitz', NULL, NULL, NULL),
-(10, TRUE, 'Automotodrom Brno', DATE '2019-08-02', FALSE,'https://cdn1.snaplap.net/wp-content/uploads/2016/10/13093914/brno-aerial.jpg', 'CZE', 'Brno', NULL, NULL, NULL),
-(11, TRUE, 'Red Bull Ring', DATE '2019-08-09', FALSE, 'https://cdn.motorlat.com/administrator/uploads/12423_helico-austria.jpg','AUT', 'Spielberg', NULL, NULL, NULL),
-(12, TRUE, 'Silverstone Circuit', DATE '2019-08-23', FALSE,'https://static01.nyt.com/images/2019/07/13/sports/13sp-silverstone-inyt1/merlin_157516356_009c6be7-3977-4ad6-b4bc-52d2addf96e1-superJumbo.jpg', 'ENG', 'Silverstone', NULL, NULL, NULL),
-(13, TRUE, 'Misano World Circuit', DATE '2019-09-13', FALSE,'https://media-cdn.tripadvisor.com/media/photo-s/1a/b3/d1/d2/le-vie-di-fuga-di-misano.jpg', 'ITA', 'Misano Adriatico', NULL, NULL, NULL),
-(14, TRUE, 'Motorland Aragon', DATE '2019-09-20', FALSE,'https://www.tumotoweb.com/tmw5/wp-content/uploads/2014/12/Circuito-Motorland-Aragon.jpg', 'ESP', 'Alcaniz', NULL, NULL, NULL),
-(15, TRUE, 'Chang International Circuit', DATE '2019-10-04', FALSE,'https://i.pinimg.com/originals/41/53/4f/41534f21b9d6e091429b7a5092ba50f3.jpg', 'THA', 'Buriram', NULL, NULL, NULL),
-(16, TRUE, 'Twin Ring Motegi', DATE '2019-10-18', FALSE,'https://d2ahiw9kb7is19.cloudfront.net/-/media/06F0CB9B19D849EC9998D5B4BCBC916C.jpg?d=20171117T090048&w=750', 'JPN', 'Hiyama', NULL, NULL, NULL),
-(17, TRUE, 'Phillip Island Circuit', DATE '2019-10-24', FALSE,'https://www.austadiums.com/stadiums/photos/phillip-island-circuit.jpg', 'AUS', 'Phillip Island', NULL, NULL, NULL),
-(18, TRUE, 'Sepang International Circuit', DATE '2019-11-01', FALSE,'https://i.redd.it/0akkcu17mbb51.jpg', 'MYS', 'Sepang', NULL, NULL, NULL),
-(19, TRUE, 'Circuit de la Comunitat Valenciana Ricardo Tormo', DATE '2019-11-15', FALSE, 'https://www.mundomotero.com/wp-content/uploads/2012/09/circuito_comunitat_valenciana_reasfaltado_2012_n.jpg','ESP', 'Valencia', NULL, NULL, NULL);  
+(1, TRUE, 'Losail International Circuit', DATE '2019-03-08',FALSE,FALSE, 'https://cdn1.snaplap.net/wp-content/uploads/2016/11/22114232/losail-night.jpg','QAT', 'Doha', NULL, NULL, NULL),
+(2, TRUE, 'Autodromo Termas de Rio Hondo', DATE '2019-03-29', FALSE,FALSE, 'https://cdn-1.motorsport.com/images/mgl/6zMgllJY/s8/motogp-argentinian-gp-2017-autodromo-termas-de-rio-hondo.jpg','ARG', 'Santiago del Estero', NULL, NULL, NULL),
+(3, TRUE, 'Circuit of The Americas', DATE '2019-04-12', FALSE,FALSE,'https://www.racefans.net/wp-content/uploads/2018/09/racefansdotnet-20180904-160658-1.jpg', 'USA', 'Austin', NULL, NULL, NULL),
+(4, TRUE, 'Circuit de Jerez', DATE '2019-05-03', FALSE,FALSE,'https://multimedia.andalucia.org/fotos/image_201037.jpeg', 'ESP', 'Jerez', NULL, NULL, NULL),
+(5, TRUE, 'Le Mans Bugatti Circuit', DATE '2019-05-17', FALSE,FALSE,'https://www.giornalemotori.com/wp-content/uploads//2014/05/NCA08GPF_300_2700.jpg', 'FRA', 'Le Mans', NULL, NULL, NULL),
+(6, TRUE, 'Autodromo Internazionale del Mugello', DATE '2019-05-31', FALSE,FALSE,'https://media-cdn.tripadvisor.com/media/photo-s/0f/1b/0f/b9/autodromo-del-mugello.jpg', 'ITA', 'Scarperia Firenze', NULL, NULL, NULL),
+(7, TRUE, 'Circuit de Catalunya', DATE '2019-06-14', FALSE,FALSE,'https://upload.wikimedia.org/wikipedia/commons/e/e7/Circuit_de_Barcelona-Catalunya%2C_April_19%2C_2018_SkySat_%28cropped%29.jpg', 'ESP', 'Barcelona', NULL, NULL, NULL),
+(8, TRUE, 'TT Circuit Assen', DATE '2019-06-28', FALSE,FALSE,'https://i.pinimg.com/originals/83/fb/65/83fb656e66c5f42fd2ec935e7690d35c.jpg', 'NLD', 'Assen', NULL, NULL, NULL),
+(9, TRUE, 'Sachsenring', DATE '2019-07-05', FALSE,FALSE,'https://www.zdf.de/assets/sachsenring-von-oben-100~1920x1080?cb=1498821325377', 'DEU', 'Oberlungwitz', NULL, NULL, NULL),
+(10, TRUE, 'Automotodrom Brno', DATE '2019-08-02', FALSE,FALSE,'https://cdn1.snaplap.net/wp-content/uploads/2016/10/13093914/brno-aerial.jpg', 'CZE', 'Brno', NULL, NULL, NULL),
+(11, TRUE, 'Red Bull Ring', DATE '2019-08-09', FALSE,FALSE, 'https://cdn.motorlat.com/administrator/uploads/12423_helico-austria.jpg','AUT', 'Spielberg', NULL, NULL, NULL),
+(12, TRUE, 'Silverstone Circuit', DATE '2019-08-23', FALSE,FALSE,'https://static01.nyt.com/images/2019/07/13/sports/13sp-silverstone-inyt1/merlin_157516356_009c6be7-3977-4ad6-b4bc-52d2addf96e1-superJumbo.jpg', 'ENG', 'Silverstone', NULL, NULL, NULL),
+(13, TRUE, 'Misano World Circuit', DATE '2019-09-13', FALSE,FALSE,'https://media-cdn.tripadvisor.com/media/photo-s/1a/b3/d1/d2/le-vie-di-fuga-di-misano.jpg', 'ITA', 'Misano Adriatico', NULL, NULL, NULL),
+(14, TRUE, 'Motorland Aragon', DATE '2019-09-20', FALSE,FALSE,'https://www.tumotoweb.com/tmw5/wp-content/uploads/2014/12/Circuito-Motorland-Aragon.jpg', 'ESP', 'Alcaniz', NULL, NULL, NULL),
+(15, TRUE, 'Chang International Circuit', DATE '2019-10-04', FALSE,FALSE,'https://i.pinimg.com/originals/41/53/4f/41534f21b9d6e091429b7a5092ba50f3.jpg', 'THA', 'Buriram', NULL, NULL, NULL),
+(16, TRUE, 'Twin Ring Motegi', DATE '2019-10-18', FALSE,FALSE,'https://d2ahiw9kb7is19.cloudfront.net/-/media/06F0CB9B19D849EC9998D5B4BCBC916C.jpg?d=20171117T090048&w=750', 'JPN', 'Hiyama', NULL, NULL, NULL),
+(17, TRUE, 'Phillip Island Circuit', DATE '2019-10-24', FALSE,FALSE,'https://www.austadiums.com/stadiums/photos/phillip-island-circuit.jpg', 'AUS', 'Phillip Island', NULL, NULL, NULL),
+(18, TRUE, 'Sepang International Circuit', DATE '2019-11-01', FALSE,FALSE,'https://i.redd.it/0akkcu17mbb51.jpg', 'MYS', 'Sepang', NULL, NULL, NULL),
+(19, TRUE, 'Circuit de la Comunitat Valenciana Ricardo Tormo', DATE '2019-11-15', FALSE,FALSE, 'https://www.mundomotero.com/wp-content/uploads/2012/09/circuito_comunitat_valenciana_reasfaltado_2012_n.jpg','ESP', 'Valencia', NULL, NULL, NULL);  
 
 
 INSERT INTO tabla_consultas(actual_race,races_completed,categoria_actual,time_message,num_users,num_equipos,num_ligas,races_validated) VALUES(1,0,'MOTO3',null,10,0,2,0);
