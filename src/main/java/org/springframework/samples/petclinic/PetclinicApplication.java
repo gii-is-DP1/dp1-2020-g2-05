@@ -22,7 +22,9 @@ public class PetclinicApplication {
 
 	@Autowired
 	private TablaConsultasService TCservice;
+	@Autowired
 	private PoblarBaseDeDatosService PBDService;
+	@Autowired
 	private TransactionService transactionService;
 
 	public static void main(String[] args) {
@@ -47,7 +49,7 @@ public class PetclinicApplication {
     }
 	
 	//Ajustar a Domingo (0 00 00 ? * 7)
-	@Scheduled(cron = "0 04 22 ? * *") 
+	@Scheduled(cron = "0 11 22 ? * *") 
     public void PoblarUltimaCarrera() throws Exception {
 		log.info("Poblando la ultima carrera completada");
 		System.out.println("Poblando");

@@ -54,9 +54,9 @@ public class OfferController {
 	public Team getUserTeam(@PathVariable("leagueId") int leagueId) throws NoTeamInThisLeagueException {
 		Optional<Team> userTeam = teamService.findTeamByUsernameAndLeagueId(userService.getUserSession().getUsername(),
 				leagueId);
-		if(userTeam.isPresent()){
+		if (userTeam.isPresent()) {
 			return userTeam.get();
-		}else {
+		} else {
 			throw new NoTeamInThisLeagueException();
 		}
 	}
@@ -92,12 +92,11 @@ public class OfferController {
 					Recruit recruit = offer.getRecruit();
 					recruitService.purchaseRecruit(recruit, purchaserTeam);
 					teamService.saveTeamMoney(purchaserTeam, -price);// Restar dinero al comprador
-					teamService.saveTeamMoney(recruit.getTeam(), price);// Dar dinero al vendedor
+					teamService.saveTeamMoney(sellerTeam, price);// Dar dinero al vendedor
 					transactionService.trade(price, recruit.getPilot(), sellerTeam, purchaserTeam); // su registro
 					offer.setTeam(purchaserTeam);
 					offer.setStatus(Status.Accepted);
 					offerService.saveOffer(offer);
-
 					modelMap.addAttribute("message", "Pilot recruited!");
 				} catch (NotAllowedNumberOfRecruitsException e) {
 					modelMap.addAttribute("message", "You already own 4 riders in this league!");

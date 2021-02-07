@@ -40,9 +40,9 @@ public class TransactionService {
 		Transaction t = createTransaction(amount, concept, team);
 		transactionRepository.save(t);
 		List<Transaction> transacciones = this.transactionRepository.findByTeamId(team.getId());
-		if (transacciones.size() == 10) {
+		if (transacciones.size() == 10) 
 			this.delete(transacciones.get(0));
-		}
+		
 	}
 
 	public void trade(Integer price, Pilot pilot, Team sellerTeam, Team purchaserTeam) {

@@ -107,8 +107,10 @@ public class TeamService {
 
 	@Transactional
 	public void saveTeamMoney(Team team, Integer price) throws DataAccessException {
+		System.out.println(team.getMoney());
+		System.out.println(price);
 		team.setMoney(team.getMoney() + price);
-		saveTeam(team);
+		this.teamRepository.save(team);
 	}
 
 	@Transactional
