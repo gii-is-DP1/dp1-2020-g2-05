@@ -49,7 +49,7 @@ class RecruitServiceTest {
 
 	@Test
 	void shouldFindRecruitsOnSaleByCorrectTeamId() {
-		long l = teamService.findTeamById(1).get().getRecruits().stream().filter(x -> x.getForSale().equals(true))
+		long l = this.recruitService.getRecruitsByTeam(1).stream().filter(x -> x.getForSale().equals(true))
 				.count();
 
 		assertThat(l == 1L).isTrue();
@@ -57,7 +57,7 @@ class RecruitServiceTest {
 
 	@Test
 	void shouldFindRecruitsNotOnSaleByCorrectTeamId() {
-		long l = teamService.findTeamById(11).get().getRecruits().stream().filter(x -> x.getForSale().equals(true))
+		long l = this.recruitService.getRecruitsByTeam(11).stream().filter(x -> x.getForSale().equals(true))
 				.count();
 
 		assertThat(l == 0L).isTrue();
@@ -74,7 +74,7 @@ class RecruitServiceTest {
 			e.printStackTrace();
 		}
 
-		long l = teamService.findTeamById(11).get().getRecruits().stream().filter(x -> x.getForSale().equals(true))
+		long l = this.recruitService.getRecruitsByTeam(11).stream().filter(x -> x.getForSale().equals(true))
 				.count();
 
 		assertThat(l == 1L).isTrue();
@@ -84,7 +84,7 @@ class RecruitServiceTest {
 	@Transactional
 	void shouldThrowsExceptionWhenPutOnSaleRecruit() {
 		Recruit recruit = recruitService.findRecruitById(8).get();
-		Team sellerTeam = recruit.getTeam();
+		int sellerTeam = recruit.getTeam().getId();
 
 		try {
 			this.recruitService.putOnSale(recruit);
@@ -92,7 +92,7 @@ class RecruitServiceTest {
 			e.printStackTrace();
 		}
 
-		assertThat(sellerTeam.getRecruits().size() == 2).isTrue();
+		assertThat(this.recruitService.getRecruitsByTeam(sellerTeam).size() == 2).isTrue();
 		Assertions.assertThrows(NotAllowedNumberOfRecruitsException.class, () -> {
 			recruitService.putOnSale(recruit);
 		});
@@ -104,7 +104,7 @@ class RecruitServiceTest {
 		Recruit recruit = recruitService.findRecruitById(1).get();
 		this.recruitService.quitOnSale(recruit);
 
-		long l = teamService.findTeamById(1).get().getRecruits().stream().filter(x -> x.getForSale().equals(true))
+		long l = this.recruitService.getRecruitsByTeam(1).stream().filter(x -> x.getForSale().equals(true))
 				.count();
 
 		assertThat(l == 0L).isTrue();
@@ -143,7 +143,7 @@ class RecruitServiceTest {
 	void shouldThrowExceptionWhenPurchaseRecruit() {
 		Recruit recruit = recruitService.findRecruitById(7).get();
 		Team purchaserTeam = teamService.findTeamById(1).get();
-		assertThat(purchaserTeam.getRecruits().size() == 4).isTrue();
+		assertThat(this.recruitService.getRecruitsByTeam(purchaserTeam.getId()).size() == 4).isTrue();
 		Assertions.assertThrows(NotAllowedNumberOfRecruitsException.class, () -> {
 			recruitService.purchaseRecruit(recruit, purchaserTeam);
 		});

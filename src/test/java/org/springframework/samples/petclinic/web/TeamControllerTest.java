@@ -1,6 +1,8 @@
 package org.springframework.samples.petclinic.web;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -47,6 +49,7 @@ import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.TransactionService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedRiderOnLineupException;
+import org.springframework.samples.petclinic.service.exceptions.NotAllowedNumberOfRecruitsException;
 import org.springframework.samples.petclinic.service.exceptions.duplicatedLeagueNameException;
 import org.springframework.samples.petclinic.util.Status;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
@@ -199,8 +202,9 @@ public class TeamControllerTest {
 		
 		recruit1.setTeam(team);
 		listRecruits.add(recruit1);
-		recruit1.setTeam(team);
-		listRecruits.add(recruit1);
+		Recruit recruit5 = new Recruit();
+		listaRecruitsNoEnVenta.add(recruit1);
+		listaRecruitsNoEnVenta.add(recruit5);
 
 		recruit2.setTeam(team1);
 		recruit3.setTeam(team1);
@@ -487,7 +491,7 @@ public class TeamControllerTest {
 	@WithMockUser(value = "spring")
 	@Test
 	void testPutOnSaleSuccess() throws Exception {
-		given(team1.getRecruits()).willReturn(listRecruits2);
+		given(this.recruitService.getRecruitsByTeam(team1.getId())).willReturn(listRecruits2);
 		given(this.teamService.findTeamById(TEST_TEAM1_ID)).willReturn(Optional.of(team1));
 		given(this.recruitService.findRecruitById(2)).willReturn(Optional.of(recruit2));
 
@@ -502,10 +506,11 @@ public class TeamControllerTest {
 	@WithMockUser(value = "spring")
 	@Test
 	void testPutOnSaleWith2RecruitsOrLess() throws Exception {
-		given(this.recruitService.getRecruitsNotOnSaleByTeam(TEST_TEAM_ID)).willThrow(Exception.class);
+		given(this.recruitService.getRecruitsNotOnSaleByTeam(TEST_TEAM_ID)).willReturn(listaRecruitsNoEnVenta);
 		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
 		given(this.recruitService.findRecruitById(TEST_RECRUIT_ID)).willReturn(Optional.of(recruit1));
-
+		when(this.recruitService.putOnSale(any())).thenThrow(NotAllowedNumberOfRecruitsException.class);
+		
 		mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/details/{recruitId}", TEST_LEAGUE_ID, TEST_TEAM_ID, TEST_RECRUIT_ID)
 				.with(csrf())
 				.param("status", Status.Outstanding.toString())

@@ -12,9 +12,11 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.jsoup.Jsoup;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.GranPremio;
 import org.springframework.samples.petclinic.service.PilotService;
+import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -32,11 +34,13 @@ import motogpApiV2.stage.Season;
 @Slf4j
 
 public class testing {
+	@Autowired
+	private static RestTemplate restTemplate = new RestTemplate();
 	
 	private static String API_KEY;
-	private static final String API_KEY_GP = "4g2egaffth2xth2b49mt785e";
-	private static final String API_KEY_2 = "w7hkcb4ptcumtv2scrcd9hqh";
-	private static final String API_KEY_3 = "rz5ru3a4r49mwawhv634556x";
+	private static final String API_KEY_GP = "xvfu4d4a2vvyff8xgn5y7pse";
+	private static final String API_KEY_2 = "9bu6jvb3n97egsjb9ytt6h4p";
+	private static final String API_KEY_3 = "n2crg9kp8d7jmhdmt2bvsa4g";
 	
 	private static final String rootUrl = "https://api.sportradar.us/motogp/trial/v2/en/sport_events/";
 	
@@ -48,27 +52,32 @@ public class testing {
 
 	}
 
-	public static String getJsonFromUrl(String url) throws IOException {
-
-		URL uri = new URL(url);
-		URLConnection yc = uri.openConnection();
-		BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
-		String inputLine;
-		StringBuffer response = new StringBuffer();
-
-		while ((inputLine = in.readLine()) != null)
-			response.append(inputLine);
-		in.close();
-
-		return response.toString();
-	}
+//	public static String getJsonFromUrl(String url) throws IOException {
+//
+//		URL uri = new URL(url);
+//		URLConnection yc = uri.openConnection();
+//		
+//		BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+//		
+//		String inputLine;
+//		
+//		StringBuffer response = new StringBuffer();
+//
+//		while ((inputLine = in.readLine()) != null)
+//			response.append(inputLine);
+//		in.close();
+//
+//		return response.toString();
+//	}
 
 	public static String getSeasonByCategoryAndYear(Integer yearToRequest, String categoryToRequest)
 			throws JsonMappingException, JsonProcessingException, IOException {
 		String idToFind = "";
 
 		String urlToGetRequestApi = urlToObtainSeasons + API_KEY;
-		Stage allSeasons = new ObjectMapper().readValue(getJsonFromUrl(urlToGetRequestApi), Stage.class);
+
+		//		Stage allSeasons = new ObjectMapper().readValue(getJsonFromUrl(urlToGetRequestApi), Stage.class);
+		Stage allSeasons = restTemplate.getForObject(urlToGetRequestApi, Stage.class);
 
 		for (int i = 0; i < allSeasons.getNumOfSeasons(); i++) {
 
@@ -93,7 +102,9 @@ public class testing {
 		String idToFind = "";
 
 		String urlToGetRequestApi = rootUrl + seasonIdToRequestItsSchedule + urlToObtainSchedules + API_KEY;
-		Schedule schedules = new ObjectMapper().readValue(getJsonFromUrl(urlToGetRequestApi), Schedule.class);
+
+		//		Schedule schedules = new ObjectMapper().readValue(getJsonFromUrl(urlToGetRequestApi), Schedule.class);
+		Schedule schedules = restTemplate.getForObject(urlToGetRequestApi, Schedule.class);
 
 		Integer numeroDeGrandesPremios = schedules.getListOfRacesScheduled().size();
 		for (int i = 0; i < numeroDeGrandesPremios; i++) {
@@ -126,7 +137,8 @@ public class testing {
 		
 		String urlToGetRequestApi = rootUrl + scheduleId + urlToObtainResults + API_KEY;
 		
-		Results results = new ObjectMapper().readValue(getJsonFromUrl(urlToGetRequestApi), Results.class);
+//		Results results = new ObjectMapper().readValue(getJsonFromUrl(urlToGetRequestApi), Results.class);
+		Results results = restTemplate.getForObject(urlToGetRequestApi, Results.class);
 
 		return results.getStage().getCompetitors();
 	}
@@ -162,7 +174,10 @@ public class testing {
 
 		System.out.println("idToObtainSchedules : " + idToObtainSchedules);
 		String urlToGetRequestApi = rootUrl+idToObtainSchedules+urlToObtainSchedules + API_KEY;
-		Stage allSeasons = new ObjectMapper().readValue(getJsonFromUrl(urlToGetRequestApi), Stage.class);	
+		
+//		Stage allSeasons = new ObjectMapper().readValue(getJsonFromUrl(urlToGetRequestApi), Stage.class);	
+		Stage allSeasons = restTemplate.getForObject(urlToGetRequestApi, Stage.class);
+
 		List<GranPremio> granPremiosToReturn = new ArrayList<GranPremio>();
 		for(int i=0;i<allSeasons.getNumOfSeasons();i++) {
 			Season stage = allSeasons.getStages().get(i);
@@ -170,7 +185,9 @@ public class testing {
 			String uri =rootUrl+idToObtainGPDetails+urlToObtainResults+API_KEY;
 			TimeUnit.SECONDS.sleep(1);
 			GranPremio gp = new GranPremio();
-			GranPremioDetails detailsOfGP_i = new ObjectMapper().readValue(getJsonFromUrl(uri), GranPremioDetails.class);	
+//			GranPremioDetails detailsOfGP_i = new ObjectMapper().readValue(getJsonFromUrl(uri), GranPremioDetails.class);	
+			GranPremioDetails detailsOfGP_i = restTemplate.getForObject(urlToGetRequestApi, GranPremioDetails.class);
+			
 			gp.setCalendar(true);
 			gp.setCircuit(detailsOfGP_i.getStage().getVenue().getName());
 			

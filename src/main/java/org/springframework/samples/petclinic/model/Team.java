@@ -1,10 +1,5 @@
 package org.springframework.samples.petclinic.model;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -103,38 +98,38 @@ public class Team extends BaseEntity implements Comparable<Team> {
 		this.league = league2;
 	}
 
-	protected Set<Transaction> getTransactionsInternal() {
-		if (this.transactions == null) {
-			this.transactions = new HashSet<>();
-		}
-		return this.transactions;
-	}
-
-	protected void setTransactionsInternal(Set<Transaction> transactions) {
-		this.transactions = transactions;
-	}
-
-	public List<Transaction> getTransactions() {
-		List<Transaction> t = new ArrayList<>(getTransactionsInternal());
-		t.sort(Comparator.reverseOrder());
-		return Collections.unmodifiableList(t);
-	}
-
-	protected Set<Recruit> getRecruitsInternal() {
-		if (this.recruit == null) {
-			this.recruit = new HashSet<>();
-		}
-		return this.recruit;
-	}
-
-	protected void setRecruitsInternal(Set<Recruit> recruits) {
-		this.recruit = recruits;
-	}
-
-	public List<Recruit> getRecruits() {
-		List<Recruit> r = new ArrayList<>(getRecruitsInternal());
-		return Collections.unmodifiableList(r);
-	}
+//	protected Set<Transaction> getTransactionsInternal() {
+//		if (this.transactions == null) {
+//			this.transactions = new HashSet<>();
+//		}
+//		return this.transactions;
+//	}
+//
+//	protected void setTransactionsInternal(Set<Transaction> transactions) {
+//		this.transactions = transactions;
+//	}
+//
+//	public List<Transaction> getTransactions() {
+//		List<Transaction> t = new ArrayList<>(getTransactionsInternal());
+//		t.sort(Comparator.reverseOrder());
+//		return Collections.unmodifiableList(t);
+//	}
+//
+//	protected Set<Recruit> getRecruitsInternal() {
+//		if (this.recruit == null) {
+//			this.recruit = new HashSet<>();
+//		}
+//		return this.recruit;
+//	}
+//
+//	protected void setRecruitsInternal(Set<Recruit> recruits) {
+//		this.recruit = recruits;
+//	}
+//
+//	public List<Recruit> getRecruits() {
+//		List<Recruit> r = new ArrayList<>(getRecruitsInternal());
+//		return Collections.unmodifiableList(r);
+//	}
 
 	@Override
 	public String toString() {
@@ -144,18 +139,6 @@ public class Team extends BaseEntity implements Comparable<Team> {
 	@Override
 	public int compareTo(Team o) {
 		return Integer.valueOf(this.getPoints()).compareTo(Integer.valueOf(o.getPoints()));
-	}
-
-	public void setRecruits(List<Recruit> recruitTeam1List) {
-		Set<Recruit> r = new HashSet<Recruit>(recruitTeam1List);
-		this.setRecruitsInternal(r);
-		
-	}
-
-	public void setTransactions(List<Transaction> transactions) {
-		Set<Transaction> t = new HashSet<Transaction>(transactions);
-		this.setTransactionsInternal(t);
-		
 	}
 
 }

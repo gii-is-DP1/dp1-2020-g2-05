@@ -103,11 +103,11 @@ class TransactionControllerTest {
 
 		transactions = Stream.of(transaction).collect(Collectors.toList());
 
-		team.setTransactions(transactions);
-
 		given(this.userService.getUserSession()).willReturn(user);
 
 		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
+		
+		given(this.transactionService.findTransactionsByTeamId(TEST_TEAM_ID)).willReturn(transactions);
 
 	}
 

@@ -24,6 +24,9 @@ public interface RecruitRepository extends CrudRepository<Recruit, Integer> {
 //
 //	@Query(value = "SELECT r.* FROM RECRUIT AS r LEFT JOIN OFFER AS o WHERE r.team_id = o.team_id = 1 and o.id IS NULL", nativeQuery = true)
 //	List<Recruit> findAllRecruitSNotOnSaleByTeam(int teamID);
+	
+	@Query("SELECT r FROM Recruit r WHERE r.team.id = :teamID")
+	List<Recruit> findAllRecruitsByTeam(@Param("teamID") int teamID);
 
 	@Query(value = "SELECT r.* FROM RECRUIT AS r WHERE r.team_id = ?1 AND r.for_sale = true", nativeQuery = true)
 	List<Recruit> findAllRecruitSOnSaleByTeam(int teamID);
@@ -45,4 +48,6 @@ public interface RecruitRepository extends CrudRepository<Recruit, Integer> {
 	@Modifying
 	@Query("UPDATE Recruit r SET r.team = :purchaserTeam WHERE r.id = :recruitID")
 	void transfer(@Param("recruitID") int recruitID, @Param("purchaserTeam") Team purchaserTeam);
+
+	
 }

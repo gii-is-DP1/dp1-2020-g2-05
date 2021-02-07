@@ -69,6 +69,11 @@ public class RecruitService {
 																	// fichajes que existen en el sistema
 		return this.pilotService.getRecruits();
 	}
+	
+	@Transactional(readOnly = true)
+	public List<Recruit> getRecruitsByTeam(int teamID) {
+		return this.recruitRepository.findAllRecruitsByTeam(teamID);
+	}
 
 	@Transactional(readOnly = true)
 	public List<Recruit> getRecruitsOnSaleByTeam(int teamID) {
@@ -83,12 +88,13 @@ public class RecruitService {
 	// Operaciones de Update
 
 	@Transactional(rollbackFor = NotAllowedNumberOfRecruitsException.class)
-	public void putOnSale(Recruit recruit) throws NotAllowedNumberOfRecruitsException {
+	public boolean putOnSale(Recruit recruit) throws NotAllowedNumberOfRecruitsException {
 		if (getRecruitsNotOnSaleByTeam(recruit.getTeam().getId()).size() == 2) {
 			throw new NotAllowedNumberOfRecruitsException();
 		} else
 			recruit.setForSale(true);
 		this.recruitRepository.save(recruit);
+		return true;
 	}
 
 	@Transactional
@@ -100,10 +106,11 @@ public class RecruitService {
 	@Transactional(rollbackFor = NotAllowedNumberOfRecruitsException.class)
 	public Boolean purchaseRecruit(Recruit recruit, Team purchaserTeam)
 			throws DataAccessException, NotAllowedNumberOfRecruitsException {
-		if (purchaserTeam.getRecruits().size() == 4) {
+		if (this.getRecruitsByTeam(purchaserTeam.getId()).size() == 4) {
 			throw new NotAllowedNumberOfRecruitsException();
 		} else {
 			recruit.setTeam(purchaserTeam);
+			recruit.setForSale(false);
 			this.recruitRepository.save(recruit);
 		}
 		return true;

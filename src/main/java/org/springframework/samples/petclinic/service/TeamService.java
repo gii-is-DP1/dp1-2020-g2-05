@@ -153,7 +153,7 @@ public class TeamService {
 
 	@Transactional
 	public void sellAllTeamRecruits(Team t) {
-		List<Recruit> recruits = t.getRecruits();
+		List<Recruit> recruits = this.recruitService.getRecruitsByTeam(t.getId());
 		Integer valor = 0;
 		for (int i = 0; i < recruits.size(); i++) {
 			Recruit r = recruits.get(i);
@@ -177,7 +177,7 @@ public class TeamService {
 		Team syst = findTeamByUsernameAndLeagueId("admin1", t.getLeague().getId()).get();
 		SecureRandom rand = new SecureRandom();
 		for (int i = 0; i < 2; i++) {
-			List<Recruit> recruitSys = syst.getRecruits();
+			List<Recruit> recruitSys = this.recruitService.getRecruitsByTeam(syst.getId());
 			Integer recruitId = rand.nextInt(recruitSys.size());
 			Recruit newR = recruitSys.get(recruitId);
 			Offer offer = newR.getOffer().stream().filter(o -> o.getStatus().equals(Status.Outstanding)).findAny()
