@@ -61,7 +61,9 @@
             <input type="hidden"  name="league" value="${leagueId}"/>	
             <petclinic:inputField label="Name" name="name"/>
             <input type="hidden"  name="points" value="${team.points}"/>	
-             <input type="hidden"  name="money" value="${team.money}"/>	 
+             <input type="hidden"  name="money" value="${team.money}"/>	
+             <input type="hidden"  name="user" value="${team.user.username}"/>	 
+              
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
