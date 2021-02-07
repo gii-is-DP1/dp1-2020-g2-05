@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.repository.LeagueRepository;
@@ -185,5 +186,37 @@ public class LeagueService {
 					"API has not found any result to code " + code + " for moto3");
 		}
 		return model;
+	}
+	
+	public ModelMap calculaCarrerasParaSiguienteCategoria(ModelMap modelMap,Category categoriaActual) {
+		switch (categoriaActual) {
+		case MOTO3:
+			modelMap.addAttribute("carrerasParaSiguienteCategoria", 5);
+			break;
+		case MOTO2:
+			modelMap.addAttribute("carrerasParaSiguienteCategoria", 10);
+			break;
+		case MOTOGP:
+			modelMap.addAttribute("carrerasParaSiguienteCategoria", 19);
+			break;
+		default:
+			modelMap.addAttribute("carrerasParaSiguienteCategoria",0);
+		}
+		
+		switch (categoriaActual) {
+		case MOTO3:
+			modelMap.addAttribute("siguienteCategoria"," Moto 2 ");
+			break;
+		case MOTO2:
+			modelMap.addAttribute("siguienteCategoria", " Moto GP ");
+			break;
+		case MOTOGP:
+			modelMap.addAttribute("siguienteCategoria", " end season ");
+			break;
+		default:
+			modelMap.addAttribute("siguienteCategoria","");
+		}
+		
+		return modelMap;
 	}
 }

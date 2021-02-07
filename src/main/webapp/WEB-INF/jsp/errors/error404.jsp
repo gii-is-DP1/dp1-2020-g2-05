@@ -12,7 +12,7 @@
 #space-invaders {
   margin: 0 auto;
   display: block;
-  background: white
+  background: #f1f1f1;
 }
 </style>
 </head>

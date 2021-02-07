@@ -30,8 +30,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 
 import lombok.extern.slf4j.Slf4j;
-import motogpAPI.RaceCode;
-import motogpAPI.Session;
+import motogpApiV2.RaceCode;
+import motogpApiV2.Session;
 
 @Slf4j
 @Service

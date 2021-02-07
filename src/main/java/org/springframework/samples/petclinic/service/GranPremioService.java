@@ -17,8 +17,8 @@ import org.springframework.samples.petclinic.repository.GranPremioRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import motogpAPI.Pais;
-import motogpAPI.RaceCode;
+import motogpApiV2.Pais;
+import motogpApiV2.RaceCode;
 
 @Service
 public class GranPremioService {

@@ -77,8 +77,10 @@ public class LeagueController {
 					"Results has been validated, check your lineups and teams score!!");
 		}
 		modelMap.addAttribute("ligas", todasLasLigas);
-		modelMap.addAttribute("categoriaActual", tablaConPropiedadesSistema.get().getCurrentCategory());
+		Category categoriaActual=tablaConPropiedadesSistema.get().getCurrentCategory();
+		this.leagueService.calculaCarrerasParaSiguienteCategoria(modelMap, categoriaActual)	;	
 		modelMap.addAttribute("carrerasCompletadas", tablaConPropiedadesSistema.get().getRacesCompleted());
+		
 		return "leagues/leagueList";
 	}
 

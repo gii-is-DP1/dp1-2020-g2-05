@@ -47,7 +47,7 @@ public abstract class AbstractBDCarreraAssert<S extends AbstractBDCarreraAssert<
    * @return this assertion object.
    * @throws AssertionError - if the actual BDCarrera's racecode is not equal to the given one.
    */
-  public S hasRacecode(motogpAPI.RaceCode racecode) {
+  public S hasRacecode(motogpApiV2.RaceCode racecode) {
     // check that actual BDCarrera we want to make assertions on is not null.
     isNotNull();
 
@@ -55,7 +55,7 @@ public abstract class AbstractBDCarreraAssert<S extends AbstractBDCarreraAssert<
     String assertjErrorMessage = "\nExpecting racecode of:\n  <%s>\nto be:\n  <%s>\nbut was:\n  <%s>";
 
     // null safe check
-    motogpAPI.RaceCode actualRacecode = actual.getRacecode();
+    motogpApiV2.RaceCode actualRacecode = actual.getRacecode();
     if (!Objects.areEqual(actualRacecode, racecode)) {
       failWithMessage(assertjErrorMessage, actual, racecode, actualRacecode);
     }
@@ -70,7 +70,7 @@ public abstract class AbstractBDCarreraAssert<S extends AbstractBDCarreraAssert<
    * @return this assertion object.
    * @throws AssertionError - if the actual BDCarrera's session is not equal to the given one.
    */
-  public S hasSession(motogpAPI.Session session) {
+  public S hasSession(motogpApiV2.Session session) {
     // check that actual BDCarrera we want to make assertions on is not null.
     isNotNull();
 
@@ -78,7 +78,7 @@ public abstract class AbstractBDCarreraAssert<S extends AbstractBDCarreraAssert<
     String assertjErrorMessage = "\nExpecting session of:\n  <%s>\nto be:\n  <%s>\nbut was:\n  <%s>";
 
     // null safe check
-    motogpAPI.Session actualSession = actual.getSession();
+    motogpApiV2.Session actualSession = actual.getSession();
     if (!Objects.areEqual(actualSession, session)) {
       failWithMessage(assertjErrorMessage, actual, session, actualSession);
     }
