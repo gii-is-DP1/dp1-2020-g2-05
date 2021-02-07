@@ -41,7 +41,7 @@ class TransactionServiceTest {
 		assertThat(beforeList.equals(afterList - 1)).isTrue();
 		assertThat(this.transactionService.findTransactionsByTeamId(team.getId()).size() == 1).isTrue();
 	}
-
+	
 	@Test
 	@Transactional
 	void shouldInsertTradeByCorrectParameters() {
