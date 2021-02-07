@@ -115,7 +115,7 @@ public class LeagueController {
 
 			modelMap.addAttribute("nombreUsuarioDeLaSesion", usuarioSesion.getUsername());
 			modelMap.addAttribute("misLigas", ligasDelUsuarioDeLaSesion);
-
+		
 			return "leagues/myLeagues";
 		}
 
