@@ -11,8 +11,8 @@ import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.TransactionService;
 import org.springframework.samples.petclinic.service.UserService;
-import org.springframework.samples.petclinic.service.exceptions.NotAllowedNumberOfRecruitsException;
 import org.springframework.samples.petclinic.service.exceptions.NoTeamInThisLeagueException;
+import org.springframework.samples.petclinic.service.exceptions.NotAllowedNumberOfRecruitsException;
 import org.springframework.samples.petclinic.util.Status;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -91,6 +91,7 @@ public class OfferController {
 				log.info("Comprando fichaje con suficiente dinero");
 				try {
 					Recruit recruit = offer.getRecruit();
+					System.out.println(purchaserTeam.getRecruits().size());
 					recruitService.purchaseRecruit(recruit, purchaserTeam);
 					teamService.saveTeamMoney(purchaserTeam, -price);// Restar dinero al comprador
 					teamService.saveTeamMoney(recruit.getTeam(), price);// Dar dinero al vendedor

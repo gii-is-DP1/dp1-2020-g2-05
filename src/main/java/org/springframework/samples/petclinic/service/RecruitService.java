@@ -98,7 +98,7 @@ public class RecruitService {
 	}
 
 	@Transactional(rollbackFor = NotAllowedNumberOfRecruitsException.class)
-	public void purchaseRecruit(Recruit recruit, Team purchaserTeam)
+	public Boolean purchaseRecruit(Recruit recruit, Team purchaserTeam)
 			throws DataAccessException, NotAllowedNumberOfRecruitsException {
 		if (purchaserTeam.getRecruits().size() == 4) {
 			throw new NotAllowedNumberOfRecruitsException();
@@ -106,6 +106,7 @@ public class RecruitService {
 			recruit.setTeam(purchaserTeam);
 			this.recruitRepository.save(recruit);
 		}
+		return true;
 	}
 
 	// Operaciones de Delete

@@ -1,7 +1,9 @@
 package org.springframework.samples.petclinic.web;
 
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -35,6 +37,7 @@ import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.TransactionService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.service.exceptions.NotAllowedNumberOfRecruitsException;
 import org.springframework.samples.petclinic.util.Status;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -156,7 +159,7 @@ class OfferControllerTests {
 
 		team1.setId(1);
 		team1.setLeague(league);
-		team1.setMoney(200);
+		team1.setMoney(2000);
 		team1.setName("Team1");
 		team1.setPoints(2000);
 		team1.setUser(user1);
@@ -209,6 +212,9 @@ class OfferControllerTests {
 		recruitTeam1List.add(recruit3);
 		recruitTeam1List.add(recruit4);
 		recruitTeam1List.add(recruit5);
+		
+		Team team4Recruits = team1;
+		team4Recruits.setRecruits(recruitTeam1List);
 	}
 
 	@WithMockUser(value = "spring")
@@ -283,11 +289,11 @@ class OfferControllerTests {
 		given(teamService.findTeamByUsernameAndLeagueId(user1.getUsername(), TEST_LEAGUE_ID))
 				.willReturn(Optional.of(team1));
 		given(offerService.findOfferById(TEST_OFFER2_ID)).willReturn(Optional.of(offer2));
-		given(team1.getRecruits()).willReturn(recruitTeam1List);
-
+		when(recruitService.purchaseRecruit(any(), any())).thenThrow(NotAllowedNumberOfRecruitsException.class);
+		
 		mockMvc.perform(get("/leagues/{leagueId}/market/{offerId}", TEST_LEAGUE_ID, TEST_OFFER2_ID))
 				.andExpect(status().is2xxSuccessful()).andExpect(view().name("offers/offersList"))
-				.andExpect(model().attribute("message", is("You already own 4 riders on this league")));
+				.andExpect(model().attribute("message", is("You already own 4 riders in this league!")));
 	}
 
 	@WithMockUser(value = "spring")

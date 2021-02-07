@@ -99,7 +99,7 @@ class TransactionControllerTest {
 
 		transactions = Stream.of(transaction).collect(Collectors.toList());
 
-		given(team.getTransactions()).willReturn(transactions);
+		team.setTransactions(transactions);
 
 		given(this.userService.getUserSession()).willReturn(user);
 
