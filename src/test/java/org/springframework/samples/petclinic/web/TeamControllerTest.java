@@ -365,7 +365,7 @@ public class TeamControllerTest {
 		mockMvc.perform(post("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID).with(csrf()).param("name", team.getName())
 				.param("points", team.getPoints().toString()).param("money", team.getMoney().toString())
 				.param("user.username", user.getUsername()).param("league.id", TEST_LEAGUE_ID.toString()))
-				.andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/leagues/{leagueId}/teams"));
+				.andExpect(status().is3xxRedirection()).andExpect(view().name("/leagues/TeamList"));
 
 	}
 
@@ -545,7 +545,7 @@ public class TeamControllerTest {
 		given(this.teamService.findTeamByLeagueId(TEST_LEAGUE_ID)).willReturn(list2);
 
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/delete", TEST_LEAGUE_ID, TEST_TEAM_ID))
-				.andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/leagues/{leagueId}/teams"));
+				.andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/myTeams"));
 	}
 
 	@WithMockUser(value = "spring")
