@@ -1,7 +1,9 @@
 package org.springframework.samples.petclinic.web;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Team;
@@ -39,9 +41,10 @@ public class TransactionController {
 		if (optTeam.isPresent() && user.equals(optTeam.get().getUser())) {
 			Team team = optTeam.get();
 			mav.setViewName("leagues/transactionsList");
-			List<Transaction> transactions = this.transactionService.findTransactionsByTeamId(teamID);
+			List<Transaction> transactions = this.transactionService.findTransactionsByTeamId(teamID).stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+			Integer money = this.teamService.findTeamById(team.getId()).get().getMoney();
 			mav.addObject("transactions", transactions);
-			mav.addObject("money", team.getMoney());
+			mav.addObject("money", money);
 		} else {
 			mav.setViewName("redirect:/myTeams");
 		}
