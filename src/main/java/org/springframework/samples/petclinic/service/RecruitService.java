@@ -111,6 +111,7 @@ public class RecruitService {
 		if (purchaserTeam.getRecruits().size() == 4) {
 			throw new NotAllowedNumberOfRecruitsException();
 		} else {
+			quitOnSale(recruit);
 			this.recruitRepository.transfer(recruit.getId(), purchaserTeam);
 		}
 	}
