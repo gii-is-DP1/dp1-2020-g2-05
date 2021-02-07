@@ -159,10 +159,10 @@ public class ResultService {
 		List<Result> resultados = this.findByPilotId(pilotId);
 		if (resultados.size()<=2) {
 			resultados = new ArrayList<Result>();
-		}else if(resultados.size()>2){
+		} else if(resultados.size()>2){
 			resultados = resultados.subList(resultados.size() - 3, resultados.size());
-
 		}
+		
 		int bonusRacha = 0;
 		int contMalaRacha = 0;
 		int contBuenaRacha = 0;
@@ -203,8 +203,11 @@ public class ResultService {
 		} else if (lineups.size() == 1 && currentGpId - lineups.get(0).getGp().getId() >= 4) {
 			this.teamRepository.deleteById(teamId);
 		} else {
-			lineups = lineups.subList(lineups.size() - 2, lineups.size());
-
+			if (lineups.size() <= 2) {
+				lineups = new ArrayList<Lineup>();
+			} else if(lineups.size() > 2) {
+				lineups = lineups.subList(lineups.size() - 2, lineups.size());
+			}
 			Integer penultimoLineupGpId = lineups.get(0).getGp().getId();
 			Integer ultimoLineupGpId = lineups.get(1).getGp().getId();
 			if (currentGpId - ultimoLineupGpId >= 4 || ultimoLineupGpId - penultimoLineupGpId >= 4)

@@ -17,6 +17,7 @@ import org.springframework.samples.petclinic.service.exceptions.JoinWithoutCodeE
 import org.springframework.samples.petclinic.service.exceptions.MaximumNumberOfLeaguesPerUserException;
 import org.springframework.samples.petclinic.service.exceptions.NoLeagueFoundException;
 import org.springframework.samples.petclinic.service.exceptions.NoTeamInThisLeagueException;
+import org.springframework.samples.petclinic.service.exceptions.NotYourTeamException;
 import org.springframework.samples.petclinic.service.exceptions.YouAlreadyParticipateInALeagueException;
 import org.springframework.samples.petclinic.service.exceptions.duplicatedLeagueNameException;
 import org.springframework.samples.petclinic.service.exceptions.LeagueHasMaximumNumberOfTeamsException;
@@ -95,6 +96,13 @@ public class CustomErrorController implements ErrorController {
 		redirectAttributes.addFlashAttribute("message", "Necesitas un código de invitación para entrar en una liga");
 		return "redirect:/leagues";
 	}
+	
+	@ExceptionHandler(NotYourTeamException.class)
+	public String NotYourTeamExceptionHandler(HttpServletRequest request,  Exception ex, RedirectAttributes redirectAttributes)  {
+		redirectAttributes.addFlashAttribute("message", "Este no es tu equipo!");
+		return "redirect:/leagues";
+	}
+	
 	
 //	@RequestMapping
 	public String defaultErrorHandler(HttpServletRequest request,  Exception ex)  {
