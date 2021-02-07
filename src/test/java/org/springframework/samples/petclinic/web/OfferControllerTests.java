@@ -34,6 +34,7 @@ import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.OfferService;
+import org.springframework.samples.petclinic.service.PoblarBaseDeDatosService;
 import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.TeamService;
@@ -76,6 +77,9 @@ class OfferControllerTests {
 
 	@MockBean
 	private UserService userService;
+	
+	@MockBean
+	private PoblarBaseDeDatosService PBDService;
 
 	// @MockBean
 	// private LeagueService leagueService;

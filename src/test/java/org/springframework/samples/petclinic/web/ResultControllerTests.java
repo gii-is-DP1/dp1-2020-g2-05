@@ -32,6 +32,7 @@ import org.springframework.samples.petclinic.model.Result;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.GranPremioService;
 import org.springframework.samples.petclinic.service.LineupService;
+import org.springframework.samples.petclinic.service.PoblarBaseDeDatosService;
 import org.springframework.samples.petclinic.service.ResultService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.TransactionService;
@@ -68,6 +69,11 @@ class ResultControllerTests {
 	
 	@MockBean
 	private AuthoritiesService authoritiesService;
+	
+
+	@MockBean
+	private PoblarBaseDeDatosService PBDService;
+
 	
 	private Pilot pilot = new Pilot();
 	private GranPremio gp = new GranPremio();

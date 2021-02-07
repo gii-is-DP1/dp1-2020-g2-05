@@ -47,11 +47,15 @@ import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.LineupService;
 import org.springframework.samples.petclinic.service.OfferService;
 import org.springframework.samples.petclinic.service.PilotService;
+import org.springframework.samples.petclinic.service.PoblarBaseDeDatosService;
 import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.TransactionService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.service.exceptions.UserEmailEmptyOrNullException;
+import org.springframework.samples.petclinic.service.exceptions.UserPasswordEmptyOrNullException;
+import org.springframework.samples.petclinic.service.exceptions.UserUsernameEmptyOrNullException;
 import org.springframework.samples.petclinic.service.exceptions.duplicatedLeagueNameException;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -102,6 +106,9 @@ public class PilotControllerTest {
 	
 	@MockBean
 	private AuthoritiesService authoritiesService;
+	
+	@MockBean
+	private PoblarBaseDeDatosService PBDService;
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -117,7 +124,7 @@ public class PilotControllerTest {
 	private String pageSize="5";
 
 	@BeforeEach
-	void setup() throws DataAccessException, duplicatedLeagueNameException {
+	void setup() throws DataAccessException, duplicatedLeagueNameException, UserEmailEmptyOrNullException, UserPasswordEmptyOrNullException, UserUsernameEmptyOrNullException {
 		user.setUsername("migue");
 		user.setPassword("asd");
 		user.setEmail("migue@mail.com");

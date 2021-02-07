@@ -51,6 +51,9 @@ import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.TransactionService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedRiderOnLineupException;
+import org.springframework.samples.petclinic.service.exceptions.UserEmailEmptyOrNullException;
+import org.springframework.samples.petclinic.service.exceptions.UserPasswordEmptyOrNullException;
+import org.springframework.samples.petclinic.service.exceptions.UserUsernameEmptyOrNullException;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -107,7 +110,7 @@ public class LineupControllerTest {
 	Recruit recruit2 = new Recruit();
 
 	@BeforeEach 
-	void setup() throws DataAccessException, DuplicatedRiderOnLineupException {
+	void setup() throws DataAccessException, DuplicatedRiderOnLineupException, UserEmailEmptyOrNullException, UserPasswordEmptyOrNullException, UserUsernameEmptyOrNullException {
 		
 		TCConsulta.setCurrentCategory(Category.MOTO3);
 		TCConsulta.setRacesCompleted(0);
