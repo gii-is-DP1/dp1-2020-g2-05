@@ -91,9 +91,10 @@ public class RecruitService {
 	public boolean putOnSale(Recruit recruit) throws NotAllowedNumberOfRecruitsException {
 		if (getRecruitsNotOnSaleByTeam(recruit.getTeam().getId()).size() == 2) {
 			throw new NotAllowedNumberOfRecruitsException();
-		} else
+		} else {
 			recruit.setForSale(true);
-		this.recruitRepository.save(recruit);
+			this.recruitRepository.save(recruit);
+		}
 		return true;
 	}
 

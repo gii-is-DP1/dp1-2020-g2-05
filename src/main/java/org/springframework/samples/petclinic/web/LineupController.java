@@ -12,11 +12,17 @@ import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.GranPremio;
 import org.springframework.samples.petclinic.model.Lineup;
 import org.springframework.samples.petclinic.model.Recruit;
+import org.springframework.samples.petclinic.model.Team;
+import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.GranPremioService;
 import org.springframework.samples.petclinic.service.LineupService;
 import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
+import org.springframework.samples.petclinic.service.TeamService;
+import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedRiderOnLineupException;
+import org.springframework.samples.petclinic.service.exceptions.NoTeamInThisLeagueException;
+import org.springframework.samples.petclinic.service.exceptions.NotYourTeamException;
 import org.springframework.samples.petclinic.web.validator.LineupValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -47,20 +53,34 @@ public class LineupController {
 	LineupService lineupService;
 	RecruitService recruitService;
 	GranPremioService granPremioService;
+	TeamService teamService;
+	UserService userService;
 
 	@Autowired
 	public LineupController(LineupService lineupService, TablaConsultasService TCService, RecruitService recruitService,
-			GranPremioService granPremioService) {
+			GranPremioService granPremioService, TeamService teamService, UserService userService) {
 		this.lineupService = lineupService;
 		this.TCService = TCService;
 		this.recruitService = recruitService;
 		this.granPremioService = granPremioService;
+		this.teamService = teamService;
+		this.userService = userService;
 	}
 
 	@ModelAttribute("recruitsSelection")
 	public List<Recruit> getAllRecruits(@PathVariable("teamId") int teamId) {
 		return this.recruitService.getRecruitsNotOnSaleByTeam(teamId);
 	}
+	
+//	@ModelAttribute("userTeam")
+//	public Team getUserTeam(@PathVariable("leagueId") int leagueId) throws NoTeamInThisLeagueException {
+//		Optional<Team> userTeam = teamService.findTeamByUsernameAndLeagueId(userService.getUserSession().getUsername(), leagueId);
+//		if (userTeam.isPresent()){
+//			return userTeam.get();
+//		} else {
+//			throw new NoTeamInThisLeagueException();
+//		}
+//	}
 	
 	@GetMapping("/lineups")
 	public String listadoAlineaciones(ModelMap modelMap) {
@@ -86,7 +106,13 @@ public class LineupController {
 	
 	@GetMapping(path = "/newLineup")
 	public String crearAlineacionGet(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, ModelMap model,
-			RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes) throws NotYourTeamException {
+		
+		User user = this.userService.getUserSession();
+		Optional<Team> optTeam = teamService.findTeamById(teamId);
+		if (!(optTeam.isPresent() && user.equals(optTeam.get().getUser()))) {
+			throw new NotYourTeamException("This is not your team!");
+		}
 		
 		List<Integer> gpsConLineupsDeEsteEquipo = this.lineupService.findByTeam(teamId).stream().map(x -> x.getGp().getId()).collect(Collectors.toList());
 		Integer currentGPId = this.TCService.getTabla().get().getActualRace();
@@ -112,7 +138,13 @@ public class LineupController {
 	
 	@PostMapping(value = "/newLineup")
 	public String crearAlineacionPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
-			@Valid Lineup lineup, BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
+			@Valid Lineup lineup, BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) throws NotYourTeamException {
+		
+		User user = this.userService.getUserSession();
+		Optional<Team> optTeam = teamService.findTeamById(teamId);
+		if (!(optTeam.isPresent() && user.equals(optTeam.get().getUser()))) {
+			throw new NotYourTeamException("This is not your team!");
+		}
 		
 		List<Integer> gpsConLineupsDeEsteEquipo = this.lineupService.findByTeam(teamId).stream().map(x -> x.getGp().getId()).collect(Collectors.toList());
 		Integer currentGPId = this.TCService.getTabla().get().getActualRace();
@@ -150,8 +182,14 @@ public class LineupController {
 	
 	@GetMapping(path = "/editLineup/{lineupId}")
 	public String editarLineupGet(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
-			@PathVariable("lineupId") int lineupId, ModelMap model, RedirectAttributes redirectAttributes) {
+			@PathVariable("lineupId") int lineupId, ModelMap model, RedirectAttributes redirectAttributes) throws NotYourTeamException {
 
+		User user = this.userService.getUserSession();
+		Optional<Team> optTeam = teamService.findTeamById(teamId);
+		if (!(optTeam.isPresent() && user.equals(optTeam.get().getUser()))) {
+			throw new NotYourTeamException("This is not your team!");
+		}
+		
 		String view = "redirect:/leagues/{leagueId}/teams/{teamId}/details";
 		Optional<Lineup> lineup = this.lineupService.findLineup(lineupId);
 
@@ -176,8 +214,14 @@ public class LineupController {
 
 	@PostMapping(value = "/editLineup/{lineupId}")
 	public String editarLineupPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
-			@Valid Lineup lineup, BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
+			@Valid Lineup lineup, BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) throws NotYourTeamException {
 
+		User user = this.userService.getUserSession();
+		Optional<Team> optTeam = teamService.findTeamById(teamId);
+		if (!(optTeam.isPresent() && user.equals(optTeam.get().getUser()))) {
+			throw new NotYourTeamException("This is not your team!");
+		}
+		
 		if (result.hasErrors()) {
 			log.info("The lineup edit form has errors!");
 			log.warn("Errors: " + result);
@@ -220,7 +264,14 @@ public class LineupController {
 
 	@GetMapping(path = "/delete/{lineupId}")
 	public String borrarLineup(@RequestHeader(name = "Referer", defaultValue = "/leagues/{leagueId}/teams/{teamId}/details") String referer, @PathVariable("lineupId") int lineupId,
-			ModelMap model, RedirectAttributes redirectAttributes) {
+			@PathVariable("teamId") int teamId, ModelMap model, RedirectAttributes redirectAttributes) throws NotYourTeamException {
+		
+		User user = this.userService.getUserSession();
+		Optional<Team> optTeam = teamService.findTeamById(teamId);
+		if (!(optTeam.isPresent() && user.equals(optTeam.get().getUser()))) {
+			throw new NotYourTeamException("This is not your team!");
+		}
+		
 		Optional<Lineup> lineup = lineupService.findLineup(lineupId);
 		log.info("Deleting lineup with id: (" + lineupId + ")");
 		if (lineup.isPresent()) {
