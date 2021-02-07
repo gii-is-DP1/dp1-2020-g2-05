@@ -146,4 +146,16 @@ public class Team extends BaseEntity implements Comparable<Team> {
 		return Integer.valueOf(this.getPoints()).compareTo(Integer.valueOf(o.getPoints()));
 	}
 
+	public void setRecruits(List<Recruit> recruitTeam1List) {
+		Set<Recruit> r = new HashSet<Recruit>(recruitTeam1List);
+		this.setRecruitsInternal(r);
+		
+	}
+
+	public void setTransactions(List<Transaction> transactions) {
+		Set<Transaction> t = new HashSet<Transaction>(transactions);
+		this.setTransactionsInternal(t);
+		
+	}
+
 }

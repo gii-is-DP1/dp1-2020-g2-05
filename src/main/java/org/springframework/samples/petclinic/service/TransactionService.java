@@ -24,16 +24,7 @@ public class TransactionService {
 		this.transactionRepository = transactionRepository;
 	}
 
-	@Transactional
-	public void saveTransaction(Integer amount, String concept, Team team) throws DataAccessException {
-		Transaction t = createTransaction(amount, concept, team);
-		transactionRepository.save(t);
-		List<Transaction> transacciones = team.getTransactions();
-		if (transacciones.size() == 10) {
-			this.delete(transacciones.get(0));
-		}
-	}
-
+	// Operaciones de Create
 	public Transaction createTransaction(Integer amount, String concept, Team team) {
 		Transaction t = new Transaction();
 		t.setDate(LocalDate.now());
@@ -44,6 +35,16 @@ public class TransactionService {
 		return t;
 	}
 
+	@Transactional
+	public void saveTransaction(Integer amount, String concept, Team team) throws DataAccessException {
+		Transaction t = createTransaction(amount, concept, team);
+		transactionRepository.save(t);
+		List<Transaction> transacciones = team.getTransactions();
+		if (transacciones.size() == 10) {
+			this.delete(transacciones.get(0));
+		}
+	}
+
 	public void trade(Integer price, Pilot pilot, Team sellerTeam, Team purchaserTeam) {
 		// Transaccion del equipo vendedor
 		saveTransaction(price, "Venta de " + pilot.getFullName(), sellerTeam);
@@ -52,9 +53,9 @@ public class TransactionService {
 		saveTransaction(-price, "Compra de " + pilot.getFullName(), purchaserTeam);
 	}
 
-	public void results(Integer i, Lineup l, String RaceCode) {
-		saveTransaction(i, "Resultados de " + l.getRider1().getFullName() + " y " + l.getRider2().getFullName() + " en "
-				+ RaceCode, l.getTeam());
+	public void results(Integer amount, Lineup alineacion, String RaceCode) {
+		saveTransaction(amount, "Resultados de " + alineacion.getRider1().getFullName() + " y "
+				+ alineacion.getRider2().getFullName() + " en " + RaceCode, alineacion.getTeam());
 	}
 
 	@Transactional(readOnly = true)
