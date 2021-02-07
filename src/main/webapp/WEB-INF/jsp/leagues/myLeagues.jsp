@@ -64,6 +64,8 @@
 							<li class="grey"> <spring:url value="/leagues/{leagueId}/teams" var="leagueUrl">
 							<spring:param name="leagueId" value="${league.id}" />
 						</spring:url> <a class="button" href="${fn:escapeXml(leagueUrl)}">Teams</a>
+							 </li>
+						
 							<c:forEach items="${league.team}" var="teams">
 							
 							<c:if test="${teams.user.username==nombreUsuarioDeLaSesion}">
@@ -72,11 +74,12 @@
 							<spring:param name="teamId" value="${teams.id}" />
 							<spring:param name="leagueId" value="${league.id}" />
 							</spring:url>  
-							<a class="button" href="${fn:escapeXml(teamUrl)}"><c:out value="${teams.name} " />
-							</a>
+							<li><a class="button" href="${fn:escapeXml(teamUrl)}"><c:out value="${teams.name} " /></a>
+							</li>
+							
+							
 							</c:if>
 							</c:forEach>
-						 </li>
 						</ul>
 					</div>
 					</c:if>

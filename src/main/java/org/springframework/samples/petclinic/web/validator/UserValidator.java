@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.samples.petclinic.web;
+package org.springframework.samples.petclinic.web.validator;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -64,10 +64,10 @@ public class UserValidator implements Validator {
 			 errors.rejectValue("password", REQUIRED, "El password no puede ser null ni estar vacio");
 		}		
 		
-		//ImgPerfil validation
-		if(user.getImgperfil()==null || user.getImgperfil().trim().isEmpty()==true) {
-			 errors.rejectValue("imgperfil", REQUIRED, "La imagen de perfil no puede ser null ni estar vacio");
-		}
+//		//ImgPerfil validation
+//		if(user.getImgperfil()==null || user.getImgperfil().trim().isEmpty()==true) {
+//			 errors.rejectValue("imgperfil", REQUIRED, "La imagen de perfil no puede ser null ni estar vacio");
+//		}
 		
 	} 
 

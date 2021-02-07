@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.web;
+package org.springframework.samples.petclinic.web.validator;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;

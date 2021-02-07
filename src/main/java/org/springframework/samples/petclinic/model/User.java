@@ -39,7 +39,6 @@ public class User{
 	String password;
 	
 	@Column(name = "imgperfil")
-	@NotEmpty
 	String imgperfil;
 	
 	boolean enabled;

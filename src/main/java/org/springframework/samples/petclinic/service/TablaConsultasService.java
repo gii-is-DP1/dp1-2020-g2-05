@@ -37,8 +37,9 @@ import motogpApiV2.Session;
 @Service
 public class TablaConsultasService {
 	
-
+	@Autowired
 	private ResultService resultService;
+	
 	private TablaConsultasRepository TCRepository;
 	private UserService userService;
 	private TeamRepository teamRepository;
@@ -52,7 +53,7 @@ public class TablaConsultasService {
 		this.userService = userService;
 		this.teamRepository = teamRepository;
 		this.leagueRepository = leagueRepository;
-
+		
 	
 	}
 

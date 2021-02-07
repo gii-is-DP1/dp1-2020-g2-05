@@ -23,6 +23,7 @@ import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.JoinWithoutCodeException;
 import org.springframework.samples.petclinic.service.exceptions.NotAllowedNumberOfRecruitsException;
+import org.springframework.samples.petclinic.web.validator.TeamValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;

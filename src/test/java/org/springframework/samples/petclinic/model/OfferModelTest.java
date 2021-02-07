@@ -8,7 +8,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.samples.petclinic.util.Status;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 class OfferModelTest {

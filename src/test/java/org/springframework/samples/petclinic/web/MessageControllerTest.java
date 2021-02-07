@@ -42,26 +42,21 @@ public class MessageControllerTest {
 	private static final int TEST_MSG_ID = 1;
 
 	@MockBean
-	@Autowired
 	private UserService userService;
 
 	@MockBean
 	private TablaConsultasService tablaConsultas;
 
 	@MockBean
-	@Autowired
 	private MessageService messageService;
 	
 	@MockBean
-	@Autowired
 	private PoblarBaseDeDatosService poblarBaseDeDatosService;
 	
 	@MockBean
-	@Autowired
 	private TransactionService transactionService;
 	
 	@MockBean
-	@Autowired
 	private AuthoritiesService authoritiesService;
 	
 	@Autowired

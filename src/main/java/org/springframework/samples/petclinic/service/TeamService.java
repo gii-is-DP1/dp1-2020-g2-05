@@ -14,11 +14,11 @@ import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Offer;
 import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Recruit;
+import org.springframework.samples.petclinic.model.Status;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.repository.TeamRepository;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedTeamNameException;
 import org.springframework.samples.petclinic.service.exceptions.NotAllowedNumberOfRecruitsException;
-import org.springframework.samples.petclinic.util.Status;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
