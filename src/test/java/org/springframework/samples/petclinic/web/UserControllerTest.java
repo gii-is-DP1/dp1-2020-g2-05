@@ -237,6 +237,43 @@ void testSeguirConErrores() throws Exception {
 			.andExpect(view().name("friends/friendsList"));
 }
 
+@WithMockUser(value = "spring")
+@Test
+void testFormEditarUser() throws Exception {
+	mockMvc.perform(get("/users/editarPerfil"))	
+			.andExpect(status().isOk())
+			.andExpect(model().attribute("user", is(user)))
+			.andExpect(view().name("Perfil/editarPerfil"));
+}
+
+@WithMockUser(value = "spring")
+@Test
+void testEditarUser2SinErrores() throws Exception {
+	mockMvc.perform(post("/users/editarPerfil") 
+			.with(csrf())	
+			.param("username", user.getUsername() )
+			.param("email", user.getEmail())
+			.param("password", user.getPassword())
+			.param("imgperfil", user.getImgperfil())
+			.param("enabled","True"))
+			.andExpect(model().attribute("teams", is(user.getTeam())))
+			.andExpect(status().isOk())		
+			.andExpect(view().name("Perfil/Perfil"));
+}
+
+@WithMockUser(value = "spring")
+@Test
+void testEditarUser2ConErrores() throws Exception {
+	mockMvc.perform(post("/users/editarPerfil") 
+			.with(csrf())	
+			.param("username", user.getUsername())
+			.param("email", " ")
+			.param("password", user.getPassword())
+			.param("imgperfil", user.getImgperfil())
+			.param("enabled","True"))
+			.andExpect(status().is4xxClientError())		;
+}
+
 
 
 }
