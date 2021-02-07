@@ -95,7 +95,7 @@ appearance: button;
  	 		<img alt="Imagen no encontrada" src="<c:out value="${res.imagen}"/>" 
  	 		width="165px" height="165px" 
  	 		style="border-radius: 10px;border:1px solid #a43939;align-items: center;" onerror="this.src='https://i.pinimg.com/originals/29/d5/ca/29d5ca916cca2eb10871eaa9af3ce84b.png'" />
- 			  
+ 			   
 			 
 			<spring:url value="/BD/carrerasBD/{date}/{code}/{id}" var="leagueUrl">
 			<spring:param name="date" value="${res.date0}" />
