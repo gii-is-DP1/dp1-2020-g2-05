@@ -1,11 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-   <!-- <head> -->
-   <!--     <title>Lineup Form</title> -->
-   <!--     <link rel="stylesheet" th:href="@{/resources/styles/petclinicCopy.css}" /> -->
-   <!--     <link th:rel="stylesheet" th:href="@{webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/> -->
-   <!--      <link th:rel="stylesheet" th:href="@{assets/bootstrap-select-1.13.9/dist/css/bootstrap-select.css}"/> -->
-   <!-- </head> -->
    <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
       <meta charset="utf-8">
@@ -18,123 +12,6 @@
       <link href="/webjars/jquery-ui/1.11.4/jquery-ui.theme.min.css" rel="stylesheet">
    </head>
    <body>
-<!--       <div> -->
-         <!-- 	<h1>Form</h1> -->
-<!--          <nav class="navbar navbar-default" role="navigation"> -->
-<!--             <div class="container"> -->
-<!--                <div class="navbar-header"> -->
-<!--                   		class="navbar-brand" -->
-<!--                   <a href="/"> -->
-<!--                   <span><img alt="Home" src="/resources/images/motogpLogo.png"></span> -->
-<!--                   </a> -->
-<!--                   			<button type="button" class="navbar-toggle" data-toggle="collapse" -->
-<!--                   				data-target="#main-navbar"> -->
-<!--                   				<span class="sr-only"><os-p>Toggle navigation</os-p></span> <span -->
-<!--                   					class="icon-bar"></span> <span class="icon-bar"></span> <span -->
-<!--                   					class="icon-bar"></span> -->
-<!--                   			</button> -->
-<!--                </div> -->
-<!--                <div class="navbar-collapse collapse" id="main-navbar"> -->
-<!--                   <ul class="nav navbar-nav"> -->
-<!--                      <li class=" "> -->
-<!--                         <a href="/pilotsPaged" title="leads to /pilots" class=""> -->
-<!--                         <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> -->
-<!--                         <span>Pilots</span> -->
-<!--                         </a> -->
-<!--                      </li> -->
-<!--                      <li class=" "> -->
-<!--                         <a href="/myTeams" title="leads to /myTeams" class=""> -->
-<!--                         <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> -->
-<!--                         <span>myTeams</span> -->
-<!--                         </a> -->
-<!--                      </li> -->
-<!--                      <li class=" "> -->
-<!--                         <a href="/leagues" title="leads to /leagues" class=""> -->
-<!--                         <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> -->
-<!--                         <span>Leagues</span> -->
-<!--                         </a> -->
-<!--                      </li> -->
-<!--                      <li class=" "> -->
-<!--                         <a href="/granPremios" title="leads to /granPremios" class=""> -->
-<!--                         <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> -->
-<!--                         <span>GPs</span> -->
-<!--                         </a> -->
-<!--                      </li> -->
-<!--                      <li class=" "> -->
-<!--                         <a href="/BD" title="leads to /BD" class=""> -->
-<!--                         <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> -->
-<!--                         <span>Settle DB</span> -->
-<!--                         </a> -->
-<!--                      </li> -->
-<!--                      <li class=" "> -->
-<!--                         <a href="/controlPanel" title="leads to /controlPanel" class=""> -->
-<!--                         <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> -->
-<!--                         <span>Control Panel<span> -->
-<!--                         </span></span></a> -->
-<!--                      </li> -->
-<!--                   </ul> -->
-<!--                   <ul class="nav navbar-nav navbar-right"> -->
-<!--                      <li class="dropdown"> -->
-<!--                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>&nbsp; -->
-<!--                         <strong>antcammar4</strong> <span class="glyphicon glyphicon-chevron-down"></span> -->
-<!--                         </a> -->
-<!--                         <ul class="dropdown-menu"> -->
-<!--                            <li> -->
-<!--                               <div class="navbar-login"> -->
-<!--                                  <div class="row"> -->
-<!--                                     <div class="col-lg-4"> -->
-<!--                                        <p class="text-center"> -->
-<!--                                           <span class="glyphicon glyphicon-user icon-size"></span> -->
-<!--                                        </p> -->
-<!--                                     </div> -->
-<!--                                     <div class="col-lg-8"> -->
-<!--                                        <p class="text-left"> -->
-<!--                                           <strong>antcammar4</strong> -->
-<!--                                        </p> -->
-<!--                                        <p class="text-left"> -->
-<!--                                           <a href="/logout" class="btn btn-primary btn-block btn-sm">Logout</a> -->
-<!--                                        </p> -->
-<!--                                     </div> -->
-<!--                                  </div> -->
-<!--                               </div> -->
-<!--                            </li> -->
-<!--                            <li class="divider"></li> -->
-<!--                               <li>  -->
-<!--                               <div class="navbar-login navbar-login-session"> -->
-<!--                               <div class="row"> -->
-<!--                               <div class="col-lg-12"> -->
-<!--                               <p> -->
-<!--                               <a href="#" class="btn btn-primary btn-block">My Profile</a> -->
-<!--                               <a href="#" class="btn btn-danger btn-block">Change -->
-<!--                               Password</a> -->
-<!--                               </p> -->
-<!--                               </div> -->
-<!--                               </div> -->
-<!--                               </div> -->
-<!--                               </li> -->
-<!--                               -->
-<!--                            <li> -->
-<!--                               <div class="navbar-login navbar-login-session"> -->
-<!--                                  <div class="row"> -->
-<!--                                     <div class="col-lg-12"> -->
-<!--                                        <p> -->
-<!--                                           <a href="/messages/" class="btn btn-primary btn-block">My messages</a> -->
-<!--                                           <a href="/friends/" class="btn btn-primary btn-block">My friends</a> -->
-<!--                                           <a href="/leagues/myLeagues" class="btn btn-primary btn-block">My leagues</a> -->
-<!--                                           												<a href="#" class="btn btn-danger btn-block">Change -->
-<!--                                           													Password</a> -->
-<!--                                        </p> -->
-<!--                                     </div> -->
-<!--                                  </div> -->
-<!--                               </div> -->
-<!--                            </li> -->
-<!--                         </ul> -->
-<!--                      </li> -->
-<!--                   </ul> -->
-<!--                </div> -->
-<!--             </div> -->
-<!--          </nav> -->
-<!--       </div> -->
       <div class="container-fluid">
          <div class="container xd-container">
             <h2>
@@ -190,9 +67,6 @@
                      <button class="btn btn-default" type="submit"><span th:text="${lineup['new']} ? 'Add Lineup' : 'Update Lineup'"></span></button>
                   </div>
                </div>
-<!--                <div>  Esto puede dar problemas -->
-<!--                   <input type="hidden" name="_csrf" value="dddb925e-110d-41c5-ae63-83616651d6c4"> -->
-<!--                </div> -->
             </form>
             <br>
             <br>
@@ -203,34 +77,5 @@
             </div>
          </div>
       </div>
-      
-<!--       <div> -->
-<!--          <form th:action="@{/leagues/}+${leagueId}+@{/teams/}+${teamId}+@{/newLineup}" th:object="${lineup}" method="post"> -->
-<!--             <input type="hidden" name="id" th:value="${lineup.id}"/> -->
-<!--             <input type="hidden" name="category" th:value="${lineup.category}"/> -->
-<!--             <input type="hidden" name="league" th:value="${leagueId}"/> -->
-<!--             <input type="hidden" name="team" th:value="${teamId}"/> -->
-<!--             <input type="hidden" name="gp.id" th:value="${lineup.gp.id}"/> -->
-<!--             	            <h1>League ID: <span th:text="${leagueId}"> </span></h1> -->
-<!--             <h4>Date: <span th:text="${lineup.gp.date0}"></span> </h4> -->
-<!--             <h4> Place: <span th:text="${lineup.gp.site}"></span> </h4> -->
-<!--             <h4>Circuit: <span th:text="${lineup.gp.date0}"></span></h4> -->
-<!--             <div class="form-group"> -->
-<!--                <label for="recruit1">Recruit 1</label> -->
-<!--                <select class="form-control" id="recruit1" name="recruit1" size="5"> -->
-<!--                   <option th:each="i : ${recruitsSelection}" th:value="${i}" th:text="${#strings.substring(i, 0, #strings.length(i)-3)}"></option> -->
-<!--                </select> -->
-<!--             </div> -->
-<!--             <div class="form-group"> -->
-<!--                <label for="recruit2">Recruit 2</label> -->
-<!--                <select class="form-control" id="recruit2" name="recruit2" size="5"> -->
-<!--                   <option th:each="i : ${recruitsSelection}" th:value="${i}" th:text="${#strings.substring(i, 0, #strings.length(i)-3)}"></option> -->
-<!--                </select> -->
-<!--             </div> -->
-<!--             <p th:errors="*{all}">Errores...</p> -->
-<!--             <div><button class="btn btn-default" type="submit">Add Lineup</button></div> -->
-<!--          </form> -->
-<!--       </div> -->
-
    </body>
 </html>
