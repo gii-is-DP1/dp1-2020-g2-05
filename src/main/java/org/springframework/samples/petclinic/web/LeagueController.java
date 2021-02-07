@@ -28,6 +28,7 @@ import org.springframework.samples.petclinic.service.exceptions.NoLeagueFoundExc
 import org.springframework.samples.petclinic.service.exceptions.NotAllowedNumberOfRecruitsException;
 import org.springframework.samples.petclinic.service.exceptions.YouAlreadyParticipateInALeagueException;
 import org.springframework.samples.petclinic.service.exceptions.duplicatedLeagueNameException;
+import org.springframework.samples.petclinic.web.validator.LeagueValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;

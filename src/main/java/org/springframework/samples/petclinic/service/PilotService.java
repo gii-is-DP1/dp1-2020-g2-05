@@ -23,7 +23,7 @@ import org.springframework.samples.petclinic.model.GranPremio;
 import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Result;
 import org.springframework.samples.petclinic.repository.PilotRepository;
-import org.springframework.samples.petclinic.web.ResultFormatter;
+import org.springframework.samples.petclinic.web.formatter.ResultFormatter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

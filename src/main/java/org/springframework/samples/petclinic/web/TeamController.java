@@ -23,6 +23,7 @@ import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.JoinWithoutCodeException;
 import org.springframework.samples.petclinic.service.exceptions.NotAllowedNumberOfRecruitsException;
+import org.springframework.samples.petclinic.web.validator.TeamValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -264,7 +265,7 @@ public class TeamController {
 	}
 
 	@GetMapping(path = "/leagues/{leagueId}/teams/{teamId}/edit")
-	public String editarPiloto(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
+	public String editarTeam(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
 			ModelMap model) {
 		Optional<Team> team = this.teamService.findTeamById(teamId);
 		log.info("Preparandose para editar el equipo " + team);
@@ -284,7 +285,7 @@ public class TeamController {
 	}
 
 	@PostMapping(value = "/leagues/{leagueId}/teams/{teamId}/edit")
-	public String editarPilotoPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
+	public String editarTeamPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
 			@Valid Team team, BindingResult result, ModelMap model) {
 
 		
@@ -321,7 +322,7 @@ public class TeamController {
 
 			model.addAttribute("message", "Team successfully Updated!");
 
-				return "Perfil/Perfil";
+				return myTeams(model);
 			
 
 			}

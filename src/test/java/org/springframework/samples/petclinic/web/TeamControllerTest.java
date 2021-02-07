@@ -37,6 +37,7 @@ import org.springframework.samples.petclinic.model.League;
 import org.springframework.samples.petclinic.model.Lineup;
 import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.model.Recruit;
+import org.springframework.samples.petclinic.model.Status;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
@@ -51,7 +52,6 @@ import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedRiderOnLineupException;
 import org.springframework.samples.petclinic.service.exceptions.NotAllowedNumberOfRecruitsException;
 import org.springframework.samples.petclinic.service.exceptions.duplicatedLeagueNameException;
-import org.springframework.samples.petclinic.util.Status;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -62,7 +62,7 @@ import org.springframework.web.context.WebApplicationContext;
 public class TeamControllerTest {
 
 	private static final Integer TEST_LEAGUE_ID = 1;
-	private static final Integer TEST_LEAGUE1_ID = 3;
+	
 	private static final Integer TEST_TEAM_ID = 1;
 
 	private static final Integer TEST_TEAM1_ID = 2;
@@ -76,7 +76,6 @@ public class TeamControllerTest {
 	@Autowired
 	private UserService userService;
 
-	private GenericIdToEntityConverter converter;
 
 	@MockBean
 	@Autowired

@@ -69,7 +69,7 @@ public abstract class AbstractOfferAssert<S extends AbstractOfferAssert<S, A>, A
    * @return this assertion object.
    * @throws AssertionError - if the actual Offer's status is not equal to the given one.
    */
-  public S hasStatus(org.springframework.samples.petclinic.util.Status status) {
+  public S hasStatus(org.springframework.samples.petclinic.model.Status status) {
     // check that actual Offer we want to make assertions on is not null.
     isNotNull();
 
@@ -77,7 +77,7 @@ public abstract class AbstractOfferAssert<S extends AbstractOfferAssert<S, A>, A
     String assertjErrorMessage = "\nExpecting status of:\n  <%s>\nto be:\n  <%s>\nbut was:\n  <%s>";
 
     // null safe check
-    org.springframework.samples.petclinic.util.Status actualStatus = actual.getStatus();
+    org.springframework.samples.petclinic.model.Status actualStatus = actual.getStatus();
     if (!Objects.areEqual(actualStatus, status)) {
       failWithMessage(assertjErrorMessage, actual, status, actualStatus);
     }

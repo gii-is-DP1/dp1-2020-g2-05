@@ -31,11 +31,7 @@
 				</petclinic:menuItem>
 			
 				
-				<petclinic:menuItem active="${name eq 'Perfil'}" url="/myTeams"
-					title="leads to /myTeams">
-					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-					<span>Perfil</span>
-				</petclinic:menuItem>
+
 				
 				<petclinic:menuItem active="${name eq 'leagues'}" url="/leagues"
 					title="leads to /leagues">
@@ -89,7 +85,7 @@
 										</div>
 										<div class="col-lg-8">
 											<p class="text-left">
-												<strong><sec:authentication property="name" /></strong>
+												<a href="/myTeams"><strong><sec:authentication property="name" /></strong></a>
 											</p>
 											<p class="text-left">
 												<a href="<c:url value="/logout" />"

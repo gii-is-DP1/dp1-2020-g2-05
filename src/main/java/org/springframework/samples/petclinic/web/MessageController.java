@@ -27,6 +27,7 @@ import org.springframework.samples.petclinic.model.Message;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.MessageService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.web.validator.MessageValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;

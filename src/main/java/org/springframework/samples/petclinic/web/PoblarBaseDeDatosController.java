@@ -17,6 +17,7 @@ import org.springframework.samples.petclinic.service.PoblarBaseDeDatosService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.exceptions.NotAllowedNumberOfRecruitsException;
+import org.springframework.samples.petclinic.web.validator.BDValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;

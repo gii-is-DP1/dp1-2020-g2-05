@@ -10,8 +10,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.samples.petclinic.util.Status;
-
 @Entity
 @Table(name = "offer")
 public class Offer extends BaseEntity {

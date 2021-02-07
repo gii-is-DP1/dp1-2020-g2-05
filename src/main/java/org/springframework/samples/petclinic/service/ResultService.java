@@ -157,7 +157,12 @@ public class ResultService {
 
 	public int compruebaRachasPiloto(Integer pilotId) {
 		List<Result> resultados = this.findByPilotId(pilotId);
-		resultados = resultados.subList(resultados.size() - 3, resultados.size());
+		if (resultados.size()<=2) {
+			resultados = new ArrayList<Result>();
+		}else if(resultados.size()>2){
+			resultados = resultados.subList(resultados.size() - 3, resultados.size());
+
+		}
 		int bonusRacha = 0;
 		int contMalaRacha = 0;
 		int contBuenaRacha = 0;

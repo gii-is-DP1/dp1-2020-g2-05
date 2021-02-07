@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.web;
+package org.springframework.samples.petclinic.web.validator;
 
 import org.springframework.samples.petclinic.model.Lineup;
 import org.springframework.samples.petclinic.model.Recruit;
