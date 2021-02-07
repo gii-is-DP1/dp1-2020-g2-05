@@ -30,6 +30,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.service.PilotService;
+import org.springframework.samples.petclinic.web.validator.PilotValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;

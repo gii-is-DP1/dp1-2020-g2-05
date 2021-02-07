@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.web;
+package org.springframework.samples.petclinic.web.formatter;
 
 import java.text.ParseException;
 import java.util.Locale;

@@ -17,6 +17,7 @@ import org.springframework.samples.petclinic.service.LineupService;
 import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedRiderOnLineupException;
+import org.springframework.samples.petclinic.web.validator.LineupValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
