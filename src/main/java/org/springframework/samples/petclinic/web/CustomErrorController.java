@@ -1,6 +1,7 @@
 package org.springframework.samples.petclinic.web;
 
 import java.util.List;
+
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -18,7 +19,11 @@ import org.springframework.samples.petclinic.service.exceptions.JoinWithoutCodeE
 import org.springframework.samples.petclinic.service.exceptions.MaximumNumberOfLeaguesPerUserException;
 import org.springframework.samples.petclinic.service.exceptions.NoLeagueFoundException;
 import org.springframework.samples.petclinic.service.exceptions.NoTeamInThisLeagueException;
+
 import org.springframework.samples.petclinic.service.exceptions.NotTeamUserException;
+
+import org.springframework.samples.petclinic.service.exceptions.NotYourTeamException;
+
 import org.springframework.samples.petclinic.service.exceptions.YouAlreadyParticipateInALeagueException;
 import org.springframework.samples.petclinic.service.exceptions.duplicatedLeagueNameException;
 import org.springframework.samples.petclinic.service.exceptions.LeagueHasMaximumNumberOfTeamsException;
@@ -98,6 +103,7 @@ public class CustomErrorController implements ErrorController {
 		return "redirect:/leagues";
 	}
 	
+
 	@ExceptionHandler(NotTeamUserException.class)
 	public String NotUserTeam(HttpServletRequest request,  Exception ex, RedirectAttributes redirectAttributes)  {
 		redirectAttributes.addFlashAttribute("message", "You are not the Owner of this team!");
@@ -109,6 +115,13 @@ public class CustomErrorController implements ErrorController {
 		redirectAttributes.addFlashAttribute("message", "Already exists a team with this name");
 		return "redirect:/leagues/{leagueId}/teams";
 	}
+
+	@ExceptionHandler(NotYourTeamException.class)
+	public String NotYourTeamExceptionHandler(HttpServletRequest request,  Exception ex, RedirectAttributes redirectAttributes)  {
+		redirectAttributes.addFlashAttribute("message", "Este no es tu equipo!");
+		return "redirect:/leagues";
+	}
+	
 	
 //	@RequestMapping
 	public String defaultErrorHandler(HttpServletRequest request,  Exception ex)  {

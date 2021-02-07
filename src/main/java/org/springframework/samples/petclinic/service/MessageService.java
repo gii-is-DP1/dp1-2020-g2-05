@@ -25,6 +25,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Message;
 import org.springframework.samples.petclinic.repository.MessageRepository;
+import org.springframework.samples.petclinic.service.exceptions.EmptyAsuntoCuerpoMessageException;
+import org.springframework.samples.petclinic.service.exceptions.EmptyUserMessageException;
+import org.springframework.samples.petclinic.service.exceptions.ReceiveEqualSendMessageException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -93,8 +96,16 @@ public class MessageService {
 	}
 
 	@Transactional
-	public void saveMessage(@Valid Message message) throws DataAccessException {
-		
+	public void saveMessage(@Valid Message message) throws DataAccessException, ReceiveEqualSendMessageException, EmptyAsuntoCuerpoMessageException, EmptyUserMessageException {
+		if(message.getUsernamereceive().equals(message.getUsernamesend())) {
+			throw new ReceiveEqualSendMessageException("El usuario que envía el mensaje no puede ser igual al que lo recibe");
+		}else if(message.getAsunto().isEmpty() || message.getCuerpo().isEmpty()){
+			throw new EmptyAsuntoCuerpoMessageException("El cuerpo o el asunto no puede estar vacío");
+
+		}else if((message.getUsernamereceive()==null  )|| message.getUsernamesend()==null){
+			throw new EmptyUserMessageException("El usuario que envia o recibe no puede ser null");
+
+		}
 		messageRepository.save(message);		
 	}		
 

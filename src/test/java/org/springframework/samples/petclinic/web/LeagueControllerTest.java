@@ -41,6 +41,7 @@ import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.LeagueService;
+import org.springframework.samples.petclinic.service.PoblarBaseDeDatosService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.TransactionService;
@@ -48,6 +49,9 @@ import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.LeagueHasMaximumNumberOfTeamsException;
 import org.springframework.samples.petclinic.service.exceptions.MaximumNumberOfLeaguesPerUserException;
 import org.springframework.samples.petclinic.service.exceptions.NoLeagueFoundException;
+import org.springframework.samples.petclinic.service.exceptions.UserEmailEmptyOrNullException;
+import org.springframework.samples.petclinic.service.exceptions.UserPasswordEmptyOrNullException;
+import org.springframework.samples.petclinic.service.exceptions.UserUsernameEmptyOrNullException;
 import org.springframework.samples.petclinic.service.exceptions.YouAlreadyParticipateInALeagueException;
 import org.springframework.samples.petclinic.service.exceptions.duplicatedLeagueNameException;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
@@ -88,6 +92,10 @@ public class LeagueControllerTest {
     	@MockBean
     	private AuthoritiesService authoritiesService;
     	
+  
+    	@MockBean
+    	private PoblarBaseDeDatosService PBDService;
+    
     	@Autowired
     	private MockMvc mockMvc;
     	
@@ -98,7 +106,7 @@ public class LeagueControllerTest {
     	TablaConsultas TCConsulta = new TablaConsultas();
 
     	@BeforeEach 
-    	void setup(TestInfo testInfo) throws DataAccessException, duplicatedLeagueNameException {
+    	void setup(TestInfo testInfo) throws DataAccessException, duplicatedLeagueNameException, UserEmailEmptyOrNullException, UserPasswordEmptyOrNullException, UserUsernameEmptyOrNullException {
     		if(testInfo.getTags().contains("SkipCleanup")) {
                 return;
             }
