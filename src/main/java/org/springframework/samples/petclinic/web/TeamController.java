@@ -288,7 +288,6 @@ public class TeamController {
 	public String editarTeamPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
 			@Valid Team team, BindingResult result, ModelMap model) {
 
-		
 		authority = this.leagueService.findAuthoritiesByUsername(team.getUser().getUsername());
 		if (authority.equals("admin")) {
 			model.put("admin", true);
