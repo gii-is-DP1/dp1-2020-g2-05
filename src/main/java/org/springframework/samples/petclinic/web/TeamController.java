@@ -124,7 +124,7 @@ public class TeamController {
 
 			log.debug("Asignandole el usuario actual al equipo");
 			team.setUser(this.userService.getUserSession());
-			log.info("Usuario " + this.userService.getUserSession() + "asignado correctamente");
+			log.info("Usuario " + this.userService.getUserSession() + " asignado correctamente");
 			
 			Optional<Team> tem = this.teamService.findTeamByUsernameAndLeagueId(team.getUser().getUsername(), leagueId);
 			List<Team> equipos = this.teamService.findTeamByLeagueId(league.getId());
