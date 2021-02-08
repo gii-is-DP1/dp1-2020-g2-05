@@ -20,8 +20,11 @@
 		<c:forEach items="${listaGP}" var="res">
 			<tr>
 				<c:if test="${res.hasBeenRun==true}">
-
-					<td	style="text-align: center; background-color: #b8bbb757; color: #00000040;"><c:out value="${res.site}" /></td>
+					<spring:url value="/granPremios/info/{gpId}" var="SeeUrl">
+							<spring:param name="gpId" value="${res.id}" />
+				</spring:url>
+				<td style="text-align: center; background-color: #b8bbb757; color: #00000040;"><a href="${fn:escapeXml(SeeUrl)}"><c:out value="${res.site}" /></a></td>
+				
 					<td	style="text-align: center; background-color: #b8bbb757; color: #00000040;"><c:out value="${res.circuit}" /></td>
 					<td	style="text-align: center; background-color: #b8bbb757; color: #00000040;"><c:out value="${res.date0}" /></td>
 					<td	style="text-align: center; background-color: #b8bbb757; color: #00000040;">
@@ -46,8 +49,11 @@
 			</tr>
 			
 				<c:if test="${res.hasBeenRun==false}">
-
-				<td style="text-align: center;"><c:out value="${res.site}" /></td>
+				
+				<spring:url value="/granPremios/info/{gpId}" var="SeeUrl">
+							<spring:param name="gpId" value="${res.id}" />
+				</spring:url>
+					<td style="text-align: center;"><a href="${fn:escapeXml(SeeUrl)}"><c:out value="${res.site}" /></a></td>
 				<td style="text-align: center;"><c:out value="${res.circuit}" /></td>
 				<td style="text-align: center;"><c:out value="${res.date0}" /></td>
 				<td style="text-align: center;">

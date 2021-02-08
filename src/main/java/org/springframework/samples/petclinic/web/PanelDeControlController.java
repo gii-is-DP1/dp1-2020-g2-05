@@ -98,7 +98,7 @@ public class PanelDeControlController {
 	
 	@GetMapping(path={"/poblarConCalendario"})
 	public String muestraPanel(ModelMap model) throws ParseException, JsonMappingException, JsonProcessingException, IOException, InterruptedException {	
-		List<GranPremio> gp =testing.obtainScheduleForAGivenYearAndGivenCategory(2019, Category.MOTOGP);		
+		List<GranPremio> gp =testing.obtainScheduleForAGivenYearAndGivenCategory(2019, Category.MOTOGP);
 		for(int i=0;i<gp.size();i++) {
 			this.GPService.saveGP(gp.get(i));
 		}

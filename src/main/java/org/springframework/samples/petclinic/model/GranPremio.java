@@ -21,6 +21,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;
+import motogpApiV2.GranPremioDetails.Venue;
 
 @Data
 @Entity
@@ -31,6 +32,9 @@ public class GranPremio extends BaseEntity {
 	@NotEmpty
     @Size(min = 3, max = 50)
 	private String site;
+	
+	@Column(name = "id_api")
+	private String idApi;
 	
 	@Column(name = "date0")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -70,6 +74,8 @@ public class GranPremio extends BaseEntity {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "recordMoto3_id")
 	private Record recordMoto3;
+    
+ 
 	
 	
     

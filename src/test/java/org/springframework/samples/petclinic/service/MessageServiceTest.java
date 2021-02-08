@@ -46,7 +46,7 @@ public class MessageServiceTest {
 			assertThat(messages.size()!=0).isTrue();
 			
 			
-			Iterable<Message> num_messages_zero = this.messageService.findAllUsernameReceive("serrojjim");
+			Iterable<Message> num_messages_zero = this.messageService.findAllUsernameReceive("wqe");
 			 List<Message> messages_fail = new ArrayList<Message>();
 			 num_messages_zero.forEach(messages_fail::add);
 				System.out.println("El numero de mensajes recibido  por sergio es " + messages_fail.size());
@@ -94,6 +94,9 @@ public class MessageServiceTest {
 
 		assertThat(found.size()).isEqualTo(found1 + 1);
 	 }
+	 
+	 
+	
 	 
 	 @Test
 	 @Transactional
