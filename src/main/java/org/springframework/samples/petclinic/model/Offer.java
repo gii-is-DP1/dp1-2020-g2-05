@@ -7,6 +7,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Version;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
@@ -22,6 +23,9 @@ public class Offer extends BaseEntity {
 	@Enumerated(EnumType.ORDINAL)
 	@Column(name = "status")
 	private Status status;
+	
+	@Version
+	private Integer version;
 
 	@ManyToOne
 	@JoinColumn(name = "team_id")
@@ -31,6 +35,14 @@ public class Offer extends BaseEntity {
 	@JoinColumn(name = "recruit_id")
 	private Recruit recruit;
 
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
+	
 	public Team getTeam() {
 		return team;
 	}

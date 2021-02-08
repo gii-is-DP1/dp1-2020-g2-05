@@ -69,13 +69,8 @@ excludeAutoConfiguration= SecurityConfiguration.class)
 public class PilotControllerTest {
 
 	private static final Integer TEST_LEAGUE_ID = 1;
-
 	private static final Integer TEST_TEAM_ID = 1;
-
 	private static final Integer PILOT_TEST_ID = 2345;
-
-
-
 
 	@MockBean
 	private UserService userService;
@@ -137,13 +132,10 @@ public class PilotControllerTest {
 		auth.add(autho);
 		user.setAuthorities(auth);
 
-
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 		Date date = new Date();
 		liga.setId(TEST_LEAGUE_ID);
 		liga.setLeagueCode("IOKASXISAU");
-
-
 
 		team.setId(TEST_TEAM_ID);
 		team.setName("Migue");
@@ -151,7 +143,6 @@ public class PilotControllerTest {
 		team.setMoney(200);
 		team.setPoints(100);
 		team.setUser(user);
-
 
 		Set<Team> teams = new HashSet<>();
 		teams.add(team);
@@ -169,7 +160,7 @@ public class PilotControllerTest {
 
 		pilot.setBaseValue(2000);
 		pilot.setCategory(Category.MOTO2);
-		pilot.setPoints("2");
+		pilot.setPoints(2);
 		pilot.setId(PILOT_TEST_ID);
 		pilot.setLastName("Nieva");
 		pilot.setName("Migue");

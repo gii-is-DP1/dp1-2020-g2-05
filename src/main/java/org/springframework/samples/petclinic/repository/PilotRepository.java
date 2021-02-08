@@ -23,7 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
-import org.springframework.samples.petclinic.model.BaseEntity;
+import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.Pilot;
 
 public interface PilotRepository extends CrudRepository<Pilot, Integer> {
@@ -36,6 +36,9 @@ public interface PilotRepository extends CrudRepository<Pilot, Integer> {
 
 	@Query("SELECT pilot FROM Pilot pilot WHERE pilot.name LIKE :name AND pilot.lastName LIKE :lastName")
 	public Optional<Pilot> findByName(@Param("lastName")String lastName,@Param("name")String name);
+	
+	@Query("SELECT pilot FROM Pilot pilot WHERE pilot.category=:category ORDER BY pilot.points DESC")
+	public List<Pilot> findTop3ByPointsAndCategory(@Param("category") Category category);
 
 	@Query(value="SELECT p.* FROM RECRUIT AS r NATURAL JOIN PILOT AS p", nativeQuery = true)
 	List<Pilot> findAllRecruits();
