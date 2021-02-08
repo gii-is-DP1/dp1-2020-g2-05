@@ -52,6 +52,7 @@ import org.springframework.samples.petclinic.service.TransactionService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedRiderOnLineupException;
 import org.springframework.samples.petclinic.service.exceptions.NotAllowedNumberOfRecruitsException;
+import org.springframework.samples.petclinic.service.exceptions.NotTeamUserException;
 import org.springframework.samples.petclinic.service.exceptions.UserEmailEmptyOrNullException;
 import org.springframework.samples.petclinic.service.exceptions.UserPasswordEmptyOrNullException;
 import org.springframework.samples.petclinic.service.exceptions.UserUsernameEmptyOrNullException;
@@ -214,8 +215,7 @@ public class TeamControllerTest {
 		listRecruits2.add(recruit2);
 		listRecruits2.add(recruit3);
 		listRecruits2.add(recruit4);
-		user.setUsername("antcammar4");
-		user.setEnabled(true);
+
 
 		Pilot pilot1 = new Pilot();
 		pilot1.setId(1);
@@ -265,7 +265,7 @@ public class TeamControllerTest {
 		listaRecruitsNoEnVenta.add(recruit2);
 		given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
 		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
-		given(this.userService.findUser(user.getUsername())).willReturn(Optional.of(user));
+//		given(this.userService.findUser(user.getUsername())).willReturn(Optional.of(user));
 		given(this.leagueService.findAuthoritiesByUsername(team.getUser().getUsername())).willReturn("admin");
 		given(this.teamService.findTeamById(TEST_TEAM1_ID)).willReturn(Optional.of(team1));
 //		given(this.teamService.findTeamByUsernameAndLeagueId(user.getUsername(), TEST_LEAGUE_ID)).willReturn(Optional.of(team));
@@ -420,7 +420,7 @@ public class TeamControllerTest {
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessUpdateFormSuccess() throws Exception {
-		given(this.userService.findUser(user.getUsername())).willReturn(Optional.of(user));
+		given(this.userService.getUserSession()).willReturn(user);
 		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
 		given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
 
@@ -536,6 +536,8 @@ public class TeamControllerTest {
 	@WithMockUser(value = "spring")
 	@Test
 	void testDeleteTeam() throws Exception {
+		given(this.userService.getUserSession()).willReturn(user);
+		given(this.teamService.findTeamById(TEST_TEAM_ID).get().getUser()).willReturn(user);
 		given(this.teamService.findTeamByLeagueId(TEST_LEAGUE_ID)).willReturn(list1);
 
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/delete", TEST_LEAGUE_ID, TEST_TEAM_ID))
@@ -557,7 +559,9 @@ public class TeamControllerTest {
 
 		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.empty());
 		given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
-
+		given(this.userService.getUserSession()).willReturn(user);
+		when(this.userService.getUserSession() != this.teamService.findTeamById(TEST_TEAM_ID).get().getUser()).thenThrow(NotTeamUserException.class);
+		
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/delete", TEST_LEAGUE_ID, TEST_TEAM_ID))
 				.andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/leagues"));
 	}
