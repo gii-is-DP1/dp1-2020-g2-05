@@ -42,18 +42,10 @@ public class TeamValidator implements Validator{
 		if (team.getMoney() == null || team.getMoney()<0) {
 			errors.rejectValue("money", REQUIRED,  REQUIRED);
 		}
-		
 	
-		
 	}
-
-	/**
-	 * This Validator validates *just* League instances
-	 */
 	@Override
 	public boolean supports(Class<?> clazz) {
 		return Team.class.isAssignableFrom(clazz);
 	}
-
-
 }
