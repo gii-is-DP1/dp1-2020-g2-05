@@ -77,12 +77,12 @@ public class RecruitService {
 
 	@Transactional(readOnly = true)
 	public List<Recruit> getRecruitsOnSaleByTeam(int teamID) {
-		return this.recruitRepository.findAllRecruitSOnSaleByTeam(teamID);
+		return this.recruitRepository.findAllRecruitsOnSaleByTeam(teamID);
 	}
 
 	@Transactional(readOnly = true)
 	public List<Recruit> getRecruitsNotOnSaleByTeam(int teamID) {
-		return this.recruitRepository.findAllRecruitSNotOnSaleByTeam(teamID);
+		return this.recruitRepository.findAllRecruitsNotOnSaleByTeam(teamID);
 	}
 
 	// Operaciones de Update
