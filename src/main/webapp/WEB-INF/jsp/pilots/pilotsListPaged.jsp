@@ -9,7 +9,7 @@
 
 <petclinic:layout pageName="pilotsPaged">
 	<h2>Pilots</h2>
-
+	
 	<form:form method="get" modelAttribute="pageSize" class="form-horizontal" id="setPageSize" actions="/pilotsPaged">
 		<div class="form-group has-feedback">
 			<button class="btn btn-default" type="submit">Set page size</button>
@@ -91,4 +91,9 @@
 			</c:forEach>
 		</tbody>
 	</table>
+	
+	<spring:url value="/pilots/top" var="messageUrl">
+	</spring:url> <a class="textButton" href="${fn:escapeXml(messageUrl)}">Top Pilots</a>
+	
+	
 </petclinic:layout>
