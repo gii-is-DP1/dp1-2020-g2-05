@@ -42,7 +42,6 @@ public class OfferController {
 
 	@Autowired
 	public OfferController(OfferService offerService, RecruitService recruitService, UserService userService,
-//			LeagueService leagueService, 
 			TeamService teamService, TransactionService transactionService) {
 		this.offerService = offerService;
 		this.recruitService = recruitService;

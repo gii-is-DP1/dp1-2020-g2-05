@@ -44,6 +44,7 @@ import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.LineupService;
 import org.springframework.samples.petclinic.service.OfferService;
+import org.springframework.samples.petclinic.service.PoblarBaseDeDatosService;
 import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.TeamService;
@@ -51,6 +52,9 @@ import org.springframework.samples.petclinic.service.TransactionService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedRiderOnLineupException;
 import org.springframework.samples.petclinic.service.exceptions.NotAllowedNumberOfRecruitsException;
+import org.springframework.samples.petclinic.service.exceptions.UserEmailEmptyOrNullException;
+import org.springframework.samples.petclinic.service.exceptions.UserPasswordEmptyOrNullException;
+import org.springframework.samples.petclinic.service.exceptions.UserUsernameEmptyOrNullException;
 import org.springframework.samples.petclinic.service.exceptions.duplicatedLeagueNameException;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -73,31 +77,25 @@ public class TeamControllerTest {
 	private WebApplicationContext context;
 	
 	@MockBean
-	@Autowired
 	private UserService userService;
 
 
 	@MockBean
-	@Autowired
 	private RecruitService recruitService;
 
 	@MockBean
-	@Autowired
 	private LineupService lineupService;
 
 	@MockBean
-	@Autowired
 	private TransactionService transactionService;
 
 	@MockBean
-	@Autowired
 	private OfferService offerService;
 
 	@MockBean
 	private TablaConsultasService tablaConsultas;
 
 	@MockBean
-	@Autowired
 	private TeamService teamService;
 
 	@MockBean
@@ -105,6 +103,11 @@ public class TeamControllerTest {
 	
 	@MockBean
 	private AuthoritiesService authoritiesService;
+	
+	
+	@MockBean
+	private PoblarBaseDeDatosService PBDService;
+	
 	
 	@Autowired
 	private MockMvc mockMvc;
@@ -130,7 +133,7 @@ public class TeamControllerTest {
     private List<Recruit> listaRecruitsEnVenta = new ArrayList<Recruit>();
 	
 	@BeforeEach
-	void setup() throws DataAccessException, duplicatedLeagueNameException, DuplicatedRiderOnLineupException {
+	void setup() throws DataAccessException, duplicatedLeagueNameException, DuplicatedRiderOnLineupException, UserEmailEmptyOrNullException, UserPasswordEmptyOrNullException, UserUsernameEmptyOrNullException {
 		
 	
 		user1.setUsername("miguel");
@@ -365,7 +368,7 @@ public class TeamControllerTest {
 		mockMvc.perform(post("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID).with(csrf()).param("name", team.getName())
 				.param("points", team.getPoints().toString()).param("money", team.getMoney().toString())
 				.param("user.username", user.getUsername()).param("league.id", TEST_LEAGUE_ID.toString()))
-				.andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/leagues/{leagueId}/teams"));
+				.andExpect(status().is3xxRedirection()).andExpect(view().name("/leagues/TeamList"));
 
 	}
 
@@ -545,7 +548,7 @@ public class TeamControllerTest {
 		given(this.teamService.findTeamByLeagueId(TEST_LEAGUE_ID)).willReturn(list2);
 
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/delete", TEST_LEAGUE_ID, TEST_TEAM_ID))
-				.andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/leagues/{leagueId}/teams"));
+				.andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/myTeams"));
 	}
 
 	@WithMockUser(value = "spring")
