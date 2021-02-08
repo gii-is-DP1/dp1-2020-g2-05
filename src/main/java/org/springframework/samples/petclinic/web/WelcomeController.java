@@ -59,14 +59,13 @@ public class WelcomeController {
 		  try {
 			  Object auth = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			  Integer index1 = auth.toString().indexOf("Username:");
-			  Integer index2 = auth.toString().indexOf("; Password:"); // CON ESTO TENEMOS EL STRIN Username: user
-			  String nombreUsuario = auth.toString().substring(index1, index2).split(": ")[1]; //con esto hemos spliteado lo de arriba y nos hemos quedado con user.
+			  Integer index2 = auth.toString().indexOf("; Password:");
+			  String nombreUsuario = auth.toString().substring(index1, index2).split(": ")[1];
 
 			  Optional<User> user = this.userService.findUser(nombreUsuario);
 			  
 			  model.put("user", user.get());
 		  }catch (Exception e) {
-			// TODO: handle exception
 		  }
 		  
 	    return "welcome";

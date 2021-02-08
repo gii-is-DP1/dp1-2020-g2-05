@@ -50,8 +50,8 @@ public class RecruitService {
 	// Operaciones de Read
 
 	@Transactional(readOnly = true)
-	public Iterable<Recruit> findAll() {
-		return this.recruitRepository.findAll();
+	public List<Recruit> findAll() {
+		return (List<Recruit>) this.recruitRepository.findAll();
 	}
 
 	@Transactional(readOnly = true)
