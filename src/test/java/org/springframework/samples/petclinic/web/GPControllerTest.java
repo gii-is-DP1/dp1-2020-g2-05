@@ -6,6 +6,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -58,14 +59,11 @@ public class GPControllerTest {
 	@MockBean
 	private AuthoritiesService authoritiesService;
 
-	
 	@MockBean
 	private PoblarBaseDeDatosService PBDService;
 	
 	@Autowired
 	private MockMvc mockMvc;
-
-
 
 	private GranPremio gp = new GranPremio();
 	private List<GranPremio> listagps = new ArrayList<GranPremio>();
@@ -164,7 +162,7 @@ public class GPControllerTest {
 
 		mockMvc.perform(get("/granPremios/{id}/delete", TEST_GP_ID))
 		.andExpect(status().is3xxRedirection())
-//		.andExpect(model().attribute("message", is("GP successfully deleted!"))) --> Hace falta ponerlo como RedirectAttribute
+		.andExpect(flash().attribute("message", is("GP successfully deleted!")))
 		.andExpect(view().name("redirect:/controlPanelSP"));
 	}
 
@@ -175,29 +173,7 @@ public class GPControllerTest {
 
 		mockMvc.perform(get("/granPremios/{id}/delete", TEST_GP_ID))
 		.andExpect(status().is3xxRedirection())
-//		.andExpect(model().attribute("message", is("GP not found!"))) --> Hace falta ponerlo como RedirectAttribute
+		.andExpect(flash().attribute("message", is("GP not found!")))
 		.andExpect(view().name("redirect:/controlPanelSP"));
 	}
-
-//	@WithMockUser(value = "spring")
-//	@Test
-//	void testPopulateGP() throws Exception {
-//		given(GPService.findGPById(TEST_GP_ID)).willReturn(Optional.of(gp));
-//		
-//		mockMvc.perform(get("/granPremios/setRecords/{gpId}", TEST_GP_ID))
-//		.andExpect(status().isOk())
-////		.andExpect(model().attribute("message", is("GP successfully populated!"))) --> Hace falta ponerlo como RedirectAttribute
-//		.andExpect(view().name("gp/gpList"));
-//	}
-	
-//	@WithMockUser(value = "spring")
-//	@Test
-//	void testCantPopulateGP() throws Exception {
-//		given(GPService.findGPById(TEST_GP_ID)).willReturn(Optional.empty());
-//		
-//		mockMvc.perform(get("/granPremios/setRecords/{gpId}", TEST_GP_ID))
-//		.andExpect(status().isOk())
-////		.andExpect(model().attribute("message", is("GP not found!"))) --> Hace falta ponerlo como RedirectAttribute
-//		.andExpect(view().name("gp/gpList"));
-//	}
 }

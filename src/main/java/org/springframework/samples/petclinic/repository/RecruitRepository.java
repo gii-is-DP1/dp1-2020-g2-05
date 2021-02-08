@@ -19,12 +19,6 @@ public interface RecruitRepository extends CrudRepository<Recruit, Integer> {
 	@Query(value = "SELECT r.* FROM RECRUIT AS r WHERE r.team_id = ?1", nativeQuery = true)
 	List<Recruit> findAllRecruits(int teamID);
 
-//	@Query(value = "SELECT r.* FROM RECRUIT AS r NATURAL JOIN OFFER AS o WHERE r.team_id = 1 AND o.status = 2", nativeQuery = true)
-//	List<Recruit> findAllRecruitSOnSaleByTeam(int teamID);
-//
-//	@Query(value = "SELECT r.* FROM RECRUIT AS r LEFT JOIN OFFER AS o WHERE r.team_id = o.team_id = 1 and o.id IS NULL", nativeQuery = true)
-//	List<Recruit> findAllRecruitSNotOnSaleByTeam(int teamID);
-	
 	@Query("SELECT r FROM Recruit r WHERE r.team.id = :teamID")
 	List<Recruit> findAllRecruitsByTeam(@Param("teamID") int teamID);
 
