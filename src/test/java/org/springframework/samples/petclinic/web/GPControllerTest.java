@@ -31,6 +31,7 @@ import org.springframework.samples.petclinic.model.TablaConsultas;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.GranPremioService;
+import org.springframework.samples.petclinic.service.PoblarBaseDeDatosService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.TransactionService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
@@ -57,6 +58,10 @@ public class GPControllerTest {
 	@MockBean
 	private AuthoritiesService authoritiesService;
 
+	
+	@MockBean
+	private PoblarBaseDeDatosService PBDService;
+	
 	@Autowired
 	private MockMvc mockMvc;
 

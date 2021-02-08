@@ -25,6 +25,9 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Authorities;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.repository.UserRepository;
+import org.springframework.samples.petclinic.service.exceptions.UserEmailEmptyOrNullException;
+import org.springframework.samples.petclinic.service.exceptions.UserPasswordEmptyOrNullException;
+import org.springframework.samples.petclinic.service.exceptions.UserUsernameEmptyOrNullException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,7 +56,15 @@ public class UserService {
 	}
 	
 	@Transactional
-	public void saveUser(User user) throws DataAccessException {
+	public void saveUser(User user) throws DataAccessException, UserEmailEmptyOrNullException, UserPasswordEmptyOrNullException, UserUsernameEmptyOrNullException {
+		if(user.getEmail().trim().isEmpty() || user.getEmail()== null) {
+			throw new UserEmailEmptyOrNullException("El email del usuario no puede ser null ni esta vacío");
+		}else if(user.getPassword().trim().isEmpty() || user.getPassword()==null){
+			throw new UserPasswordEmptyOrNullException("El password del usuario no puede ser null ni esta vacío");
+		}else if(user.getUsername().trim().isEmpty() || user.getUsername()==null){
+			throw new UserUsernameEmptyOrNullException("El username del usuario no puede ser null ni esta vacío");
+		}
+		
 		user.setEnabled(true);
 		
 		userRepository.save(user);

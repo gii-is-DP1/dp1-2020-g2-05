@@ -24,9 +24,13 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.service.exceptions.UserEmailEmptyOrNullException;
+import org.springframework.samples.petclinic.service.exceptions.UserPasswordEmptyOrNullException;
+import org.springframework.samples.petclinic.service.exceptions.UserUsernameEmptyOrNullException;
 import org.springframework.samples.petclinic.web.validator.UserValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -76,8 +80,17 @@ public class UserController {
 	}
 
 	@PostMapping(value = "/users/new")
-	public String processCreationForm(@Valid User user, BindingResult result) {
+	public String processCreationForm(@Valid User user, BindingResult result,ModelMap model) throws DataAccessException, UserEmailEmptyOrNullException, UserPasswordEmptyOrNullException, UserUsernameEmptyOrNullException {
 		if (result.hasErrors()) {
+			
+			List<ObjectError> errores = result.getAllErrors();
+			List<String> erroresstring = new ArrayList<String>();
+			for(int i=0;i<errores.size();i++) {
+				System.out.println(errores.get(i).getDefaultMessage());
+				erroresstring.add(errores.get(i).getDefaultMessage());
+			}
+			model.put("message",erroresstring );	
+
 			return USER_CREATE_FORM;
 		}
 		else {
@@ -102,7 +115,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/friends")
-	public String processAddFollower(@Valid User user,BindingResult result, ModelMap model) {
+	public String processAddFollower(@Valid User user,BindingResult result, ModelMap model) throws DataAccessException, UserEmailEmptyOrNullException, UserPasswordEmptyOrNullException, UserUsernameEmptyOrNullException {
 		if(user.getUsername().equals(userService.getUserSession().getUsername())) {
 			ObjectError error =  new ObjectError("user", "No puedes seguirte a ti mismo");
 			result.addError(error);
@@ -134,7 +147,7 @@ public class UserController {
 	}
 	
 	@GetMapping(path="/friends/remove/{username}")
-	public String borrarFriend(@PathVariable("username") String username, ModelMap model,RedirectAttributes ra) {
+	public String borrarFriend(@PathVariable("username") String username, ModelMap model,RedirectAttributes ra) throws DataAccessException, UserEmailEmptyOrNullException, UserPasswordEmptyOrNullException, UserUsernameEmptyOrNullException {
 		User session = userService.getUserSession();
 		
 		List <User> friends1 =  session.getFriends();
@@ -165,7 +178,7 @@ public class UserController {
 	}
 	
 	@PostMapping(value = "/users/editarPerfil")
-	public String cambiarImagen2(@Valid User user,ModelMap modelMap, BindingResult result) {
+	public String cambiarImagen2(@Valid User user,ModelMap modelMap, BindingResult result) throws DataAccessException, UserEmailEmptyOrNullException, UserPasswordEmptyOrNullException, UserUsernameEmptyOrNullException {
 		if (result.hasErrors()) {
 			List<ObjectError> errores = result.getAllErrors();
 			List<String> erroresstring = new ArrayList<String>();
