@@ -1,6 +1,7 @@
 package org.springframework.samples.petclinic.service;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -113,7 +114,10 @@ public class PoblarBaseDeDatosService {
 		form.setSession(Session.RACE);
 		form.setYear(añoactual);
 		this.poblarUnaCarreraYSusResultados(form, gp);
-		
+	}
+	
+	public List<GranPremio> findAllActualYear(Integer year) throws ParseException {
+		return this.gpService.findAllActualYear(year);
 	}
 	
 }

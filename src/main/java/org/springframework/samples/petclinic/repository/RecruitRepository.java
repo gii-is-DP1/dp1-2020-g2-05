@@ -13,21 +13,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface RecruitRepository extends CrudRepository<Recruit, Integer> {
 
-	@Query("SELECT r FROM RECRUIT AS r JOIN PILOT p JOIN TEAM t WHERE r.pilot.id = :pilotID AND t.league.id = :leagueID and t.id = r.team.id and p.id = r.pilot.id")
-	Optional<Recruit> findRecruitByPilotId(@Param("pilotID") int pilotID, @Param("leagueID") int leagueID);
+	@Query("SELECT r FROM Recruit r WHERE r.pilot.id = ?1 AND r.team.league.id = ?2")
+	Optional<Recruit> findRecruitByPilotId(int pilotId, int leagueId);
 
-	@Query("SELECT r FROM RECRUIT r WHERE r.team.id = :teamID")
-	List<Recruit> findAllRecruits(@Param("teamID") int teamID);
+	@Query(value = "SELECT r FROM Recruit r WHERE r.team.id = ?1")
+	List<Recruit> findAllRecruits(int teamID);
 
 	@Query("SELECT r FROM Recruit r WHERE r.team.id = :teamID")
 	List<Recruit> findAllRecruitsByTeam(@Param("teamID") int teamID);
 
-	@Query("SELECT r FROM RECRUIT r WHERE r.team.id = :teamID AND r.for_sale = false")
-	List<Recruit> findAllRecruitsNotOnSaleByTeam(@Param("teamID") int teamID);
+	@Query(value = "SELECT r FROM Recruit r WHERE r.team.id = ?1 AND r.forSale = true")
+	List<Recruit> findAllRecruitsOnSaleByTeam(int teamID);
 
-	@Query("SELECT r FROM RECRUIT r WHERE r.team.id = :teamID AND r.for_sale = true")
-	List<Recruit> findAllRecruitsOnSaleByTeam(@Param("teamID") int teamID);
-
+	@Query("SELECT r FROM Recruit r WHERE r.team.id = ?1 AND r.forSale = false")
+	List<Recruit> findAllRecruitsNotOnSaleByTeam(int teamID);
+	
 	@Transactional
 	@Modifying
 	@Query("UPDATE Recruit r SET r.forSale = true WHERE r.id = :recruitID")
