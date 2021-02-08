@@ -64,7 +64,7 @@ public class PilotServiceTest {
 		Pilot pilot = new Pilot();
 		pilot.setBaseValue(200);
 		pilot.setCategory(Category.MOTOGP);
-		pilot.setPoints("27");
+		pilot.setPoints(27);
 		pilot.setName("Ale");
 		pilot.setLastName("Ruiz");
 		pilot.setNationality("Spain");
@@ -161,7 +161,7 @@ public class PilotServiceTest {
 		competitorToTest.setResult(result);
 		this.pilotService.updatePilot(competitorToTest, 15);
 		
-		assertThat(this.pilotService.findByName("Rojas", "Antonio").get().getPoints()).isEqualTo("15");
+		assertThat(this.pilotService.findByName("Rojas", "Antonio").get().getPoints()).isEqualTo(15);
 	}
 	
 

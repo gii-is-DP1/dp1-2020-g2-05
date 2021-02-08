@@ -205,7 +205,7 @@ public class TeamController {
 			return mostrarDetallesEscuderia(leagueId, teamId, modelMap);
 		} else {
 			modelMap.addAttribute("message", "Recruit not found!");
-			return "/leagues/teamDetails";
+			return mostrarDetallesEscuderia(leagueId, teamId, modelMap);
 		}
 	}
 
@@ -215,7 +215,7 @@ public class TeamController {
 			throws NotAllowedNumberOfRecruitsException, NotTeamUserException {
 		if (result.hasErrors()) {
 			
-			modelMap.put("message", result.getAllErrors());
+			modelMap.put("message", "Set a valid price");
 			return setPrice(leagueId, teamId, recruitId, modelMap);
 		} else {
 			Optional<Recruit> opRecruit = recruitService.findRecruitById(recruitId);
@@ -243,6 +243,9 @@ public class TeamController {
 			@RequestHeader(name = "Referer", defaultValue = "/leagues/{leagueId}/teams") String referer,
 			@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, ModelMap model) throws NotTeamUserException {
 
+		System.out.println(this.userService.getUserSession());
+		System.out.println(this.teamService.findTeamById(teamId).get().getUser());
+		
 		if(this.userService.getUserSession() != this.teamService.findTeamById(teamId).get().getUser()){
 			throw new NotTeamUserException();
 		}else {
@@ -305,6 +308,9 @@ public class TeamController {
 	@PostMapping(value = "/leagues/{leagueId}/teams/{teamId}/edit")
 	public String editarTeamPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
 			@Valid Team team, BindingResult result, ModelMap model) {
+		
+		
+
 
 		authority = this.leagueService.findAuthoritiesByUsername(team.getUser().getUsername());
 		if (authority.equals("admin")) {

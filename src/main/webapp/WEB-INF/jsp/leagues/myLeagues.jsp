@@ -62,5 +62,7 @@
 	<spring:url value="/leagues/join" var="messageUrl">
 	</spring:url> <a class="textButton" href="${fn:escapeXml(messageUrl)}">Join league</a>
 	</div>
+
+
 		
 </petclinic:layout>
