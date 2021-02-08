@@ -10,9 +10,7 @@
 <petclinic:layout pageName="Teams">
 	<h2>Teams</h2>
 	
-	<c:if test="${EquipoSi!=null}"><h2><c:out value="${EquipoSi}" /></h2></c:if>
-	<c:if test="${EquipoNo!=null}"><h2><c:out value="${EquipoNo}" /></h2></c:if>
-	<c:if test="${Error!=null}"><h2><c:out value="${Error}" /></h2></c:if>
+
 	
 	
 		
