@@ -152,7 +152,7 @@ INSERT INTO recruit(id,for_sale,pilot_id,team_id) VALUES (7,false,7,11);
 INSERT INTO recruit(id,for_sale,pilot_id,team_id) VALUES (8,false,8,5);
 INSERT INTO recruit(id,for_sale,pilot_id,team_id) VALUES (9,false,9,5);
 
-INSERT INTO offer(id,price,status,recruit_id,team_id) VALUES (1,2000,2,1,1);
+INSERT INTO offer(id,price,version,status,recruit_id,team_id) VALUES (1,2000,1,2,1,1);
 
 
 
