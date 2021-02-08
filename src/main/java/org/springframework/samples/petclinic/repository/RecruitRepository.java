@@ -13,8 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface RecruitRepository extends CrudRepository<Recruit, Integer> {
 
-	@Query("SELECT r FROM Recruit r WHERE r.pilot.id = ?1 AND r.team.league.id = ?2")
-	Optional<Recruit> findRecruitByPilotId(int pilotId, int leagueId);
+	@Query("SELECT r FROM Recruit r WHERE r.pilot.id = :pilotID AND r.team.league.id = :leagueID")
+	Optional<Recruit> findRecruitByPilotId(@Param("pilotID") int pilotID, @Param("leagueID") int leagueID);
 
 	@Query(value = "SELECT r FROM Recruit r WHERE r.team.id = ?1")
 	List<Recruit> findAllRecruits(int teamID);

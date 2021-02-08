@@ -4,13 +4,11 @@ import java.text.ParseException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.samples.petclinic.model.GranPremio;
 import org.springframework.samples.petclinic.service.PoblarBaseDeDatosService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
-import org.springframework.samples.petclinic.service.TransactionService;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
@@ -25,8 +23,6 @@ public class PetclinicApplication {
 	private TablaConsultasService TCservice;
 	@Autowired
 	private PoblarBaseDeDatosService PBDService;
-	@Autowired
-	private TransactionService transactionService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(PetclinicApplication.class, args);
@@ -57,13 +53,6 @@ public class PetclinicApplication {
 		this.PBDService.poblandoUltimaCarreraCompletada();
     }
 
-	// Cada quince dias
-	@Scheduled(cron = "0 0 0 1,15 * ?")
-	public void actualizarTransacciones() throws Exception {
-		log.info("Eliminando transacciones hechas hace mas de quince días");
-		this.transactionService.eliminarTransaccionesAntiguas();
-	}
-	
 	@Scheduled(cron = "0 00 00 ? * 7")
 	public void bloquearLineups() throws ParseException {
 			List<GranPremio> gps = this.PBDService.findAllActualYear(2019);

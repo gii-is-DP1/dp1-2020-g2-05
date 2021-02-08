@@ -11,6 +11,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 @Entity
 @Table(name = "recruit")
 public class Recruit extends BaseEntity {
@@ -33,7 +36,7 @@ public class Recruit extends BaseEntity {
 	private Pilot pilot;
 
 	@ManyToOne
-	@JoinColumn(name = "team_id")
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Team team;
 
 	public Boolean getForSale() {
