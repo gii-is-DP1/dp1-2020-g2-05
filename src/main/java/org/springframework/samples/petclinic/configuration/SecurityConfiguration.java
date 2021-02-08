@@ -59,6 +59,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/leagues/myLeagues/**").authenticated()
 				.antMatchers("/leagues/**").authenticated()
 				
+				.antMatchers("/pilots/top").permitAll()
 				.antMatchers("/pilots/**").hasAnyAuthority("admin")
 				.antMatchers("/pilotsPaged").authenticated()
 
@@ -85,6 +86,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 				.antMatchers("/poblarConCalendario").hasAnyAuthority("admin")
 				
+
 				
 				.antMatchers("/styles/**").permitAll()
 				.antMatchers("/thyme/**").permitAll()

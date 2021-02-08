@@ -29,7 +29,7 @@ public class PilotValidator implements Validator{
 		 boolean resultado;
 
 	        try {
-	            Integer.parseInt(pilot.getPoints());
+	            pilot.getPoints();
 	            resultado = true;
 	        } catch (NumberFormatException excepcion) {
 	            resultado = false;

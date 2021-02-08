@@ -92,6 +92,9 @@ public class PilotService {
 		}
 		return res;
 	}
+	public List<Pilot> top10Pilots(Category category){
+		return this.pilotRepository.findTop3ByPointsAndCategory(category);
+	}
 	
 //	public void poblarBD(FormRellenarBD form) throws JSONException, IOException, ParseException {
 ////		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MMM-dd");		
@@ -316,15 +319,15 @@ public class PilotService {
 		pilotAGuardar.setLastName(rider_i.getName().split(", ")[0]);
 		pilotAGuardar.setNationality(rider_i.getNationality());
 		pilotAGuardar.setCategory(categoryFromForm);
-		pilotAGuardar.setPoints("0");
+		pilotAGuardar.setPoints(0);
 		Random random = new Random();
 		pilotAGuardar.setBaseValue(random.nextInt(3000) + 1000);//Valores arbitrarios, pueden cambiar
 		this.savePilot(pilotAGuardar);
 	}
 	public void updatePilot(Competitor rider_i,Integer puntos) {
 		Pilot pilotAGuardar = this.findByName(rider_i.getName().split(", ")[0], rider_i.getName().split(", ")[1]).get();
-		Integer suma=Integer.parseInt(pilotAGuardar.getPoints())+puntos;
-		pilotAGuardar.setPoints(suma.toString());
+		Integer suma=pilotAGuardar.getPoints()+puntos;
+		pilotAGuardar.setPoints(suma);
 		this.savePilot(pilotAGuardar);
 	}
 	
