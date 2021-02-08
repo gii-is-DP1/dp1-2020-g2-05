@@ -89,6 +89,7 @@ public class UserController {
 				System.out.println(errores.get(i).getDefaultMessage());
 				erroresstring.add(errores.get(i).getDefaultMessage());
 			}
+			model.put("userr", user);
 			model.put("message",erroresstring );	
 
 			return USER_CREATE_FORM;

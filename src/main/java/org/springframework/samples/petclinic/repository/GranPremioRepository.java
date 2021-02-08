@@ -12,10 +12,10 @@ import org.springframework.samples.petclinic.model.GranPremio;
 public interface GranPremioRepository  extends  CrudRepository<GranPremio, Integer>{
 
 	
-	@Query("SELECT gp FROM GranPremio gp WHERE gp.date0 >= :year AND gp.calendar = true")
+	@Query("SELECT gp FROM GranPremio gp WHERE gp.date0 >= :year AND gp.calendar = true ORDER BY gp.date0 ASC")
 	public List<GranPremio> findAllActualYear(@Param("year") LocalDate year);
 	
-	@Query("SELECT gp FROM GranPremio gp WHERE gp.hasBeenRun=true ORDER BY gp.id DESC")
+	@Query("SELECT gp FROM GranPremio gp WHERE gp.hasBeenRun=true ORDER BY gp.date0 ASC")
 	public List<GranPremio> findUltimoGpSinValidar() ;
 	
 	@Query("SELECT gp FROM GranPremio gp WHERE gp.date0=:fecha")
