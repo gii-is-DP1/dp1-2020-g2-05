@@ -50,8 +50,8 @@ public class RecruitService {
 	// Operaciones de Read
 
 	@Transactional(readOnly = true)
-	public Iterable<Recruit> findAll() {
-		return this.recruitRepository.findAll();
+	public List<Recruit> findAll() {
+		return (List<Recruit>) this.recruitRepository.findAll();
 	}
 
 	@Transactional(readOnly = true)
@@ -77,12 +77,12 @@ public class RecruitService {
 
 	@Transactional(readOnly = true)
 	public List<Recruit> getRecruitsOnSaleByTeam(int teamID) {
-		return this.recruitRepository.findAllRecruitSOnSaleByTeam(teamID);
+		return this.recruitRepository.findAllRecruitsOnSaleByTeam(teamID);
 	}
 
 	@Transactional(readOnly = true)
 	public List<Recruit> getRecruitsNotOnSaleByTeam(int teamID) {
-		return this.recruitRepository.findAllRecruitSNotOnSaleByTeam(teamID);
+		return this.recruitRepository.findAllRecruitsNotOnSaleByTeam(teamID);
 	}
 
 	// Operaciones de Update

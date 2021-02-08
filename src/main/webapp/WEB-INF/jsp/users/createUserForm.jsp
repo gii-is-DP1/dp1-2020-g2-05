@@ -7,25 +7,17 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
 <petclinic:layout pageName="users">
-    <h2>
-    </h2>
+    <h2>Registration Form</h2>
     <form:form modelAttribute="userr" class="form-horizontal" id="add-user-form">
         <div class="form-group has-feedback">
             <petclinic:inputField label="Username" name="username"/>
             <petclinic:inputField label="Email" name="email"/>
             <petclinic:inputField label="Password" name="password"/>
             <petclinic:inputField label="URL imagen de perfil" name="imgperfil"/>
-            
-
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                
-                        <button class="btn btn-default" type="submit">Add User</button>
-                   
-                    
-                  
-               
+            	<button class="btn btn-default" type="submit">Add User</button>
             </div>
         </div>
     </form:form>

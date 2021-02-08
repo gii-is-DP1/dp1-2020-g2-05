@@ -102,9 +102,6 @@ public class PoblarBaseDeDatosService {
 	}
 	
 	public void poblandoUltimaCarreraCompletada() throws Exception {
-//		Integer mesactual = LocalDate.now().getMonthValue();
-//		Integer añoactual = LocalDate.now().getYear();
-//		Integer diaactual = LocalDate.now().getDayOfMonth();
 		Integer mesactual = 3;
 		Integer añoactual = 2019;
 		Integer diaactual = 8;

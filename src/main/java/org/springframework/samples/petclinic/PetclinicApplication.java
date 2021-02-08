@@ -1,17 +1,12 @@
 package org.springframework.samples.petclinic;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.context.annotation.Bean;
 import org.springframework.samples.petclinic.service.PoblarBaseDeDatosService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
-import org.springframework.samples.petclinic.service.TransactionService;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.web.client.RestTemplate;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,8 +19,6 @@ public class PetclinicApplication {
 	private TablaConsultasService TCservice;
 	@Autowired
 	private PoblarBaseDeDatosService PBDService;
-	@Autowired
-	private TransactionService transactionService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(PetclinicApplication.class, args);
@@ -56,14 +49,6 @@ public class PetclinicApplication {
 		this.PBDService.poblandoUltimaCarreraCompletada();
 		
     }
-	
-
-	// Cada quince dias
-	@Scheduled(cron = "0 0 0 1,15 * ?")
-	public void actualizarTransacciones() throws Exception {
-		log.info("Eliminando transacciones hechas hace mas de quince días");
-		this.transactionService.eliminarTransaccionesAntiguas();
-	}
 
 //	@Bean
 //	public RestTemplate restTemplate(RestTemplateBuilder builder) {

@@ -13,26 +13,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface RecruitRepository extends CrudRepository<Recruit, Integer> {
 
-	@Query(value = "SELECT r.* FROM RECRUIT AS r JOIN PILOT AS p JOIN TEAM t WHERE r.pilot_id = ?1 and  t.league_id = ?2 and t.id = r.team_id and p.id = r.pilot_id", nativeQuery = true)
-	Optional<Recruit> findRecruitByPilotId(int pilotId, int leagueId);
+	@Query("SELECT r FROM Recruit r WHERE r.pilot.id = :pilotID AND r.team.league.id = :leagueID")
+	Optional<Recruit> findRecruitByPilotId(@Param("pilotID") int pilotID, @Param("leagueID") int leagueID);
 
-	@Query(value = "SELECT r.* FROM RECRUIT AS r WHERE r.team_id = ?1", nativeQuery = true)
-	List<Recruit> findAllRecruits(int teamID);
-
-//	@Query(value = "SELECT r.* FROM RECRUIT AS r NATURAL JOIN OFFER AS o WHERE r.team_id = 1 AND o.status = 2", nativeQuery = true)
-//	List<Recruit> findAllRecruitSOnSaleByTeam(int teamID);
-//
-//	@Query(value = "SELECT r.* FROM RECRUIT AS r LEFT JOIN OFFER AS o WHERE r.team_id = o.team_id = 1 and o.id IS NULL", nativeQuery = true)
-//	List<Recruit> findAllRecruitSNotOnSaleByTeam(int teamID);
-	
 	@Query("SELECT r FROM Recruit r WHERE r.team.id = :teamID")
 	List<Recruit> findAllRecruitsByTeam(@Param("teamID") int teamID);
 
-	@Query(value = "SELECT r.* FROM RECRUIT AS r WHERE r.team_id = ?1 AND r.for_sale = true", nativeQuery = true)
-	List<Recruit> findAllRecruitSOnSaleByTeam(int teamID);
+	@Query("SELECT r FROM Recruit r WHERE r.team.id = :teamID AND r.forSale = false")
+	List<Recruit> findAllRecruitsNotOnSaleByTeam(@Param("teamID") int teamID);
 
-	@Query(value = "SELECT r.* FROM RECRUIT AS r WHERE r.team_id = ?1 AND r.for_sale = false", nativeQuery = true)
-	List<Recruit> findAllRecruitSNotOnSaleByTeam(int teamID);
+	@Query("SELECT r FROM Recruit r WHERE r.team.id = :teamID AND r.forSale = true")
+	List<Recruit> findAllRecruitsOnSaleByTeam(@Param("teamID") int teamID);
 
 	@Transactional
 	@Modifying
@@ -49,5 +40,4 @@ public interface RecruitRepository extends CrudRepository<Recruit, Integer> {
 	@Query("UPDATE Recruit r SET r.team = :purchaserTeam WHERE r.id = :recruitID")
 	void transfer(@Param("recruitID") int recruitID, @Param("purchaserTeam") Team purchaserTeam);
 
-	
 }

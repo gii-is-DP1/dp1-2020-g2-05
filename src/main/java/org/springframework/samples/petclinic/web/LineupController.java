@@ -21,7 +21,6 @@ import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedRiderOnLineupException;
-import org.springframework.samples.petclinic.service.exceptions.NoTeamInThisLeagueException;
 import org.springframework.samples.petclinic.service.exceptions.NotYourTeamException;
 import org.springframework.samples.petclinic.web.validator.LineupValidator;
 import org.springframework.stereotype.Controller;
@@ -71,16 +70,6 @@ public class LineupController {
 	public List<Recruit> getAllRecruits(@PathVariable("teamId") int teamId) {
 		return this.recruitService.getRecruitsNotOnSaleByTeam(teamId);
 	}
-	
-//	@ModelAttribute("userTeam")
-//	public Team getUserTeam(@PathVariable("leagueId") int leagueId) throws NoTeamInThisLeagueException {
-//		Optional<Team> userTeam = teamService.findTeamByUsernameAndLeagueId(userService.getUserSession().getUsername(), leagueId);
-//		if (userTeam.isPresent()){
-//			return userTeam.get();
-//		} else {
-//			throw new NoTeamInThisLeagueException();
-//		}
-//	}
 	
 	@GetMapping("/lineups")
 	public String listadoAlineaciones(ModelMap modelMap) {

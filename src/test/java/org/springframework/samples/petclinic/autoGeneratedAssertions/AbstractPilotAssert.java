@@ -80,7 +80,7 @@ public abstract class AbstractPilotAssert<S extends AbstractPilotAssert<S, A>, A
     String assertjErrorMessage = "\nExpecting dorsal of:\n  <%s>\nto be:\n  <%s>\nbut was:\n  <%s>";
 
     // null safe check
-    String actualDorsal = actual.getPoints();
+    Integer actualDorsal = actual.getPoints();
     if (!Objects.areEqual(actualDorsal, dorsal)) {
       failWithMessage(assertjErrorMessage, actual, dorsal, actualDorsal);
     }

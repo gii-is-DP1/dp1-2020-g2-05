@@ -113,26 +113,26 @@ class UserValidatorTests {
 		assertThat(violation.getMessage()).isEqualTo("must not be empty");
 	}
 	
-	@Test
-	void shouldNotValidateWhenImgPerfilEmpty() {
-		LocaleContextHolder.setLocale(Locale.ENGLISH);
-
-		User user = new User();
-		user.setUsername("sergio");
-		user.setPassword("123");
-		user.setEmail("sergio@prueba.com");
-		user.setEnabled(true);
-		log.info("Se ha creado el user con url empty: " + user);
-
-		Validator validator = createValidator();
-		Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
-
-		assertThat(constraintViolations.size()).isEqualTo(1);
-		ConstraintViolation<User> violation = constraintViolations.iterator().next();
-		assertThat(violation.getPropertyPath().toString()).isEqualTo("imgperfil");
-		assertThat(violation.getMessage()).isEqualTo("must not be empty");
-	}
-	
+//	@Test
+//	void shouldNotValidateWhenImgPerfilEmpty() {
+//		LocaleContextHolder.setLocale(Locale.ENGLISH);
+//
+//		User user = new User();
+//		user.setUsername("sergio");
+//		user.setPassword("123");
+//		user.setEmail("sergio@prueba.com");
+//		user.setEnabled(true);
+//		log.info("Se ha creado el user con url empty: " + user);
+//
+//		Validator validator = createValidator();
+//		Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
+//
+//		assertThat(constraintViolations.size()).isEqualTo(1);
+//		ConstraintViolation<User> violation = constraintViolations.iterator().next();
+//		assertThat(violation.getPropertyPath().toString()).isEqualTo("imgperfil");
+//		assertThat(violation.getMessage()).isEqualTo("must not be empty");
+//	}
+//	
 //	@Test
 //	void shouldNotValidateWhenImgPerfilNotFormat() {
 //		LocaleContextHolder.setLocale(Locale.ENGLISH);

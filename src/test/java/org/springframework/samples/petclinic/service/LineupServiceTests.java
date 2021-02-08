@@ -1,9 +1,12 @@
 package org.springframework.samples.petclinic.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +15,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.Lineup;
+import org.springframework.samples.petclinic.model.Recruit;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedRiderOnLineupException;
 import org.springframework.stereotype.Service;
 
@@ -35,8 +39,8 @@ public class LineupServiceTests {
 	
 	@Test
 	void shouldNotFindLineupById() {
-		Optional<Lineup> lineup_fail = this.lineupService.findLineup(12311);
-		assertThat(lineup_fail.isPresent()).isFalse();
+		Optional<Lineup> lineupFail = this.lineupService.findLineup(9999);
+		assertThat(lineupFail.isPresent()).isFalse();
 	}
 	
 	@Test
@@ -47,8 +51,8 @@ public class LineupServiceTests {
 	
 	@Test
 	void shouldNotFindLineupsByTeamId() {
-		List<Lineup> lineup_fail = this.lineupService.findByTeam(12311);
-		assertThat(lineup_fail.isEmpty()).isTrue();
+		List<Lineup> lineupFail = this.lineupService.findByTeam(9999);
+		assertThat(lineupFail.isEmpty()).isTrue();
 	}
 	
 	@Test
@@ -61,8 +65,10 @@ public class LineupServiceTests {
 		newLineup.setRecruit2(this.recruitService.findRecruitById(2).get());
 		newLineup.setTeam(this.teamService.findTeamById(1).get());
 		
+		List<Lineup> allLineups = this.lineupService.findAll();
 		List<Lineup> lineupsByGpId = this.lineupService.findByGpId(GP_ID);
 		assertThat(lineupsByGpId.size()).isGreaterThan(0);
+		assertThat(allLineups.containsAll(lineupsByGpId));  // Metamorphic relation
 	}
 	
 	@Test
@@ -73,16 +79,17 @@ public class LineupServiceTests {
 	
 	@Test
 	void shouldFindLineupsByRecruitId() {
-		int RECRUIT_ID = 1;
 		Lineup newLineup = new Lineup();
 		newLineup.setCategory(Category.MOTOGP);
 		newLineup.setGp(this.lineupService.findLineup(1).get().getGp());
-		newLineup.setRecruit1(this.recruitService.findRecruitById(RECRUIT_ID).get());
-		newLineup.setRecruit2(this.recruitService.findRecruitById(RECRUIT_ID+1).get());
+		newLineup.setRecruit1(this.recruitService.findRecruitById(2).get());
+		newLineup.setRecruit2(this.recruitService.findRecruitById(4).get());
 		newLineup.setTeam(this.teamService.findTeamById(1).get());
 		
-		List<Lineup> lineupsByGpId = this.lineupService.findByRecruit(RECRUIT_ID);
-		assertThat(lineupsByGpId.size()).isGreaterThan(0);
+		List<Lineup> allLineups = this.lineupService.findAll();
+		List<Lineup> lineupsByRecruitId = this.lineupService.findByRecruit(2);
+		assertThat(lineupsByRecruitId.size()).isGreaterThan(0);
+		assertThat(allLineups.containsAll(lineupsByRecruitId));  // Metamorphic relation
 	}
 	
 	@Test
@@ -107,6 +114,7 @@ public class LineupServiceTests {
 
 		List<Lineup> allLineupsAfterInsert = this.lineupService.findAll();
 		assertThat(allLineupsAfterInsert.size()).isEqualTo(allLineups.size() + 1);
+		assertThat(allLineupsAfterInsert.containsAll(allLineups));  // Metamorphic relation
 	}
 	
 	@Test
@@ -124,7 +132,18 @@ public class LineupServiceTests {
 		this.lineupService.delete(newLineup);
 		List<Lineup> allLineupsAfterInsertAndDelete = this.lineupService.findAll();
 
-		assertThat(allLineupsAfterInsertAndDelete.size()).isEqualTo(allLineups.size());
+		assertThat(allLineupsAfterInsertAndDelete.size()).isEqualTo(allLineups.size()); // Metamorphic relation
+	}
+	
+	@Test
+	void metamorphicTestingLineupRiders() {
+		List<Lineup> allLineups = this.lineupService.findAll();
+		List<Recruit> allRecruits = this.recruitService.findAll();
+
+		for (Lineup l : allLineups) {
+			List<Recruit> recruitsInLineup = Stream.of(l.getRecruit1(), l.getRecruit2()).collect(Collectors.toList());
+			assertTrue("Not a subset", allRecruits.containsAll(recruitsInLineup));  // Metamorphic relation
+		}
 	}
 
 }

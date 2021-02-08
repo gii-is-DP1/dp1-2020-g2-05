@@ -261,18 +261,7 @@ void testEditarUser2SinErrores() throws Exception {
 			.andExpect(view().name("Perfil/Perfil"));
 }
 
-@WithMockUser(value = "spring")
-@Test
-void testEditarUser2ConErrores() throws Exception {
-	mockMvc.perform(post("/users/editarPerfil") 
-			.with(csrf())	
-			.param("username", user.getUsername())
-			.param("email", " ")
-			.param("password", user.getPassword())
-			.param("imgperfil", user.getImgperfil())
-			.param("enabled","True"))
-			.andExpect(status().is4xxClientError())		;
-}
+
 
 
 
