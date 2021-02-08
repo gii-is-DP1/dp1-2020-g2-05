@@ -13,19 +13,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface RecruitRepository extends CrudRepository<Recruit, Integer> {
 
-	@Query("SELECT r FROM RECRUIT AS r JOIN PILOT p JOIN TEAM t WHERE r.pilot.id = :pilotID AND t.league.id = :leagueID and t.id = r.team.id and p.id = r.pilot.id")
+	@Query("SELECT r FROM Recruit r WHERE r.pilot.id = :pilotID AND r.team.league.id = :leagueID")
 	Optional<Recruit> findRecruitByPilotId(@Param("pilotID") int pilotID, @Param("leagueID") int leagueID);
-
-	@Query("SELECT r FROM RECRUIT r WHERE r.team.id = :teamID")
-	List<Recruit> findAllRecruits(@Param("teamID") int teamID);
 
 	@Query("SELECT r FROM Recruit r WHERE r.team.id = :teamID")
 	List<Recruit> findAllRecruitsByTeam(@Param("teamID") int teamID);
 
-	@Query("SELECT r FROM RECRUIT r WHERE r.team.id = :teamID AND r.for_sale = false")
+	@Query("SELECT r FROM Recruit r WHERE r.team.id = :teamID AND r.forSale = false")
 	List<Recruit> findAllRecruitsNotOnSaleByTeam(@Param("teamID") int teamID);
 
-	@Query("SELECT r FROM RECRUIT r WHERE r.team.id = :teamID AND r.for_sale = true")
+	@Query("SELECT r FROM Recruit r WHERE r.team.id = :teamID AND r.forSale = true")
 	List<Recruit> findAllRecruitsOnSaleByTeam(@Param("teamID") int teamID);
 
 	@Transactional

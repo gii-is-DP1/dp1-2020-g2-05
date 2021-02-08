@@ -70,14 +70,11 @@ public class TransactionService {
 		return this.transactionRepository.findByTeamId(teamID);
 	}
 
+	// Operaciones de Delete
+	
 	@Transactional
 	private void delete(Transaction t) {
 		this.transactionRepository.delete(t);
-	}
-
-	@Transactional
-	public void eliminarTransaccionesAntiguas() {
-		this.transactionRepository.deleteAll();
 	}
 
 }
