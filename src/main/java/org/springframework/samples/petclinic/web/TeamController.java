@@ -110,11 +110,14 @@ public class TeamController {
 			ModelMap model) throws NotAllowedNumberOfRecruitsException, DuplicatedTeamNameException {
 		
 		League league = this.leagueService.findLeague(leagueId).get();
+		System.out.println(league);
 		log.debug("Asignandole la liga " + league);
 		team.setLeague(league);
 		
 
 		log.info("La liga " + league + " ha sido asignada correctamente");
+		
+		System.out.println(result.getAllErrors());
 		if (result.hasErrors()) {
 			model.put("team", team);
 			model.put("message", result.getAllErrors());
@@ -127,8 +130,9 @@ public class TeamController {
 			log.info("Usuario " + this.userService.getUserSession() + "asignado correctamente");
 			
 			Optional<Team> tem = this.teamService.findTeamByUsernameAndLeagueId(team.getUser().getUsername(), leagueId);
+			System.out.println(tem);
 			List<Team> equipos = this.teamService.findTeamByLeagueId(league.getId());
-
+			System.out.println(equipos);
 			Integer igual = 0;
 			for (int i = 0; i < equipos.size(); i++) {
 				if (igual == 0) {
@@ -242,9 +246,7 @@ public class TeamController {
 	public String borrarEscuderia(
 			@RequestHeader(name = "Referer", defaultValue = "/leagues/{leagueId}/teams") String referer,
 			@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, ModelMap model) throws NotTeamUserException {
-
-		System.out.println(this.userService.getUserSession());
-		System.out.println(this.teamService.findTeamById(teamId).get().getUser());
+		
 		
 		if(this.userService.getUserSession() != this.teamService.findTeamById(teamId).get().getUser()){
 			throw new NotTeamUserException();
@@ -282,11 +284,7 @@ public class TeamController {
 			if(this.userService.getUserSession() != this.teamService.findTeamById(teamId).get().getUser()){
 				throw new NotTeamUserException();
 			}else {
-				
-			
-		
 
-		
 		Optional<Team> team = this.teamService.findTeamById(teamId);
 		log.info("Preparandose para editar el equipo " + team);
 		model.put("team", team.get());
@@ -309,21 +307,6 @@ public class TeamController {
 	public String editarTeamPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
 			@Valid Team team, BindingResult result, ModelMap model) {
 		
-		
-
-
-		authority = this.leagueService.findAuthoritiesByUsername(team.getUser().getUsername());
-		if (authority.equals("admin")) {
-			model.put("admin", true);
-		} else {
-			model.put("usuario", true);
-		}
-
-		League league = this.leagueService.findLeague(leagueId).get();
-
-		log.debug("Asignandole la liga " + league);
-
-		team.setLeague(league);
 
 		if (result.hasErrors()) {
 			model.put("Editar", true);
@@ -392,6 +375,7 @@ public class TeamController {
 		} else {
 			model.put("usuario", true);
 		}
+		
 		model.put("teams", tem);
 		model.put("league", this.leagueService.findLeague(leagueId).get());
 		model.put("user", usuario);

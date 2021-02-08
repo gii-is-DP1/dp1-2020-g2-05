@@ -139,9 +139,6 @@ public class TeamService {
 				r.setTeam(t);
 				recruitService.saveRecruit(r);
 				offerService.putOnSale(r, r.getPilot().getBaseValue());
-
-				// Por si luego este fichaje tiene que ser asignado al primer equipo, se pueda
-				// borrar sin problemas con la base de datos, le añadimos la oferta a mano
 				Offer offer = offerService.findOffersByRecruit(r.getId()).get(0);
 				Set<Offer> offers = new HashSet<>();
 				offers.add(offer);
@@ -157,8 +154,7 @@ public class TeamService {
 		Integer valor = 0;
 		for (int i = 0; i < recruits.size(); i++) {
 			Recruit r = recruits.get(i);
-			if (r.getForSale()) { // Si el fichaje esta en venta, ponemos su oferta asociada en denegada para
-									// evitar incoherencias
+			if (r.getForSale()) { 
 				Offer offer = r.getOffer().stream().filter(o -> o.getStatus().equals(Status.Outstanding)).findAny()
 						.get();
 				offer.setStatus(Status.Denied);
