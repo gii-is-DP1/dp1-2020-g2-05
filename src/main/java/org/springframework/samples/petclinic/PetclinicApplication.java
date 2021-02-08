@@ -33,7 +33,7 @@ public class PetclinicApplication {
 	}
 
 	// Ajustar a lunes (0 00 00 ? * MON)
-	@Scheduled(cron = "0 0 12 ? * MON")
+	@Scheduled(cron = "0 05 00 ? * *")
 	public void validarCarreras() throws Exception {
 		log.info("Validando la ultima carrera completada");
 		System.out.println("VALIDANDO");
@@ -42,7 +42,7 @@ public class PetclinicApplication {
     }
 	
 	//Ajustar a Domingo (0 00 00 ? * 7)
-	@Scheduled(cron = "0 11 22 ? * *") 
+	@Scheduled(cron = "0 04 00 ? * *") 
     public void PoblarUltimaCarrera() throws Exception {
 		log.info("Poblando la ultima carrera completada");
 		System.out.println("Poblando");

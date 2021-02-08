@@ -29,16 +29,18 @@ import motogpApiV2.testing.testing;
 @Transactional
 public class PoblarBaseDeDatosService {
 
+	private TablaConsultasService TCService;
 	private GranPremioService gpService; 
 	private PilotService pilotService;
 	private ResultService resultService;
 
 	
 	@Autowired
-	public PoblarBaseDeDatosService(PilotService pilotService,ResultService resultService,GranPremioService gpService) {
+	public PoblarBaseDeDatosService(PilotService pilotService,ResultService resultService,GranPremioService gpService,TablaConsultasService TCService) {
 		this.pilotService = pilotService;
 		this.resultService = resultService;
 		this.gpService =gpService;
+		this.TCService = TCService;
 	}
 	
 	
@@ -91,12 +93,18 @@ public class PoblarBaseDeDatosService {
 				}
 			}
 		}
+		
+		try {
+			this.gpService.populateRecord(gp);
+		} catch (Exception e) {
+
+		}
 	}
 	
 	public void poblandoUltimaCarreraCompletada() throws Exception {
 		Integer mesactual = 3;
 		Integer añoactual = 2019;
-		Integer diaactual = 29;
+		Integer diaactual = 8;
 		LocalDate fecha = LocalDate.of(añoactual, mesactual, diaactual);
 		GranPremio gp = new GranPremio();
 		System.out.println(fecha);
@@ -113,6 +121,12 @@ public class PoblarBaseDeDatosService {
 		form.setSession(Session.RACE);
 		form.setYear(añoactual);
 		this.poblarUnaCarreraYSusResultados(form, gp);
+		this.TCService.actualizarTabla(Category.MOTO2);
+		this.TCService.actualizarTabla(Category.MOTO3);
+		this.TCService.actualizarTabla(Category.MOTOGP);
+		gp.setHasBeenRun(true);
+		gpService.saveGP(gp);
+		
 		
 	}
 	

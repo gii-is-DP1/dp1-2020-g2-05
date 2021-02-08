@@ -111,6 +111,7 @@ public class GranPremioService {
 	}
 	
 	public GranPremio ultimoGPSinValidar() {
+		System.out.println(GPRepository.findUltimoGpSinValidar());
 		return GPRepository.findUltimoGpSinValidar().get(0);
 	}
 	
