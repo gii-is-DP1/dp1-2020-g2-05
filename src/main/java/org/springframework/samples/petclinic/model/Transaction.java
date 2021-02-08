@@ -32,7 +32,7 @@ public class Transaction extends BaseEntity implements Comparable<Transaction> {
 	@NotBlank
 	private String concept;
 
-	@ManyToOne()
+	@ManyToOne
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Team team;
 
