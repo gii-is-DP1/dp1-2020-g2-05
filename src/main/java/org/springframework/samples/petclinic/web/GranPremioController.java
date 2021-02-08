@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.web;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
@@ -7,6 +8,7 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.GranPremio;
 import org.springframework.samples.petclinic.service.GranPremioService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
@@ -18,7 +20,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+
 import lombok.extern.slf4j.Slf4j;
+import motogpApiV2.GranPremioDetails.GranPremioDetails;
+import motogpApiV2.GranPremioDetails.Venue;
+import motogpApiV2.testing.testing;
 
 @Slf4j
 @Controller
@@ -90,4 +98,16 @@ public class GranPremioController {
 		return "redirect:/controlPanelSP";
 	}
 	
+
+
+
+	@GetMapping(path="/granPremios/info/{gpId}")
+	public String detallesGP(@PathVariable("gpId") int id, ModelMap model) throws ParseException, JsonMappingException, JsonProcessingException, IOException, InterruptedException {	
+		GranPremio gp = GPService.findGPById(id).get();
+		Venue datos = testing.obteinDetailsFromGp(gp.getIdApi());
+		model.addAttribute("lista", datos);
+		model.addAttribute("gp",gp); 
+		return "gp/gpDetails";
+	}
+
 }

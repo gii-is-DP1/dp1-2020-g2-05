@@ -78,6 +78,7 @@ public class ResultService {
 		Integer gpId = gpService.ultimoGPSinValidar().getId();
 		GranPremio gp = gpService.findGPById(gpId).get();
 		gp.setHasBeenValidated(true);
+		gpService.saveGP(gp);
 		String code = gp.getRaceCode();
 
 		List<Result> results = new ArrayList<Result>();
