@@ -16,15 +16,18 @@ public interface RecruitRepository extends CrudRepository<Recruit, Integer> {
 	@Query("SELECT r FROM Recruit r WHERE r.pilot.id = :pilotID AND r.team.league.id = :leagueID")
 	Optional<Recruit> findRecruitByPilotId(@Param("pilotID") int pilotID, @Param("leagueID") int leagueID);
 
+	@Query(value = "SELECT r FROM Recruit r WHERE r.team.id = ?1")
+	List<Recruit> findAllRecruits(int teamID);
+
 	@Query("SELECT r FROM Recruit r WHERE r.team.id = :teamID")
 	List<Recruit> findAllRecruitsByTeam(@Param("teamID") int teamID);
 
-	@Query("SELECT r FROM Recruit r WHERE r.team.id = :teamID AND r.forSale = false")
-	List<Recruit> findAllRecruitsNotOnSaleByTeam(@Param("teamID") int teamID);
+	@Query(value = "SELECT r FROM Recruit r WHERE r.team.id = ?1 AND r.forSale = true")
+	List<Recruit> findAllRecruitsOnSaleByTeam(int teamID);
 
-	@Query("SELECT r FROM Recruit r WHERE r.team.id = :teamID AND r.forSale = true")
-	List<Recruit> findAllRecruitsOnSaleByTeam(@Param("teamID") int teamID);
-
+	@Query("SELECT r FROM Recruit r WHERE r.team.id = ?1 AND r.forSale = false")
+	List<Recruit> findAllRecruitsNotOnSaleByTeam(int teamID);
+	
 	@Transactional
 	@Modifying
 	@Query("UPDATE Recruit r SET r.forSale = true WHERE r.id = :recruitID")

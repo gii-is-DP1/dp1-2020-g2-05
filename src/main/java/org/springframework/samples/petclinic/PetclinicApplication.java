@@ -1,8 +1,12 @@
 package org.springframework.samples.petclinic;
 
+import java.text.ParseException;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.samples.petclinic.model.GranPremio;
 import org.springframework.samples.petclinic.service.PoblarBaseDeDatosService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -32,7 +36,8 @@ public class PetclinicApplication {
 		TCservice.actualizarTablaAutomatica();
 	}
 
-	// Ajustar a lunes (0 00 00 ? * MON)
+//	Ajustar a lunes (0 00 00 ? * MON)
+//	@Scheduled(cron = "0 0 12 ? * MON")
 	@Scheduled(cron = "0 05 00 ? * *")
 	public void validarCarreras() throws Exception {
 		log.info("Validando la ultima carrera completada");
@@ -41,22 +46,20 @@ public class PetclinicApplication {
         TCservice.comprobandoCarrerasCompletadas();
     }
 	
-	//Ajustar a Domingo (0 00 00 ? * 7)
+//	Ajustar a Domingo (0 00 00 ? * 7)
+//	@Scheduled(cron = "0 00 00 ? * 7") 
 	@Scheduled(cron = "0 04 00 ? * *") 
     public void PoblarUltimaCarrera() throws Exception {
 		log.info("Poblando la ultima carrera completada");
 		System.out.println("Poblando");
 		this.PBDService.poblandoUltimaCarreraCompletada();
-		
     }
 
-//	@Bean
-//	public RestTemplate restTemplate(RestTemplateBuilder builder) {
-//		return builder.build();
-//	}
-	
-
-	
-	
-
+	@Scheduled(cron = "0 00 00 ? * 7")
+	public void bloquearLineups() throws ParseException {
+			List<GranPremio> gps = this.PBDService.findAllActualYear(2019);
+			Integer gpsCompleted = this.TCservice.getTabla().get().getRacesCompleted();
+			GranPremio gp = gps.get(gpsCompleted);
+			gp.setHasBeenRun(true);
+		}
 }

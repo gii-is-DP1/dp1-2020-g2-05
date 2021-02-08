@@ -1,17 +1,10 @@
 package org.springframework.samples.petclinic.service;
 
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
@@ -23,41 +16,21 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.model.League;
-import org.springframework.samples.petclinic.model.Team;
-import org.springframework.samples.petclinic.service.exceptions.duplicatedLeagueNameException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.ModelMap;
-import org.json.JSONException;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.samples.petclinic.model.BDCarrera;
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.Pilot;
-import org.springframework.stereotype.Service;
 
-import motogpApiV2.RaceCode;
-import motogpApiV2.Session;
 import motogpApiV2.results.Competitor;
 import motogpApiV2.results.Result;
-import motogpApiV2.testing.testing;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 public class PilotServiceTest {
+	
 	@Autowired
-	protected PilotService pilotService;
-
+	PilotService pilotService;
 	@Autowired
-	protected ResultService resultService;
-	
-	
-	
-	
-
+	ResultService resultService;
 	
 	@Test
 	void shouldSavePilotAndDelete() {
@@ -99,7 +72,6 @@ public class PilotServiceTest {
 	void shouldNotFindPilotById() {
 		Optional<Pilot> pilotSaved = this.pilotService.findPilotById(this.pilotService.pilotCount()+5);
 		assertThat(pilotSaved.isPresent()).isFalse();
-	
 	}
 	
 	@Test
@@ -112,7 +84,6 @@ public class PilotServiceTest {
 	void shouldNotFindPilotByName() {
 		Optional<Pilot> pilotSaved = this.pilotService.findByName("Test", "Negative");
 		assertThat(pilotSaved.isPresent()).isFalse();
-	
 	}
 	
 	@Test
@@ -122,7 +93,6 @@ public class PilotServiceTest {
 		assertThat(pilotSaved.get(0).getName()).isEqualTo("Sergio");
 		assertThat(pilotSaved.get(1).getLastName()).isEqualTo("Rojas");
 		assertThat(pilotSaved.get(0).getLastName()).isEqualTo("Rojas");
-	
 	}
 	
 	
