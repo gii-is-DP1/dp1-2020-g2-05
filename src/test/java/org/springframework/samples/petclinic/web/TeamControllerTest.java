@@ -28,7 +28,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.configuration.GenericIdToEntityConverter;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
 import org.springframework.samples.petclinic.model.Authorities;
 import org.springframework.samples.petclinic.model.Category;
@@ -52,7 +51,6 @@ import org.springframework.samples.petclinic.service.TransactionService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedRiderOnLineupException;
 import org.springframework.samples.petclinic.service.exceptions.NotAllowedNumberOfRecruitsException;
-import org.springframework.samples.petclinic.service.exceptions.NotTeamUserException;
 import org.springframework.samples.petclinic.service.exceptions.UserEmailEmptyOrNullException;
 import org.springframework.samples.petclinic.service.exceptions.UserPasswordEmptyOrNullException;
 import org.springframework.samples.petclinic.service.exceptions.UserUsernameEmptyOrNullException;
@@ -60,9 +58,6 @@ import org.springframework.samples.petclinic.service.exceptions.duplicatedLeague
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.context.WebApplicationContext;
 @WebMvcTest(controllers=TeamController.class,
 		excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class),
@@ -466,6 +461,8 @@ public class TeamControllerTest {
 	void testSetPriceSuccess() throws Exception {
 		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
 		given(this.recruitService.findRecruitById(TEST_RECRUIT_ID)).willReturn(Optional.of(recruit1));
+		given(this.userService.getUserSession()).willReturn(user);
+		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
 
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/details/{recruitId}", TEST_LEAGUE_ID, TEST_TEAM_ID,
 				TEST_RECRUIT_ID)).andExpect(status().isOk()).andExpect(model().attributeExists("offer"))
@@ -477,7 +474,9 @@ public class TeamControllerTest {
 	void testSetPriceError() throws Exception {
 		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
 		given(this.recruitService.findRecruitById(10)).willReturn(Optional.empty());
-
+		given(this.userService.getUserSession()).willReturn(user);
+		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
+		
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/details/{recruitId}", TEST_LEAGUE_ID, TEST_TEAM_ID, 10))
 				.andExpect(status().isOk()).andExpect(model().attributeExists("message"))
 				.andExpect(model().attribute("message", is("Recruit not found!")))
@@ -490,6 +489,8 @@ public class TeamControllerTest {
 		given(this.recruitService.getRecruitsByTeam(team1.getId())).willReturn(listRecruits2);
 		given(this.teamService.findTeamById(TEST_TEAM1_ID)).willReturn(Optional.of(team1));
 		given(this.recruitService.findRecruitById(2)).willReturn(Optional.of(recruit2));
+		given(this.userService.getUserSession()).willReturn(user1);
+		given(this.teamService.findTeamById(TEST_TEAM1_ID)).willReturn(Optional.of(team1));
 
 		mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/details/{recruitId}", TEST_LEAGUE_ID, TEST_TEAM1_ID, 2)
 				.with(csrf())
@@ -506,6 +507,8 @@ public class TeamControllerTest {
 		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
 		given(this.recruitService.findRecruitById(TEST_RECRUIT_ID)).willReturn(Optional.of(recruit1));
 		when(this.recruitService.putOnSale(any())).thenThrow(NotAllowedNumberOfRecruitsException.class);
+		given(this.userService.getUserSession()).willReturn(user);
+		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
 		
 		mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/details/{recruitId}", TEST_LEAGUE_ID, TEST_TEAM_ID, TEST_RECRUIT_ID)
 				.with(csrf())
@@ -521,6 +524,8 @@ public class TeamControllerTest {
 	void testPutOnSaleError() throws Exception {
 		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
 		given(this.recruitService.findRecruitById(TEST_RECRUIT_ID)).willReturn(Optional.of(recruit1));
+		given(this.userService.getUserSession()).willReturn(user);
+		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
 
 		mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/details/{recruitId}", TEST_LEAGUE_ID, TEST_TEAM_ID,
 				TEST_RECRUIT_ID).with(csrf()).param("status", "").param("price", "")).andExpect(status().isOk())
