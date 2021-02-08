@@ -4,6 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="org.springframework.samples.petclinic.model.Status" %>
 
 <petclinic:layout pageName="leagues" userTeam="${userTeam.id}" userTeamName="${userTeam.name}" userLeague="${userTeam.league.id}" userLeagueName="${userTeam.league.name}" userMoney="${userTeam.money}">
@@ -44,9 +45,13 @@
 						<spring:url value="/leagues/{leagueId}/market/{offerId}" var="offerUrl">
 								<spring:param name="offerId" value="${offer.id}" />
 								<spring:param name="leagueId" value="${leagueId}" />
-							</spring:url> <a href="${fn:escapeXml(offerUrl)}">
+						</spring:url>
+						<form:form method="get" action="${offerUrl}">
+								<input name="version" type="hidden" value="${offer.version}">
+								<button type="submit">
 								<span class="glyphicon glyphicon-euro" aria-hidden="true"></span>
-							</a>
+								</button>
+							</form:form>
 						</td>
 					</c:otherwise>
 					</c:choose>

@@ -16,10 +16,12 @@ import org.springframework.samples.petclinic.service.exceptions.NoTeamInThisLeag
 import org.springframework.samples.petclinic.service.exceptions.NotAllowedNumberOfRecruitsException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -68,15 +70,17 @@ public class OfferController {
 	}
 
 	@GetMapping(path = "{offerId}")
-	public String recruitPilot(@PathVariable("leagueId") int leagueId, @PathVariable("offerId") int offerId,
-			ModelMap modelMap) throws NoTeamInThisLeagueException {
+	public String recruitPilot(@PathVariable("leagueId") int leagueId, @PathVariable("offerId") int offerId, 
+			@RequestParam(value = "version", required=false) Integer version, ModelMap modelMap) throws NoTeamInThisLeagueException {
 		Optional<Offer> opo = offerService.findOfferById(offerId);
 		if (opo.isPresent()) {
 			Offer offer = opo.get();
 			Team purchaserTeam = getUserTeam(leagueId);
 			Team sellerTeam = offer.getRecruit().getTeam();
 			Integer price = offer.getPrice();
-			if (!offer.getStatus().equals(Status.Outstanding)) {
+			if(offer.getVersion()!=version) {
+				modelMap.addAttribute("message", "Concurrent transaction of offer! Try again!");
+			} else if (!offer.getStatus().equals(Status.Outstanding)) {
 				modelMap.addAttribute("message", "This pilot isn't on sale anymore");
 			} else if (purchaserTeam.getId() == sellerTeam.getId()) {// Si la escudería es la misma que ofrecio
 				// el piloto, se cancela la oferta
