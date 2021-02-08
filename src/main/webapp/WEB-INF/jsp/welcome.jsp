@@ -14,14 +14,14 @@
     <p><h2>Group ${group}</h2></p>
     <p><ul>
     <c:forEach items="${persons}" var = "person">
-    	<li><c:out value="${person.lastName}"></c:out>,<c:out value="${person.firstName}"></c:out></li>
+    	<li><c:out value="${person.lastName}"></c:out>, <c:out value="${person.firstName}"></c:out></li>
     </c:forEach>
     </ul></p>
     </div>
     <div class="row">
         <div class="col-md-12">
-            <spring:url value="/resources/images/pets.png" htmlEscape="true" var="petsImage"/>
-            <img class="img-responsive" src="${petsImage}"/>
+            <spring:url value="/resources/images/welcomePhoto.png" htmlEscape="true" var="welcomePhoto"/>
+            <img class="img-responsive" src="${welcomePhoto}"/>
             
         </div> 
     </div>

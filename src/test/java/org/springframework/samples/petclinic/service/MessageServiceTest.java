@@ -10,7 +10,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Message;
+import org.springframework.samples.petclinic.service.exceptions.EmptyAsuntoCuerpoMessageException;
+import org.springframework.samples.petclinic.service.exceptions.EmptyUserMessageException;
+import org.springframework.samples.petclinic.service.exceptions.ReceiveEqualSendMessageException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,7 +73,7 @@ public class MessageServiceTest {
 	 
 	 @Test
 	 @Transactional
-	 void shouldInsertMessage() {
+	 void shouldInsertMessage() throws DataAccessException, ReceiveEqualSendMessageException, EmptyAsuntoCuerpoMessageException, EmptyUserMessageException {
 		Iterable<Message> message = this.messageService.findAll();
 		List<Message> found = new ArrayList<Message>();
 	    message.forEach(found::add);
@@ -93,7 +97,7 @@ public class MessageServiceTest {
 	 
 	 @Test
 	 @Transactional
-	 void shouldDeleteMessage() {
+	 void shouldDeleteMessage() throws DataAccessException, ReceiveEqualSendMessageException, EmptyAsuntoCuerpoMessageException, EmptyUserMessageException {
 		 Iterable<Message> message = this.messageService.findAll();
 		 List<Message> found = new ArrayList<Message>();
 		 message.forEach(found::add);

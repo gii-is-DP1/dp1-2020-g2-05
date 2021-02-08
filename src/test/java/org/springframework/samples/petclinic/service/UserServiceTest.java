@@ -10,7 +10,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.User;
+import org.springframework.samples.petclinic.service.exceptions.UserEmailEmptyOrNullException;
+import org.springframework.samples.petclinic.service.exceptions.UserPasswordEmptyOrNullException;
+import org.springframework.samples.petclinic.service.exceptions.UserUsernameEmptyOrNullException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +38,7 @@ public class UserServiceTest {
 	 
 	 @Test
 	 @Transactional
-	 void shouldInsertUser() {
+	 void shouldInsertUser() throws DataAccessException, UserEmailEmptyOrNullException, UserPasswordEmptyOrNullException, UserUsernameEmptyOrNullException {
 		Iterable<User> user = this.userService.findAll();
 		List<User> found = new ArrayList<User>();
 	    user.forEach(found::add);
@@ -57,7 +61,7 @@ public class UserServiceTest {
 	 
 	 @Test
 	 @Transactional
-	 void shouldDeleteUser() {
+	 void shouldDeleteUser() throws DataAccessException, UserEmailEmptyOrNullException, UserPasswordEmptyOrNullException, UserUsernameEmptyOrNullException {
 		 Iterable<User> user = this.userService.findAll();
 			List<User> found = new ArrayList<User>();
 		    user.forEach(found::add);
@@ -81,7 +85,7 @@ public class UserServiceTest {
 	 }
 	 
 	 @Test
-		void shouldFindFriendsByUser() {
+		void shouldFindFriendsByUser() throws DataAccessException, UserEmailEmptyOrNullException, UserPasswordEmptyOrNullException, UserUsernameEmptyOrNullException {
 		 	List<User> friends1 = userService.findUser("serrojjim").get().getFriends();
 		 	Optional<User> friend = 	userService.findUser("martorsan13");
 			friends1.add(friend.get());

@@ -34,6 +34,7 @@ import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.OfferService;
+import org.springframework.samples.petclinic.service.PoblarBaseDeDatosService;
 import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.TeamService;
@@ -76,6 +77,9 @@ class OfferControllerTests {
 
 	@MockBean
 	private UserService userService;
+	
+	@MockBean
+	private PoblarBaseDeDatosService PBDService;
 
 	// @MockBean
 	// private LeagueService leagueService;
@@ -106,35 +110,35 @@ class OfferControllerTests {
 	@BeforeEach
 	void setup() {
 		pilot1.setCategory(Category.MOTOGP);
-		pilot1.setPoints("27");
+		pilot1.setPoints(27);
 		pilot1.setName("Ale");
 		pilot1.setLastName("Ruiz");
 		pilot1.setNationality("Spain");
 		pilot1.setBaseValue(200);
 
 		pilot2.setCategory(Category.MOTOGP);
-		pilot2.setPoints("7");
+		pilot2.setPoints(7);
 		pilot2.setName("Juan");
 		pilot2.setLastName("Perez");
 		pilot2.setNationality("Spain");
 		pilot2.setBaseValue(400);
 
 		pilot3.setCategory(Category.MOTOGP);
-		pilot3.setPoints("3");
+		pilot3.setPoints(3);
 		pilot3.setName("Rodri");
 		pilot3.setLastName("Perez");
 		pilot3.setNationality("Spain");
 		pilot3.setBaseValue(500);
 
 		pilot4.setCategory(Category.MOTOGP);
-		pilot4.setPoints("2");
+		pilot4.setPoints(2);
 		pilot4.setName("Omar");
 		pilot4.setLastName("Perez");
 		pilot4.setNationality("Spain");
 		pilot4.setBaseValue(2000);
 
 		pilot5.setCategory(Category.MOTOGP);
-		pilot5.setPoints("5");
+		pilot5.setPoints(5);
 		pilot5.setName("Pepe");
 		pilot5.setLastName("Perez");
 		pilot5.setNationality("Spain");

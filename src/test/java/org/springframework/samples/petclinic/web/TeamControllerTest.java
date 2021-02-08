@@ -44,6 +44,7 @@ import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.LeagueService;
 import org.springframework.samples.petclinic.service.LineupService;
 import org.springframework.samples.petclinic.service.OfferService;
+import org.springframework.samples.petclinic.service.PoblarBaseDeDatosService;
 import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.TeamService;
@@ -51,6 +52,10 @@ import org.springframework.samples.petclinic.service.TransactionService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedRiderOnLineupException;
 import org.springframework.samples.petclinic.service.exceptions.NotAllowedNumberOfRecruitsException;
+import org.springframework.samples.petclinic.service.exceptions.NotTeamUserException;
+import org.springframework.samples.petclinic.service.exceptions.UserEmailEmptyOrNullException;
+import org.springframework.samples.petclinic.service.exceptions.UserPasswordEmptyOrNullException;
+import org.springframework.samples.petclinic.service.exceptions.UserUsernameEmptyOrNullException;
 import org.springframework.samples.petclinic.service.exceptions.duplicatedLeagueNameException;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -73,31 +78,25 @@ public class TeamControllerTest {
 	private WebApplicationContext context;
 	
 	@MockBean
-	@Autowired
 	private UserService userService;
 
 
 	@MockBean
-	@Autowired
 	private RecruitService recruitService;
 
 	@MockBean
-	@Autowired
 	private LineupService lineupService;
 
 	@MockBean
-	@Autowired
 	private TransactionService transactionService;
 
 	@MockBean
-	@Autowired
 	private OfferService offerService;
 
 	@MockBean
 	private TablaConsultasService tablaConsultas;
 
 	@MockBean
-	@Autowired
 	private TeamService teamService;
 
 	@MockBean
@@ -105,6 +104,11 @@ public class TeamControllerTest {
 	
 	@MockBean
 	private AuthoritiesService authoritiesService;
+	
+	
+	@MockBean
+	private PoblarBaseDeDatosService PBDService;
+	
 	
 	@Autowired
 	private MockMvc mockMvc;
@@ -130,7 +134,7 @@ public class TeamControllerTest {
     private List<Recruit> listaRecruitsEnVenta = new ArrayList<Recruit>();
 	
 	@BeforeEach
-	void setup() throws DataAccessException, duplicatedLeagueNameException, DuplicatedRiderOnLineupException {
+	void setup() throws DataAccessException, duplicatedLeagueNameException, DuplicatedRiderOnLineupException, UserEmailEmptyOrNullException, UserPasswordEmptyOrNullException, UserUsernameEmptyOrNullException {
 		
 	
 		user1.setUsername("miguel");
@@ -211,13 +215,12 @@ public class TeamControllerTest {
 		listRecruits2.add(recruit2);
 		listRecruits2.add(recruit3);
 		listRecruits2.add(recruit4);
-		user.setUsername("antcammar4");
-		user.setEnabled(true);
+
 
 		Pilot pilot1 = new Pilot();
 		pilot1.setId(1);
 		pilot1.setCategory(Category.MOTO3);
-		pilot1.setPoints("27");
+		pilot1.setPoints(27);
 		pilot1.setName("Ale");
 		pilot1.setLastName("Ruiz");
 		pilot1.setNationality("Spain");
@@ -225,7 +228,7 @@ public class TeamControllerTest {
 		Pilot pilot2 = new Pilot();
 		pilot2.setId(2);
 		pilot2.setCategory(Category.MOTO3);
-		pilot2.setPoints("7");
+		pilot2.setPoints(7);
 		pilot2.setName("Juan");
 		pilot2.setLastName("Perez");
 		pilot2.setNationality("Spain");
@@ -262,7 +265,7 @@ public class TeamControllerTest {
 		listaRecruitsNoEnVenta.add(recruit2);
 		given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
 		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
-		given(this.userService.findUser(user.getUsername())).willReturn(Optional.of(user));
+//		given(this.userService.findUser(user.getUsername())).willReturn(Optional.of(user));
 		given(this.leagueService.findAuthoritiesByUsername(team.getUser().getUsername())).willReturn("admin");
 		given(this.teamService.findTeamById(TEST_TEAM1_ID)).willReturn(Optional.of(team1));
 //		given(this.teamService.findTeamByUsernameAndLeagueId(user.getUsername(), TEST_LEAGUE_ID)).willReturn(Optional.of(team));
@@ -365,7 +368,7 @@ public class TeamControllerTest {
 		mockMvc.perform(post("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID).with(csrf()).param("name", team.getName())
 				.param("points", team.getPoints().toString()).param("money", team.getMoney().toString())
 				.param("user.username", user.getUsername()).param("league.id", TEST_LEAGUE_ID.toString()))
-				.andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/leagues/{leagueId}/teams"));
+				.andExpect(status().is3xxRedirection()).andExpect(view().name("/leagues/TeamList"));
 
 	}
 
@@ -417,7 +420,7 @@ public class TeamControllerTest {
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessUpdateFormSuccess() throws Exception {
-		given(this.userService.findUser(user.getUsername())).willReturn(Optional.of(user));
+		given(this.userService.getUserSession()).willReturn(user);
 		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
 		given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
 
@@ -533,6 +536,8 @@ public class TeamControllerTest {
 	@WithMockUser(value = "spring")
 	@Test
 	void testDeleteTeam() throws Exception {
+		given(this.userService.getUserSession()).willReturn(user);
+		given(this.teamService.findTeamById(TEST_TEAM_ID).get().getUser()).willReturn(user);
 		given(this.teamService.findTeamByLeagueId(TEST_LEAGUE_ID)).willReturn(list1);
 
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/delete", TEST_LEAGUE_ID, TEST_TEAM_ID))
@@ -545,7 +550,7 @@ public class TeamControllerTest {
 		given(this.teamService.findTeamByLeagueId(TEST_LEAGUE_ID)).willReturn(list2);
 
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/delete", TEST_LEAGUE_ID, TEST_TEAM_ID))
-				.andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/leagues/{leagueId}/teams"));
+				.andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/myTeams"));
 	}
 
 	@WithMockUser(value = "spring")
@@ -554,7 +559,9 @@ public class TeamControllerTest {
 
 		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.empty());
 		given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
-
+		given(this.userService.getUserSession()).willReturn(user);
+		when(this.userService.getUserSession() != this.teamService.findTeamById(TEST_TEAM_ID).get().getUser()).thenThrow(NotTeamUserException.class);
+		
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/delete", TEST_LEAGUE_ID, TEST_TEAM_ID))
 				.andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/leagues"));
 	}

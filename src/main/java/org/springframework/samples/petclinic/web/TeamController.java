@@ -21,8 +21,11 @@ import org.springframework.samples.petclinic.service.OfferService;
 import org.springframework.samples.petclinic.service.RecruitService;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedTeamNameException;
 import org.springframework.samples.petclinic.service.exceptions.JoinWithoutCodeException;
+import org.springframework.samples.petclinic.service.exceptions.NoTeamInThisLeagueException;
 import org.springframework.samples.petclinic.service.exceptions.NotAllowedNumberOfRecruitsException;
+import org.springframework.samples.petclinic.service.exceptions.NotTeamUserException;
 import org.springframework.samples.petclinic.web.validator.TeamValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -30,6 +33,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -70,11 +74,6 @@ public class TeamController {
 	}
 
 	private String authority;
-
-	private Boolean EquipoSi = false;
-	private Boolean EquipoNo = false;
-	private Boolean Error = false;
-
 	
 	@GetMapping(path = "/leagues/{leagueId}/teams/new")
 	public String crearEquipo(@PathVariable("leagueId") int leagueId, @RequestHeader(name = "Referer", defaultValue = "http://localhost:8090/") String referer,
@@ -108,7 +107,7 @@ public class TeamController {
 
 	@PostMapping(value = "/leagues/{leagueId}/teams/new")
 	public String saveNewTeam(@PathVariable("leagueId") int leagueId, @Valid Team team, BindingResult result,
-			ModelMap model) throws NotAllowedNumberOfRecruitsException {
+			ModelMap model) throws NotAllowedNumberOfRecruitsException, DuplicatedTeamNameException {
 		
 		League league = this.leagueService.findLeague(leagueId).get();
 		log.debug("Asignandole la liga " + league);
@@ -125,7 +124,7 @@ public class TeamController {
 
 			log.debug("Asignandole el usuario actual al equipo");
 			team.setUser(this.userService.getUserSession());
-			log.info("Usuario " + this.userService.getUserSession() + " asignado correctamente");
+			log.info("Usuario " + this.userService.getUserSession() + "asignado correctamente");
 			
 			Optional<Team> tem = this.teamService.findTeamByUsernameAndLeagueId(team.getUser().getUsername(), leagueId);
 			List<Team> equipos = this.teamService.findTeamByLeagueId(league.getId());
@@ -142,14 +141,12 @@ public class TeamController {
 			if (tem.isPresent()) {
 				log.warn("El equipo " + team + " no se ha podido crear");
 				model.addAttribute("message", "Sorry, you cannot have more teams in this league!");
-				EquipoNo = true;
-				return "redirect:/leagues/{leagueId}/teams";
+				return showTeams(leagueId, model);
 
 			}else if (igual != 0) {
 				log.warn("El equipo " + team + " no se ha podido crear");
-				model.addAttribute("message",
-						"Sorry, already exists a team with thsi name, try it with another team Name");
-				return "redirect:/leagues/{leagueId}/teams";
+				throw new DuplicatedTeamNameException();
+				
 				
 			}else {
 				
@@ -160,13 +157,13 @@ public class TeamController {
 				this.teamService.saveTeam(team);
 				log.info("Equipo " + team + " guardado correctamente.");
 				
-				EquipoSi = true;
+				model.addAttribute("message", "Team created Succesfully!");
 				
 				log.debug("Se procede asignar aleatoriamente los 2 pilotos al equipo " + team);
 				teamService.randomRecruit2Pilots(team);
 				log.info("2 pilotos iniciales asignados al equipo " + team);
 
-				return "redirect:/leagues/{leagueId}/teams";
+				return showTeams(leagueId, model);
 			}
 		}
 	}
@@ -174,7 +171,11 @@ public class TeamController {
 
 	@GetMapping(path = "/leagues/{leagueId}/teams/{teamId}/details")
 	public String mostrarDetallesEscuderia(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamID,
-			ModelMap model) {
+			ModelMap model) throws NotTeamUserException {
+		
+		if(this.userService.getUserSession() != this.teamService.findTeamById(teamID).get().getUser()){
+			throw new NotTeamUserException();
+		}else {
 		Optional<Team> team = this.teamService.findTeamById(teamID);
 
 		if (team.isPresent()) {
@@ -190,11 +191,12 @@ public class TeamController {
 		}
 		return "/leagues/teamDetails";
 	}
+	}
 	
 
 	@GetMapping(path = "/leagues/{leagueId}/teams/{teamId}/details/{recruitId}")
 	public String setPrice(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
-			@PathVariable("recruitId") int recruitId, ModelMap modelMap) {
+			@PathVariable("recruitId") int recruitId, ModelMap modelMap) throws NotTeamUserException {
 
 		Optional<Recruit> opRecruit = recruitService.findRecruitById(recruitId);
 		if (opRecruit.isPresent()) {
@@ -203,17 +205,17 @@ public class TeamController {
 			return mostrarDetallesEscuderia(leagueId, teamId, modelMap);
 		} else {
 			modelMap.addAttribute("message", "Recruit not found!");
-			return "/leagues/teamDetails";
+			return mostrarDetallesEscuderia(leagueId, teamId, modelMap);
 		}
 	}
 
 	@PostMapping(path = "/leagues/{leagueId}/teams/{teamId}/details/{recruitId}")
 	public String putOnSale(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
 			@PathVariable("recruitId") int recruitId, @Valid Offer offer, BindingResult result, ModelMap modelMap)
-			throws NotAllowedNumberOfRecruitsException {
+			throws NotAllowedNumberOfRecruitsException, NotTeamUserException {
 		if (result.hasErrors()) {
 			
-			modelMap.put("message", result.getAllErrors());
+			modelMap.put("message", "Set a valid price");
 			return setPrice(leagueId, teamId, recruitId, modelMap);
 		} else {
 			Optional<Recruit> opRecruit = recruitService.findRecruitById(recruitId);
@@ -239,8 +241,14 @@ public class TeamController {
 	@GetMapping(path = "/leagues/{leagueId}/teams/{teamId}/delete")
 	public String borrarEscuderia(
 			@RequestHeader(name = "Referer", defaultValue = "/leagues/{leagueId}/teams") String referer,
-			@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, ModelMap model) {
+			@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, ModelMap model) throws NotTeamUserException {
 
+		System.out.println(this.userService.getUserSession());
+		System.out.println(this.teamService.findTeamById(teamId).get().getUser());
+		
+		if(this.userService.getUserSession() != this.teamService.findTeamById(teamId).get().getUser()){
+			throw new NotTeamUserException();
+		}else {
 		Optional<Team> team = this.teamService.findTeamById(teamId);
 		log.info("Preparandose para borrar el equipo " + team);
 
@@ -261,12 +269,24 @@ public class TeamController {
 			model.addAttribute("message", "Team not found!");
 			return "redirect:/leagues";
 		}
-
+		}
 	}
+	
+	
 
 	@GetMapping(path = "/leagues/{leagueId}/teams/{teamId}/edit")
+	
 	public String editarTeam(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
-			ModelMap model) {
+			ModelMap model) throws NotTeamUserException {
+		
+			if(this.userService.getUserSession() != this.teamService.findTeamById(teamId).get().getUser()){
+				throw new NotTeamUserException();
+			}else {
+				
+			
+		
+
+		
 		Optional<Team> team = this.teamService.findTeamById(teamId);
 		log.info("Preparandose para editar el equipo " + team);
 		model.put("team", team.get());
@@ -282,11 +302,15 @@ public class TeamController {
 
 		return "leagues/TeamsEdit";
 
+			}
 	}
 
 	@PostMapping(value = "/leagues/{leagueId}/teams/{teamId}/edit")
 	public String editarTeamPost(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
 			@Valid Team team, BindingResult result, ModelMap model) {
+		
+		
+
 
 		authority = this.leagueService.findAuthoritiesByUsername(team.getUser().getUsername());
 		if (authority.equals("admin")) {
@@ -371,19 +395,6 @@ public class TeamController {
 		model.put("teams", tem);
 		model.put("league", this.leagueService.findLeague(leagueId).get());
 		model.put("user", usuario);
-		if (EquipoNo)
-			model.put("EquipoNo", "You cannot have more than 1 teams in the same league");
-		EquipoNo = false;
-		if (EquipoSi)
-			model.put("EquipoSi", "Team created succesfully!");
-		EquipoSi = false;
-		if (Error)
-			model.put("Error", "Your team have some errors!");
-		Error = false;
-		if (Error)
-			model.put("Error", "Your team have some errors!");
-		Error = false;
-
 		return "/leagues/TeamList";
 	}
 }

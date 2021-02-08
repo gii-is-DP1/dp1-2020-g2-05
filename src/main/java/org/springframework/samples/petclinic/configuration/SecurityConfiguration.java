@@ -38,7 +38,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/oups/**").authenticated()
 				
 				.antMatchers("/users/new").permitAll()
-				
+				.antMatchers("/users/Perfil").authenticated()
+				.antMatchers("/users/editarPerfil").authenticated()
 				.antMatchers("/admin/**").hasAnyAuthority("admin")
 				
 				.antMatchers("/owners/**").hasAnyAuthority("owner","admin")	
@@ -58,6 +59,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/leagues/myLeagues/**").authenticated()
 				.antMatchers("/leagues/**").authenticated()
 				
+				.antMatchers("/pilots/top").permitAll()
 				.antMatchers("/pilots/**").hasAnyAuthority("admin")
 				.antMatchers("/pilotsPaged").authenticated()
 
@@ -84,6 +86,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 				.antMatchers("/poblarConCalendario").hasAnyAuthority("admin")
 				
+
 				
 				.antMatchers("/styles/**").permitAll()
 				.antMatchers("/thyme/**").permitAll()
