@@ -16,7 +16,6 @@ import org.springframework.samples.petclinic.service.exceptions.NoTeamInThisLeag
 import org.springframework.samples.petclinic.service.exceptions.NotAllowedNumberOfRecruitsException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -78,18 +77,17 @@ public class OfferController {
 			Team purchaserTeam = getUserTeam(leagueId);
 			Team sellerTeam = offer.getRecruit().getTeam();
 			Integer price = offer.getPrice();
-			if(offer.getVersion()!=version) {
-				modelMap.addAttribute("message", "Concurrent transaction of offer! Try again!");
-			} else if (!offer.getStatus().equals(Status.Outstanding)) {
-				modelMap.addAttribute("message", "This pilot isn't on sale anymore");
-			} else if (purchaserTeam.getId() == sellerTeam.getId()) {// Si la escudería es la misma que ofrecio
+			if (purchaserTeam.getId() == sellerTeam.getId()) {// Si la escudería es la misma que ofrecio
 				// el piloto, se cancela la oferta
 				offer.setStatus(Status.Denied);
 				offerService.saveOffer(offer);
 				recruitService.quitOnSale(offer.getRecruit());
 				modelMap.addAttribute("message", "Offer cancelled!");
 				return "redirect:/leagues/{leagueId}/teams/" + purchaserTeam.getId() + "/details";
-
+			} else if (!offer.getStatus().equals(Status.Outstanding)) {
+				modelMap.addAttribute("message", "This pilot isn't on sale anymore");
+			} else if(offer.getVersion()!=version) {
+				modelMap.addAttribute("message", "Concurrent transaction of offer! Try again!");
 			} else if (purchaserTeam.getMoney() >= price) {
 				log.info("Comprando fichaje con suficiente dinero");
 				try {
