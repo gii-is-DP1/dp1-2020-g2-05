@@ -169,7 +169,7 @@ public class PilotControllerTest {
 
 		pilot.setBaseValue(2000);
 		pilot.setCategory(Category.MOTO2);
-		pilot.setPoints("2");
+		pilot.setPoints(2);
 		pilot.setId(PILOT_TEST_ID);
 		pilot.setLastName("Nieva");
 		pilot.setName("Migue");

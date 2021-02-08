@@ -149,7 +149,7 @@ public class LineupControllerTest {
 		Pilot pilot1 = new Pilot();
 		pilot1.setId(1);
 		pilot1.setCategory(Category.MOTO3);
-		pilot1.setPoints("27");
+		pilot1.setPoints(27);
 		pilot1.setName("Ale");
 		pilot1.setLastName("Ruiz");
 		pilot1.setNationality("Spain");
@@ -157,7 +157,7 @@ public class LineupControllerTest {
 		Pilot pilot2 = new Pilot();
 		pilot2.setId(2);
 		pilot2.setCategory(Category.MOTO3);
-		pilot2.setPoints("7");
+		pilot2.setPoints(7);
 		pilot2.setName("Juan");
 		pilot2.setLastName("Perez");
 		pilot2.setNationality("Spain");
