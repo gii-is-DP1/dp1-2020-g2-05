@@ -83,6 +83,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/granPremios/{id}/delete").hasAnyAuthority("admin")
 				.antMatchers("/granPremios/new").hasAnyAuthority("admin")
 				.antMatchers("/granPremios").authenticated()
+				.antMatchers("/granPremios/**").authenticated()
 
 				.antMatchers("/poblarConCalendario").hasAnyAuthority("admin")
 				

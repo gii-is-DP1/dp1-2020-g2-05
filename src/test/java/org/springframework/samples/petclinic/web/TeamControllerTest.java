@@ -28,7 +28,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.configuration.GenericIdToEntityConverter;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
 import org.springframework.samples.petclinic.model.Authorities;
 import org.springframework.samples.petclinic.model.Category;
@@ -52,7 +51,6 @@ import org.springframework.samples.petclinic.service.TransactionService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedRiderOnLineupException;
 import org.springframework.samples.petclinic.service.exceptions.NotAllowedNumberOfRecruitsException;
-import org.springframework.samples.petclinic.service.exceptions.NotTeamUserException;
 import org.springframework.samples.petclinic.service.exceptions.UserEmailEmptyOrNullException;
 import org.springframework.samples.petclinic.service.exceptions.UserPasswordEmptyOrNullException;
 import org.springframework.samples.petclinic.service.exceptions.UserUsernameEmptyOrNullException;
@@ -162,7 +160,7 @@ public class TeamControllerTest {
 
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 		Date date = new Date();
-		liga1.setId(TEST_LEAGUE_ID);
+		liga1.setId(2);
 		liga1.setLeagueCode("IOKASXISAX");
 		liga1.setName("Ligue2");
 		liga1.setLeagueDate(formatter.format(date));
@@ -265,26 +263,9 @@ public class TeamControllerTest {
 		listaRecruitsNoEnVenta.add(recruit2);
 		given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
 		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
-//		given(this.userService.findUser(user.getUsername())).willReturn(Optional.of(user));
 		given(this.leagueService.findAuthoritiesByUsername(team.getUser().getUsername())).willReturn("admin");
-		given(this.teamService.findTeamById(TEST_TEAM1_ID)).willReturn(Optional.of(team1));
-//		given(this.teamService.findTeamByUsernameAndLeagueId(user.getUsername(), TEST_LEAGUE_ID)).willReturn(Optional.of(team));
 	}
 
-//	@GetMapping(path = "/leagues/{leagueId}/teams/{teamId}/details")
-//	public String mostrarDetallesEscuderia(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamID,
-//			ModelMap model) {
-//		Optional<Team> team = this.teamService.findTeamById(teamID);
-//
-//			model.addAttribute("message", "Team found!");
-//			model.addAttribute("team", team.get());
-//			List<Recruit> fichajesEnVenta = recruitService.getRecruitsOnSaleByTeam(teamID);
-//			List<Recruit> fichajes = recruitService.getRecruitsNotOnSaleByTeam(teamID);
-//			model.addAttribute("misFichajes", fichajes);
-//			model.addAttribute("fichajesEnVenta", fichajesEnVenta);
-//			model.addAttribute("misAlineaciones", lineupService.findByTeam(teamID));
-//		return "/leagues/teamDetails";
-//	}
 
 	@WithMockUser(value = "spring")
 	@Test
@@ -334,9 +315,9 @@ public class TeamControllerTest {
 	void testInitCreationFormNegative() throws Exception {
 		given(this.teamService.findTeamsByLeagueId(TEST_LEAGUE_ID)).willReturn(6);
 
-		mockMvc.perform(get("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID).header("Referer", "http://localhost:8090/leagues/join"))
+		mockMvc.perform(get("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID).header("Referer", "http://localhost:8090/leagues"))
 		.andExpect(status().is3xxRedirection())
-		.andExpect(view().name("redirect:/leagues/{leagueId}/teams"));
+		.andExpect(view().name("redirect:/leagues"));
 	}	
 
 	@WithMockUser(value = "spring")
@@ -362,13 +343,16 @@ public class TeamControllerTest {
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessCreationFormHasSuccess() throws Exception {
-		given(this.userService.getUserSession()).willReturn(user);
-		given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
-
-		mockMvc.perform(post("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID).with(csrf()).param("name", team.getName())
-				.param("points", team.getPoints().toString()).param("money", team.getMoney().toString())
-				.param("user.username", user.getUsername()).param("league.id", TEST_LEAGUE_ID.toString()))
-				.andExpect(status().is3xxRedirection()).andExpect(view().name("/leagues/TeamList"));
+		given(this.teamService.findTeamByUsernameAndLeagueId(user1.getUsername(), TEST_LEAGUE_ID)).willReturn(Optional.empty());
+		given(this.userService.getUserSession()).willReturn(user1);
+		given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga1));
+		given(this.leagueService.findAuthoritiesByUsername(user1.getUsername())).willReturn("admin");
+		mockMvc.perform(post("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID).with(csrf()).param("name", "aaaa")
+				.param("points", "123")
+				.param("money", "123")
+				.param("league.id", TEST_LEAGUE_ID.toString())
+				.param("user.username", user1.getUsername()))
+				.andExpect(status().isOk()).andExpect(view().name("/leagues/TeamList"));
 
 	}
 
@@ -411,6 +395,8 @@ public class TeamControllerTest {
 		given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
 		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
 		given(this.userService.findUser(user.getUsername())).willReturn(Optional.of(user));
+		given(this.userService.getUserSession()).willReturn(user);
+
 
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/edit", TEST_LEAGUE_ID, TEST_TEAM_ID))
 				.andExpect(status().isOk()).andExpect(model().attributeExists("team"))
@@ -439,10 +425,13 @@ public class TeamControllerTest {
 	@WithMockUser(value = "spring")
 	@Test
 	void testInitUpdateForm1() throws Exception {
-		given(this.userService.findUser(user.getUsername())).willReturn(Optional.of(user1));
-		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team1));
+		given(this.leagueService.findAuthoritiesByUsername(team1.getUser().getUsername())).willReturn("user");
 		given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
-		given(this.leagueService.findAuthoritiesByUsername(user1.getUsername())).willReturn("user");
+		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team1));
+		given(this.userService.findUser(user1.getUsername())).willReturn(Optional.of(user1));
+		given(this.userService.getUserSession()).willReturn(user1);
+
+
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/edit", TEST_LEAGUE_ID, TEST_TEAM_ID))
 				.andExpect(status().isOk()).andExpect(model().attributeExists("team"))
 				.andExpect(model().attributeExists("Editar")).andExpect(view().name("leagues/TeamsEdit"));
@@ -472,6 +461,8 @@ public class TeamControllerTest {
 	void testSetPriceSuccess() throws Exception {
 		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
 		given(this.recruitService.findRecruitById(TEST_RECRUIT_ID)).willReturn(Optional.of(recruit1));
+		given(this.userService.getUserSession()).willReturn(user);
+		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
 
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/details/{recruitId}", TEST_LEAGUE_ID, TEST_TEAM_ID,
 				TEST_RECRUIT_ID)).andExpect(status().isOk()).andExpect(model().attributeExists("offer"))
@@ -483,7 +474,9 @@ public class TeamControllerTest {
 	void testSetPriceError() throws Exception {
 		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
 		given(this.recruitService.findRecruitById(10)).willReturn(Optional.empty());
-
+		given(this.userService.getUserSession()).willReturn(user);
+		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
+		
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/details/{recruitId}", TEST_LEAGUE_ID, TEST_TEAM_ID, 10))
 				.andExpect(status().isOk()).andExpect(model().attributeExists("message"))
 				.andExpect(model().attribute("message", is("Recruit not found!")))
@@ -496,6 +489,8 @@ public class TeamControllerTest {
 		given(this.recruitService.getRecruitsByTeam(team1.getId())).willReturn(listRecruits2);
 		given(this.teamService.findTeamById(TEST_TEAM1_ID)).willReturn(Optional.of(team1));
 		given(this.recruitService.findRecruitById(2)).willReturn(Optional.of(recruit2));
+		given(this.userService.getUserSession()).willReturn(user1);
+		given(this.teamService.findTeamById(TEST_TEAM1_ID)).willReturn(Optional.of(team1));
 
 		mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/details/{recruitId}", TEST_LEAGUE_ID, TEST_TEAM1_ID, 2)
 				.with(csrf())
@@ -512,6 +507,8 @@ public class TeamControllerTest {
 		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
 		given(this.recruitService.findRecruitById(TEST_RECRUIT_ID)).willReturn(Optional.of(recruit1));
 		when(this.recruitService.putOnSale(any())).thenThrow(NotAllowedNumberOfRecruitsException.class);
+		given(this.userService.getUserSession()).willReturn(user);
+		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
 		
 		mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/details/{recruitId}", TEST_LEAGUE_ID, TEST_TEAM_ID, TEST_RECRUIT_ID)
 				.with(csrf())
@@ -527,6 +524,8 @@ public class TeamControllerTest {
 	void testPutOnSaleError() throws Exception {
 		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
 		given(this.recruitService.findRecruitById(TEST_RECRUIT_ID)).willReturn(Optional.of(recruit1));
+		given(this.userService.getUserSession()).willReturn(user);
+		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
 
 		mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/details/{recruitId}", TEST_LEAGUE_ID, TEST_TEAM_ID,
 				TEST_RECRUIT_ID).with(csrf()).param("status", "").param("price", "")).andExpect(status().isOk())
@@ -537,7 +536,7 @@ public class TeamControllerTest {
 	@Test
 	void testDeleteTeam() throws Exception {
 		given(this.userService.getUserSession()).willReturn(user);
-		given(this.teamService.findTeamById(TEST_TEAM_ID).get().getUser()).willReturn(user);
+		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
 		given(this.teamService.findTeamByLeagueId(TEST_LEAGUE_ID)).willReturn(list1);
 
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/delete", TEST_LEAGUE_ID, TEST_TEAM_ID))
@@ -557,13 +556,12 @@ public class TeamControllerTest {
 	@Test
 	void testDeleteTeamError() throws Exception {
 
-		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.empty());
+		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
 		given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
-		given(this.userService.getUserSession()).willReturn(user);
-		when(this.userService.getUserSession() != this.teamService.findTeamById(TEST_TEAM_ID).get().getUser()).thenThrow(NotTeamUserException.class);
+		given(this.userService.getUserSession()).willReturn(user1);
 		
 		mockMvc.perform(get("/leagues/{leagueId}/teams/{teamId}/delete", TEST_LEAGUE_ID, TEST_TEAM_ID))
-				.andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/leagues"));
+				.andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/myTeams"));
 	}
 
 	@WithMockUser(value = "spring")

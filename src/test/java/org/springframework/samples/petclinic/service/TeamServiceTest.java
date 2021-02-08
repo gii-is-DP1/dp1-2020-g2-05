@@ -16,6 +16,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.League;
+import org.springframework.samples.petclinic.model.Recruit;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.service.exceptions.NotAllowedNumberOfRecruitsException;
 import org.springframework.samples.petclinic.service.exceptions.duplicatedLeagueNameException;
@@ -215,8 +216,11 @@ public class TeamServiceTest {
 		
 		teamService.sellAllTeamRecruits(team);
 		
-		assertThat(this.recruitService.getRecruitsByTeam(team.getId()).size()).isEqualTo(0);
-//		assertThat(team.getMoney()).isGreaterThanOrEqualTo(money);
+		
+		List<Recruit> l = this.recruitService.getRecruitsByTeam(team.getId());
+		
+		assertThat(l.size()).isEqualTo(0);
+		assertThat(team.getMoney()).isGreaterThanOrEqualTo(money);
 	}
 	
 	@Test

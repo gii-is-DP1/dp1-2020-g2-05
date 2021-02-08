@@ -36,8 +36,9 @@ public class PetclinicApplication {
 		TCservice.actualizarTablaAutomatica();
 	}
 
-	// Ajustar a lunes (0 00 12 ? * MON)
-	@Scheduled(cron = "0 0 12 ? * MON")
+//	Ajustar a lunes (0 00 00 ? * MON)
+//	@Scheduled(cron = "0 0 12 ? * MON")
+	@Scheduled(cron = "0 05 00 ? * *")
 	public void validarCarreras() throws Exception {
 		log.info("Validando la ultima carrera completada");
 		System.out.println("VALIDANDO");
@@ -45,8 +46,9 @@ public class PetclinicApplication {
         TCservice.comprobandoCarrerasCompletadas();
     }
 	
-	//Ajustar a Domingo (0 00 00 ? * 7)
-	@Scheduled(cron = "0 00 00 ? * 7") 
+//	Ajustar a Domingo (0 00 00 ? * 7)
+//	@Scheduled(cron = "0 00 00 ? * 7") 
+	@Scheduled(cron = "0 04 00 ? * *") 
     public void PoblarUltimaCarrera() throws Exception {
 		log.info("Poblando la ultima carrera completada");
 		System.out.println("Poblando");
