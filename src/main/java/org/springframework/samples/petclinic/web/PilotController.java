@@ -18,6 +18,8 @@ package org.springframework.samples.petclinic.web;
 
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -28,6 +30,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
+import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.Pilot;
 import org.springframework.samples.petclinic.service.PilotService;
 import org.springframework.samples.petclinic.web.validator.PilotValidator;
@@ -277,15 +280,40 @@ public class PilotController {
 		Optional<Pilot> pilot = this.pilotService.findPilotById(pilotId);
 		String view = "pilots/pilotsListPaged";
 		model.addAttribute(pilot.get());
-		if(pilot.isPresent()) {
+		if (pilot.isPresent()) {
 			view = "pilots/pilotsEdit";
-		}else {
+		} else {
 			model.addAttribute("message", "Rider not found!");
-//			view=listadoPilotosPaginado(model);
 		}
 		return view;
 	}
 	
+	@GetMapping(path="pilots/top")
+	public String topPilotos(ModelMap model) {
+		log.info("Mostrando top");
+		Category category = Category.MOTO3;
+		List<Pilot> topPilotsMoto3 = this.pilotService.top10Pilots(category);
+		 category = Category.MOTO2;
+		List<Pilot> topPilotsMoto2 = this.pilotService.top10Pilots(category);
+		 category = Category.MOTOGP;
+		List<Pilot> topPilotsMotoGP = this.pilotService.top10Pilots(category);
+		List<Pilot> top3PilotsPerCategory= new ArrayList<Pilot>();
+		top3PilotsPerCategory.add(topPilotsMotoGP.get(0));
+		top3PilotsPerCategory.add(topPilotsMotoGP.get(1));
+		top3PilotsPerCategory.add(topPilotsMotoGP.get(2));
+		
+		top3PilotsPerCategory.add(topPilotsMoto2.get(0));
+		top3PilotsPerCategory.add(topPilotsMoto2.get(1));
+		top3PilotsPerCategory.add(topPilotsMoto2.get(2));
+		
+		top3PilotsPerCategory.add(topPilotsMoto3.get(0));
+		top3PilotsPerCategory.add(topPilotsMoto3.get(1));
+		top3PilotsPerCategory.add(topPilotsMoto3.get(2));
+		
+		model.put("listasPilotos",top3PilotsPerCategory);
+		System.out.println(top3PilotsPerCategory);
+		return "/pilots/topPilots";
+	}
 	
 }
 

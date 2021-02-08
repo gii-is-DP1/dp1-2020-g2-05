@@ -209,7 +209,7 @@ public class TeamController {
 			return mostrarDetallesEscuderia(leagueId, teamId, modelMap);
 		} else {
 			modelMap.addAttribute("message", "Recruit not found!");
-			return "/leagues/teamDetails";
+			return mostrarDetallesEscuderia(leagueId, teamId, modelMap);
 		}
 	}
 
@@ -219,7 +219,7 @@ public class TeamController {
 			throws NotAllowedNumberOfRecruitsException, NotTeamUserException {
 		if (result.hasErrors()) {
 			
-			modelMap.put("message", result.getAllErrors());
+			modelMap.put("message", "Set a valid price");
 			return setPrice(leagueId, teamId, recruitId, modelMap);
 		} else {
 			Optional<Recruit> opRecruit = recruitService.findRecruitById(recruitId);

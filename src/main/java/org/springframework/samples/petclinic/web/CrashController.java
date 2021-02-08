@@ -46,23 +46,6 @@ public class CrashController {
 //	    throw new ArithmeticException("test exception");
 	}
 	
-	@RequestMapping("/NoTeamInThisLeagueException")
-	public String triggerNoTeamInThisLeagueException() throws NoTeamInThisLeagueException {
-		throw new NoTeamInThisLeagueException();
-	}
-	
-//	@RequestMapping("/400")
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    public String badRequest() {
-//        return "errors/error400";
-//    }
-//	
-//	@RequestMapping("/401")
-//    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-//    public String unauthorized() {
-//        return "errors/error401";
-//    }
-	
 	@RequestMapping("/403")
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public String forbidden() {

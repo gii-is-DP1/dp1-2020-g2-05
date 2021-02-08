@@ -36,15 +36,15 @@ class RecruitServiceTest {
 		recruitService.saveRecruit(piloto, equipo);
 
 		Long afterList = StreamSupport.stream(recruitService.findAll().spliterator(), false).count();
-		assertThat(beforeList.equals(afterList - 1));
+		assertThat(beforeList.equals(afterList - 1)).isTrue();
 	}
 
 	@Test
 	void shouldFindRecruitByCorrectPilotId() {
 		Recruit recruit = recruitService.getRecruitByPilotId(1, 2).get();
 
-		assertThat(recruit.getTeam().getId().equals(1));
-		assertThat(recruit.getPilot().getPoints().equals("93"));
+		assertThat(recruit.getTeam().getId().equals(1)).isTrue();
+		assertThat(recruit.getPilot().getBaseValue().equals(2000)).isTrue();
 	}
 
 	@Test
