@@ -5,7 +5,4 @@ import org.springframework.samples.petclinic.model.TablaConsultas;
 
 public interface TablaConsultasRepository extends CrudRepository<TablaConsultas,Integer> {
 
-	
-	
-	
 }

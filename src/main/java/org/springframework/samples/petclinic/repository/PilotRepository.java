@@ -23,94 +23,22 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
-import org.springframework.samples.petclinic.model.BaseEntity;
 import org.springframework.samples.petclinic.model.Category;
 import org.springframework.samples.petclinic.model.Pilot;
 
-/**
- * Spring Data JPA specialization of the {@link PilotRepository} interface
- *
- * @author Michael Isvy
- * @since 15.1.2013
- */
 public interface PilotRepository extends CrudRepository<Pilot, Integer> {
 
-
-	/**
-	 * Retrieve all <code>PetType</code>s from the data store.
-	 * @return a <code>Collection</code> of <code>PetType</code>s
-	 */
-//	@Query("SELECT ptype FROM PetType ptype ORDER BY ptype.name")
-//	List<PetType> findPetTypes() throws DataAccessException;
-	
-	/**
-	 * Retrieve a <code>Pilot</code> from the data store by id.
-	 * @param id the id to search for
-	 * @return the <code>Pet</code> if found
-	 * @throws org.springframework.dao.DataRetrievalFailureException if not found
-	 */
-//	@Query("SELECT pilot FROM Pilot pilot left join fetch pilot.results WHERE pilot.id =:id")
-//	public Optional<Pilot> findById(@Param("id")int id);
-	
-//	@Query("SELECT pilot FROM Pilot pilot WHERE pilot.id =:id")
-
-//	/**
-//	 * Retrieve all <code>PetType</code>s from the data store.
-//	 * @return a <code>Collection</code> of <code>PetType</code>s
-//	 */
-////	@Query("SELECT ptype FROM PetType ptype ORDER BY ptype.name")
-////	List<PetType> findPetTypes() throws DataAccessException;
-//	
-//	/**
-//	 * Retrieve a <code>Pilot</code> from the data store by id.
-//	 * @param id the id to search for
-//	 * @return the <code>Pet</code> if found
-//	 * @throws org.springframework.dao.DataRetrievalFailureException if not found
-//	 */
-//	@Query("SELECT pilot FROM Pilot pilot left join fetch pilot.results WHERE pilot.id =:id")
-
-//	public Pilot findById(@Param("id")int id);
-	
-	@Override
 	@Query(value="SELECT * FROM PILOT order by category, name, lastname, points, nationality", nativeQuery=true)
 	public List<Pilot> findAll();
 	
 	@Query("SELECT COUNT(pilot) FROM Pilot pilot WHERE pilot.name LIKE :name AND pilot.lastName LIKE :lastName")
 	public Integer countByName(@Param("lastName")String lastName,@Param("name")String name);
-	
-	
 
 	@Query("SELECT pilot FROM Pilot pilot WHERE pilot.name LIKE :name AND pilot.lastName LIKE :lastName")
 	public Optional<Pilot> findByName(@Param("lastName")String lastName,@Param("name")String name);
-
 	
 	@Query("SELECT pilot FROM Pilot pilot WHERE pilot.category=:category ORDER BY pilot.points DESC")
 	public List<Pilot> findTop3ByPointsAndCategory(@Param("category") Category category);
-
-	
-	/**
-	 * Save a <code>Pilot</code> to the data store, either inserting or updating it.
-	 * @param pet the <code>Pilot</code> to save
-	 * @see BaseEntity#isNew
-	 */
-
-//	
-////	@Query("SELECT pilot FROM Pilot pilot WHERE pilot.id =:id")
-////	public Pilot findById(@Param("id")int id);
-//
-//	
-//	@Query("SELECT DISTINCT pilot FROM Pilot pilot left join fetch pilot.results WHERE pilot.lastName LIKE :lastName%")
-//	public Collection<Pilot> findByLastName(@Param("lastName") String lastName);
-//	
-//	@Query("SELECT pilot FROM Pilot pilot")
-//	public Collection<Pilot> findAll();
-//
-//	/**
-//	 * Save a <code>Pilot</code> to the data store, either inserting or updating it.
-//	 * @param pet the <code>Pilot</code> to save
-//	 * @see BaseEntity#isNew
-//	 */
-//	void save(Pilot pilot) throws DataAccessException;
 
 	@Query(value="SELECT p.* FROM RECRUIT AS r NATURAL JOIN PILOT AS p", nativeQuery = true)
 	List<Pilot> findAllRecruits();

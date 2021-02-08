@@ -1,11 +1,8 @@
 package org.springframework.samples.petclinic.web;
 
-import java.io.IOException;
 import java.text.ParseException;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -19,7 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,9 +35,7 @@ public class GranPremioController {
 
 	@GetMapping(path="/granPremios")
 	public String detallesLiga(ModelMap model) throws ParseException {	
-		// El sorted sería mejor meterlo en el repositorio con un ORDER BY
-		List<GranPremio> gps = GPService.findAllActualYear(2019).stream().distinct()
-								.sorted(Comparator.comparing(GranPremio::getId)).collect(Collectors.toList());
+		List<GranPremio> gps = GPService.findAllActualYear(2019);
 		model.addAttribute("listaGP", gps);
 		log.info("Showing all GPs in database: " + gps);
 		return "gp/gpList";
@@ -55,9 +50,8 @@ public class GranPremioController {
 	}
 	
 	
-	//Cambiar model.addAttribute por ra.addatributte.
 	@PostMapping(path="/granPremios/new")
-	public String nuevoGranPremio(@Valid GranPremio granpremio, BindingResult results, ModelMap model) {	
+	public String nuevoGranPremio(@Valid GranPremio granpremio, BindingResult results, ModelMap model, RedirectAttributes redirectAttributes) {	
 		if (results.hasErrors()) {
 			log.warn("The GP creation form has errors!");
 			log.warn("Errors: " + results);
@@ -66,11 +60,12 @@ public class GranPremioController {
 		} else {
 			granpremio.setCalendar(true);
 			granpremio.setHasBeenRun(false);
-//			try {
-//				this.GPService.populateRecord(granpremio);
-//			} catch (Exception e) {
-//				log.warn("Sorry, records are unavailable for this GP!"); // Provisional
-//			}
+			try {
+				this.GPService.populateRecord(granpremio);
+			} catch (Exception e) {
+				redirectAttributes.addFlashAttribute("message", "Sorry, records are unavailable for this GP!");
+				log.warn("Sorry, records are unavailable for this GP!");
+			}
 			this.GPService.saveGP(granpremio);
 			log.info("GP succesfully created!: " + granpremio);
 			model.addAttribute("message","Gran Premio loaded succesfully!");
@@ -80,36 +75,19 @@ public class GranPremioController {
 	}
 	
 	@GetMapping(path = "/granPremios/{id}/delete")
-	public String eliminarGranPremio(@PathVariable("id") int id, ModelMap model) {
+	public String eliminarGranPremio(@PathVariable("id") int id, ModelMap model, RedirectAttributes redirectAttributes) {
 		Optional<GranPremio> gp = this.GPService.findGPById(id);
 		log.info("Deleting GP with id: (" + id + ")");
 		if (gp.isPresent()) {
 			log.info("GP: " + gp.get());
 			GPService.delete(gp.get());
-			model.addAttribute("message", "GP successfully deleted!");
+			redirectAttributes.addFlashAttribute("message", "GP successfully deleted!");
 		} else {
-			model.addAttribute("message", "GP not found!");
+			redirectAttributes.addFlashAttribute("message", "GP not found!");
 			log.warn("The GP with id (" + id + ") was not found!");
 		}
 
 		return "redirect:/controlPanelSP";
 	}
-	
-//	@RequestMapping(path="/granPremios/setRecords/{gpId}")
-//	public String populateRecords(@PathVariable("gpId") int gpId, ModelMap model) throws IOException {
-//		Optional<GranPremio> gp = this.GPService.findGPById(gpId);
-//		log.info("Populating GP with id: (" + gpId + ")");
-//		if (gp.isPresent()) {
-//			log.info("GP: " + gp.get());
-//			this.GPService.populateRecord(gp.get());
-//			this.GPService.saveGP(gp.get());
-//			model.addAttribute("message", "GP successfully populated!");
-//		} else {
-//			model.addAttribute("message", "GP not found!");
-//			log.warn("The GP with id (" + gpId + ") was not found!");
-//		}
-//		
-//		return "gp/gpList";
-//	}
 	
 }

@@ -280,11 +280,10 @@ public class PilotController {
 		Optional<Pilot> pilot = this.pilotService.findPilotById(pilotId);
 		String view = "pilots/pilotsListPaged";
 		model.addAttribute(pilot.get());
-		if(pilot.isPresent()) {
+		if (pilot.isPresent()) {
 			view = "pilots/pilotsEdit";
-		}else {
+		} else {
 			model.addAttribute("message", "Rider not found!");
-//			view=listadoPilotosPaginado(model);
 		}
 		return view;
 	}

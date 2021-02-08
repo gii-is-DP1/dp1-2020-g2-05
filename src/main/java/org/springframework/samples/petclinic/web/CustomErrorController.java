@@ -122,8 +122,6 @@ public class CustomErrorController implements ErrorController {
 		return "redirect:/leagues";
 	}
 	
-	
-//	@RequestMapping
 	public String defaultErrorHandler(HttpServletRequest request,  Exception ex)  {
 
 		ServletWebRequest servletWebRequest = new ServletWebRequest(request);
@@ -151,7 +149,7 @@ public class CustomErrorController implements ErrorController {
 	}
 	
 	@RequestMapping
-//	@ExceptionHandler(Exception.class)
+	@ExceptionHandler(Exception.class)
 	public String handleError(HttpServletRequest request, Exception ex) {
 		String res = "errorUser";
 		if (this.authoritiesService.isCurrentUserAdmin()) {

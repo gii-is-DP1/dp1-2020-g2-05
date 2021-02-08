@@ -53,8 +53,6 @@ public class TablaConsultasService {
 		this.userService = userService;
 		this.teamRepository = teamRepository;
 		this.leagueRepository = leagueRepository;
-		
-	
 	}
 
 	public Optional<TablaConsultas> getTabla() throws DataAccessException {
@@ -99,7 +97,6 @@ public class TablaConsultasService {
 		}
 		
 		this.saveTabla(tabla);
-
 	}
 	
 	
@@ -146,16 +143,13 @@ public class TablaConsultasService {
 		//Actualizo la variable del sistema de la fecha del sistema
 		tabla.setFechaSistema(LocalDate.now());
 		
-		
 		this.saveTabla(tabla);
-		
 	}
 
 
 
 	public void comprobandoCarrerasCompletadas() throws Exception {
 		TablaConsultas tabla = this.getTabla().get();
-		
 		
 		if (tabla.getRacesCompleted() - tabla.getGpsValidated() == 1) {
 			resultService.validateResults();
@@ -166,11 +160,5 @@ public class TablaConsultasService {
 			log.info("No hay grandes premios por validar.");
 		}
 	}
-
-	
-	
-	
-	
-	
 }
 
