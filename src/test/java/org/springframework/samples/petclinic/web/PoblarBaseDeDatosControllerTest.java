@@ -29,6 +29,7 @@ import org.springframework.samples.petclinic.service.GranPremioService;
 import org.springframework.samples.petclinic.service.PoblarBaseDeDatosService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
 import org.springframework.samples.petclinic.service.TeamService;
+import org.springframework.samples.petclinic.service.TransactionService;
 import org.springframework.samples.petclinic.service.exceptions.duplicatedLeagueNameException;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -76,6 +77,9 @@ public class PoblarBaseDeDatosControllerTest {
 	@MockBean
 	private AuthoritiesService authoritiesService;
 
+
+	@MockBean
+	private TransactionService transactionService;
 	@Autowired
 	private MockMvc mockMvc;
 
