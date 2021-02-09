@@ -1,10 +1,15 @@
 package org.springframework.samples.petclinic;
 
+import java.util.Iterator;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.service.PoblarBaseDeDatosService;
 import org.springframework.samples.petclinic.service.TablaConsultasService;
+import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
@@ -17,8 +22,14 @@ public class PetclinicApplication {
 
 	@Autowired
 	private TablaConsultasService TCservice;
+	
+	@Autowired
+	private TeamService teamService;
+	
 	@Autowired
 	private PoblarBaseDeDatosService PBDService;
+	
+	Integer equiposAntiguos;
 
 	public static void main(String[] args) {
 		SpringApplication.run(PetclinicApplication.class, args);
@@ -48,6 +59,25 @@ public class PetclinicApplication {
 		System.out.println("Poblando");
 		this.PBDService.poblandoUltimaCarreraCompletada();
 		
+    }
+	
+	@Scheduled(cron = "0 37 2 ? * *")
+	public void VerUsoAplicación() throws Exception {
+		log.info("Calculando los nuevos equipos");
+		System.out.println("Calculando estadísticas de nuevos equipos");
+		
+		List<Integer> result = teamService.ComprobandoEquiposGuardados(equiposAntiguos);
+		if(result.get(0) == 0) {
+			System.out.println("El número de equipos que participan en nuestra página web no ha cambiado esta semana");
+		}else if(result.get(0) == 1) {
+			System.out.println("¡Esta semana se han inscrito " + result.get(1) + " equipos nuevos!");
+		}else if(result.get(0)== 2) {
+			System.out.println("Esta semana se han dado de baja" + result.get(1) + " equipos");
+		}
+		log.info("Estadisticas de equipos calculadas");
+
+		equiposAntiguos =  teamService.ComprobandoEquiposGuardados(equiposAntiguos).get(2);
+       
     }
 
 //	@Bean

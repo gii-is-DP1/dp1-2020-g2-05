@@ -452,8 +452,11 @@ public class TeamControllerTest {
 				.willReturn(user.getAuthorities().toString());
 
 		mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/edit", TEST_LEAGUE_ID, TEST_TEAM_ID).with(csrf())
-				.param("name", "125").param("points", "aaa").param("money", "aaa")
-				.param("user.username", user.getUsername()).param("league.id", TEST_LEAGUE_ID.toString()))
+				.param("name", "125")
+				.param("points", "aaa")
+				.param("money", "aaa")
+				.param("user.username", user.getUsername())
+				.param("league.id", TEST_LEAGUE_ID.toString()))
 				.andExpect(model().attributeHasErrors("team"))
 				.andExpect(model().attributeHasFieldErrors("team", "points"))
 				.andExpect(model().attributeHasFieldErrors("team", "name"))
