@@ -123,6 +123,7 @@ class TransactionControllerTest {
 	@WithMockUser(value = "spring")
 	@Test
 	void testGetTransactionList() throws Exception {
+		given(this.userService.findAuthoritiesByUsername(user.getUsername())).willReturn("admin");
 		mockMvc.perform(get("/myTeams/{teamID}/transactions", TEST_TEAM_ID)).andExpect(status().isOk())
 				.andExpect(model().attributeExists("transactions"))
 				.andExpect(model().attribute("transactions", transactions)).andExpect(model().attributeExists("money"));
