@@ -1,6 +1,7 @@
 package org.springframework.samples.petclinic.service;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -126,8 +127,10 @@ public class PoblarBaseDeDatosService {
 		this.TCService.actualizarTabla(Category.MOTOGP);
 		gp.setHasBeenRun(true);
 		gpService.saveGP(gp);
-		
-		
+	}
+	
+	public List<GranPremio> findAllActualYear(Integer year) throws ParseException {
+		return this.gpService.findAllActualYear(year);
 	}
 	
 }

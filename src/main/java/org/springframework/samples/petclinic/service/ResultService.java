@@ -175,7 +175,8 @@ public class ResultService {
 		try {
 			List<Team> teams = (List<Team>) this.teamRepository.findAll();
 			for (Team t : teams) {
-				compruebaInactividadTeam(t.getId());
+				if (t.getName() != "Sistema") {
+				}
 			}
 		} catch (Exception e) {
 			log.warn("No hay suficientes lineups como para expulsar a un equipo por inactividad!");

@@ -1,10 +1,6 @@
 package org.springframework.samples.petclinic.service;
 
 import java.io.IOException;
-import java.security.SecureRandom;
-import java.text.ParseException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -30,33 +26,19 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-import lombok.extern.slf4j.Slf4j;
-//import motogpAPI.PeticionesGet;
 
 import motogpApiV2.results.Competitor;
 import motogpApiV2.testing.testing;
 
-/**
- * Mostly used as a facade for all Petclinic controllers Also a placeholder
- * for @Transactional and @Cacheable annotations
- *
- * @author Michael Isvy
- */
-@Slf4j
 @Service
 public class PilotService {
 	
-//	public static final Integer MAXIMO_CARRERAS=18;
-	
 	private PilotRepository pilotRepository;
-	private GranPremioService gpService;
 	private ResultService resultService;
-//	private AuthoritiesService authoritiesService;
 	
 	@Autowired
-	public PilotService(PilotRepository pilotRepository, GranPremioService gpService, ResultService resultService) {
+	public PilotService(PilotRepository pilotRepository, ResultService resultService) {
 		this.pilotRepository = pilotRepository;
-		this.gpService = gpService;
 		this.resultService = resultService;
 	}
 
@@ -75,15 +57,6 @@ public class PilotService {
 
 	}
 	
-//	public void prueba() throws JSONException, IOException{
-//		FormRellenarBD form = new FormRellenarBD();
-//		
-//		form.setAnyoFinal(2019);
-//		form.setAnyoFinal(2018);
-//		form.setCategory(Category.Moto3);
-//		
-//	}
-	
 	public List<String> obtenerResultsFormatted(Set<Result> result){
 		ResultFormatter formatter = new ResultFormatter(resultService);
 		List<String> res = new ArrayList<String>();
@@ -94,141 +67,7 @@ public class PilotService {
 	}
 	public List<Pilot> top10Pilots(Category category){
 		return this.pilotRepository.findTop3ByPointsAndCategory(category);
-	}
-	
-//	public void poblarBD(FormRellenarBD form) throws JSONException, IOException, ParseException {
-////		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MMM-dd");		
-//		for(int i=form.getAnyoInicial(); i < form.getAnyoFinal(); i++) {
-//			for (int j=0;j<MAXIMO_CARRERAS;j++) {
-//				GranPremio gp = new GranPremio(); //entidad de una carrera
-//				List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceNumberCampu(form.getCategory(), i, j, Session.RACE);
-////				if(todosLosResultadosDeUnaCarrera.size()==0) {
-////					throw new NotFoundException("No se han encontrado carreras para los anyos dados");
-////				}else {
-//					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//					LocalDate date = LocalDate.parse(todosLosResultadosDeUnaCarrera.get(0).getFecha(), formatter);				
-//					gp.setSite(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
-//					gp.setCircuit(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
-//					gp.setDate0(date);
-//					gp.setRaceCode(todosLosResultadosDeUnaCarrera.get(0).getRaceCode());
-//					gp.setCalendar(false);
-//					this.gpService.saveGP(gp);
-//
-//					for (int k=0;k<todosLosResultadosDeUnaCarrera.size();k++) {
-//						InfoCarrera resultado_k = todosLosResultadosDeUnaCarrera.get(k);
-//						gp.setCircuit(resultado_k.getLugar());
-//						gp.setSite(resultado_k.getNombreEvento());
-//
-//						Pilot pilot = new Pilot();
-//						pilot.setName(resultado_k.getPiloto().split(" ")[0]);
-//						pilot.setLastName(resultado_k.getPiloto().split(" ")[1]);
-//						pilot.setDorsal(resultado_k.getNumeros().toString());
-//
-//						if (resultado_k.getPais().isEmpty()) {pilot.setNationality("Andorra");} 
-//						else {pilot.setNationality(resultado_k.getPais());}
-//
-//						pilot.setCategory((form.getCategory()));
-//
-//						Random random = new Random();
-//						pilot.setBaseValue(random.nextInt(3000) + 1000);//Valores arbitrarios, pueden cambiar
-//
-//						Result result = new Result();
-//
-//						if (this.countByName(pilot.getLastName(), pilot.getName())!=0) {
-//							result.setPilot(this.pilotRepository.findByName(pilot.getLastName(), pilot.getName()).get());
-//						} else {
-//							result.setPilot(pilot);
-//						}
-//						result.setPosition(resultado_k.getPosicion());
-//						result.setGp(gp);
-//						result.setLap(false);
-//						result.setPole(false);
-//						this.resultService.saveResult(result);
-//						savePilot(pilot);
-//					}
-//				}
-//			}			
-//		}
-////	}
-//	
-//	@Transactional
-//	//	2016, RaceCode.AUT, Session.RACE
-//	public void poblarBDCarreraACarrera(BDCarrera form,GranPremio gp,Boolean GpEstaEnCalendario) throws JSONException, IOException, ParseException {
-//
-//		//EL GP QUE SE PASA COMO PARAMETRO, O ESTA VACIO, O ESTA EN EL CALENDARIO
-//		//				GranPremio gp = new GranPremio(); //entidad de una carrera
-//		List<InfoCarrera> todosLosResultadosDeUnaCarrera = PeticionesGet.getResultsByRaceCodeCampu(form.getCategory(), form.getYear(), form.getRacecode(), form.getSession());
-//		log.info("La api ha obtenido los resultados satisfactoriamente para year :" + form.getYear()+", category:" + form.getCategory());
-//
-//		//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//
-////		if (todosLosResultadosDeUnaCarrera.size()==0) {
-////			throw new NotFoundException("No se han encontrado carreras para los parametros dados");
-////		} else {
-//			
-//			if (GpEstaEnCalendario==false) {
-//				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//				LocalDate date = LocalDate.parse(todosLosResultadosDeUnaCarrera.get(0).getFecha(), formatter);			
-//				gp.setSite(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
-//				gp.setCircuit(todosLosResultadosDeUnaCarrera.get(0).getNombreEvento());
-//				gp.setDate0(date);
-//				gp.setRaceCode(todosLosResultadosDeUnaCarrera.get(0).getRaceCode());
-//				gp.setHasBeenRun(true);
-//				gp.setCalendar(true);
-//				try {
-//					this.gpService.populateRecord(gp);
-//				} catch (Exception e) {
-//					System.out.println("Sorry, records are unavailable for this GP!"); // Provisional
-//				}
-//				this.gpService.saveGP(gp);	
-//			}
-//
-//			for (int k=0;k<todosLosResultadosDeUnaCarrera.size();k++) {
-//				InfoCarrera resultado_k = todosLosResultadosDeUnaCarrera.get(k);
-//				if (GpEstaEnCalendario==false) {
-//					gp.setCircuit(resultado_k.getLugar());
-//					gp.setSite(resultado_k.getNombreEvento());
-//				}
-//
-//				Pilot pilot = new Pilot();
-//				pilot.setName(resultado_k.getPiloto().split(" ")[0]);
-//				pilot.setLastName(resultado_k.getPiloto().split(" ")[1]);
-//				pilot.setDorsal(resultado_k.getNumeros().toString());
-//
-//				if (resultado_k.getPais().isEmpty()) {
-//					pilot.setNationality("Andorra");
-//				} else {
-//					pilot.setNationality(resultado_k.getPais());
-//				}
-//
-//				pilot.setCategory(resultado_k.getCategory());
-//
-//				Random random = new Random();
-//				pilot.setBaseValue(random.nextInt(3000) + 1000);//Valores arbitrarios, pueden cambiar
-//
-//				Result result = new Result();
-//
-//				if (this.countByName(pilot.getLastName(), pilot.getName())!=0) {
-//					result.setPilot(this.pilotRepository.findByName(pilot.getLastName(), pilot.getName()).get());
-//				} else {
-//					result.setPilot(pilot);
-//				}
-//				
-//				result.setPosition(resultado_k.getPosicion());
-//				result.setGp(gp);
-//				result.setLap(false);
-//				result.setPole(false);
-//				this.resultService.saveResult(result);
-//				Set<Result> results = new HashSet<Result>();
-//				results.add(result);
-//				pilot.setResults(results);
-//				savePilot(pilot);
-//			}
-//			log.info("La api ha asociado los resultados al gp : " + gp.getSite());
-////		}
-//	}			
-//		
-	
+	}		
 	
 	public void poblarUnaCarreraYSusResultados(BDCarrera form,GranPremio gp) throws JsonMappingException, JsonProcessingException, IOException, InterruptedException {
 		List<Competitor> listaDeRiders =testing.findCompetitorAndItsResultsByCategoryRaceCodeAndYear(form.getYear(), form.getRacecode(), form.getCategory());
@@ -321,7 +160,7 @@ public class PilotService {
 		pilotAGuardar.setCategory(categoryFromForm);
 		pilotAGuardar.setPoints(0);
 		Random random = new Random();
-		pilotAGuardar.setBaseValue(random.nextInt(3000) + 1000);//Valores arbitrarios, pueden cambiar
+		pilotAGuardar.setBaseValue(random.nextInt(3000) + 1000);
 		this.savePilot(pilotAGuardar);
 	}
 	public void updatePilot(Competitor rider_i,Integer puntos) {
