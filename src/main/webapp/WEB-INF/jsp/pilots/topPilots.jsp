@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
-<%@ page import="org.springframework.samples.petclinic.model.Category" %>
+<%@ page import="org.springframework.samples.dreamgp.model.Category" %>
 <head>
 <link rel="stylesheet" href="/resources/styles/pilot.css">
  	

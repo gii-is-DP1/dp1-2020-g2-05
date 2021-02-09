@@ -13,9 +13,9 @@ import java.util.concurrent.TimeUnit;
 
 import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.petclinic.model.Category;
-import org.springframework.samples.petclinic.model.GranPremio;
-import org.springframework.samples.petclinic.service.PilotService;
+import org.springframework.samples.dreamgp.model.Category;
+import org.springframework.samples.dreamgp.model.GranPremio;
+import org.springframework.samples.dreamgp.service.PilotService;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
