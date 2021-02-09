@@ -122,6 +122,12 @@ public class UserController {
 			
 		}
 		
+		if(!userService.findUser(user.getUsername()).isPresent()) {
+			ObjectError error =  new ObjectError("user", "No se ha encontrado el usuario");
+			result.addError(error);
+			
+		}
+		
 		if(result.hasErrors()) {
 			List<ObjectError> errores = result.getAllErrors();
 			List<String> erroresstring = new ArrayList<String>();
