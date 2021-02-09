@@ -1,8 +1,11 @@
 
+
 package org.springframework.samples.dreamgp.service;
 
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -35,6 +38,8 @@ public class TeamService {
 	private TablaConsultasService TCService;
 	private OfferService offerService;
 	private TransactionService transactionService;
+	
+	
 
 	@Autowired
 	public TeamService(TeamRepository teamRepository, UserService userService,
@@ -107,6 +112,8 @@ public class TeamService {
 
 	@Transactional
 	public void saveTeamMoney(Team team, Integer price) throws DataAccessException {
+		System.out.println(team.getMoney());
+		System.out.println(price);
 		team.setMoney(team.getMoney() + price);
 		this.teamRepository.save(team);
 	}
@@ -182,6 +189,42 @@ public class TeamService {
 			offerService.saveOffer(offer);
 			recruitService.purchaseRecruit(newR, t);
 		}
+	}
+	
+	public List<Integer> ComprobandoEquiposGuardados(Integer equiposAntiguos) throws Exception {
+		if(equiposAntiguos == null) {
+			equiposAntiguos = 0;
+		}
+		List<Integer> result = new ArrayList<>();
+		
+		Integer equiposActuales;
+		List<Team>  equipos = new ArrayList<>();
+		
+		Iterator<Team>  Iterator = this.findAllTeams().iterator();
+		
+		while(Iterator.hasNext()) {
+			equipos.add(Iterator.next());
+		}
+		
+		equiposActuales = equipos.size();
+		
+		if(equiposAntiguos > equiposActuales) {
+			result.add(2);
+			result.add(equiposAntiguos-equiposActuales);
+
+			
+		}else if(equiposAntiguos < equiposActuales) {
+			result.add(1);
+			result.add(equiposActuales-equiposAntiguos);
+			
+		}else {
+			result.add(0);
+			result.add(0);
+		}
+		
+		result.add(equiposActuales);
+		
+		return result;
 	}
 
 }
