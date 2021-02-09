@@ -34,6 +34,7 @@ import org.springframework.samples.dreamgp.service.AuthoritiesService;
 import org.springframework.samples.dreamgp.service.GranPremioService;
 import org.springframework.samples.dreamgp.service.PoblarBaseDeDatosService;
 import org.springframework.samples.dreamgp.service.TablaConsultasService;
+import org.springframework.samples.dreamgp.service.TeamService;
 import org.springframework.samples.dreamgp.service.TransactionService;
 import org.springframework.samples.dreamgp.web.GranPremioController;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
@@ -62,6 +63,9 @@ public class GPControllerTest {
 
 	@MockBean
 	private PoblarBaseDeDatosService PBDService;
+	
+	@MockBean
+	TeamService teamService;
 	
 	@Autowired
 	private MockMvc mockMvc;

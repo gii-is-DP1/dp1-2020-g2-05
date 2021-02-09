@@ -30,6 +30,7 @@ import org.springframework.samples.dreamgp.model.User;
 import org.springframework.samples.dreamgp.service.AuthoritiesService;
 import org.springframework.samples.dreamgp.service.PoblarBaseDeDatosService;
 import org.springframework.samples.dreamgp.service.TablaConsultasService;
+import org.springframework.samples.dreamgp.service.TeamService;
 import org.springframework.samples.dreamgp.service.TransactionService;
 import org.springframework.samples.dreamgp.service.UserService;
 import org.springframework.samples.dreamgp.service.exceptions.UserEmailEmptyOrNullException;
@@ -62,6 +63,9 @@ public class UserControllerTest {
 	@MockBean
 	private TransactionService transactionService;
 		
+	@MockBean
+	TeamService teamService;
+	
 	@Autowired
 	private MockMvc mockMvc;
 	

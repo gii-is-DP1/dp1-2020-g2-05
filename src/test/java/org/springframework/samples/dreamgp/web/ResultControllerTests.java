@@ -35,6 +35,7 @@ import org.springframework.samples.dreamgp.service.LineupService;
 import org.springframework.samples.dreamgp.service.PoblarBaseDeDatosService;
 import org.springframework.samples.dreamgp.service.ResultService;
 import org.springframework.samples.dreamgp.service.TablaConsultasService;
+import org.springframework.samples.dreamgp.service.TeamService;
 import org.springframework.samples.dreamgp.service.TransactionService;
 import org.springframework.samples.dreamgp.web.ResultController;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
@@ -71,6 +72,8 @@ class ResultControllerTests {
 	@MockBean
 	private AuthoritiesService authoritiesService;
 	
+	@MockBean
+	private TeamService teamService;
 
 	@MockBean
 	private PoblarBaseDeDatosService PBDService;

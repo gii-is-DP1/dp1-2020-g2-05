@@ -231,12 +231,9 @@ public class TeamServiceTest {
 	@Transactional
 	void shouldRandomRecruit2Pilots() throws NotAllowedNumberOfRecruitsException {
 		Team team = teamService.findTeamById(3).get();
-		Team sysTeam = teamService.findTeamById(8).get();
-		teamService.recruitAndOfferAll(sysTeam, Category.MOTO3);
 		
 		teamService.randomRecruit2Pilots(team);
 		
-		
-		assertThat(this.recruitService.getRecruitsByTeam(team.getId()).size()).isEqualTo(2);
+		assertThat(this.recruitService.getRecruitsByTeam(team.getId()).size()).isEqualTo(4);//Ya tenía 2
 	}
 }
