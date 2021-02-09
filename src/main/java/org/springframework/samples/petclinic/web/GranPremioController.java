@@ -110,4 +110,13 @@ public class GranPremioController {
 		return "gp/gpDetails";
 	}
 
+	
+	@GetMapping(path="/granPremios/grid/{gpId}")
+	public String gridGp(@PathVariable("gpId") int id, ModelMap model) throws ParseException, JsonMappingException, JsonProcessingException, IOException, InterruptedException {	
+		GranPremio gp = GPService.findGPById(id).get();
+		List<motogpApiV2.Qualifying.Competitor> grid = testing.obtainGridForAGivenYearAndRacecode(gp.getIdApi());
+		model.addAttribute("grid", grid);
+		model.addAttribute("gp",gp); 
+		return "gp/gpGrid";
+	}
 }
