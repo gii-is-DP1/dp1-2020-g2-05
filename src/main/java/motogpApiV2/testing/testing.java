@@ -13,9 +13,9 @@ import java.util.concurrent.TimeUnit;
 
 import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.petclinic.model.Category;
-import org.springframework.samples.petclinic.model.GranPremio;
-import org.springframework.samples.petclinic.service.PilotService;
+import org.springframework.samples.dreamgp.model.Category;
+import org.springframework.samples.dreamgp.model.GranPremio;
+import org.springframework.samples.dreamgp.service.PilotService;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import motogpApiV2.RaceCode;
 import motogpApiV2.GranPremioDetails.GranPremioDetails;
+import motogpApiV2.GranPremioDetails.Venue;
 import motogpApiV2.races.Races;
 import motogpApiV2.races.Schedule;
 import motogpApiV2.results.Competitor;
@@ -52,23 +53,23 @@ public class testing {
 
 	}
 
-//	public static String getJsonFromUrl(String url) throws IOException {
-//
-//		URL uri = new URL(url);
-//		URLConnection yc = uri.openConnection();
-//		
-//		BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
-//		
-//		String inputLine;
-//		
-//		StringBuffer response = new StringBuffer();
-//
-//		while ((inputLine = in.readLine()) != null)
-//			response.append(inputLine);
-//		in.close();
-//
-//		return response.toString();
-//	}
+	public static String getJsonFromUrl(String url) throws IOException {
+
+		URL uri = new URL(url);
+		URLConnection yc = uri.openConnection();
+		
+		BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+		
+		String inputLine;
+		
+		StringBuffer response = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null)
+			response.append(inputLine);
+		in.close();
+
+		return response.toString();
+	}
 
 	public static String getSeasonByCategoryAndYear(Integer yearToRequest, String categoryToRequest)
 			throws JsonMappingException, JsonProcessingException, IOException {
@@ -174,7 +175,8 @@ public class testing {
 
 		System.out.println("idToObtainSchedules : " + idToObtainSchedules);
 		String urlToGetRequestApi = rootUrl+idToObtainSchedules+urlToObtainSchedules + API_KEY;
-		
+		TimeUnit.SECONDS.sleep(1);
+
 //		Stage allSeasons = new ObjectMapper().readValue(getJsonFromUrl(urlToGetRequestApi), Stage.class);	
 		Stage allSeasons = restTemplate.getForObject(urlToGetRequestApi, Stage.class);
 
@@ -185,8 +187,8 @@ public class testing {
 			String uri =rootUrl+idToObtainGPDetails+urlToObtainResults+API_KEY;
 			TimeUnit.SECONDS.sleep(1);
 			GranPremio gp = new GranPremio();
-//			GranPremioDetails detailsOfGP_i = new ObjectMapper().readValue(getJsonFromUrl(uri), GranPremioDetails.class);	
-			GranPremioDetails detailsOfGP_i = restTemplate.getForObject(urlToGetRequestApi, GranPremioDetails.class);
+			GranPremioDetails detailsOfGP_i = new ObjectMapper().readValue(getJsonFromUrl(uri), GranPremioDetails.class);	
+//			GranPremioDetails detailsOfGP_i = restTemplate.getForObject(urlToGetRequestApi, GranPremioDetails.class);
 			
 			gp.setCalendar(true);
 			gp.setCircuit(detailsOfGP_i.getStage().getVenue().getName());
@@ -199,13 +201,26 @@ public class testing {
 			gp.setSite(detailsOfGP_i.getStage().getVenue().getCity());
 			gp.setHasBeenRun(false);
 			gp.setRaceCode(detailsOfGP_i.getStage().getVenue().getCountryCode());
-
+			gp.setIdApi(idToObtainGPDetails);
 			granPremiosToReturn.add(gp);
 			
 			log.info("Gp creado correctamente :"+gp);
 		}
 		
 		return granPremiosToReturn;
+		
+	}		
+	
+	public static Venue obteinDetailsFromGp(String id) throws JsonMappingException, JsonProcessingException, IOException, InterruptedException {
+		API_KEY=API_KEY_3;
+
+		
+			String idToObtainGPDetails = id;
+			String uri =rootUrl+idToObtainGPDetails+urlToObtainResults+API_KEY;
+			GranPremioDetails detailsOfGP_i = new ObjectMapper().readValue(getJsonFromUrl(uri), GranPremioDetails.class);	
+
+	
+		return detailsOfGP_i.getStage().getVenue();
 		
 	}		
 	
