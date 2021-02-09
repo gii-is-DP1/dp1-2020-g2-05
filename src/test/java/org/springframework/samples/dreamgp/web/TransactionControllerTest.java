@@ -27,6 +27,7 @@ import org.springframework.samples.dreamgp.model.Team;
 import org.springframework.samples.dreamgp.model.Transaction;
 import org.springframework.samples.dreamgp.model.User;
 import org.springframework.samples.dreamgp.service.AuthoritiesService;
+import org.springframework.samples.dreamgp.service.LineupService;
 import org.springframework.samples.dreamgp.service.PoblarBaseDeDatosService;
 import org.springframework.samples.dreamgp.service.TablaConsultasService;
 import org.springframework.samples.dreamgp.service.TeamService;
@@ -60,7 +61,8 @@ class TransactionControllerTest {
 	@MockBean
 	private PoblarBaseDeDatosService PBDService;
 	
-	
+	@MockBean
+	private LineupService lineupService;
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -121,6 +123,7 @@ class TransactionControllerTest {
 	@WithMockUser(value = "spring")
 	@Test
 	void testGetTransactionList() throws Exception {
+		given(this.userService.findAuthoritiesByUsername(user.getUsername())).willReturn("admin");
 		mockMvc.perform(get("/myTeams/{teamID}/transactions", TEST_TEAM_ID)).andExpect(status().isOk())
 				.andExpect(model().attributeExists("transactions"))
 				.andExpect(model().attribute("transactions", transactions)).andExpect(model().attributeExists("money"));

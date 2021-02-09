@@ -41,6 +41,7 @@ import org.springframework.samples.dreamgp.model.Team;
 import org.springframework.samples.dreamgp.model.User;
 import org.springframework.samples.dreamgp.service.AuthoritiesService;
 import org.springframework.samples.dreamgp.service.LeagueService;
+import org.springframework.samples.dreamgp.service.LineupService;
 import org.springframework.samples.dreamgp.service.PoblarBaseDeDatosService;
 import org.springframework.samples.dreamgp.service.TablaConsultasService;
 import org.springframework.samples.dreamgp.service.TeamService;
@@ -94,9 +95,11 @@ public class LeagueControllerTest {
     	@MockBean
     	private AuthoritiesService authoritiesService;
     	
-  
     	@MockBean
     	private PoblarBaseDeDatosService PBDService;
+    	
+    	@MockBean
+    	private LineupService lineupService;
     
     	@Autowired
     	private MockMvc mockMvc;
@@ -162,7 +165,7 @@ public class LeagueControllerTest {
     	@Test
     	void testShowLeagues() throws Exception {
     		given(leagueService.findAll()).willReturn(lista);
-    		given(this.leagueService.findAuthoritiesByUsername(user.getUsername())).willReturn("admin");
+    		given(this.userService.findAuthoritiesByUsername(user.getUsername())).willReturn("admin");
     		given( this.TCService.getTabla()).willReturn(Optional.of(this.TCConsulta));
 
     		mockMvc.perform(get("/leagues").flashAttr("categoriaActual", Category.MOTO3)).andExpect(status().isOk())
@@ -176,7 +179,7 @@ public class LeagueControllerTest {
     	@Test
     	void testLimitedShowLeagues() throws Exception {
     		given(leagueService.findAll()).willReturn(lista);
-    		given(this.leagueService.findAuthoritiesByUsername(user.getUsername())).willReturn("user");
+    		given(this.userService.findAuthoritiesByUsername(user.getUsername())).willReturn("user");
     		given(this.TCService.getTabla()).willReturn(Optional.of(TCConsulta));
     		
     		mockMvc.perform(get("/leagues")).andExpect(status().isOk())

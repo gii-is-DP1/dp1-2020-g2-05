@@ -18,11 +18,9 @@ package org.springframework.samples.dreamgp.service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.dreamgp.model.Authorities;
 import org.springframework.samples.dreamgp.model.User;
 import org.springframework.samples.dreamgp.repository.UserRepository;
 import org.springframework.samples.dreamgp.service.exceptions.UserEmailEmptyOrNullException;
@@ -50,7 +48,6 @@ public class UserService {
 
 	@Transactional
 	public List<User> findAll(){
-		
 		List<User> lista = (List<User>) userRepository.findAll();
 		return lista;
 	}
@@ -68,8 +65,6 @@ public class UserService {
 		user.setEnabled(true);
 		
 		userRepository.save(user);
-		
-
 	}
 	
 	public Optional<User> findUser(String username) {
@@ -91,11 +86,12 @@ public class UserService {
 		
 	}
 	
-	
-	
 	public void delete(User user) {
 		userRepository.delete(user);
-		
 	}	
+	
+	public String findAuthoritiesByUsername(String username) {
+		return this.userRepository.findAuthoritiesByUsername(username);
+	}
 
 }

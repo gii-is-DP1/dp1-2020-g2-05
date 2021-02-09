@@ -1,6 +1,5 @@
 package org.springframework.samples.dreamgp.service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -13,9 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.samples.dreamgp.model.BDCarrera;
 import org.springframework.samples.dreamgp.model.Category;
-import org.springframework.samples.dreamgp.model.GranPremio;
 import org.springframework.samples.dreamgp.model.Pilot;
 import org.springframework.samples.dreamgp.model.Result;
 import org.springframework.samples.dreamgp.repository.PilotRepository;
@@ -23,12 +20,7 @@ import org.springframework.samples.dreamgp.web.formatter.ResultFormatter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-
-
 import motogpApiV2.results.Competitor;
-import motogpApiV2.testing.testing;
 
 @Service
 public class PilotService {
@@ -68,58 +60,6 @@ public class PilotService {
 	public List<Pilot> top10Pilots(Category category){
 		return this.pilotRepository.findTop3ByPointsAndCategory(category);
 	}		
-	
-	public void poblarUnaCarreraYSusResultados(BDCarrera form,GranPremio gp) throws JsonMappingException, JsonProcessingException, IOException, InterruptedException {
-		List<Competitor> listaDeRiders =testing.findCompetitorAndItsResultsByCategoryRaceCodeAndYear(form.getYear(), form.getRacecode(), form.getCategory());
-
-		Integer numeroDeRiders = listaDeRiders.size();
-
-		for (int i=0;i<numeroDeRiders;i++) {
-			Competitor rider_i = listaDeRiders.get(i);
-
-			if (rider_i.getResult()==null) {
-				motogpApiV2.results.Result resultNull = new motogpApiV2.results.Result();
-				resultNull.setPosition(0);
-				resultNull.setPoints(0);
-				rider_i.setResult(resultNull);
-			}
-
-			Result result = new Result();
-			result.setGp(gp);
-
-			
-			if (rider_i.getResult().getPosition()==null) {
-				result.setPosition(0);
-			} else {
-				result.setPosition(rider_i.getResult().getPosition());
-			}
-			
-			this.resultService.saveResult(result);
-			
-			if (this.countByName(rider_i.getName().split(", ")[0], rider_i.getName().split(", ")[1])!=0) {
-
-				this.updatePilotResults(rider_i, result);
-
-				if (rider_i.getResult().getPoints()==null) {
-					this.updatePilot(rider_i, 0);
-				} else {
-					this.updatePilot(rider_i, rider_i.getResult().getPoints());
-				}
-
-			} else {
-				this.createNewPilot(rider_i,form.getCategory());
-
-				this.assignResultToAPilot(rider_i, result);
-
-				if (rider_i.getResult().getPoints()==null) {
-					this.updatePilot(rider_i, 0);
-				} else {
-					this.updatePilot(rider_i, rider_i.getResult().getPoints());
-				}
-			}
-		}
-	}
-	
 	
 	@Transactional
 	public Optional<Pilot> findPilotById(int pilotId) {

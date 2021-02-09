@@ -21,7 +21,6 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;
-import motogpApiV2.GranPremioDetails.Venue;
 
 @Data
 @Entity

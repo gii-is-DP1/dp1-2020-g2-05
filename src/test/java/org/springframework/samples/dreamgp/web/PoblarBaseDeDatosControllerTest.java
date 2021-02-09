@@ -29,6 +29,7 @@ import org.springframework.samples.dreamgp.model.Result;
 import org.springframework.samples.dreamgp.model.TablaConsultas;
 import org.springframework.samples.dreamgp.service.AuthoritiesService;
 import org.springframework.samples.dreamgp.service.GranPremioService;
+import org.springframework.samples.dreamgp.service.LineupService;
 import org.springframework.samples.dreamgp.service.PoblarBaseDeDatosService;
 import org.springframework.samples.dreamgp.service.TablaConsultasService;
 import org.springframework.samples.dreamgp.service.TeamService;
@@ -77,9 +78,12 @@ public class PoblarBaseDeDatosControllerTest {
 	@MockBean
 	private AuthoritiesService authoritiesService;
 
-
 	@MockBean
 	private TransactionService transactionService;
+	
+	@MockBean
+	private LineupService lineupService;
+
 	@Autowired
 	private MockMvc mockMvc;
 

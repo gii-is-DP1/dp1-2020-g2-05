@@ -28,6 +28,7 @@ import org.springframework.samples.dreamgp.configuration.SecurityConfiguration;
 import org.springframework.samples.dreamgp.model.Authorities;
 import org.springframework.samples.dreamgp.model.Message;
 import org.springframework.samples.dreamgp.service.AuthoritiesService;
+import org.springframework.samples.dreamgp.service.LineupService;
 import org.springframework.samples.dreamgp.service.MessageService;
 import org.springframework.samples.dreamgp.service.PoblarBaseDeDatosService;
 import org.springframework.samples.dreamgp.service.TablaConsultasService;
@@ -70,6 +71,9 @@ public class MessageControllerTest {
 	
 	@MockBean
 	private TeamService teamService;
+	
+	@MockBean
+	private LineupService lineupService;
 	
 	@Autowired
 	private MockMvc mockMvc;

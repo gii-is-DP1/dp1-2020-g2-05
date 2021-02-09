@@ -23,7 +23,6 @@ import org.springframework.samples.dreamgp.service.TeamService;
 import org.springframework.samples.dreamgp.service.UserService;
 import org.springframework.samples.dreamgp.service.exceptions.DuplicatedTeamNameException;
 import org.springframework.samples.dreamgp.service.exceptions.JoinWithoutCodeException;
-import org.springframework.samples.dreamgp.service.exceptions.NoTeamInThisLeagueException;
 import org.springframework.samples.dreamgp.service.exceptions.NotAllowedNumberOfRecruitsException;
 import org.springframework.samples.dreamgp.service.exceptions.NotTeamUserException;
 import org.springframework.samples.dreamgp.web.validator.TeamValidator;
@@ -33,7 +32,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -79,7 +77,7 @@ public class TeamController {
 	public String crearEquipo(@PathVariable("leagueId") int leagueId, @RequestHeader(name = "Referer", defaultValue = "http://localhost:8090/") String referer,
 			ModelMap model) throws JoinWithoutCodeException {
 		
-		authority = this.leagueService.findAuthoritiesByUsername(this.userService.getUserSession().getUsername());
+		authority = this.userService.findAuthoritiesByUsername(this.userService.getUserSession().getUsername());
 
 		if (authority.equals("admin")) {
 			model.put("admin", true);
@@ -117,7 +115,7 @@ public class TeamController {
 	public String saveNewTeam(@PathVariable("leagueId") int leagueId, @Valid Team team, BindingResult result,
 			ModelMap model) throws NotAllowedNumberOfRecruitsException, DuplicatedTeamNameException {
 		
-		authority = this.leagueService.findAuthoritiesByUsername(this.userService.getUserSession().getUsername());
+		authority = this.userService.findAuthoritiesByUsername(this.userService.getUserSession().getUsername());
 		League league = this.leagueService.findLeague(leagueId).get();
 		log.debug("Asignandole la liga " + league);
 		team.setLeague(league);
@@ -183,7 +181,7 @@ public class TeamController {
 	public String mostrarDetallesEscuderia(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamID,
 			ModelMap model) throws NotTeamUserException {
 		
-		authority = this.leagueService.findAuthoritiesByUsername(this.userService.getUserSession().getUsername());
+		authority = this.userService.findAuthoritiesByUsername(this.userService.getUserSession().getUsername());
 
 		if(this.userService.getUserSession() != this.teamService.findTeamById(teamID).get().getUser() && !authority.equals("admin")){
 			throw new NotTeamUserException();
@@ -255,8 +253,8 @@ public class TeamController {
 			@RequestHeader(name = "Referer", defaultValue = "/leagues/{leagueId}/teams") String referer,
 			@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, ModelMap model) throws NotTeamUserException {
 		
-		authority = this.leagueService.findAuthoritiesByUsername(this.userService.getUserSession().getUsername());
-		System.out.println(authority);
+		authority = this.userService.findAuthoritiesByUsername(this.userService.getUserSession().getUsername());
+
 		if(this.userService.getUserSession() != this.teamService.findTeamById(teamId).get().getUser() && !authority.equals("admin")){
 			throw new NotTeamUserException();
 		}else {
@@ -285,7 +283,7 @@ public class TeamController {
 	public String editarTeam(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
 			ModelMap model) throws NotTeamUserException {
 		
-		authority = this.leagueService.findAuthoritiesByUsername(this.userService.getUserSession().getUsername());
+		authority = this.userService.findAuthoritiesByUsername(this.userService.getUserSession().getUsername());
 
 			if(this.userService.getUserSession() != this.teamService.findTeamById(teamId).get().getUser() && !authority.equals("admin")){
 				throw new NotTeamUserException();
@@ -295,7 +293,7 @@ public class TeamController {
 		log.info("Preparandose para editar el equipo " + team);
 		model.put("team", team.get());
 
-		authority = this.leagueService.findAuthoritiesByUsername(team.get().getUser().getUsername());
+		authority = this.userService.findAuthoritiesByUsername(team.get().getUser().getUsername());
 
 		if (authority.equals("admin")) {
 			model.put("admin", true);
@@ -374,7 +372,7 @@ public class TeamController {
 
 		log.info("Equipos ordenados correctamente");
 
-		authority = this.leagueService.findAuthoritiesByUsername(this.userService.getUserSession().getUsername());
+		authority = this.userService.findAuthoritiesByUsername(this.userService.getUserSession().getUsername());
 
 		if (authority.equals("admin")) {
 			model.put("admin", true);

@@ -112,10 +112,10 @@ public class ResultService {
 						rider = lineup.getRider2();
 
 					Integer puntos = team.getPoints();
-					Integer money = this.calculaMoney(resultado.getPosition()) + team.getMoney();
+					Integer money =  team.getMoney();
 
 					Integer gananciaPuntos = this.calculaPuntos(resultado.getPosition());
-					Integer gananciaMoney = compruebaRachasPiloto(rider.getId());
+					Integer gananciaMoney = this.calculaMoney(resultado.getPosition()) + compruebaRachasPiloto(rider.getId());
 
 					String nombrePiloto = rider.getFullName();
 
@@ -131,8 +131,8 @@ public class ResultService {
 					team.setMoney(money + gananciaMoney);
 					teamRepository.save(team);
 
-					log.info("El equipo '" + team.getName() + "' ahora cuenta con un total de " + puntos + " (+"
-							+ gananciaPuntos + ") puntos y " + money + " (+" + gananciaMoney + ")€ correctamente");
+					log.info("El equipo '" + team.getName() + "', gracias a " + nombrePiloto + " ahora cuenta con un total de "
+					+ puntos + " (+" + gananciaPuntos + ") puntos y " + money + " (+" + gananciaMoney + ")€ correctamente");
 					this.transactionService.results(money, lineup, code);
 				}
 			}

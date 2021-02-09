@@ -28,6 +28,7 @@ import org.springframework.samples.dreamgp.configuration.SecurityConfiguration;
 import org.springframework.samples.dreamgp.model.Authorities;
 import org.springframework.samples.dreamgp.model.User;
 import org.springframework.samples.dreamgp.service.AuthoritiesService;
+import org.springframework.samples.dreamgp.service.LineupService;
 import org.springframework.samples.dreamgp.service.PoblarBaseDeDatosService;
 import org.springframework.samples.dreamgp.service.TablaConsultasService;
 import org.springframework.samples.dreamgp.service.TeamService;
@@ -62,6 +63,9 @@ public class UserControllerTest {
 		
 	@MockBean
 	private TransactionService transactionService;
+	
+	@MockBean
+	private LineupService lineupService;
 		
 	@MockBean
 	TeamService teamService;

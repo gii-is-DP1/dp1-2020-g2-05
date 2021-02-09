@@ -1,4 +1,4 @@
-package motogpApiV2.testing;
+package motogpApiV2.apiCore;
 
 public enum Session {
 	FP1,

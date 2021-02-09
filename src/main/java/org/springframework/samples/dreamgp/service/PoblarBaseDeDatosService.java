@@ -10,22 +10,17 @@ import org.springframework.samples.dreamgp.model.BDCarrera;
 import org.springframework.samples.dreamgp.model.Category;
 import org.springframework.samples.dreamgp.model.GranPremio;
 import org.springframework.samples.dreamgp.model.Result;
-import org.springframework.samples.dreamgp.repository.PilotRepository;
-import org.springframework.samples.dreamgp.web.PoblarBaseDeDatosController;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.ModelMap;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-import lombok.extern.slf4j.Slf4j;
 import motogpApiV2.RaceCode;
 import motogpApiV2.Session;
+import motogpApiV2.apiCore.ApiMain;
 import motogpApiV2.results.Competitor;
-import motogpApiV2.testing.testing;
 
-@Slf4j
 @Service
 @Transactional
 public class PoblarBaseDeDatosService {
@@ -47,7 +42,7 @@ public class PoblarBaseDeDatosService {
 	
 	
 	public void poblarUnaCarreraYSusResultados(BDCarrera form,GranPremio gp) throws JsonMappingException, JsonProcessingException, IOException, InterruptedException {
-		List<Competitor> listaDeRiders =testing.findCompetitorAndItsResultsByCategoryRaceCodeAndYear(form.getYear(), form.getRacecode(), form.getCategory());
+		List<Competitor> listaDeRiders =ApiMain.findCompetitorAndItsResultsByCategoryRaceCodeAndYear(form.getYear(), form.getRacecode(), form.getCategory());
 
 		Integer numeroDeRiders = listaDeRiders.size();
 
@@ -103,12 +98,9 @@ public class PoblarBaseDeDatosService {
 	}
 	
 	public void poblandoUltimaCarreraCompletada() throws Exception {
-//		Integer mesactual = LocalDate.now().getMonthValue();
-//		Integer añoactual = LocalDate.now().getYear();
-//		Integer diaactual = LocalDate.now().getDayOfMonth();
-		Integer mesactual = 3;
-		Integer añoactual = 2019;
-		Integer diaactual = 8;
+		Integer mesactual = 3;//LocalDate.now().getMonthValue();
+		Integer añoactual = 2019;//LocalDate.now().getYear();
+		Integer diaactual = 8;//LocalDate.now().getDayOfMonth();
 		LocalDate fecha = LocalDate.of(añoactual, mesactual, diaactual);
 		GranPremio gp = new GranPremio();
 		System.out.println(fecha);
