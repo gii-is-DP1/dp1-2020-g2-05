@@ -1,18 +1,3 @@
-/*
- * Copyright 2002-2013 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.springframework.samples.dreamgp.repository;
 
 import java.util.List;
@@ -28,7 +13,7 @@ import org.springframework.samples.dreamgp.model.Pilot;
 
 public interface PilotRepository extends CrudRepository<Pilot, Integer> {
 
-	@Query(value="SELECT * FROM PILOT order by category, name, lastname, points, nationality", nativeQuery=true)
+	@Query("SELECT p FROM Pilot p ORDER BY p.category, p.name, p.lastName, p.points, p.nationality")
 	public List<Pilot> findAll();
 	
 	@Query("SELECT COUNT(pilot) FROM Pilot pilot WHERE pilot.name LIKE :name AND pilot.lastName LIKE :lastName")
@@ -43,9 +28,9 @@ public interface PilotRepository extends CrudRepository<Pilot, Integer> {
 	@Query(value="SELECT p.* FROM RECRUIT AS r NATURAL JOIN PILOT AS p", nativeQuery = true)
 	List<Pilot> findAllRecruits();
 	
-	@Query(value="SELECT p.* FROM RECRUIT AS r, PILOT as p WHERE r.team_id = ?1 AND  r.pilot_id = p.id", nativeQuery = true)
+	@Query("SELECT p FROM Recruit r, Pilot p WHERE r.team.id = ?1 AND  r.pilot.id = p.id")
 	List<Pilot> findAllRecruits(int teamID);
 	
-	@Query(value="SELECT * FROM PILOT", nativeQuery = true)
+	@Query("SELECT p FROM Pilot p")
 	Page<Pilot> findAllPage(Pageable pageable); 
 }
