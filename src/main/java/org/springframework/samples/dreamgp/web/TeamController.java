@@ -117,6 +117,7 @@ public class TeamController {
 	public String saveNewTeam(@PathVariable("leagueId") int leagueId, @Valid Team team, BindingResult result,
 			ModelMap model) throws NotAllowedNumberOfRecruitsException, DuplicatedTeamNameException {
 		
+		authority = this.leagueService.findAuthoritiesByUsername(this.userService.getUserSession().getUsername());
 		League league = this.leagueService.findLeague(leagueId).get();
 		log.debug("Asignandole la liga " + league);
 		team.setLeague(league);
@@ -255,7 +256,7 @@ public class TeamController {
 			@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, ModelMap model) throws NotTeamUserException {
 		
 		authority = this.leagueService.findAuthoritiesByUsername(this.userService.getUserSession().getUsername());
-		
+		System.out.println(authority);
 		if(this.userService.getUserSession() != this.teamService.findTeamById(teamId).get().getUser() && !authority.equals("admin")){
 			throw new NotTeamUserException();
 		}else {
@@ -270,15 +271,10 @@ public class TeamController {
 			List<Team> t = this.teamService.findTeamByLeagueId(leagueId);
 			if (t.size() == 1 && t.get(0).getName().equals("Sistema")) {
 				return "redirect:/leagues";
-			} else {
-				return "redirect:" + referer;
-
-			}
-		} else {
-			log.info("El equipo " + team + "no se ha podido borrar correctamente");
-			model.addAttribute("message", "Team not found!");
-			return "redirect:/leagues";
+			} 
 		}
+		return "redirect:" + referer;
+
 		}
 	}
 	
