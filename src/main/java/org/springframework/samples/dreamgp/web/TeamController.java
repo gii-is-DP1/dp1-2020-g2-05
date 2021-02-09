@@ -79,8 +79,16 @@ public class TeamController {
 	public String crearEquipo(@PathVariable("leagueId") int leagueId, @RequestHeader(name = "Referer", defaultValue = "http://localhost:8090/") String referer,
 			ModelMap model) throws JoinWithoutCodeException {
 		
+		authority = this.leagueService.findAuthoritiesByUsername(this.userService.getUserSession().getUsername());
+
+		if (authority.equals("admin")) {
+			model.put("admin", true);
+		} else {
+			model.put("usuario", true);
+		}
+		
 		String r = referer.split(":[0-9]{4}")[1];
-		if(!r.equalsIgnoreCase("/leagues/join")) {
+		if(!r.equalsIgnoreCase("/leagues/join") && !authority.equals("admin")) {
 			throw new JoinWithoutCodeException();
 		}
 		
@@ -110,14 +118,12 @@ public class TeamController {
 			ModelMap model) throws NotAllowedNumberOfRecruitsException, DuplicatedTeamNameException {
 		
 		League league = this.leagueService.findLeague(leagueId).get();
-		System.out.println(league);
 		log.debug("Asignandole la liga " + league);
 		team.setLeague(league);
 		
 
 		log.info("La liga " + league + " ha sido asignada correctamente");
 		
-		System.out.println(result.getAllErrors());
 		if (result.hasErrors()) {
 			model.put("team", team);
 			model.put("message", result.getAllErrors());
@@ -130,9 +136,7 @@ public class TeamController {
 			log.info("Usuario " + this.userService.getUserSession() + "asignado correctamente");
 			
 			Optional<Team> tem = this.teamService.findTeamByUsernameAndLeagueId(team.getUser().getUsername(), leagueId);
-			System.out.println(tem);
 			List<Team> equipos = this.teamService.findTeamByLeagueId(league.getId());
-			System.out.println(equipos);
 			Integer igual = 0;
 			for (int i = 0; i < equipos.size(); i++) {
 				if (igual == 0) {
@@ -142,7 +146,7 @@ public class TeamController {
 				}
 			}
 
-			if (tem.isPresent()) {
+			if (tem.isPresent() && !authority.equals("admin")) {
 				log.warn("El equipo " + team + " no se ha podido crear");
 				model.addAttribute("message", "Sorry, you cannot have more teams in this league!");
 				return showTeams(leagueId, model);
@@ -153,9 +157,10 @@ public class TeamController {
 				
 				
 			}else {
-				
+				if(!authority.equals("admin")) {
 				team.setMoney(2000);
 				team.setPoints(0);
+				}
 				
 				log.debug("Guardando el equipo " + team + " en la base de datos.");
 				this.teamService.saveTeam(team);
@@ -177,7 +182,9 @@ public class TeamController {
 	public String mostrarDetallesEscuderia(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamID,
 			ModelMap model) throws NotTeamUserException {
 		
-		if(this.userService.getUserSession() != this.teamService.findTeamById(teamID).get().getUser()){
+		authority = this.leagueService.findAuthoritiesByUsername(this.userService.getUserSession().getUsername());
+
+		if(this.userService.getUserSession() != this.teamService.findTeamById(teamID).get().getUser() && !authority.equals("admin")){
 			throw new NotTeamUserException();
 		}else {
 		Optional<Team> team = this.teamService.findTeamById(teamID);
@@ -247,8 +254,9 @@ public class TeamController {
 			@RequestHeader(name = "Referer", defaultValue = "/leagues/{leagueId}/teams") String referer,
 			@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId, ModelMap model) throws NotTeamUserException {
 		
+		authority = this.leagueService.findAuthoritiesByUsername(this.userService.getUserSession().getUsername());
 		
-		if(this.userService.getUserSession() != this.teamService.findTeamById(teamId).get().getUser()){
+		if(this.userService.getUserSession() != this.teamService.findTeamById(teamId).get().getUser() && !authority.equals("admin")){
 			throw new NotTeamUserException();
 		}else {
 		Optional<Team> team = this.teamService.findTeamById(teamId);
@@ -281,7 +289,9 @@ public class TeamController {
 	public String editarTeam(@PathVariable("leagueId") int leagueId, @PathVariable("teamId") int teamId,
 			ModelMap model) throws NotTeamUserException {
 		
-			if(this.userService.getUserSession() != this.teamService.findTeamById(teamId).get().getUser()){
+		authority = this.leagueService.findAuthoritiesByUsername(this.userService.getUserSession().getUsername());
+
+			if(this.userService.getUserSession() != this.teamService.findTeamById(teamId).get().getUser() && !authority.equals("admin")){
 				throw new NotTeamUserException();
 			}else {
 

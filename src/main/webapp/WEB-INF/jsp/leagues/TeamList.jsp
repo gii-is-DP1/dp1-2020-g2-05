@@ -63,8 +63,7 @@
 				<spring:url value="/leagues/{leagueId}/teams/new" var="TeamUrl">
 							<spring:param name="leagueId" value="${league.id}" />
 						</spring:url> <a href="${fn:escapeXml(TeamUrl)}">New</a>
-	<spring:url value="market" var="marketUrl">
-	</spring:url> <a href="${fn:escapeXml(marketUrl)}">Go to Market</a>
+
 	
 		</c:if>
 		<c:if test="${usuario == true }">
@@ -130,6 +129,7 @@
 		</tbody>
 		</table>
 	</c:if>
-
+	<spring:url value="market" var="marketUrl">
+	</spring:url> <a href="${fn:escapeXml(marketUrl)}">Go to Market</a>
 
 </petclinic:layout>
