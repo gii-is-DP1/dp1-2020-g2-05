@@ -41,8 +41,10 @@ public class TransactionController {
 		if (optTeam.isPresent() && user.equals(optTeam.get().getUser())) {
 			Team team = optTeam.get();
 			mav.setViewName("leagues/transactionsList");
-			List<Transaction> transactions = this.transactionService.findTransactionsByTeamId(teamID).stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+			List<Transaction> transactions = this.transactionService.findTransactionsByTeamId(teamID).stream()
+					.sorted(Comparator.reverseOrder()).collect(Collectors.toList());
 			Integer money = this.teamService.findTeamById(team.getId()).get().getMoney();
+			mav.addObject("team", team);
 			mav.addObject("transactions", transactions);
 			mav.addObject("money", money);
 		} else {
