@@ -29,6 +29,10 @@
 					<td	style="text-align: center; background-color: #b8bbb757; color: #00000040;"><c:out value="${res.date0}" /></td>
 					<td	style="text-align: center; background-color: #b8bbb757; color: #00000040;">
 					
+						<spring:url value="/granPremios/grid/{gpId}" var="gridUrl">
+							<spring:param name="gpId" value="${res.id}" />
+						</spring:url> <a href="${fn:escapeXml(gridUrl)}"> Grid</a>	
+									
 						<spring:url value="/granPremios/{gpId}/results/MOTOGP/{raceCode}" var="leagueUrl">
 							<spring:param name="raceCode" value="${res.raceCode}" />
 							<spring:param name="gpId" value="${res.id}" />
@@ -57,7 +61,9 @@
 				<td style="text-align: center;"><c:out value="${res.circuit}" /></td>
 				<td style="text-align: center;"><c:out value="${res.date0}" /></td>
 				<td style="text-align: center;">
-				
+				<spring:url value="/granPremios/grid/{gpId}" var="gridUrl">
+							<spring:param name="gpId" value="${res.id}" />
+						</spring:url> <a href="${fn:escapeXml(gridUrl)}"> Grid</a>	
 					<spring:url value="/granPremios/{gpId}/results/MOTOGP/{raceCode}" var="leagueUrl">
 						<spring:param name="raceCode" value="${res.raceCode}" />
 						<spring:param name="gpId" value="${res.id}" />

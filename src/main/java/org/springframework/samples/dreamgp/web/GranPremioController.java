@@ -1,6 +1,7 @@
 package org.springframework.samples.dreamgp.web;
 
 import java.io.IOException;
+
 import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
@@ -110,4 +111,13 @@ public class GranPremioController {
 		return "gp/gpDetails";
 	}
 
+	
+	@GetMapping(path="/granPremios/grid/{gpId}")
+	public String gridGp(@PathVariable("gpId") int id, ModelMap model) throws ParseException, JsonMappingException, JsonProcessingException, IOException, InterruptedException {	
+		GranPremio gp = GPService.findGPById(id).get();
+		List<motogpApiV2.Qualifying.Competitor> grid = testing.obtainGridForAGivenYearAndRacecode(gp.getIdApi());
+		model.addAttribute("grid", grid);
+		model.addAttribute("gp",gp); 
+		return "gp/gpGrid";
+	}
 }
