@@ -1,8 +1,6 @@
 package org.springframework.samples.dreamgp.model;
 
 import javax.persistence.Column;
-
-
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;

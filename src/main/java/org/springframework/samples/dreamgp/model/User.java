@@ -18,7 +18,6 @@ import javax.validation.constraints.NotEmpty;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-
 import lombok.Data;
 
 @Data

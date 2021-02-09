@@ -262,7 +262,7 @@ listaRecruitsEnVenta.add(recruit1);
 listaRecruitsNoEnVenta.add(recruit2);
 given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
 given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
-given(this.leagueService.findAuthoritiesByUsername(team.getUser().getUsername())).willReturn("admin");
+given(this.userService.findAuthoritiesByUsername(team.getUser().getUsername())).willReturn("admin");
 }
 
 
@@ -345,7 +345,7 @@ void testProcessCreationFormHasSuccess() throws Exception {
 given(this.teamService.findTeamByUsernameAndLeagueId(user1.getUsername(), TEST_LEAGUE_ID)).willReturn(Optional.empty());
 given(this.userService.getUserSession()).willReturn(user1);
 given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga1));
-given(this.leagueService.findAuthoritiesByUsername(user1.getUsername())).willReturn("admin");
+given(this.userService.findAuthoritiesByUsername(user1.getUsername())).willReturn("admin");
 mockMvc.perform(post("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID).with(csrf()).param("name", "aaaa")
 		.param("points", "123")
 		.param("money", "123")
@@ -390,7 +390,7 @@ mockMvc.perform(post("/leagues/{leagueId}/teams/new", TEST_LEAGUE_ID).with(csrf(
 @WithMockUser(value = "spring")
 @Test
 void testInitUpdateForm() throws Exception {
-given(this.leagueService.findAuthoritiesByUsername(team.getUser().getUsername())).willReturn("admin");
+given(this.userService.findAuthoritiesByUsername(team.getUser().getUsername())).willReturn("admin");
 given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
 given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
 given(this.userService.findUser(user.getUsername())).willReturn(Optional.of(user));
@@ -424,7 +424,7 @@ mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/edit", TEST_LEAGUE_ID, 
 @WithMockUser(value = "spring")
 @Test
 void testInitUpdateForm1() throws Exception {
-given(this.leagueService.findAuthoritiesByUsername(team1.getUser().getUsername())).willReturn("user");
+given(this.userService.findAuthoritiesByUsername(team1.getUser().getUsername())).willReturn("user");
 given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
 given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team1));
 given(this.userService.findUser(user1.getUsername())).willReturn(Optional.of(user1));
@@ -442,7 +442,7 @@ void testProcessUpdateFormHasErrors() throws Exception {
 given(this.userService.findUser(user.getUsername())).willReturn(Optional.of(user));
 given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(Optional.of(team));
 given(this.leagueService.findLeague(TEST_LEAGUE_ID)).willReturn(Optional.of(liga));
-given(this.leagueService.findAuthoritiesByUsername(user.getUsername()))
+given(this.userService.findAuthoritiesByUsername(user.getUsername()))
 		.willReturn(user.getAuthorities().toString());
 
 mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/edit", TEST_LEAGUE_ID, TEST_TEAM_ID).with(csrf())
