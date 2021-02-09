@@ -49,7 +49,7 @@ public class DreamGPApplication {
 		}
 
 		// Ajustar a lunes (0 00 00 ? * MON)
-		@Scheduled(cron = "0 30 17 ? * *")
+		@Scheduled(cron = "0 00 00 ? * MON")
 		public void validarCarreras() throws Exception {
 			log.info("Validando la ultima carrera completada");
 			System.out.println("VALIDANDO");
@@ -58,7 +58,7 @@ public class DreamGPApplication {
 	    }
 		
 		//Ajustar a Domingo (0 00 00 ? * 7)
-		@Scheduled(cron = "0 29 17 ? * *") 
+		@Scheduled(cron = "0 00 00 ? * 7") 
 	    public void PoblarUltimaCarrera() throws Exception {
 			log.info("Poblando la ultima carrera completada");
 			System.out.println("Poblando");
