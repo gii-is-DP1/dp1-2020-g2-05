@@ -143,7 +143,7 @@ public class GPControllerTest {
 				.param("hasBeenRun", gp.getHasBeenRun().toString())
 				.param("calendar", gp.getCalendar().toString()))
 		.andExpect(status().is3xxRedirection())		
-		.andExpect(view().name("redirect:/controlPanel"));
+		.andExpect(view().name("redirect:/controlPanelSP"));
 	}
 
 	@WithMockUser(value = "spring")

@@ -133,7 +133,7 @@ public class ResultService {
 
 					log.info("El equipo '" + team.getName() + "', gracias a " + nombrePiloto + " ahora cuenta con un total de "
 					+ puntos + " (+" + gananciaPuntos + ") puntos y " + money + " (+" + gananciaMoney + ")€ correctamente");
-					this.transactionService.results(money, lineup, code);
+					this.transactionService.results(gananciaMoney, rider, code, team);
 				}
 			}
 		}
