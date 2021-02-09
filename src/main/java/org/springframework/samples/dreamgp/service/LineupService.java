@@ -1,5 +1,6 @@
 package org.springframework.samples.dreamgp.service;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -9,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.dreamgp.model.Lineup;
 import org.springframework.samples.dreamgp.repository.LineupRepository;
-import org.springframework.samples.dreamgp.service.exceptions.DuplicatedRiderOnLineupException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,12 +23,8 @@ public class LineupService {
 	}
 
 	@Transactional
-	public void saveLineup(Lineup lineup) throws DataAccessException, DuplicatedRiderOnLineupException {
-		if (lineup.getRecruit1().equals(lineup.getRecruit2())) {
-			throw new DuplicatedRiderOnLineupException("You can't select the same rider twice!");
-		} else {
+	public void saveLineup(Lineup lineup) throws DataAccessException {
 			lineupRepository.save(lineup);
-		}
 	}
 
 	@Transactional
@@ -54,5 +50,29 @@ public class LineupService {
 	
 	public List<Lineup> findByRecruit(int recruitId) {
 		return this.lineupRepository.findByRecruit(recruitId);
+	}
+
+	public List<Integer> calculaEstadisticas(Integer lineupsAntiguos) {
+		List<Lineup> allLineups = this.findAll();
+		Integer lineupsActuales = allLineups.size();
+		
+		if(lineupsAntiguos == null) {
+			lineupsAntiguos = 2;
+		}
+		
+		List<Integer> res = new ArrayList<Integer>();
+		if (lineupsActuales > lineupsAntiguos) {
+			res.add(1);
+			res.add(lineupsActuales - lineupsAntiguos);
+		} else if (lineupsActuales < lineupsAntiguos) {
+			res.add(2);
+			res.add(lineupsAntiguos - lineupsActuales);
+		} else {
+			res.add(0);
+			res.add(0);
+		}
+		
+		res.add(lineupsActuales);
+		return res;
 	}
 }

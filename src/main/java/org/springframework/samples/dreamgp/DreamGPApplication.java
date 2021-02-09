@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.samples.dreamgp.model.GranPremio;
+import org.springframework.samples.dreamgp.service.LineupService;
 import org.springframework.samples.dreamgp.service.PoblarBaseDeDatosService;
 import org.springframework.samples.dreamgp.service.TablaConsultasService;
 import org.springframework.samples.dreamgp.service.TeamService;
@@ -30,6 +31,10 @@ public class DreamGPApplication {
 		@Autowired
 		private PoblarBaseDeDatosService PBDService;
 		
+		@Autowired
+		private LineupService lineupService;
+		
+		Integer lineupsAntiguos;
 		Integer equiposAntiguos;
 
 		public static void main(String[] args) {
@@ -62,6 +67,30 @@ public class DreamGPApplication {
 			
 	    }
 		
+		@Scheduled(cron = "0 00 00 ? * 7")
+		public void bloquearLineups() throws ParseException {
+				List<GranPremio> gps = this.PBDService.findAllActualYear(2019);
+				Integer gpsCompleted = this.TCservice.getTabla().get().getRacesCompleted();
+				GranPremio gp = gps.get(gpsCompleted);
+				gp.setHasBeenRun(true);
+			}
+		
+		@Scheduled(cron = "0 00 00 ? * *") // Se ejecuta todos los dias a las 00:00
+		public void estadisticasLineups() throws Exception {
+			log.info("Calculando estadisticas de alineaciones");
+			
+			List<Integer> estadisticas = lineupService.calculaEstadisticas(lineupsAntiguos);
+			if (estadisticas.get(0) == 0) { // Codigo que indica que no ha cambiado el numero de lineups totales
+				log.info("El numero de alineaciones que hay en nuestra pagina no ha cambiado en todo el día.");
+			} else if(estadisticas.get(0) == 1) { // Codigo que indica que ha aumentado el numero de lineups totales
+				log.info("Hoy hay " + estadisticas.get(1) + " alineaciones mas que ayer en nuestra pagina.");
+			} else if(estadisticas.get(0)== 2) { // Codigo que indica que ha disminuido el numero de lineups totales
+				log.info("Hoy, el numero de alineaciones que hay en nuestra pagina ha bajado en " + estadisticas.get(1) + ".");
+			}
+			log.info("Estadisticas de alineaciones calculadas");
+			lineupsAntiguos =  estadisticas.get(2); // Lineups actuales
+	    }
+		
 		@Scheduled(cron = "0 00 12 ? * SUN")
 		public void VerUsoAplicación() throws Exception {
 			log.info("Calculando los nuevos equipos");
@@ -78,7 +107,6 @@ public class DreamGPApplication {
 			log.info("Estadisticas de equipos calculadas");
 
 			equiposAntiguos =  teamService.ComprobandoEquiposGuardados(equiposAntiguos).get(2);
-	       
 	    }
 
 }

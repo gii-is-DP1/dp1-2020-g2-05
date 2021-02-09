@@ -20,7 +20,6 @@ import org.springframework.samples.dreamgp.service.LeagueService;
 import org.springframework.samples.dreamgp.service.LineupService;
 import org.springframework.samples.dreamgp.service.RecruitService;
 import org.springframework.samples.dreamgp.service.TeamService;
-import org.springframework.samples.dreamgp.service.exceptions.DuplicatedRiderOnLineupException;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
@@ -103,7 +102,7 @@ public class LineupServiceTests {
 	}
 	
 	@Test
-	void shouldInsertLineup() throws DataAccessException, DuplicatedRiderOnLineupException {
+	void shouldInsertLineup() throws DataAccessException {
 		List<Lineup> allLineups = this.lineupService.findAll();
 
 		Lineup newLineup = new Lineup();
@@ -122,7 +121,7 @@ public class LineupServiceTests {
 	}
 	
 	@Test
-	void shouldDeleteLineup() throws DataAccessException, DuplicatedRiderOnLineupException {
+	void shouldDeleteLineup() throws DataAccessException {
 		List<Lineup> allLineups = this.lineupService.findAll();
 
 		Lineup newLineup = new Lineup();

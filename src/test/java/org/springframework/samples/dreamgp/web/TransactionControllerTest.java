@@ -27,6 +27,7 @@ import org.springframework.samples.dreamgp.model.Team;
 import org.springframework.samples.dreamgp.model.Transaction;
 import org.springframework.samples.dreamgp.model.User;
 import org.springframework.samples.dreamgp.service.AuthoritiesService;
+import org.springframework.samples.dreamgp.service.LineupService;
 import org.springframework.samples.dreamgp.service.PoblarBaseDeDatosService;
 import org.springframework.samples.dreamgp.service.TablaConsultasService;
 import org.springframework.samples.dreamgp.service.TeamService;
@@ -60,7 +61,8 @@ class TransactionControllerTest {
 	@MockBean
 	private PoblarBaseDeDatosService PBDService;
 	
-	
+	@MockBean
+	private LineupService lineupService;
 
 	@Autowired
 	private MockMvc mockMvc;
