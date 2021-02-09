@@ -17,9 +17,6 @@ import org.springframework.samples.dreamgp.model.Offer;
 import org.springframework.samples.dreamgp.model.Recruit;
 import org.springframework.samples.dreamgp.model.Status;
 import org.springframework.samples.dreamgp.model.Team;
-import org.springframework.samples.dreamgp.service.OfferService;
-import org.springframework.samples.dreamgp.service.RecruitService;
-import org.springframework.samples.dreamgp.service.TeamService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -55,7 +52,7 @@ class OfferServiceTests {
 	@Test
 	void shouldFindOffersByLeague() {
 		Collection<Offer> offers = offerService.findOffersByLeague(2);
-		assertThat(offers.size()).isEqualTo(1);
+		assertThat(offers.size()).isEqualTo(28);
 		
 		Collection<Offer> offersFail = offerService.findOffersByLeague(0);
 		assertThat(offersFail).isEmpty();
@@ -77,7 +74,7 @@ class OfferServiceTests {
 		
 		offerService.putOnSale(recruit, 300);
 		
-		Offer offer = offerService.findOfferById(2).get();// La nueva oferta creada
+		Offer offer = offerService.findOfferById(89).get();// La nueva oferta creada
 		assertThat(offer.getRecruit()).isEqualTo(recruit);
 		assertThat(offer.getPrice()).isEqualTo(300);
 		assertThat(offer.getStatus()).isEqualTo(Status.Outstanding);
@@ -130,17 +127,4 @@ class OfferServiceTests {
 		assertThat(offer.getTeam().getName()).isEqualTo(team.getName());
 	}
 	
-	@Test
-	@Transactional
-	void shouldDeleteOffer() {
-		Integer initialOffersNum =  offerService.findAllOffers().size();
-		Offer offer = offerService.findOfferById(1).get();
-		
-		offerService.deleteOffer(offer);
-		
-		Integer actualOffersNum =  offerService.findAllOffers().size();
-		assertThat(actualOffersNum).isEqualTo(initialOffersNum - 1);
-		Optional<Offer> offerFail = offerService.findOfferById(1);
-		assertThat(offerFail).isNotPresent();
-	}
 }
