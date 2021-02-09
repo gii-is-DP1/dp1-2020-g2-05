@@ -31,66 +31,45 @@ import org.springframework.samples.dreamgp.service.exceptions.ReceiveEqualSendMe
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Mostly used as a facade for all Petclinic controllers Also a placeholder
- * for @Transactional and @Cacheable annotations
- *
- * @author Michael Isvy
- */
 @Service
 public class MessageService {
 
 	private MessageRepository messageRepository;
 
 
-	
 	@Autowired
 	public MessageService(MessageRepository messageRepository) {
-	
 		this.messageRepository = messageRepository;
-	
 	}
-
-
-
-
 
 	@Transactional
 	public int messageCount() {
 		return (int) messageRepository.count();
 	}
-	
+
 	@Transactional
 	public List<Message> findAll(){
-		
+
 		List<Message> result = new ArrayList<Message>();
 		messageRepository.findAll().forEach(result::add);
-	    return result;
-	    
-		
+		return result;
 	}
-	
+
 	@Transactional
 	public List<Message> findAllUsernameReceive(String usernamereceive){
 		return messageRepository.findByUsernameReceive(usernamereceive);
 	}
-	
+
 	@Transactional
 	public Iterable<Message> findAllUsernameSend(String usernamesend){
 		return messageRepository.findByUsernameSend(usernamesend);
 	}
-	
-	
-
 
 	public void delete(Message messageId) {
 		messageRepository.delete(messageId);
-		
 	}	
-	
-	
 
-    @Transactional
+	@Transactional
 	public Optional<Message> findMessageById(int messageId) {
 		return messageRepository.findById(messageId);
 	}
@@ -104,14 +83,11 @@ public class MessageService {
 
 		}else if((message.getUsernamereceive()==null  )|| message.getUsernamesend()==null){
 			throw new EmptyUserMessageException("El usuario que envia o recibe no puede ser null");
-
 		}
 		messageRepository.save(message);		
 	}		
 
-
-
-	}
+}
 
 
 

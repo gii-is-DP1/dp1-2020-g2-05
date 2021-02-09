@@ -25,7 +25,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.dreamgp.model.Authorities;
 import org.springframework.samples.dreamgp.model.User;
 import org.springframework.samples.dreamgp.repository.AuthoritiesRepository;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

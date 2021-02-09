@@ -240,12 +240,12 @@ public class LeagueServiceTest {
 	 
 	 @Test
 		void shouldFindAuthorities() {
-		 	String aut = this.leagueService.findAuthoritiesByUsername("antcammar4");
+		 	String aut = this.userService.findAuthoritiesByUsername("antcammar4");
 			assertThat(aut).isEqualTo("admin");
 		}
 	 @Test
 		void shouldNotFindAuthorities() {
-		 	String aut = this.leagueService.findAuthoritiesByUsername("notFoundUserqwertyuioawsdeftg");
+		 	String aut = this.userService.findAuthoritiesByUsername("notFoundUserqwertyuioawsdeftg");
 			assertThat(aut).isEqualTo(null);
 		}
 	 @Test

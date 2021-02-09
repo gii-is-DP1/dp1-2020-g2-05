@@ -21,7 +21,6 @@ import org.springframework.samples.dreamgp.service.LeagueService;
 import org.springframework.samples.dreamgp.service.TablaConsultasService;
 import org.springframework.samples.dreamgp.service.TeamService;
 import org.springframework.samples.dreamgp.service.UserService;
-import org.springframework.samples.dreamgp.service.exceptions.JoinWithoutCodeException;
 import org.springframework.samples.dreamgp.service.exceptions.LeagueHasMaximumNumberOfTeamsException;
 import org.springframework.samples.dreamgp.service.exceptions.MaximumNumberOfLeaguesPerUserException;
 import org.springframework.samples.dreamgp.service.exceptions.NoLeagueFoundException;

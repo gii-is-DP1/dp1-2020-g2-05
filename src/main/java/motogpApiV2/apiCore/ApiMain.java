@@ -1,4 +1,4 @@
-package motogpApiV2.testing;
+package motogpApiV2.apiCore;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -11,11 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.dreamgp.model.Category;
 import org.springframework.samples.dreamgp.model.GranPremio;
-import org.springframework.samples.dreamgp.service.PilotService;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -31,18 +29,18 @@ import motogpApiV2.races.Races;
 import motogpApiV2.races.Schedule;
 import motogpApiV2.results.Competitor;
 import motogpApiV2.results.Results;
-import motogpApiV2.stage.Stage;
 import motogpApiV2.stage.Season;
+import motogpApiV2.stage.Stage;
 @Slf4j
 
-public class testing {
+public class ApiMain {
 	@Autowired
 	private static RestTemplate restTemplate = new RestTemplate();
 	
 	private static String API_KEY;
-	private static final String API_KEY_GP = "xvfu4d4a2vvyff8xgn5y7pse";
-	private static final String API_KEY_2 = "9bu6jvb3n97egsjb9ytt6h4p";
-	private static final String API_KEY_3 = "n2crg9kp8d7jmhdmt2bvsa4g";
+	private static final String API_KEY_GP = "pfhv578e2d6bcyvfrsu6c7fn"; // Otras keys por si se acaban: , xvfu4d4a2vvyff8xgn5y7pse
+	private static final String API_KEY_2 = "daq726c2d62r948rm76tk2vd"; // 9bu6jvb3n97egsjb9ytt6h4p
+	private static final String API_KEY_3 = "sqhb8g4feemy8eregn7ss7y7"; // n2crg9kp8d7jmhdmt2bvsa4g
 	
 	private static final String rootUrl = "https://api.sportradar.us/motogp/trial/v2/en/sport_events/";
 	
@@ -135,11 +133,8 @@ public class testing {
 			throws JsonMappingException, JsonProcessingException, IOException, InterruptedException {
 		TimeUnit.SECONDS.sleep(1);
 		
-		String idToFind = "";
 		
 		String urlToGetRequestApi = rootUrl + scheduleId + urlToObtainResults + API_KEY;
-		
-//		Results results = new ObjectMapper().readValue(getJsonFromUrl(urlToGetRequestApi), Results.class);
 		Results results = restTemplate.getForObject(urlToGetRequestApi, Results.class);
 
 		return results.getStage().getCompetitors();

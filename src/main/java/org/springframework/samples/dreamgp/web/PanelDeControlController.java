@@ -16,11 +16,11 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import lombok.extern.slf4j.Slf4j;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-import motogpApiV2.testing.testing;
+import lombok.extern.slf4j.Slf4j;
+import motogpApiV2.apiCore.ApiMain;
 
 @Controller
 @Slf4j
@@ -28,19 +28,14 @@ public class PanelDeControlController {
 	
 	GranPremioService GPService;
 	LeagueService leagueService;
-	UserService userService;
 	TablaConsultasService TCService;
 	
 	@Autowired
-	public PanelDeControlController(GranPremioService GPService, LeagueService leagueService, UserService userService, 
-			TablaConsultasService TCService) {
+	public PanelDeControlController(GranPremioService GPService, LeagueService leagueService, TablaConsultasService TCService) {
 		this.GPService = GPService;
 		this.leagueService = leagueService;
-		this.userService = userService;
 		this.TCService = TCService;
 	}
-
-
 	
 	@GetMapping(path="/controlPanelSP")
 	public String muestraPanelSinParams(ModelMap model) throws ParseException {	
@@ -83,7 +78,7 @@ public class PanelDeControlController {
 	@GetMapping(path={"/poblarConCalendario"})
 	public String muestraPanel(ModelMap model) throws ParseException, JsonMappingException, JsonProcessingException, IOException, InterruptedException {	
 
-		List<GranPremio> gp =testing.obtainScheduleForAGivenYearAndGivenCategory(2019, Category.MOTOGP);
+		List<GranPremio> gp =ApiMain.obtainScheduleForAGivenYearAndGivenCategory(2019, Category.MOTOGP);
 		for(int i=0;i<gp.size();i++) {
 
 			this.GPService.saveGP(gp.get(i));

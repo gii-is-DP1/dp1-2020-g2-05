@@ -165,7 +165,7 @@ public class LeagueControllerTest {
     	@Test
     	void testShowLeagues() throws Exception {
     		given(leagueService.findAll()).willReturn(lista);
-    		given(this.leagueService.findAuthoritiesByUsername(user.getUsername())).willReturn("admin");
+    		given(this.userService.findAuthoritiesByUsername(user.getUsername())).willReturn("admin");
     		given( this.TCService.getTabla()).willReturn(Optional.of(this.TCConsulta));
 
     		mockMvc.perform(get("/leagues").flashAttr("categoriaActual", Category.MOTO3)).andExpect(status().isOk())
@@ -179,7 +179,7 @@ public class LeagueControllerTest {
     	@Test
     	void testLimitedShowLeagues() throws Exception {
     		given(leagueService.findAll()).willReturn(lista);
-    		given(this.leagueService.findAuthoritiesByUsername(user.getUsername())).willReturn("user");
+    		given(this.userService.findAuthoritiesByUsername(user.getUsername())).willReturn("user");
     		given(this.TCService.getTabla()).willReturn(Optional.of(TCConsulta));
     		
     		mockMvc.perform(get("/leagues")).andExpect(status().isOk())
