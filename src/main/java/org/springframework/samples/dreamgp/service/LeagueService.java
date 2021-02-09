@@ -14,6 +14,7 @@ import org.springframework.samples.dreamgp.model.Category;
 import org.springframework.samples.dreamgp.model.League;
 import org.springframework.samples.dreamgp.model.Team;
 import org.springframework.samples.dreamgp.repository.LeagueRepository;
+import org.springframework.samples.dreamgp.repository.UserRepository;
 import org.springframework.samples.dreamgp.service.exceptions.duplicatedLeagueNameException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,17 +26,14 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 public class LeagueService {
+	
 	private LeagueRepository leagueRepository;
+	private UserRepository userRepository;
 
 	@Autowired
 	public LeagueService(LeagueRepository leagueRepository) {
 		this.leagueRepository = leagueRepository;
 	}
-
-//	@Autowired
-//	public TeamService(TeamRepository teamRepository) {
-//		this.teamRepository = teamRepository;
-//	}
 
 	@Transactional
 	public Boolean saveLeague(League ligaAGuardar) throws DataAccessException, duplicatedLeagueNameException {
@@ -62,15 +60,6 @@ public class LeagueService {
 		return leagueRepository.findByLeagueCode(leagueCode);
 	}
 
-//	public Optional<User> findUserByUsername(String username) throws DataAccessException {
-//		return leagueRepository.findUserByUsername(username);
-//	}
-
-	@Transactional(readOnly = true)
-	public String findAuthoritiesByUsername(String username) throws DataAccessException {
-		return leagueRepository.findAuthoritiesByUsername(username);
-	}
-
 	@Transactional(readOnly = true)
 	public Integer findLeaguesByUsername(String username) throws DataAccessException {
 		return leagueRepository.findLeaguesByUsername(username);
@@ -93,12 +82,6 @@ public class LeagueService {
 		}
 		return sb;
 	}
-
-//	public <E> List<E> convertirIterableLista(Iterable<E> leagues) {
-//		List<E> result = new ArrayList<E>();
-//		leagues.forEach(result::add);
-//		return result;
-//	}
 
 	@Transactional
 	public boolean comprobarSiHayLigasVacias(List<League> todasLasLigas) {

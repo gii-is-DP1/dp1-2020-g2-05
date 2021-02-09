@@ -1,37 +1,23 @@
 package org.springframework.samples.dreamgp.service;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.sql.Date;
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.Month;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.samples.dreamgp.model.BDCarrera;
 import org.springframework.samples.dreamgp.model.Category;
-import org.springframework.samples.dreamgp.model.GranPremio;
 import org.springframework.samples.dreamgp.model.League;
 import org.springframework.samples.dreamgp.model.TablaConsultas;
 import org.springframework.samples.dreamgp.model.Team;
-import org.springframework.samples.dreamgp.repository.GranPremioRepository;
 import org.springframework.samples.dreamgp.repository.LeagueRepository;
 import org.springframework.samples.dreamgp.repository.TablaConsultasRepository;
 import org.springframework.samples.dreamgp.repository.TeamRepository;
-import org.springframework.samples.dreamgp.web.PoblarBaseDeDatosController;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.ModelMap;
 
 import lombok.extern.slf4j.Slf4j;
-import motogpApiV2.RaceCode;
-import motogpApiV2.Session;
 
 @Slf4j
 @Service

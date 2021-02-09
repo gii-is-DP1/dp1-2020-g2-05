@@ -12,15 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface LeagueRepository extends Repository<League, Integer>{
 	
-	@Query("SELECT user FROM User user WHERE user.username LIKE :username") //METER EN USER REPOSITORY
-	public Optional<User> findUserByUsername(@Param("username") String username);
-	
 	@Query("SELECT COUNT(t)  FROM Team t WHERE t.user.username like :username") 
 	public Integer findLeaguesByUsername(@Param("username") String username);
-	
-	@Query("SELECT aut.authority FROM Authorities aut WHERE aut.user.username LIKE :username") //METER EN USER REPOSITORY
-	public String findAuthoritiesByUsername(@Param("username") String username);
-	
+
 	@Transactional
 	@Modifying
 	@Query("UPDATE League l SET l.name = :name WHERE l.id = :id")	

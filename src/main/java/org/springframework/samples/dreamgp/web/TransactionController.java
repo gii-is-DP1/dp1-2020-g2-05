@@ -25,8 +25,7 @@ public class TransactionController {
 	private UserService userService;
 
 	@Autowired
-	public TransactionController(TransactionService transactionService, TeamService teamService,
-			UserService userService) {
+	public TransactionController(TransactionService transactionService, TeamService teamService, UserService userService) {
 		super();
 		this.transactionService = transactionService;
 		this.teamService = teamService;
@@ -38,7 +37,8 @@ public class TransactionController {
 		ModelAndView mav = new ModelAndView();
 		User user = this.userService.getUserSession();
 		Optional<Team> optTeam = teamService.findTeamById(teamID);
-		if (optTeam.isPresent() && user.equals(optTeam.get().getUser())) {
+		Boolean isAdmin = this.userService.findAuthoritiesByUsername(user.getUsername()).equals("admin");
+		if (optTeam.isPresent() && user.equals(optTeam.get().getUser()) || isAdmin) {
 			Team team = optTeam.get();
 			mav.setViewName("leagues/transactionsList");
 			List<Transaction> transactions = this.transactionService.findTransactionsByTeamId(teamID).stream()
