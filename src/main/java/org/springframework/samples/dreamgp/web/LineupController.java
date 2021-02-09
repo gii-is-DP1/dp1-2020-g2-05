@@ -20,7 +20,6 @@ import org.springframework.samples.dreamgp.service.RecruitService;
 import org.springframework.samples.dreamgp.service.TablaConsultasService;
 import org.springframework.samples.dreamgp.service.TeamService;
 import org.springframework.samples.dreamgp.service.UserService;
-import org.springframework.samples.dreamgp.service.exceptions.DuplicatedRiderOnLineupException;
 import org.springframework.samples.dreamgp.service.exceptions.NotYourTeamException;
 import org.springframework.samples.dreamgp.web.validator.LineupValidator;
 import org.springframework.stereotype.Controller;
@@ -152,18 +151,7 @@ public class LineupController {
 			model.put("lineup", lineup);
 			return "thymeleaf/lineupsEdit";
 		} else {
-			try {
 				this.lineupService.saveLineup(lineup);
-			}  catch (DuplicatedRiderOnLineupException e) {
-				log.warn("Fallo al intentar crear un nuevo lineup: Se ha seleccionado dos veces a :" + lineup.getRecruit1());
-				result.rejectValue("recruit1", "duplicatedRider", "selected the same rider twice");
-				result.rejectValue("recruit2", "duplicatedRider", "selected the same rider twice");
-				redirectAttributes.addFlashAttribute("message", result.getAllErrors());
-				GranPremio currentGP = this.granPremioService.findGPById(currentGPId).get();
-				lineup.setGp(currentGP);
-				model.put("lineup", lineup);
-				return "thymeleaf/lineupsEdit";
-			}
 			log.info("Lineup succesfully created!: " + lineup);
 			return "redirect:/leagues/{leagueId}/teams/{teamId}/details";
 		}
@@ -232,18 +220,7 @@ public class LineupController {
 				redirectAttributes.addFlashAttribute("message", "No se puede modificar una alineacion para un GP que ya se ha disputado!");
 				return "redirect:/leagues/{leagueId}/teams/{teamId}/details";
 			}
-			try {
 				this.lineupService.saveLineup(lineupToUpdate);
-			}  catch (DuplicatedRiderOnLineupException e) {
-				log.warn("Fallo al intentar crear un nuevo lineup: Se ha seleccionado dos veces a :" + lineupToUpdate.getRecruit1());
-				result.rejectValue("recruit1", "duplicatedRider", "selected the same rider twice");
-				result.rejectValue("recruit2", "duplicatedRider", "selected the same rider twice");
-				redirectAttributes.addFlashAttribute("message", result.getAllErrors());
-				GranPremio currentGP = this.lineupService.findLineup(lineup.getId()).get().getGp();
-				lineup.setGp(currentGP);
-				model.put("lineup", lineup);
-				return "thymeleaf/lineupsEdit";
-			}
 			log.info("Saving edited lineup: " + lineupToUpdate);
 			redirectAttributes.addFlashAttribute("message", "Lineup successfully saved!");
 			return "redirect:/leagues/{leagueId}/teams/{teamId}/details";

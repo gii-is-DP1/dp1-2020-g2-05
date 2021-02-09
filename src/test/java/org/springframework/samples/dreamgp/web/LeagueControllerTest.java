@@ -41,6 +41,7 @@ import org.springframework.samples.dreamgp.model.Team;
 import org.springframework.samples.dreamgp.model.User;
 import org.springframework.samples.dreamgp.service.AuthoritiesService;
 import org.springframework.samples.dreamgp.service.LeagueService;
+import org.springframework.samples.dreamgp.service.LineupService;
 import org.springframework.samples.dreamgp.service.PoblarBaseDeDatosService;
 import org.springframework.samples.dreamgp.service.TablaConsultasService;
 import org.springframework.samples.dreamgp.service.TeamService;
@@ -94,9 +95,11 @@ public class LeagueControllerTest {
     	@MockBean
     	private AuthoritiesService authoritiesService;
     	
-  
     	@MockBean
     	private PoblarBaseDeDatosService PBDService;
+    	
+    	@MockBean
+    	private LineupService lineupService;
     
     	@Autowired
     	private MockMvc mockMvc;

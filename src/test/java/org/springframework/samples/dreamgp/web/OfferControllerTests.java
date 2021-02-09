@@ -33,6 +33,7 @@ import org.springframework.samples.dreamgp.model.Status;
 import org.springframework.samples.dreamgp.model.Team;
 import org.springframework.samples.dreamgp.model.User;
 import org.springframework.samples.dreamgp.service.AuthoritiesService;
+import org.springframework.samples.dreamgp.service.LineupService;
 import org.springframework.samples.dreamgp.service.OfferService;
 import org.springframework.samples.dreamgp.service.PoblarBaseDeDatosService;
 import org.springframework.samples.dreamgp.service.RecruitService;
@@ -81,6 +82,9 @@ class OfferControllerTests {
 	
 	@MockBean
 	private PoblarBaseDeDatosService PBDService;
+	
+	@MockBean
+	private LineupService lineupService;
 
 	// @MockBean
 	// private LeagueService leagueService;
