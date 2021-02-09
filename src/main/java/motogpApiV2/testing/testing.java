@@ -26,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 import motogpApiV2.RaceCode;
 import motogpApiV2.GranPremioDetails.GranPremioDetails;
 import motogpApiV2.GranPremioDetails.Venue;
+import motogpApiV2.Qualifying.Qualifying;
 import motogpApiV2.races.Races;
 import motogpApiV2.races.Schedule;
 import motogpApiV2.results.Competitor;
@@ -223,6 +224,61 @@ public class testing {
 		return detailsOfGP_i.getStage().getVenue();
 		
 	}		
+	
+	
+	public static String obteinIdGridFromGp(String id) throws JsonMappingException, JsonProcessingException, IOException, InterruptedException {
+		API_KEY=API_KEY_3;
+
+		
+			String idToObtainGPDetails = id;
+			String uri =rootUrl+idToObtainGPDetails+urlToObtainResults+API_KEY;
+			GranPremioDetails detailsOfGP_i = new ObjectMapper().readValue(getJsonFromUrl(uri), GranPremioDetails.class);	
+
+			String idToReturn="";
+			
+			
+				System.out.println(detailsOfGP_i.getStage().getStages().get(4).getDescription());
+					idToReturn=  detailsOfGP_i.getStage().getStages().get(4).getId();
+
+				
+			
+				 
+			return idToReturn;
+		
+	}		
+	
+	public static String obtainIdOfQualifying(String idOfGpToObtainGrid) throws JsonMappingException, JsonProcessingException, IOException{
+		API_KEY=API_KEY_3;
+		String uri =rootUrl+idOfGpToObtainGrid+urlToObtainResults+API_KEY;
+
+//		String urlToGetRequestApi = rootUrl + idOfGpToObtainGrid + urlToObtainResults + API_KEY;
+		GranPremioDetails detailsOfGP_i = new ObjectMapper().readValue(getJsonFromUrl(uri), GranPremioDetails.class);	
+
+		
+		String idToReturn="";
+		
+		for(int i=0;i<10;i++) {
+			if(detailsOfGP_i.getStage().getDescription().equals("Qualifying")) {
+				idToReturn=  detailsOfGP_i.getStage().getId();
+
+			}
+		}
+			
+		return idToReturn;
+	}
+	
+	public static List<motogpApiV2.Qualifying.Competitor> obtainGridForAGivenYearAndRacecode(String idOfGpToObtainGrid) throws InterruptedException, JsonMappingException, JsonProcessingException, IOException{
+		API_KEY=API_KEY_3;
+		String idToQualifying= obteinIdGridFromGp(idOfGpToObtainGrid);
+		TimeUnit.SECONDS.sleep(1);
+
+		String urlToGetRequestApi = rootUrl + idToQualifying + urlToObtainResults + API_KEY;
+		Qualifying qualification = new ObjectMapper().readValue(getJsonFromUrl(urlToGetRequestApi), Qualifying.class);	
+		TimeUnit.SECONDS.sleep(1);
+
+		return qualification.getStage().getCompetitors();
+		
+	}
 	
 	public static String raceCodeToStringParser(RaceCode raceCode) {
 		switch (raceCode) {
