@@ -57,9 +57,4 @@ public class OfferService {
 	public void saveOffer(Offer offer) throws DataAccessException {
 		offerRepository.save(offer);
 	}
-
-	@Transactional
-	public void deleteOffer(Offer offer) throws DataAccessException {
-		offerRepository.delete(offer);
-	}
 }

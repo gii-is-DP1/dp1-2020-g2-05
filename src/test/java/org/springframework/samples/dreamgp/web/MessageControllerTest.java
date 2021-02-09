@@ -31,6 +31,7 @@ import org.springframework.samples.dreamgp.service.AuthoritiesService;
 import org.springframework.samples.dreamgp.service.MessageService;
 import org.springframework.samples.dreamgp.service.PoblarBaseDeDatosService;
 import org.springframework.samples.dreamgp.service.TablaConsultasService;
+import org.springframework.samples.dreamgp.service.TeamService;
 import org.springframework.samples.dreamgp.service.TransactionService;
 import org.springframework.samples.dreamgp.service.UserService;
 import org.springframework.samples.dreamgp.service.exceptions.EmptyAsuntoCuerpoMessageException;
@@ -66,6 +67,9 @@ public class MessageControllerTest {
 	
 	@MockBean
 	private AuthoritiesService authoritiesService;
+	
+	@MockBean
+	private TeamService teamService;
 	
 	@Autowired
 	private MockMvc mockMvc;
