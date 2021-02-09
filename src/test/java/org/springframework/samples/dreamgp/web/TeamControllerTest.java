@@ -54,7 +54,6 @@ import org.springframework.samples.dreamgp.service.exceptions.UserEmailEmptyOrNu
 import org.springframework.samples.dreamgp.service.exceptions.UserPasswordEmptyOrNullException;
 import org.springframework.samples.dreamgp.service.exceptions.UserUsernameEmptyOrNullException;
 import org.springframework.samples.dreamgp.service.exceptions.duplicatedLeagueNameException;
-import org.springframework.samples.dreamgp.web.TeamController;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -490,7 +489,7 @@ void testPutOnSaleSuccess() throws Exception {
 given(this.recruitService.getRecruitsByTeam(team1.getId())).willReturn(listRecruits2);
 given(this.teamService.findTeamById(TEST_TEAM1_ID)).willReturn(Optional.of(team1));
 given(this.recruitService.findRecruitById(2)).willReturn(Optional.of(recruit2));
-given(this.userService.getUserSession()).willReturn(user);
+given(this.userService.getUserSession()).willReturn(user1);
 
 mockMvc.perform(post("/leagues/{leagueId}/teams/{teamId}/details/{recruitId}", TEST_LEAGUE_ID, TEST_TEAM1_ID, 2)
 		.with(csrf())

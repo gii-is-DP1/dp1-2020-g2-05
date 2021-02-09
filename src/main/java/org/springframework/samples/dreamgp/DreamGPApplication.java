@@ -1,7 +1,6 @@
 package org.springframework.samples.dreamgp;
 
 import java.text.ParseException;
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,22 +90,19 @@ public class DreamGPApplication {
 			lineupsAntiguos =  estadisticas.get(2); // Lineups actuales
 	    }
 		
-		@Scheduled(cron = "0 00 12 ? * SUN")
+		@Scheduled(cron = "0 00 00 ? * MON")
 		public void VerUsoAplicación() throws Exception {
 			log.info("Calculando los nuevos equipos");
-			System.out.println("Calculando estadísticas de nuevos equipos");
+			log.info("Calculando estadísticas de nuevos equipos");
+		
+			String s = "" ;
+
+			Integer result = teamService.ComprobandoEquiposGuardados();
 			
-			List<Integer> result = teamService.ComprobandoEquiposGuardados(equiposAntiguos);
-			if(result.get(0) == 0) {
-				System.out.println("El número de equipos que participan en nuestra página web no ha cambiado esta semana");
-			}else if(result.get(0) == 1) {
-				System.out.println("¡Esta semana se han inscrito " + result.get(1) + " equipos nuevos!");
-			}else if(result.get(0)== 2) {
-				System.out.println("Esta semana se han dado de baja" + result.get(1) + " equipos");
-			}
+			s = s + "El sistema tiene almacenados esta semana" + result + " equipos" ;
+			
+			System.out.println(s);
+			
 			log.info("Estadisticas de equipos calculadas");
-
-			equiposAntiguos =  teamService.ComprobandoEquiposGuardados(equiposAntiguos).get(2);
-	    }
-
+		}
 }

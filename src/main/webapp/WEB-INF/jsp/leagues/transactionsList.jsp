@@ -5,7 +5,7 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
 
 
-<petclinic:layout pageName="transaction">
+<petclinic:layout pageName="transactionsList" userTeam="${team.id}" userTeamName="${team.name}" userLeague="${team.league.id}" userLeagueName="${team.league.name}" userMoney="${team.money}">
 	<h2>
 		Current money:
 		<c:out value="${money}" />

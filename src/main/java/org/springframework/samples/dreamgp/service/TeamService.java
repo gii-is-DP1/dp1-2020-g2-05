@@ -1,5 +1,3 @@
-
-
 package org.springframework.samples.dreamgp.service;
 
 import java.security.SecureRandom;
@@ -38,7 +36,6 @@ public class TeamService {
 	private TablaConsultasService TCService;
 	private OfferService offerService;
 	private TransactionService transactionService;
-	
 	
 
 	@Autowired
@@ -191,11 +188,7 @@ public class TeamService {
 		}
 	}
 	
-	public List<Integer> ComprobandoEquiposGuardados(Integer equiposAntiguos) throws Exception {
-		if(equiposAntiguos == null) {
-			equiposAntiguos = 0;
-		}
-		List<Integer> result = new ArrayList<>();
+	public Integer ComprobandoEquiposGuardados() throws Exception {
 		
 		Integer equiposActuales;
 		List<Team>  equipos = new ArrayList<>();
@@ -207,24 +200,9 @@ public class TeamService {
 		}
 		
 		equiposActuales = equipos.size();
-		
-		if(equiposAntiguos > equiposActuales) {
-			result.add(2);
-			result.add(equiposAntiguos-equiposActuales);
 
-			
-		}else if(equiposAntiguos < equiposActuales) {
-			result.add(1);
-			result.add(equiposActuales-equiposAntiguos);
-			
-		}else {
-			result.add(0);
-			result.add(0);
-		}
 		
-		result.add(equiposActuales);
-		
-		return result;
+		return equiposActuales;
 	}
 
 }
