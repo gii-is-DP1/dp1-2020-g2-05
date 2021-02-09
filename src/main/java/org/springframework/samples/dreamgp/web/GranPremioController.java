@@ -67,13 +67,14 @@ public class GranPremioController {
 			} catch (Exception e) {
 				redirectAttributes.addFlashAttribute("message", "Sorry, records are unavailable for this GP!");
 				log.warn("Sorry, records are unavailable for this GP!");
+				
 			}
 			this.GPService.saveGP(granpremio);
 			log.info("GP succesfully created!: " + granpremio);
 			model.addAttribute("message","Gran Premio loaded succesfully!");
 		}
 		
-		return "redirect:/controlPanel";
+		return "redirect:/controlPanelSP";
 	}
 	
 	@GetMapping(path = "/granPremios/{id}/delete")
