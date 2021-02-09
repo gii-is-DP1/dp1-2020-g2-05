@@ -49,7 +49,6 @@ import org.springframework.samples.dreamgp.service.TablaConsultasService;
 import org.springframework.samples.dreamgp.service.TeamService;
 import org.springframework.samples.dreamgp.service.TransactionService;
 import org.springframework.samples.dreamgp.service.UserService;
-import org.springframework.samples.dreamgp.service.exceptions.DuplicatedRiderOnLineupException;
 import org.springframework.samples.dreamgp.service.exceptions.NotAllowedNumberOfRecruitsException;
 import org.springframework.samples.dreamgp.service.exceptions.UserEmailEmptyOrNullException;
 import org.springframework.samples.dreamgp.service.exceptions.UserPasswordEmptyOrNullException;
@@ -132,7 +131,7 @@ private List<Recruit> listaRecruitsNoEnVenta = new ArrayList<Recruit>();
 private List<Recruit> listaRecruitsEnVenta = new ArrayList<Recruit>();
 
 @BeforeEach
-void setup() throws DataAccessException, duplicatedLeagueNameException, DuplicatedRiderOnLineupException, UserEmailEmptyOrNullException, UserPasswordEmptyOrNullException, UserUsernameEmptyOrNullException {
+void setup() throws DataAccessException, duplicatedLeagueNameException, UserEmailEmptyOrNullException, UserPasswordEmptyOrNullException, UserUsernameEmptyOrNullException {
 
 
 user1.setUsername("miguel");

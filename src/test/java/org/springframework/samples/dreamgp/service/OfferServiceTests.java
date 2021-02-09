@@ -52,7 +52,7 @@ class OfferServiceTests {
 	@Test
 	void shouldFindOffersByLeague() {
 		Collection<Offer> offers = offerService.findOffersByLeague(2);
-		assertThat(offers.size()).isEqualTo(28);
+		assertThat(offers.size()).isEqualTo(27);
 		
 		Collection<Offer> offersFail = offerService.findOffersByLeague(0);
 		assertThat(offersFail).isEmpty();

@@ -50,7 +50,6 @@ import org.springframework.samples.dreamgp.service.TablaConsultasService;
 import org.springframework.samples.dreamgp.service.TeamService;
 import org.springframework.samples.dreamgp.service.TransactionService;
 import org.springframework.samples.dreamgp.service.UserService;
-import org.springframework.samples.dreamgp.service.exceptions.DuplicatedRiderOnLineupException;
 import org.springframework.samples.dreamgp.service.exceptions.UserEmailEmptyOrNullException;
 import org.springframework.samples.dreamgp.service.exceptions.UserPasswordEmptyOrNullException;
 import org.springframework.samples.dreamgp.service.exceptions.UserUsernameEmptyOrNullException;
@@ -111,7 +110,7 @@ public class LineupControllerTest {
 	Recruit recruit2 = new Recruit();
 
 	@BeforeEach 
-	void setup() throws DataAccessException, DuplicatedRiderOnLineupException, UserEmailEmptyOrNullException, UserPasswordEmptyOrNullException, UserUsernameEmptyOrNullException {
+	void setup() throws DataAccessException, UserEmailEmptyOrNullException, UserPasswordEmptyOrNullException, UserUsernameEmptyOrNullException {
 
 		TCConsulta.setCurrentCategory(Category.MOTO3);
 		TCConsulta.setRacesCompleted(0);
@@ -169,11 +168,12 @@ public class LineupControllerTest {
 		recruit1.setId(1);
 		recruit1.setPilot(pilot1);
 		recruit1.setTeam(team);
+		recruit1.setForSale(false);
 
 		recruit2.setId(2);
 		recruit2.setPilot(pilot2);
 		recruit2.setTeam(team);
-
+		recruit2.setForSale(false);
 
 		gp.setId(1);
 		gp.setCalendar(true);
@@ -301,6 +301,8 @@ public class LineupControllerTest {
 				.param("gp.id", lineup.getGp().getId().toString())
 				.param("recruit1.id", lineup.getRecruit1().getId().toString()) 
 				.param("recruit2.id", lineup.getRecruit2().getId().toString()) 
+				.param("recruit1.forSale", Boolean.FALSE.toString())
+				.param("recruit2.forSale", Boolean.FALSE.toString())
 				.flashAttr("recruitsSelection", listaPilotos)) 
 		.andExpect(status().is3xxRedirection())
 		.andExpect(view().name("redirect:/leagues/{leagueId}/teams/{teamId}/details"));
@@ -318,10 +320,11 @@ public class LineupControllerTest {
 				.param("id", "uno")
 				.param("category", "test_error_category")
 				.param("gp.id", "test_error_gp_id")
-				.param("recruit1.id", "test_error_string"))
+				.param("recruit1.id", "test_error_string")
+				.param("recruit1.forSale", Boolean.FALSE.toString()))
 		.andExpect(status().isOk())
 		.andExpect(model().attributeHasErrors("lineup"))
-		.andExpect(model().attributeErrorCount("lineup", 5))
+		.andExpect(model().attributeErrorCount("lineup", 6))
 		.andExpect(view().name("thymeleaf/lineupsEdit"));
 	}
 
@@ -417,6 +420,8 @@ public class LineupControllerTest {
 				.param("gp.site", lineup.getGp().getSite().toString())
 				.param("recruit1.id", lineup.getRecruit1().getId().toString()) 
 				.param("recruit2.id", lineup.getRecruit2().getId().toString())
+				.param("recruit1.forSale", Boolean.FALSE.toString())
+				.param("recruit2.forSale", Boolean.FALSE.toString())
 				.flashAttr("recruitsSelection", listaPilotos))
 		.andExpect(status().is3xxRedirection())
 		.andExpect(flash().attribute("message", is("Lineup successfully saved!")))
@@ -443,6 +448,8 @@ public class LineupControllerTest {
 				.param("gp.id", lineup.getGp().getId().toString())
 				.param("recruit1.id", lineup.getRecruit1().getId().toString()) 
 				.param("recruit2.id", lineup.getRecruit2().getId().toString())
+				.param("recruit1.forSale", Boolean.FALSE.toString())
+				.param("recruit2.forSale", Boolean.FALSE.toString())
 				.flashAttr("recruitsSelection", listaPilotos))
 		.andExpect(status().is3xxRedirection())
 		.andExpect(flash().attribute("message", is("No se puede modificar una alineacion para un GP que ya se ha disputado!")))
@@ -460,10 +467,11 @@ public class LineupControllerTest {
 				.param("id", "uno")
 				.param("category", "test_error_category")
 				.param("gp.id", "test_error_gp_id")
-				.param("recruit1.id", "test_error_string"))
+				.param("recruit1.id", "test_error_string")
+				.param("recruit1.forSale", Boolean.FALSE.toString()))
 		.andExpect(status().isOk())
 		.andExpect(model().attributeHasErrors("lineup"))
-		.andExpect(model().attributeErrorCount("lineup", 5))
+		.andExpect(model().attributeErrorCount("lineup", 6))
 		.andExpect(view().name("thymeleaf/lineupsEdit"));
 	}
 
