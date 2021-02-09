@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
-<%@ page import="org.springframework.samples.petclinic.model.Status"%>
+<%@ page import="org.springframework.samples.dreamgp.model.Status"%>
 <%@ taglib prefix="sec"	uri="http://www.springframework.org/security/tags"%>
 <petclinic:layout pageName="teamDetails" userTeam="${team.id}" userTeamName="${team.name}" userLeague="${team.league.id}" userLeagueName="${team.league.name}" userMoney="${team.money}">
 

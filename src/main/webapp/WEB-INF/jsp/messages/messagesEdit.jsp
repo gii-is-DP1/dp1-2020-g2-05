@@ -5,7 +5,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
-<%@ page import="org.springframework.samples.petclinic.model.User"%>
+<%@ page import="org.springframework.samples.dreamgp.model.User"%>
 
 <petclinic:layout pageName="messagese">
 	
