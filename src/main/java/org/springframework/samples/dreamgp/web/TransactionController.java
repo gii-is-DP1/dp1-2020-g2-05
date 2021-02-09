@@ -44,6 +44,7 @@ public class TransactionController {
 			List<Transaction> transactions = this.transactionService.findTransactionsByTeamId(teamID).stream()
 					.sorted(Comparator.reverseOrder()).collect(Collectors.toList());
 			Integer money = this.teamService.findTeamById(team.getId()).get().getMoney();
+			mav.addObject("team", team);
 			mav.addObject("transactions", transactions);
 			mav.addObject("money", money);
 		} else {

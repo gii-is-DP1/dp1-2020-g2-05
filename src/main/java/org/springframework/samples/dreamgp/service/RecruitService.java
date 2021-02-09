@@ -90,7 +90,7 @@ public class RecruitService {
 
 	@Transactional(rollbackFor = NotAllowedNumberOfRecruitsException.class)
 	public boolean putOnSale(Recruit recruit) throws DataAccessException, NotAllowedNumberOfRecruitsException {
-		// Gestión de la regla de negocio R6 que exige que el minimo número de pilotos
+		// Gestión de la regla de negocio R2 que exige que el minimo número de pilotos
 		// que un equipo debe tener en posesion es de dos. Por lo cual, al menos dos
 		// fichajes deben estar fuera del mercado
 		if (getRecruitsNotOnSaleByTeam(recruit.getTeam().getId()).size() == 2) {
@@ -111,7 +111,7 @@ public class RecruitService {
 	@Transactional(rollbackFor = NotAllowedNumberOfRecruitsException.class)
 	public Boolean purchaseRecruit(Recruit recruit, Team purchaserTeam)
 			throws DataAccessException, NotAllowedNumberOfRecruitsException {
-		// Gestión de la regla de negocio R7 que exige que el máximo número de pilotos
+		// Gestión de la regla de negocio R6 que exige que el máximo número de pilotos
 		// que un equipo debe tener en posesion es de cuatro. Por lo cual, al intentar
 		// realizar el traspaso de un quinto debe elevarse una excepción
 		if (this.getRecruitsByTeam(purchaserTeam.getId()).size() == 4) {
