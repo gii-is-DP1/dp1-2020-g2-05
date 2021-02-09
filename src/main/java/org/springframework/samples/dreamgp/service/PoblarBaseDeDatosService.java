@@ -1,5 +1,6 @@
 package org.springframework.samples.dreamgp.service;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -10,17 +11,19 @@ import org.springframework.samples.dreamgp.model.BDCarrera;
 import org.springframework.samples.dreamgp.model.Category;
 import org.springframework.samples.dreamgp.model.GranPremio;
 import org.springframework.samples.dreamgp.model.Result;
+import org.springframework.samples.dreamgp.web.PoblarBaseDeDatosController;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
+import lombok.extern.slf4j.Slf4j;
 import motogpApiV2.RaceCode;
 import motogpApiV2.Session;
 import motogpApiV2.apiCore.ApiMain;
 import motogpApiV2.results.Competitor;
-
+@Slf4j
 @Service
 @Transactional
 public class PoblarBaseDeDatosService {
@@ -116,7 +119,34 @@ public class PoblarBaseDeDatosService {
 		form.setRacecode(RaceCode.valueOf(gp.getRaceCode()));
 		form.setSession(Session.RACE);
 		form.setYear(añoactual);
-		this.poblarUnaCarreraYSusResultados(form, gp);
+		try {
+			this.poblarUnaCarreraYSusResultados(form, gp);
+		} catch (FileNotFoundException e) {
+			log.warn("API has not found any result to code " + gp.getRaceCode() + " for moto3 ");
+			
+
+		}
+
+
+		try {
+			form.setCategory(Category.MOTO2);
+			this.poblarUnaCarreraYSusResultados(form, gp);
+		} catch (FileNotFoundException e) {
+			log.warn("API has not found any result to code " + gp.getRaceCode() + " for moto2 ");
+
+		}
+		
+		
+		try {
+			form.setCategory(Category.MOTOGP);
+			this.poblarUnaCarreraYSusResultados(form, gp);
+		} catch (FileNotFoundException e) {
+			log.warn("API has not found any result to code " + gp.getRaceCode() + " for motogp ");
+
+		}
+		
+	
+
 		this.TCService.actualizarTabla(Category.MOTO2);
 		this.TCService.actualizarTabla(Category.MOTO3);
 		this.TCService.actualizarTabla(Category.MOTOGP);

@@ -57,8 +57,8 @@ public class DreamGPApplication {
 	        TCservice.comprobandoCarrerasCompletadas();
 	    }
 		
-		//Ajustar a Domingo (0 00 00 ? * 7)
-		@Scheduled(cron = "0 00 00 ? * 7") 
+		//Ajustar a Domingo (0 00 16 ? * 7)
+		@Scheduled(cron = "0 00 16 ? * 7") 
 	    public void PoblarUltimaCarrera() throws Exception {
 			log.info("Poblando la ultima carrera completada");
 			System.out.println("Poblando");
