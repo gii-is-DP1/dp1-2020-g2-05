@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.dreamgp.model.Lineup;
 import org.springframework.samples.dreamgp.model.Pilot;
+import org.springframework.samples.dreamgp.model.Recruit;
 import org.springframework.samples.dreamgp.model.Team;
 import org.springframework.samples.dreamgp.model.Transaction;
 import org.springframework.samples.dreamgp.repository.TransactionRepository;
@@ -53,9 +54,8 @@ public class TransactionService {
 		saveTransaction(-price, "Compra de " + pilot.getFullName(), purchaserTeam);
 	}
 
-	public void results(Integer amount, Lineup alineacion, String RaceCode) {
-		saveTransaction(amount, "Resultados de " + alineacion.getRider1().getFullName() + " y "
-				+ alineacion.getRider2().getFullName() + " en " + RaceCode, alineacion.getTeam());
+	public void results(Integer amount, Pilot pilot, String RaceCode, Team team) {
+		saveTransaction(amount, "Resultados de " + pilot.getFullName() + " en " + RaceCode, team);
 	}
 
 	//Operaciones de Read
