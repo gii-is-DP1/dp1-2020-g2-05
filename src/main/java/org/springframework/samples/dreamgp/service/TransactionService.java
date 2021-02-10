@@ -5,9 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.dreamgp.model.Lineup;
 import org.springframework.samples.dreamgp.model.Pilot;
-import org.springframework.samples.dreamgp.model.Recruit;
 import org.springframework.samples.dreamgp.model.Team;
 import org.springframework.samples.dreamgp.model.Transaction;
 import org.springframework.samples.dreamgp.repository.TransactionRepository;
@@ -46,6 +44,7 @@ public class TransactionService {
 		
 	}
 
+	@Transactional
 	public void trade(Integer price, Pilot pilot, Team sellerTeam, Team purchaserTeam) {
 		// Transaccion del equipo vendedor
 		saveTransaction(price, "Venta de " + pilot.getFullName(), sellerTeam);
@@ -54,6 +53,7 @@ public class TransactionService {
 		saveTransaction(-price, "Compra de " + pilot.getFullName(), purchaserTeam);
 	}
 
+	@Transactional
 	public void results(Integer amount, Pilot pilot, String RaceCode, Team team) {
 		saveTransaction(amount, "Resultados de " + pilot.getFullName() + " en " + RaceCode, team);
 	}
@@ -73,7 +73,7 @@ public class TransactionService {
 	// Operaciones de Delete
 	
 	@Transactional
-	private void delete(Transaction t) {
+	public void delete(Transaction t) {
 		this.transactionRepository.delete(t);
 	}
 
