@@ -489,7 +489,7 @@ void setup() throws DataAccessException, duplicatedLeagueNameException, UserEmai
 		.param("status", Status.Outstanding.toString())
 		.param("price", "1500"))
 	.andExpect(status().isOk())
-	.andExpect(model().attribute("message",is("You must own at least 3 riders not on sale to perform this action")))
+	.andExpect(model().attribute("message",is("You must own at least 2 riders not on sale to perform this action")))
 	.andExpect(view().name("/leagues/teamDetails"));
 }
 
